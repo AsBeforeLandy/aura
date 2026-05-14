@@ -54,7 +54,7 @@ public/                        # dumi public 目录
 
 ---
 
-## Task 1: 创建 @aura-ui/cli 包骨架
+## Task 1: 创建 @aura/cli 包骨架
 
 **Files:**
 - Create: `packages/cli/package.json`
@@ -65,7 +65,7 @@ public/                        # dumi public 目录
 
 ```json
 {
-  "name": "@aura-ui/cli",
+  "name": "@aura/cli",
   "version": "0.0.1",
   "description": "Aura UI CLI - MCP Server, Skill installation, and documentation tools",
   "bin": {
@@ -132,7 +132,7 @@ program.parse();
 - [ ] **Step 3: 安装依赖**
 
 ```bash
-cd /Users/landy/GitHub-program/aura-ui
+cd /Users/landy/GitHub-program/aura
 pnpm install
 ```
 
@@ -140,7 +140,7 @@ pnpm install
 
 ```bash
 git add packages/cli/
-git commit -m "feat(cli): add @aura-ui/cli package skeleton"
+git commit -m "feat(cli): add @aura/cli package skeleton"
 ```
 
 ---
@@ -177,7 +177,7 @@ import { registerGeneratorPrompt } from './prompts/generator';
 
 export async function startMcpServer() {
   const server = new McpServer({
-    name: 'aura-ui',
+    name: 'aura',
     version: '0.0.1',
   });
 
@@ -248,7 +248,7 @@ export async function startMcpServer() {
 > 基于 React 18 + TypeScript + CSS Variables，支持亮/暗双模式主题
 
 ## 快速开始
-npm install @aura-ui/ui
+npm install @aura/ui
 
 ## 组件列表
 - Button: 按钮组件 (variant: default/primary/dashed/text/link, size: sm/md/lg)

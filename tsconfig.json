@@ -13,7 +13,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@aura-ui/*": ["packages/*/src"]
+      "@aura/*": ["packages/*/src"]
     }
   }
 }

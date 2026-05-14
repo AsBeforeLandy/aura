@@ -4,7 +4,7 @@
 
 **Goal:** 建立 Aura 组件库的基础设施 — Design Tokens、主题系统、共享工具函数、测试框架、项目重命名，以及 Button 组件改造。
 
-**Architecture:** CSS Variables 实现 Design Tokens，ThemeProvider 通过 `data-theme` 属性切换亮/暗模式。所有 Token 定义在 `@aura-ui/shared` 的 TypeScript 中，同时生成 CSS 变量文件。组件使用 Less 编写样式，引用 CSS 变量实现主题化。
+**Architecture:** CSS Variables 实现 Design Tokens，ThemeProvider 通过 `data-theme` 属性切换亮/暗模式。所有 Token 定义在 `@aura/shared` 的 TypeScript 中，同时生成 CSS 变量文件。组件使用 Less 编写样式，引用 CSS 变量实现主题化。
 
 **Tech Stack:** React 18 + TypeScript + Less + CSS Variables + Vitest + dumi 2 + pnpm workspaces
 
@@ -53,7 +53,7 @@ vitest.config.ts           # 测试配置
 - [ ] **Step 1: 安装 vitest 和 jsdom**
 
 ```bash
-cd /Users/landy/GitHub-program/aura-ui
+cd /Users/landy/GitHub-program/aura
 pnpm add -Dw vitest @testing-library/react @testing-library/jest-dom jsdom
 ```
 
@@ -71,9 +71,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@aura-ui/shared': path.resolve(__dirname, 'packages/shared/src'),
-      '@aura-ui/ui': path.resolve(__dirname, 'packages/ui/src'),
-      '@aura-ui/request': path.resolve(__dirname, 'packages/request/src'),
+      '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
+      '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
+      '@aura/request': path.resolve(__dirname, 'packages/request/src'),
     },
   },
 });
@@ -91,7 +91,7 @@ export default defineConfig({
 - [ ] **Step 4: 验证 vitest 可运行**
 
 ```bash
-cd /Users/landy/GitHub-program/aura-ui
+cd /Users/landy/GitHub-program/aura
 pnpm test
 ```
 
@@ -121,9 +121,9 @@ git commit -m "chore: add vitest testing framework"
 - [ ] **Step 2: 确认子包名称**
 
 确认各子包 `package.json` 中的 `name` 已为：
-- `packages/shared/package.json`: `"@aura-ui/shared"`
-- `packages/ui/package.json`: `"@aura-ui/ui"`
-- `packages/request/package.json`: `"@aura-ui/request"`
+- `packages/shared/package.json`: `"@aura/shared"`
+- `packages/ui/package.json`: `"@aura/ui"`
+- `packages/request/package.json`: `"@aura/request"`
 
 如果已经是则无需改动。
 
@@ -1027,7 +1027,7 @@ Replace `packages/ui/src/button/index.tsx`:
 
 ```tsx
 import React, { forwardRef, ButtonHTMLAttributes } from 'react';
-import { classNames, prefixCls } from '@aura-ui/shared';
+import { classNames, prefixCls } from '@aura/shared';
 import './index.less';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

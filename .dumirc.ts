@@ -13,9 +13,9 @@ export default defineConfig({
   },
   autoAlias: true,
   alias: {
-    '@aura-ui/ui': path.join(__dirname, 'packages/ui/src'),
-    '@aura-ui/request': path.join(__dirname, 'packages/request/src'),
-    '@aura-ui/shared': path.join(__dirname, 'packages/shared/src'),
+    '@aura/ui': path.join(__dirname, 'packages/ui/src'),
+    '@aura/request': path.join(__dirname, 'packages/request/src'),
+    '@aura/shared': path.join(__dirname, 'packages/shared/src'),
   },
   locales: [
     { id: 'zh-CN', name: '中文' },

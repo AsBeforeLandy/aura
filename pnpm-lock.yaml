@@ -30,18 +30,18 @@ importers:
 
   packages/request:
     specifiers:
-      '@aura-ui/shared': workspace:*
+      '@aura/shared': workspace:*
     dependencies:
-      '@aura-ui/shared': link:../shared
+      '@aura/shared': link:../shared
 
   packages/shared:
     specifiers: {}
 
   packages/ui:
     specifiers:
-      '@aura-ui/shared': workspace:*
+      '@aura/shared': workspace:*
     dependencies:
-      '@aura-ui/shared': link:../shared
+      '@aura/shared': link:../shared
 
 packages:
 

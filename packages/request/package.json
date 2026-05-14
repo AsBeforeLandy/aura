@@ -1,5 +1,5 @@
 {
-  "name": "@aura-ui/request",
+  "name": "@aura/request",
   "version": "0.0.1",
   "description": "基于原生 Fetch 的 HTTP 请求封装",
   "main": "lib/index.js",
@@ -10,7 +10,7 @@
     "react": ">=18.0.0"
   },
   "dependencies": {
-    "@aura-ui/shared": "workspace:*"
+    "@aura/shared": "workspace:*"
   },
   "license": "MIT"
 }

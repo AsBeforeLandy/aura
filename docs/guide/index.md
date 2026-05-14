@@ -6,9 +6,9 @@ Aura 是一套基于 React 18 + TypeScript 的现代化 AI 友好组件库，采
 
 | 包名 | 说明 |
 |------|------|
-| `@aura-ui/ui` | UI 组件库（Button、更多组件持续开发中） |
-| `@aura-ui/request` | 基于原生 Fetch 的 HTTP 请求封装 |
-| `@aura-ui/shared` | 共享工具函数（classNames、防抖、节流等） |
+| `@aura/ui` | UI 组件库（Button、更多组件持续开发中） |
+| `@aura/request` | 基于原生 Fetch 的 HTTP 请求封装 |
+| `@aura/shared` | 共享工具函数（classNames、防抖、节流等） |
 
 ## 特性
 

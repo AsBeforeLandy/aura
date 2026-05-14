@@ -6,9 +6,9 @@
 
 | 包名 | 说明 |
 |------|------|
-| `@aura-ui/ui` | UI 组件库 |
-| `@aura-ui/request` | Fetch 请求封装 |
-| `@aura-ui/shared` | 共享工具函数 |
+| `@aura/ui` | UI 组件库 |
+| `@aura/request` | Fetch 请求封装 |
+| `@aura/shared` | 共享工具函数 |
 
 ## 快速开始
 

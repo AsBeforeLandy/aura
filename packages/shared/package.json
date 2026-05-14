@@ -1,5 +1,5 @@
 {
-  "name": "@aura-ui/shared",
+  "name": "@aura/shared",
   "version": "0.0.1",
   "description": "Aura 共享工具函数",
   "main": "lib/index.js",

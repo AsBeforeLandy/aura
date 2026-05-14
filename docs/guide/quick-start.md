@@ -4,19 +4,19 @@
 
 ```bash
 # 安装组件库
-pnpm add @aura-ui/ui
+pnpm add @aura/ui
 
 # 安装请求封装（可选）
-pnpm add @aura-ui/request
+pnpm add @aura/request
 
 # 安装工具函数（可选）
-pnpm add @aura-ui/shared
+pnpm add @aura/shared
 ```
 
 ## 使用组件
 
 ```tsx
-import { Button } from '@aura-ui/ui';
+import { Button } from '@aura/ui';
 
 const App = () => (
   <Button type="primary" onClick={() => alert('Hello Aura!')}>
@@ -28,7 +28,7 @@ const App = () => (
 ## 使用请求封装
 
 ```tsx
-import { get, post, setRequestDefaults } from '@aura-ui/request';
+import { get, post, setRequestDefaults } from '@aura/request';
 
 // 设置全局配置
 setRequestDefaults({

@@ -5,7 +5,7 @@
 
 ## Context
 
-Aura UI（原名 aura-ui）是一个基于 React 18 + TypeScript + dumi 2 + pnpm monorepo 的组件库项目。目前处于早期阶段，仅有 1 个 Button 组件，无设计 Token 系统、无主题切换、无 AI 支持设施。
+Aura（原名 aura-ui）是一个基于 React 18 + TypeScript + dumi 2 + pnpm monorepo 的组件库项目。目前处于早期阶段，仅有 1 个 Button 组件，无设计 Token 系统、无主题切换、无 AI 支持设施。
 
 本方案旨在将组件库正式命名为 "Aura"，创建完整的现代化 UI 组件体系，设计风格与 "Aura"（光环、光晕、气场）名称呼应，并原生支持 AI/Vibe Coding 工作流。
 
@@ -47,7 +47,7 @@ AI 工具集成方式（prompt 示例）：
 
 ### Layer 2: MCP Server（IDE 集成）
 
-通过 `@aura-ui/cli` 的 `aura mcp` 命令启动 MCP Server。
+通过 `@aura/cli` 的 `aura mcp` 命令启动 MCP Server。
 
 **7 个 Tools：**
 
@@ -82,7 +82,7 @@ AI 工具集成方式（prompt 示例）：
 
 ### Layer 3: Skill（AI IDE 深度集成）
 
-`@aura-ui/skill` 提供预置的 Agent 技能文件。
+`@aura/skill` 提供预置的 Agent 技能文件。
 
 **包含 Skills：**
 
@@ -95,7 +95,7 @@ AI 工具集成方式（prompt 示例）：
 
 安装方式：
 ```bash
-npm i -g @aura-ui/skill
+npm i -g @aura/skill
 npx aura-skill
 ```
 
@@ -103,7 +103,7 @@ npx aura-skill
 
 ### Layer 4: CLI（命令行工具）
 
-`@aura-ui/cli` 提供命令行工具集。
+`@aura/cli` 提供命令行工具集。
 
 ```bash
 aura mcp              # 启动 MCP Server
@@ -118,13 +118,13 @@ aura init             # 初始化 Aura UI 项目
 
 ```
 packages/
-├── shared/              # @aura-ui/shared
+├── shared/              # @aura/shared
 │   └── src/
 │       ├── tokens.ts    # Design Token 定义（颜色/圆角/阴影/间距/字号）
 │       ├── utils.ts     # 工具函数（classNames, debounce, throttle 等）
 │       └── index.ts
 │
-├── ui/                  # @aura-ui/ui
+├── ui/                  # @aura/ui
 │   └── src/
 │       ├── index.ts     # 统一导出
 │       ├── theme/
@@ -141,15 +141,15 @@ packages/
 │       │   └── index.less
 │       └── ...（其他组件）
 │
-├── request/             # @aura-ui/request（保持不变）
+├── request/             # @aura/request（保持不变）
 │
-├── cli/                 # @aura-ui/cli（新增）
+├── cli/                 # @aura/cli（新增）
 │   └── src/
 │       ├── index.ts     # CLI 入口（commander）
 │       ├── mcp.ts       # MCP Server 实现（@modelcontextprotocol/sdk）
 │       └── commands/    # 子命令
 │
-└── skill/               # @aura-ui/skill（新增）
+└── skill/               # @aura/skill（新增）
     ├── package.json
     └── skills/
         ├── component-guide.md
@@ -212,7 +212,7 @@ public/                  # 静态文件（构建后）
 
 ```tsx
 // 可选使用 — 不包 Provider 也有默认主题
-import { ThemeProvider } from '@aura-ui/ui';
+import { ThemeProvider } from '@aura/ui';
 
 <ThemeProvider theme="dark">
   <App />
@@ -258,7 +258,7 @@ variant?: string  // 如 'default' | 'primary' | 'dashed' | 'text' | 'link'
 5. **children 优先**：组件默认接受 children
 6. **丰富 JSDoc**：每个 prop 有中文描述和示例
 7. **开箱即美**：零 props 即为推荐样式
-8. **单一导入**：`import { Button, Card, Input } from '@aura-ui/ui'`
+8. **单一导入**：`import { Button, Card, Input } from '@aura/ui'`
 9. **组合式子组件**：`Card.Header` / `Card.Body` / `Card.Footer`
 
 ### 示例：Card 组件
@@ -408,7 +408,7 @@ Menu · Breadcrumb · Pagination · Steps · Dropdown · Slider · Rate · Uploa
 
 ### 第四批：AI 支持设施
 
-@aura-ui/cli · MCP Server · LLMs.txt 生成 · @aura-ui/skill
+@aura/cli · MCP Server · LLMs.txt 生成 · @aura/skill
 
 ---
 

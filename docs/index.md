@@ -21,4 +21,4 @@ features:
 
 ## 为什么选择 Aura？
 
-Aura 采用 monorepo 架构，将组件库（`@aura-ui/ui`）、请求封装（`@aura-ui/request`）和工具函数（`@aura-ui/shared`）解耦为独立包，按需引入、灵活组合。
+Aura 采用 monorepo 架构，将组件库（`@aura/ui`）、请求封装（`@aura/request`）和工具函数（`@aura/shared`）解耦为独立包，按需引入、灵活组合。

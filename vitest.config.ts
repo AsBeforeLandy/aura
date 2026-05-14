@@ -9,9 +9,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@aura-ui/shared': path.resolve(__dirname, 'packages/shared/src'),
-      '@aura-ui/ui': path.resolve(__dirname, 'packages/ui/src'),
-      '@aura-ui/request': path.resolve(__dirname, 'packages/request/src'),
+      '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
+      '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
+      '@aura/request': path.resolve(__dirname, 'packages/request/src'),
     },
   },
 });
