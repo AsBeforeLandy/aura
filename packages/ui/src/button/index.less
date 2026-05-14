@@ -1,0 +1,96 @@
+.aura-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  line-height: 1.5714;
+  color: rgba(0, 0, 0, 0.88);
+  background: #fff;
+
+  &:hover {
+    color: #6a5acd;
+    border-color: #6a5acd;
+  }
+}
+
+.aura-btn-default {
+  background: #fff;
+}
+
+.aura-btn-primary {
+  color: #fff;
+  background: #6a5acd;
+  border-color: #6a5acd;
+
+  &:hover {
+    color: #fff;
+    background: #7b68ee;
+    border-color: #7b68ee;
+  }
+}
+
+.aura-btn-dashed {
+  border-style: dashed;
+}
+
+.aura-btn-text {
+  border-color: transparent;
+  background: transparent;
+}
+
+.aura-btn-link {
+  border-color: transparent;
+  background: transparent;
+  color: #6a5acd;
+}
+
+.aura-btn-small {
+  height: 24px;
+  padding: 0 7px;
+  font-size: 14px;
+}
+
+.aura-btn-middle {
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+}
+
+.aura-btn-large {
+  height: 40px;
+  padding: 6.4px 15px;
+  font-size: 16px;
+}
+
+.aura-btn-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.aura-btn-loading {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.aura-btn-loading-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: aura-spin 0.6s linear infinite;
+}
+
+@keyframes aura-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

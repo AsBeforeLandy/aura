@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:brainstorming:*)",
+      "Bash(bash /Users/landy/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/brainstorming/scripts/start-server.sh --project-dir /Users/landy/GitHub-program/aura-ui)",
+      "Bash(echo \".superpowers/\" >> /Users/landy/GitHub-program/aura-ui/.gitignore)",
+      "mcp__duckduckgo-search__duckduckgo_search",
+      "mcp__duckduckgo-search__jina_fetch",
+      "Bash(mkdir -p /Users/landy/GitHub-program/aura-ui/docs/superpowers/specs)",
+      "Skill(superpowers:writing-plans)",
+      "Skill(superpowers:writing-plans:*)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Skill(superpowers:subagent-driven-development:*)",
+      "Bash(pnpm add *)"
+    ],
+    "additionalDirectories": [
+      "/Users/landy/GitHub-program/aura-ui",
+      "/Users/landy/GitHub-program/aura-ui/docs/superpowers"
+    ]
+  }
+}

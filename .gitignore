@@ -1,0 +1,12 @@
+node_modules
+dist
+lib
+esm
+.dumi
+.dumi/tmp
+.umi
+.umi-production
+.DS_Store
+*.log
+coverage
+.superpowers/

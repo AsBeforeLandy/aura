@@ -1,0 +1,16 @@
+{
+  "name": "@aura-ui/request",
+  "version": "0.0.1",
+  "description": "基于原生 Fetch 的 HTTP 请求封装",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "types": "lib/index.d.ts",
+  "files": ["lib", "esm", "dist"],
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "dependencies": {
+    "@aura-ui/shared": "workspace:*"
+  },
+  "license": "MIT"
+}
