@@ -1,8 +1,8 @@
 {
-  "name": "aura-ui",
+  "name": "aura",
   "version": "0.0.1",
   "private": true,
-  "description": "Aura UI - 基于 React 18 的企业级组件库",
+  "description": "Aura - 基于 React 18 的现代化 AI 友好组件库",
   "scripts": {
     "dev": "dumi dev",
     "build": "dumi build",

@@ -19,7 +19,7 @@ pnpm add @aura-ui/shared
 import { Button } from '@aura-ui/ui';
 
 const App = () => (
-  <Button type="primary" onClick={() => alert('Hello Aura UI!')}>
+  <Button type="primary" onClick={() => alert('Hello Aura!')}>
     点击我
   </Button>
 );

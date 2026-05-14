@@ -22,9 +22,9 @@ export default defineConfig({
     { id: 'en-US', name: 'EN' },
   ],
   themeConfig: {
-    name: 'Aura UI',
+    name: 'Aura',
     logo: '/logo.svg',
-    footer: 'Open-source MIT Licensed | Aura UI',
+    footer: 'Open-source MIT Licensed | Aura',
     prefersColor: { default: 'light', switch: true },
     nav: [
       { title: '指南', link: '/guide' },

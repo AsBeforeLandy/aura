@@ -1,6 +1,6 @@
 # 介绍
 
-Aura UI 是一套基于 React 18 + TypeScript 的企业级组件库，采用 monorepo 架构。
+Aura 是一套基于 React 18 + TypeScript 的现代化 AI 友好组件库，采用 monorepo 架构。
 
 ## 包结构
 

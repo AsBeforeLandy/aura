@@ -1,7 +1,7 @@
 {
   "name": "@aura-ui/ui",
   "version": "0.0.1",
-  "description": "Aura UI 组件库",
+  "description": "Aura 组件库",
   "main": "lib/index.js",
   "module": "esm/index.js",
   "types": "lib/index.d.ts",

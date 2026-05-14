@@ -1,7 +1,7 @@
 {
   "name": "@aura-ui/shared",
   "version": "0.0.1",
-  "description": "Aura UI 共享工具函数",
+  "description": "Aura 共享工具函数",
   "main": "lib/index.js",
   "module": "esm/index.js",
   "types": "lib/index.d.ts",

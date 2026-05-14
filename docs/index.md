@@ -1,7 +1,7 @@
 ---
 hero:
-  title: Aura UI
-  description: 基于 React 18 的企业级组件库
+  title: Aura
+  description: 基于 React 18 的现代化 AI 友好组件库
   actions:
     - text: 快速开始
       link: /guide/quick-start
@@ -19,6 +19,6 @@ features:
     description: 基于原生 Fetch 封装，支持拦截器、超时、错误处理
 ---
 
-## 为什么选择 Aura UI？
+## 为什么选择 Aura？
 
-Aura UI 采用 monorepo 架构，将组件库（`@aura-ui/ui`）、请求封装（`@aura-ui/request`）和工具函数（`@aura-ui/shared`）解耦为独立包，按需引入、灵活组合。
+Aura 采用 monorepo 架构，将组件库（`@aura-ui/ui`）、请求封装（`@aura-ui/request`）和工具函数（`@aura-ui/shared`）解耦为独立包，按需引入、灵活组合。
