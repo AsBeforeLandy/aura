@@ -1,0 +1,222 @@
+.aura-tabs {
+  display: flex;
+  flex-direction: column;
+
+  /* ===== Nav Bar ===== */
+  &-nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 1px solid var(--aura-border);
+  }
+
+  /* ===== Tab 按钮 ===== */
+  &-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-size: var(--aura-font-size-md);
+    font-family: inherit;
+    line-height: 1.5;
+    color: var(--aura-text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color var(--aura-duration-normal) var(--aura-easing),
+                background-color var(--aura-duration-normal) var(--aura-easing),
+                border-color var(--aura-duration-normal) var(--aura-easing),
+                transform var(--aura-duration-fast) var(--aura-easing);
+    white-space: nowrap;
+    user-select: none;
+
+    &:hover {
+      color: var(--aura-primary-700);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &-active {
+      color: var(--aura-primary-700);
+      font-weight: 600;
+    }
+
+    &-disabled {
+      color: var(--aura-text-tertiary);
+      cursor: not-allowed;
+
+      &:hover {
+        color: var(--aura-text-tertiary);
+      }
+
+      &:active {
+        transform: none;
+      }
+    }
+  }
+
+  /* ===== 指示器（default variant） ===== */
+  &-indicator {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: var(--aura-primary-700);
+    border-radius: 2px 2px 0 0;
+    transition: transform var(--aura-duration-slow) var(--aura-easing),
+                width var(--aura-duration-slow) var(--aura-easing);
+    will-change: transform, width;
+  }
+
+  /* ===== Content ===== */
+  &-content {
+    padding-top: var(--aura-spacing-4);
+  }
+
+  /* ===== Panel 切换动画 ===== */
+  &-panel {
+    animation: aura-tabs-fade-in var(--aura-duration-slow) var(--aura-easing);
+  }
+
+  /* ===== Size 变体 ===== */
+  &-sm {
+    .aura-tabs-tab {
+      padding: 4px 12px;
+      font-size: var(--aura-font-size-sm);
+    }
+  }
+
+  &-lg {
+    .aura-tabs-tab {
+      padding: 12px 24px;
+      font-size: var(--aura-font-size-lg);
+    }
+  }
+
+  /* ===== Variant: card ===== */
+  &&-card {
+    .aura-tabs-nav {
+      border-bottom: none;
+      gap: 0;
+    }
+
+    .aura-tabs-tab {
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: var(--aura-radius-md) var(--aura-radius-md) 0 0;
+      background: transparent;
+      transition: all var(--aura-duration-normal) var(--aura-easing);
+
+      &:hover {
+        background: var(--aura-bg-secondary);
+        border-color: var(--aura-border);
+      }
+
+      &-active {
+        background: var(--aura-bg);
+        border-color: var(--aura-border);
+        color: var(--aura-primary-700);
+
+        &:hover {
+          background: var(--aura-bg);
+        }
+      }
+    }
+  }
+
+  /* ===== Variant: pill ===== */
+  &&-pill {
+    .aura-tabs-nav {
+      border-bottom: none;
+      gap: var(--aura-spacing-2);
+      background: var(--aura-bg-secondary);
+      padding: var(--aura-spacing-1);
+      border-radius: var(--aura-radius-full);
+      display: inline-flex;
+    }
+
+    .aura-tabs-tab {
+      border-radius: var(--aura-radius-full);
+      padding: 6px 16px;
+      transition: all var(--aura-duration-normal) var(--aura-easing);
+
+      &:hover {
+        background: var(--aura-bg-tertiary);
+        color: var(--aura-text);
+      }
+
+      &-active {
+        background: var(--aura-primary-700);
+        color: var(--aura-text-inverse);
+        box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+
+        &:hover {
+          background: var(--aura-primary-600);
+          color: var(--aura-text-inverse);
+        }
+      }
+    }
+
+    // pill size sm
+    &.aura-tabs-sm {
+      .aura-tabs-tab {
+        padding: 3px 12px;
+        font-size: var(--aura-font-size-sm);
+      }
+    }
+
+    // pill size lg
+    &.aura-tabs-lg {
+      .aura-tabs-tab {
+        padding: 8px 24px;
+        font-size: var(--aura-font-size-lg);
+      }
+    }
+  }
+}
+
+/* ===== 动画关键帧 ===== */
+@keyframes aura-tabs-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-tabs {
+    &-tab {
+      &:hover {
+        color: var(--aura-primary-400);
+      }
+
+      &-active {
+        color: var(--aura-primary-400);
+      }
+    }
+
+    &-indicator {
+      background: var(--aura-primary-400);
+    }
+
+    &&-pill {
+      .aura-tabs-tab-active {
+        background: var(--aura-primary-600);
+        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+
+        &:hover {
+          background: var(--aura-primary-500);
+        }
+      }
+    }
+  }
+}

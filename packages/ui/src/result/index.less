@@ -1,0 +1,103 @@
+.aura-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--aura-spacing-8) var(--aura-spacing-4);
+  min-height: 300px;
+
+  /* ===== 图标区域 ===== */
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--aura-spacing-4);
+    animation: aura-result-icon-in var(--aura-duration-slow) cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* ===== 标题 ===== */
+  &-title {
+    font-size: var(--aura-font-size-xl);
+    font-weight: 600;
+    color: var(--aura-text);
+    line-height: 1.5;
+    margin-bottom: var(--aura-spacing-2);
+  }
+
+  /* ===== 副标题 ===== */
+  &-subtitle {
+    font-size: var(--aura-font-size-md);
+    color: var(--aura-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--aura-spacing-4);
+    max-width: 480px;
+  }
+
+  /* ===== 附加内容 ===== */
+  &-extra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--aura-spacing-3);
+    margin-top: var(--aura-spacing-2);
+  }
+
+  /* ===== 变体颜色 ===== */
+  &&-success {
+    .aura-result-icon {
+      color: var(--aura-success);
+    }
+  }
+
+  &&-error {
+    .aura-result-icon {
+      color: var(--aura-error);
+    }
+  }
+
+  &&-warning {
+    .aura-result-icon {
+      color: var(--aura-warning);
+    }
+  }
+
+  &&-info {
+    .aura-result-icon {
+      color: var(--aura-info);
+    }
+  }
+
+  &&-404,
+  &&-403,
+  &&-500 {
+    .aura-result-icon {
+      color: var(--aura-text-tertiary);
+    }
+  }
+}
+
+/* ===== 图标缩放入场动画 ===== */
+@keyframes aura-result-icon-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-result {
+    &-title {
+      color: var(--aura-text);
+    }
+
+    &-subtitle {
+      color: var(--aura-text-secondary);
+    }
+  }
+}

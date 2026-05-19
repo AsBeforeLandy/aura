@@ -1,0 +1,969 @@
+/* ===== Aura Design Tokens ===== */
+:root {
+  --aura-primary-50: #faf5ff;
+  --aura-primary-100: #f3e8ff;
+  --aura-primary-200: #e9d5ff;
+  --aura-primary-300: #d8b4fe;
+  --aura-primary-400: #c084fc;
+  --aura-primary-500: #a855f7;
+  --aura-primary-600: #9333ea;
+  --aura-primary-700: #7c3aed;
+  --aura-primary-800: #6d28d9;
+  --aura-primary-900: #5b21b6;
+  --aura-primary-950: #3b0764;
+  --aura-gray-50: #f9fafb;
+  --aura-gray-100: #f3f4f6;
+  --aura-gray-200: #e5e7eb;
+  --aura-gray-300: #d1d5db;
+  --aura-gray-400: #9ca3af;
+  --aura-gray-500: #6b7280;
+  --aura-gray-600: #4b5563;
+  --aura-gray-700: #374151;
+  --aura-gray-800: #1f2937;
+  --aura-gray-900: #111827;
+  --aura-gray-950: #030712;
+  --aura-success: #10b981;
+  --aura-success-light: #d1fae5;
+  --aura-warning: #f59e0b;
+  --aura-warning-light: #fef3c7;
+  --aura-error: #ef4444;
+  --aura-error-light: #fee2e2;
+  --aura-info: #3b82f6;
+  --aura-info-light: #dbeafe;
+  --aura-bg: #ffffff;
+  --aura-bg-secondary: #f9fafb;
+  --aura-bg-tertiary: #f3f4f6;
+  --aura-text: #111827;
+  --aura-text-secondary: #6b7280;
+  --aura-text-tertiary: #9ca3af;
+  --aura-text-inverse: #ffffff;
+  --aura-border: #e5e7eb;
+  --aura-border-hover: #d1d5db;
+  --aura-radius-sm: 6px;
+  --aura-radius-md: 10px;
+  --aura-radius-lg: 14px;
+  --aura-radius-xl: 20px;
+  --aura-radius-full: 9999px;
+  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.3);
+  --aura-font-size-xs: 12px;
+  --aura-font-size-sm: 13px;
+  --aura-font-size-md: 14px;
+  --aura-font-size-lg: 16px;
+  --aura-font-size-xl: 18px;
+  --aura-font-size-2xl: 20px;
+  --aura-font-size-3xl: 24px;
+  --aura-duration-fast: 150ms;
+  --aura-duration-normal: 200ms;
+  --aura-duration-slow: 300ms;
+  --aura-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --aura-primary-50: #3b0764;
+  --aura-primary-100: #4c1d95;
+  --aura-primary-200: #5b21b6;
+  --aura-primary-300: #6d28d9;
+  --aura-primary-400: #7c3aed;
+  --aura-primary-500: #8b5cf6;
+  --aura-primary-600: #a78bfa;
+  --aura-primary-700: #c4b5fd;
+  --aura-primary-800: #ddd6fe;
+  --aura-primary-900: #ede9fe;
+  --aura-primary-950: #faf5ff;
+  --aura-gray-50: #030712;
+  --aura-gray-100: #111827;
+  --aura-gray-200: #1f2937;
+  --aura-gray-300: #374151;
+  --aura-gray-400: #4b5563;
+  --aura-gray-500: #6b7280;
+  --aura-gray-600: #9ca3af;
+  --aura-gray-700: #d1d5db;
+  --aura-gray-800: #e5e7eb;
+  --aura-gray-900: #f3f4f6;
+  --aura-gray-950: #f9fafb;
+  --aura-success: #34d399;
+  --aura-success-light: rgba(16, 185, 129, 0.15);
+  --aura-warning: #fbbf24;
+  --aura-warning-light: rgba(245, 158, 11, 0.15);
+  --aura-error: #f87171;
+  --aura-error-light: rgba(239, 68, 68, 0.15);
+  --aura-info: #60a5fa;
+  --aura-info-light: rgba(59, 130, 246, 0.15);
+  --aura-bg: #0f0c29;
+  --aura-bg-secondary: #1a1a3e;
+  --aura-bg-tertiary: #252550;
+  --aura-text: #f3f4f6;
+  --aura-text-secondary: #9ca3af;
+  --aura-text-tertiary: #6b7280;
+  --aura-text-inverse: #111827;
+  --aura-border: rgba(139, 92, 246, 0.2);
+  --aura-border-hover: rgba(139, 92, 246, 0.4);
+  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.4);
+}
+
+/* ===================================================================
+   Aura Docs Theme — 全局覆盖 dumi 默认蓝色 (#1677ff → #7c3aed)
+   =================================================================== */
+
+/* --- 通配：所有含 dumi-default 前缀的链接/文字/背景中出现的蓝色 --- */
+
+/* 亮色主色: #7c3aed / 暗色主色: #a78bfa */
+
+/* ===== Navbar 导航栏 ===== */
+.dumi-default-navbar > li > a:hover,
+.dumi-default-navbar > li > .dumi-default-navbar-dropdown > li > a:hover {
+  color: #7c3aed !important;
+}
+
+.dumi-default-navbar > li > .dumi-default-navbar-dropdown {
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
+}
+
+/* ===== Sidebar 侧边栏 ===== */
+.dumi-default-sidebar > dl > dd > a:hover,
+.dumi-default-sidebar > dl > dd > a.active {
+  color: #7c3aed !important;
+}
+
+/* ===== TOC 目录 ===== */
+.dumi-default-toc > a.active {
+  border-inline-start-color: #7c3aed !important;
+  color: #7c3aed !important;
+}
+
+/* ===== Search 搜索 ===== */
+.dumi-default-search-bar input:focus {
+  border-color: #7c3aed !important;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1) !important;
+}
+
+.dumi-default-search-bar > svg {
+  fill: #7c3aed !important;
+}
+
+.dumi-default-search-result a:hover {
+  color: #7c3aed !important;
+}
+
+/* ===== Tabs 标签页 ===== */
+.dumi-default-tabs > button[aria-selected="true"] {
+  color: #7c3aed !important;
+}
+
+.dumi-default-tabs > button[aria-selected="true"]::after {
+  background: #7c3aed !important;
+}
+
+.dumi-default-tabs-ink-bar {
+  background: #7c3aed !important;
+}
+
+.dumi-default-tabs-dropdown > ul > li:hover {
+  color: #7c3aed !important;
+}
+
+/* ===== Content Tabs 组件页标签 ===== */
+.dumi-default-content-tabs > li > button:hover {
+  color: #7c3aed !important;
+}
+
+.dumi-default-content-tabs > li[data-active]::after {
+  background-color: #7c3aed !important;
+}
+
+/* ===== Badge 徽标 ===== */
+.dumi-default-badge {
+  color: #7c3aed !important;
+  background: rgba(124, 58, 237, 0.08) !important;
+}
+
+/* ===== Previewer 组件预览器 ===== */
+.dumi-default-previewer {
+  border-color: rgba(124, 58, 237, 0.12) !important;
+  border-radius: 12px !important;
+}
+
+.dumi-default-previewer:focus-within {
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08) !important;
+  border-color: rgba(124, 58, 237, 0.3) !important;
+}
+
+.dumi-default-previewer > .dumi-default-previewer-actions > button:hover {
+  color: #7c3aed !important;
+}
+
+.dumi-default-previewer-demo[data-loading]::before {
+  border-color: #7c3aed transparent !important;
+}
+
+/* ===== Source Code Editor ===== */
+.dumi-default-source-code-editor > .dumi-default-source-code-editor-actions > button:hover {
+  color: #7c3aed !important;
+}
+
+.dumi-default-source-code-editor:focus-within::after {
+  box-shadow: 0 0 0 1px #7c3aed inset !important;
+}
+
+/* ===== 文档内容链接 ===== */
+.markdown a,
+.dumi-default-doc-content a {
+  color: #7c3aed !important;
+}
+
+.markdown a:hover,
+.dumi-default-doc-content a:hover {
+  color: #8b5cf6 !important;
+}
+
+/* ===== 页面底部导航 ===== */
+.dumi-default-content-footer a {
+  color: #7c3aed !important;
+}
+
+.dumi-default-content-footer a:hover {
+  color: #8b5cf6 !important;
+}
+
+.dumi-default-content-footer svg {
+  fill: #7c3aed !important;
+}
+
+/* ===== 404 页面 ===== */
+.dumi-default-not-found a {
+  color: #7c3aed !important;
+}
+
+/* ===== NProgress 进度条 ===== */
+#nprogress .bar {
+  background: #7c3aed !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #7c3aed, 0 0 5px #7c3aed !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #7c3aed !important;
+  border-left-color: #7c3aed !important;
+}
+
+/* ===== Hero 首页 ===== */
+.dumi-default-hero-title {
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+.dumi-default-hero > p {
+  color: #6b7280 !important;
+}
+
+.dumi-default-hero-actions > a:first-child {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4) !important;
+  color: #fff !important;
+}
+
+.dumi-default-hero-actions > a:first-child:hover {
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
+  opacity: 1 !important;
+  transform: translateY(-2px);
+}
+
+.dumi-default-hero-actions > a:not(:first-child) {
+  color: #7c3aed !important;
+  border-color: #7c3aed !important;
+}
+
+.dumi-default-hero-actions > a:not(:first-child):hover {
+  background: rgba(124, 58, 237, 0.05) !important;
+  opacity: 1 !important;
+}
+
+/* ===== Features 特性区域 ===== */
+.dumi-default-features {
+  max-width: 1200px !important;
+}
+
+.dumi-default-features > dl {
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+}
+
+.dumi-default-features > dl:hover {
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.08) !important;
+  transform: translateY(-2px);
+}
+
+/* ===== Header 头部导航 ===== */
+.dumi-default-header {
+  border-bottom: 1px solid rgba(124, 58, 237, 0.08) !important;
+}
+
+.dumi-default-header-left .dumi-default-logo {
+  color: #7c3aed !important;
+}
+
+/* ===== 暗色模式 ===== */
+
+[data-prefers-color="dark"] .dumi-default-header {
+  border-bottom-color: rgba(139, 92, 246, 0.15) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-header-left .dumi-default-logo {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-navbar > li > a:hover,
+[data-prefers-color="dark"] .dumi-default-navbar > li > .dumi-default-navbar-dropdown > li > a:hover {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a:hover,
+[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a.active {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-toc > a.active {
+  border-inline-start-color: #a78bfa !important;
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-search-bar input:focus {
+  border-color: #a78bfa !important;
+  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.15) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-search-bar > svg {
+  fill: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-search-result a:hover {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-tabs > button[aria-selected="true"] {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-tabs > button[aria-selected="true"]::after {
+  background: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-tabs-ink-bar {
+  background: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-tabs-dropdown > ul > li:hover {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-content-tabs > li > button:hover {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-content-tabs > li[data-active]::after {
+  background-color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-source-code-editor:focus-within::after {
+  box-shadow: 0 0 0 1px #a78bfa inset !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer-demo[data-loading]::before {
+  border-color: #a78bfa transparent !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-badge {
+  color: #a78bfa !important;
+  background: rgba(167, 139, 250, 0.12) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer {
+  border-color: rgba(139, 92, 246, 0.15) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer:focus-within {
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.08) !important;
+  border-color: rgba(167, 139, 250, 0.3) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer > .dumi-default-previewer-actions > button:hover {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .markdown a,
+[data-prefers-color="dark"] .dumi-default-doc-content a {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .markdown a:hover,
+[data-prefers-color="dark"] .dumi-default-doc-content a:hover {
+  color: #c4b5fd !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-content-footer a {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-content-footer a:hover {
+  color: #c4b5fd !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-content-footer svg {
+  fill: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-not-found a {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] #nprogress .bar {
+  background: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] #nprogress .peg {
+  box-shadow: 0 0 10px #a78bfa, 0 0 5px #a78bfa !important;
+}
+
+[data-prefers-color="dark"] #nprogress .spinner-icon {
+  border-top-color: #a78bfa !important;
+  border-left-color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-hero-title {
+  background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 50%, #8b5cf6 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-hero-actions > a:first-child {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-hero-actions > a:not(:first-child) {
+  color: #a78bfa !important;
+  border-color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-features > dl:hover {
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12) !important;
+}
+
+/* ===== 页脚样式增强 ===== */
+.dumi-default-footer {
+  border-top: 1px solid rgba(124, 58, 237, 0.08) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-footer {
+  border-top-color: rgba(139, 92, 246, 0.12) !important;
+}
+
+.dumi-default-footer a {
+  color: #7c3aed !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-footer a {
+  color: #a78bfa !important;
+}
+
+/* ===================================================================
+   Aura Docs Layout — 对标 antd 文档页面布局
+   =================================================================== */
+
+/* ===== 全局基础 ===== */
+
+/* 页面背景白色 */
+body {
+  background: #ffffff !important;
+}
+
+[data-prefers-color="dark"] body {
+  background: #0f0c29 !important;
+}
+
+/* 全局滚动条优化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+[data-prefers-color="dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+}
+
+[data-prefers-color="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+html {
+  background: #ffffff !important;
+}
+
+/* 选中文本主题色 */
+::selection {
+  background: rgba(124, 58, 237, 0.2) !important;
+  color: inherit !important;
+}
+
+::-moz-selection {
+  background: rgba(124, 58, 237, 0.2) !important;
+  color: inherit !important;
+}
+
+[data-prefers-color="dark"] ::selection {
+  background: rgba(167, 139, 250, 0.3) !important;
+}
+
+[data-prefers-color="dark"] ::-moz-selection {
+  background: rgba(167, 139, 250, 0.3) !important;
+}
+
+/* ===== 2a. 内容区整体布局 ===== */
+.dumi-default-header-content {
+  max-width: none !important;
+  background: #ffffff !important;
+}
+
+.dumi-default-doc-layout > main {
+  max-width: none !important;
+  background: #ffffff !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-header-content {
+  background: #0f0c29 !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-doc-layout > main {
+  background: #0f0c29 !important;
+}
+
+[data-prefers-color="dark"] html {
+  background: #0f0c29 !important;
+}
+/* 页面标题区域 */
+.dumi-default-doc-content > h1,
+.markdown > h1:first-child {
+  font-size: 30px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  margin-bottom: 8px !important;
+  color: var(--aura-text) !important;
+}
+
+/* 标题下方副标题 */
+.dumi-default-doc-content > h1 + p,
+.markdown > h1:first-child + p {
+  font-size: 14px !important;
+  color: var(--aura-text-secondary) !important;
+  line-height: 1.8 !important;
+  margin-bottom: 32px !important;
+}
+
+/* h2 标题样式 */
+.dumi-default-doc-content > h2,
+.markdown > h2 {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: var(--aura-text) !important;
+  margin-top: 48px !important;
+  margin-bottom: 16px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid var(--aura-border) !important;
+}
+
+/* h3 标题样式（Demo 标题） */
+.dumi-default-doc-content > h3,
+.markdown > h3 {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--aura-text) !important;
+  margin-top: 32px !important;
+  margin-bottom: 12px !important;
+}
+
+/* 段落文字 */
+.dumi-default-doc-content p,
+.markdown p {
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+  color: var(--aura-text-secondary) !important;
+}
+
+/* 导入语句区块样式 */
+.dumi-default-doc-content pre,
+.markdown pre {
+  border-radius: 8px !important;
+  margin-bottom: 24px !important;
+}
+
+/* ===== 2b. Demo 预览器样式增强 ===== */
+
+/* 预览器整体容器 */
+.dumi-default-previewer {
+  border: 1px solid var(--aura-border) !important;
+  border-radius: 12px !important;
+  margin: 16px 0 32px !important;
+  overflow: visible !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Demo 预览区域 */
+.dumi-default-previewer-demo {
+  background: #ffffff !important;
+  padding: 32px 24px !important;
+  min-height: 80px !important;
+}
+
+/* Demo 描述区域 */
+.dumi-default-previewer-desc {
+  padding: 12px 24px !important;
+  font-size: 13px !important;
+  color: var(--aura-text-secondary) !important;
+  border-top: 1px solid var(--aura-border) !important;
+  background: var(--aura-bg) !important;
+}
+
+/* Demo 操作按钮区 */
+.dumi-default-previewer-actions {
+  border-top: 1px solid var(--aura-border) !important;
+  background: var(--aura-bg) !important;
+  padding: 8px 12px !important;
+}
+
+.dumi-default-previewer-actions > button {
+  color: var(--aura-text-tertiary) !important;
+  transition: color 0.2s ease !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 6px !important;
+}
+
+.dumi-default-previewer-actions > button:hover {
+  color: #7c3aed !important;
+  background: rgba(124, 58, 237, 0.06) !important;
+}
+
+/* 源码展开区域 */
+.dumi-default-previewer-source {
+  border-top: 1px solid var(--aura-border) !important;
+}
+
+/* ===== 2c. API 表格美化 ===== */
+
+/* 表格整体 */
+.markdown table,
+.dumi-default-doc-content table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border: 1px solid var(--aura-border) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  font-size: 14px !important;
+  margin: 16px 0 32px !important;
+}
+
+/* 表头 */
+.markdown table thead th,
+.dumi-default-doc-content table thead th {
+  background: var(--aura-bg-secondary) !important;
+  font-weight: 600 !important;
+  color: var(--aura-text) !important;
+  padding: 12px 16px !important;
+  text-align: left !important;
+  border-bottom: 2px solid var(--aura-border) !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+}
+
+/* 表格单元格 */
+.markdown table tbody td,
+.dumi-default-doc-content table tbody td {
+  padding: 10px 16px !important;
+  border-bottom: 1px solid var(--aura-border) !important;
+  color: var(--aura-text-secondary) !important;
+  font-size: 13px !important;
+  line-height: 1.7 !important;
+  vertical-align: top !important;
+}
+
+.markdown table tbody tr:last-child td,
+.dumi-default-doc-content table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* 表格行 hover */
+.markdown table tbody tr:hover,
+.dumi-default-doc-content table tbody tr:hover {
+  background: var(--aura-bg-secondary) !important;
+}
+
+/* 属性名列（第一列）等宽字体 */
+.markdown table tbody td:first-child,
+.dumi-default-doc-content table tbody td:first-child {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace !important;
+  font-size: 13px !important;
+  color: #7c3aed !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+}
+
+/* 类型列代码样式 */
+.markdown table tbody td:nth-child(3),
+.dumi-default-doc-content table tbody td:nth-child(3) {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace !important;
+  font-size: 12px !important;
+  color: var(--aura-text-secondary) !important;
+}
+
+/* 表格内代码标签 */
+.markdown table code,
+.dumi-default-doc-content table code {
+  background: var(--aura-bg-tertiary) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace !important;
+  font-size: 12px !important;
+  color: #9333ea !important;
+}
+
+/* ===== 2d. 侧边栏样式优化 ===== */
+
+/* 侧边栏整体 */
+.dumi-default-sidebar {
+  border-right: 1px solid var(--aura-border) !important;
+  padding: 16px 0 !important;
+}
+
+/* 分类标题（dl > dt） */
+.dumi-default-sidebar > dl > dt {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--aura-text-tertiary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 16px 24px 6px !important;
+}
+
+/* 侧边栏链接 */
+.dumi-default-sidebar > dl > dd > a {
+  padding: 6px 24px !important;
+  font-size: 14px !important;
+  color: var(--aura-text-secondary) !important;
+  border-radius: 0 !important;
+  transition: all 0.15s ease !important;
+  border-left: 2px solid transparent !important;
+  margin: 0 0 0 8px !important;
+  padding-left: 16px !important;
+}
+
+/* 侧边栏链接 hover */
+.dumi-default-sidebar > dl > dd > a:hover {
+  color: var(--aura-text) !important;
+  background: rgba(124, 58, 237, 0.04) !important;
+}
+
+/* 侧边栏活动项 — 左侧边框指示器 */
+.dumi-default-sidebar > dl > dd > a.active {
+  color: #7c3aed !important;
+  font-weight: 500 !important;
+  background: rgba(124, 58, 237, 0.06) !important;
+  border-left-color: #7c3aed !important;
+}
+
+/* ===== 2e. 右侧 TOC 样式 ===== */
+
+/* TOC 整体 */
+.dumi-default-toc {
+  padding: 16px 0 !important;
+}
+
+/* TOC 链接 */
+.dumi-default-toc > a {
+  font-size: 13px !important;
+  padding: 4px 12px !important;
+  color: var(--aura-text-secondary) !important;
+  border-left: 2px solid var(--aura-border) !important;
+  transition: all 0.15s ease !important;
+  line-height: 1.6 !important;
+}
+
+/* TOC 二级标题缩进 */
+.dumi-default-toc > a[data-level="3"] {
+  padding-left: 24px !important;
+}
+
+/* TOC hover */
+.dumi-default-toc > a:hover {
+  color: var(--aura-text) !important;
+  border-left-color: var(--aura-border-hover) !important;
+}
+
+/* TOC 活动项 */
+.dumi-default-toc > a.active {
+  color: #7c3aed !important;
+  border-left-color: #7c3aed !important;
+  font-weight: 500 !important;
+  background: rgba(124, 58, 237, 0.04) !important;
+}
+
+/* ===== 2f. 暗色模式适配 ===== */
+
+/* 暗色 — 内容区标题 */
+[data-prefers-color="dark"] .dumi-default-doc-content > h1,
+[data-prefers-color="dark"] .markdown > h1:first-child {
+  color: var(--aura-gray-50) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-doc-content > h1 + p,
+[data-prefers-color="dark"] .markdown > h1:first-child + p {
+  color: var(--aura-gray-400) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-doc-content > h2,
+[data-prefers-color="dark"] .markdown > h2 {
+  color: var(--aura-gray-50) !important;
+  border-bottom-color: rgba(139, 92, 246, 0.15) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-doc-content > h3,
+[data-prefers-color="dark"] .markdown > h3 {
+  color: var(--aura-gray-50) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-doc-content p,
+[data-prefers-color="dark"] .markdown p {
+  color: var(--aura-gray-400) !important;
+}
+
+/* 暗色 — Demo 预览器 */
+[data-prefers-color="dark"] .dumi-default-previewer {
+  border-color: rgba(139, 92, 246, 0.12) !important;
+  background: var(--aura-bg-secondary) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer-demo {
+  background: var(--aura-bg-tertiary) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer-desc {
+  background: rgba(15, 12, 41, 0.6) !important;
+  border-top-color: rgba(139, 92, 246, 0.12) !important;
+  color: var(--aura-gray-400) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer-actions {
+  background: rgba(15, 12, 41, 0.6) !important;
+  border-top-color: rgba(139, 92, 246, 0.12) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer-actions > button:hover {
+  color: #a78bfa !important;
+  background: rgba(167, 139, 250, 0.1) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-previewer-source {
+  border-top-color: rgba(139, 92, 246, 0.12) !important;
+}
+
+/* 暗色 — API 表格 */
+[data-prefers-color="dark"] .markdown table,
+[data-prefers-color="dark"] .dumi-default-doc-content table {
+  border-color: rgba(139, 92, 246, 0.12) !important;
+}
+
+[data-prefers-color="dark"] .markdown table thead th,
+[data-prefers-color="dark"] .dumi-default-doc-content table thead th {
+  background: var(--aura-bg-tertiary) !important;
+  color: var(--aura-gray-200) !important;
+  border-bottom-color: rgba(139, 92, 246, 0.15) !important;
+}
+
+[data-prefers-color="dark"] .markdown table tbody td,
+[data-prefers-color="dark"] .dumi-default-doc-content table tbody td {
+  border-bottom-color: rgba(139, 92, 246, 0.08) !important;
+  color: var(--aura-gray-400) !important;
+}
+
+[data-prefers-color="dark"] .markdown table tbody tr:hover,
+[data-prefers-color="dark"] .dumi-default-doc-content table tbody tr:hover {
+  background: rgba(139, 92, 246, 0.06) !important;
+}
+
+[data-prefers-color="dark"] .markdown table tbody td:first-child,
+[data-prefers-color="dark"] .dumi-default-doc-content table tbody td:first-child {
+  color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .markdown table code,
+[data-prefers-color="dark"] .dumi-default-doc-content table code {
+  background: rgba(139, 92, 246, 0.12) !important;
+  color: #c4b5fd !important;
+}
+
+/* 暗色 — 侧边栏 */
+[data-prefers-color="dark"] .dumi-default-sidebar {
+  border-right-color: rgba(139, 92, 246, 0.1) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-sidebar > dl > dt {
+  color: var(--aura-gray-500) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a {
+  color: var(--aura-gray-400) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a:hover {
+  color: var(--aura-gray-200) !important;
+  background: rgba(167, 139, 250, 0.06) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a.active {
+  color: #a78bfa !important;
+  background: rgba(167, 139, 250, 0.08) !important;
+  border-left-color: #a78bfa !important;
+}
+
+/* 暗色 — TOC */
+[data-prefers-color="dark"] .dumi-default-toc > a {
+  color: var(--aura-gray-500) !important;
+  border-left-color: rgba(139, 92, 246, 0.15) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-toc > a:hover {
+  color: var(--aura-gray-300) !important;
+  border-left-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-toc > a.active {
+  color: #a78bfa !important;
+  border-left-color: #a78bfa !important;
+  background: rgba(167, 139, 250, 0.06) !important;
+}

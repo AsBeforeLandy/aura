@@ -1,0 +1,426 @@
+.aura-select {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 160px;
+
+  &-selector {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 8px 32px 8px 12px;
+    font-size: var(--aura-font-size-md);
+    font-family: inherit;
+    line-height: 1.5;
+    border: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-md);
+    background: var(--aura-bg);
+    color: var(--aura-text);
+    cursor: pointer;
+    transition: all var(--aura-duration-normal) var(--aura-easing);
+    position: relative;
+    min-height: 38px;
+    box-sizing: border-box;
+
+    &:hover {
+      border-color: var(--aura-primary-700);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aura-primary-200);
+    }
+  }
+
+  // 箭头区域
+  &-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    color: var(--aura-text-tertiary);
+  }
+
+  &-arrow-icon {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    transition: transform var(--aura-duration-normal) var(--aura-easing);
+  }
+
+  // 展开状态
+  &&-open {
+    .aura-select-selector {
+      border-color: var(--aura-primary-700);
+      box-shadow: 0 0 0 2px var(--aura-primary-200);
+    }
+
+    .aura-select-arrow-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  // 禁用状态
+  &&-disabled {
+    .aura-select-selector {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: var(--aura-bg-secondary);
+
+      &:hover {
+        border-color: var(--aura-border);
+      }
+    }
+  }
+
+  // 占位文本
+  &-placeholder {
+    color: var(--aura-text-tertiary);
+    user-select: none;
+  }
+
+  // 选中项显示
+  &-selection-item {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // 清除按钮
+  &-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--aura-text-tertiary);
+    border-radius: var(--aura-radius-full);
+
+    &:hover {
+      color: var(--aura-text-secondary);
+      background: var(--aura-bg-tertiary);
+    }
+  }
+
+  // 搜索输入框
+  &-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: inherit;
+    font-family: inherit;
+    color: var(--aura-text);
+    padding: 0;
+    line-height: inherit;
+
+    &::placeholder {
+      color: var(--aura-text-tertiary);
+    }
+  }
+
+  // 多选标签
+  &-multiple &-selector {
+    flex-wrap: wrap;
+    gap: var(--aura-spacing-1);
+    padding: 4px 32px 4px 8px;
+    min-height: 38px;
+  }
+
+  &-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aura-spacing-1);
+    flex: 1;
+  }
+
+  &-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 1px 6px;
+    font-size: var(--aura-font-size-xs);
+    line-height: 1.6;
+    background: var(--aura-primary-100);
+    color: var(--aura-primary-800);
+    border-radius: var(--aura-radius-sm);
+    user-select: none;
+    max-width: 100%;
+  }
+
+  &-tag-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 2px;
+    border-radius: var(--aura-radius-full);
+
+    &:hover {
+      color: var(--aura-primary-900);
+    }
+  }
+
+  // 下拉面板
+  &-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    max-height: 256px;
+    overflow-y: auto;
+    background: var(--aura-bg);
+    border: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-md);
+    box-shadow: var(--aura-shadow-lg);
+    z-index: 1000;
+    padding: var(--aura-spacing-1) 0;
+    animation: aura-dropdown-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top center;
+  }
+
+  // 选项
+  &-option {
+    display: flex;
+    align-items: center;
+    gap: var(--aura-spacing-2);
+    padding: 8px 12px;
+    font-size: var(--aura-font-size-md);
+    color: var(--aura-text);
+    cursor: pointer;
+    transition: all 0.15s var(--aura-easing);
+
+    &:hover {
+      background: var(--aura-bg-secondary);
+    }
+
+    &&-selected {
+      color: var(--aura-primary-700);
+      font-weight: 500;
+      background: var(--aura-primary-50);
+    }
+
+    &&-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+
+  &-option-label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // 多选勾选框
+  &-option-checkbox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-sm);
+    flex-shrink: 0;
+  }
+
+  &-option-check {
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: var(--aura-primary-700);
+    border-radius: 2px;
+  }
+
+  // 单选对勾
+  &-option-tick {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 10px;
+      border: solid var(--aura-primary-700);
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg) translateY(-1px);
+    }
+  }
+
+  // 加载状态
+  &-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--aura-spacing-2);
+    padding: var(--aura-spacing-4);
+    color: var(--aura-text-secondary);
+  }
+
+  &-loading-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--aura-border);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: aura-select-spin 0.6s linear infinite;
+  }
+
+  // 空状态
+  &-empty {
+    padding: var(--aura-spacing-4);
+    text-align: center;
+    color: var(--aura-text-tertiary);
+  }
+
+  // Variants
+  &&-filled {
+    .aura-select-selector {
+      background: var(--aura-primary-50);
+      border: 2px solid transparent;
+      border-bottom-color: var(--aura-primary-200);
+      border-radius: var(--aura-radius-md);
+      box-shadow: none;
+
+      &:hover {
+        border-bottom-color: var(--aura-primary-400);
+        box-shadow: none;
+      }
+
+      &:focus-visible {
+        box-shadow: none;
+      }
+    }
+
+    &.aura-select-open .aura-select-selector {
+      border-bottom-color: var(--aura-primary-700);
+      box-shadow: none;
+    }
+  }
+
+  &&-bordered {
+    .aura-select-selector {
+      border: 2px solid var(--aura-border);
+      border-radius: var(--aura-radius-lg);
+
+      &:hover {
+        border-color: var(--aura-primary-400);
+        box-shadow: 0 0 0 3px var(--aura-primary-100);
+      }
+    }
+
+    &.aura-select-open .aura-select-selector {
+      border-color: var(--aura-primary-700);
+      box-shadow: 0 0 0 4px var(--aura-primary-100);
+    }
+  }
+
+  // Sizes
+  &&-sm {
+    .aura-select-selector {
+      padding: 4px 28px 4px 8px;
+      font-size: var(--aura-font-size-sm);
+      min-height: 30px;
+      border-radius: var(--aura-radius-sm);
+    }
+
+    .aura-select-option {
+      padding: 6px 8px;
+      font-size: var(--aura-font-size-sm);
+    }
+  }
+
+  &&-lg {
+    .aura-select-selector {
+      padding: 10px 36px 10px 14px;
+      font-size: var(--aura-font-size-lg);
+      min-height: 46px;
+      border-radius: var(--aura-radius-lg);
+    }
+
+    .aura-select-option {
+      padding: 10px 14px;
+      font-size: var(--aura-font-size-lg);
+    }
+  }
+}
+
+@keyframes aura-select-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// 暗色模式
+[data-theme="dark"] {
+  .aura-select {
+    &-selector:focus-visible {
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+    }
+
+    &-tag {
+      background: rgba(124, 58, 237, 0.2);
+      color: var(--aura-primary-600);
+    }
+
+    &-option-selected {
+      background: rgba(124, 58, 237, 0.1);
+    }
+  }
+
+  .aura-select-filled {
+    .aura-select-selector {
+      background: rgba(124, 58, 237, 0.08);
+      border-bottom-color: rgba(124, 58, 237, 0.2);
+
+      &:hover {
+        border-bottom-color: var(--aura-primary-500);
+        box-shadow: none;
+      }
+
+      &:focus-visible {
+        box-shadow: none;
+      }
+    }
+
+    &.aura-select-open .aura-select-selector {
+      border-bottom-color: var(--aura-primary-400);
+      box-shadow: none;
+    }
+  }
+
+  .aura-select-bordered {
+    .aura-select-selector {
+      &:hover {
+        border-color: var(--aura-primary-500);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+      }
+    }
+
+    &.aura-select-open .aura-select-selector {
+      border-color: var(--aura-primary-400);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+    }
+  }
+}

@@ -1,0 +1,95 @@
+.aura-spin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  // 旋转指示器
+  &-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--aura-spacing-2);
+    color: var(--aura-primary-700);
+  }
+
+  // 旋转 SVG 动画
+  &-svg {
+    animation: aura-spin-rotate 0.8s linear infinite;
+  }
+
+  // 提示文字
+  &-tip {
+    color: var(--aura-primary-700);
+    font-size: var(--aura-font-size-sm);
+    line-height: 1.5;
+  }
+
+  // 容器（有 children 时）
+  &-container {
+    position: relative;
+  }
+
+  // 覆盖层
+  &-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  // 内容区域
+  &-content {
+    transition: opacity var(--aura-duration-normal) var(--aura-easing);
+  }
+
+  // 加载中时的半透明内容
+  &-content-blur {
+    opacity: 0.3;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // 尺寸：sm
+  &&-sm {
+    .aura-spin-indicator {
+      color: var(--aura-primary-700);
+    }
+  }
+
+  // 尺寸：md
+  &&-md {
+    .aura-spin-indicator {
+      color: var(--aura-primary-700);
+    }
+  }
+
+  // 尺寸：lg
+  &&-lg {
+    .aura-spin-indicator {
+      color: var(--aura-primary-700);
+    }
+  }
+}
+
+@keyframes aura-spin-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// 暗色模式适配
+[data-theme="dark"] {
+  .aura-spin {
+    &-indicator {
+      color: var(--aura-primary-600);
+    }
+
+    &-tip {
+      color: var(--aura-primary-600);
+    }
+  }
+}

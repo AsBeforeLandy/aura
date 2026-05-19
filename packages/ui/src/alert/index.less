@@ -1,0 +1,131 @@
+.aura-alert {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--aura-spacing-2);
+  padding: var(--aura-spacing-3) var(--aura-spacing-4);
+  border-radius: var(--aura-radius-md);
+  font-size: var(--aura-font-size-md);
+  line-height: 1.5;
+  background: var(--aura-info-light);
+  border: 1px solid var(--aura-info);
+  color: var(--aura-text);
+  animation: aura-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.3s var(--aura-easing), transform 0.3s var(--aura-easing), max-height 0.3s var(--aura-easing);
+
+  // 关闭动画
+  &&-closing {
+    opacity: 0;
+    transform: translateY(-8px);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+
+  // 带图标时
+  &-with-icon {
+    .aura-alert-icon {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--aura-info);
+      animation: aura-icon-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+    }
+  }
+
+  // 内容区
+  &-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  // 标题
+  &-title {
+    font-weight: 600;
+    color: var(--aura-text);
+  }
+
+  // 描述
+  &-description {
+    color: var(--aura-text-secondary);
+    font-size: var(--aura-font-size-sm);
+    margin-top: var(--aura-spacing-1);
+  }
+
+  // 关闭按钮
+  &-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--aura-text-tertiary);
+    cursor: pointer;
+    border-radius: var(--aura-radius-sm);
+    transition: all 0.2s var(--aura-easing);
+    margin-left: auto;
+
+    &:hover {
+      color: var(--aura-text);
+      background: rgba(0, 0, 0, 0.06);
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  // 成功
+  &&-success {
+    background: var(--aura-success-light);
+    border-color: var(--aura-success);
+    .aura-alert-icon { color: var(--aura-success); }
+  }
+
+  // 警告
+  &&-warning {
+    background: var(--aura-warning-light);
+    border-color: var(--aura-warning);
+    .aura-alert-icon { color: var(--aura-warning); }
+  }
+
+  // 错误
+  &&-error {
+    background: var(--aura-error-light);
+    border-color: var(--aura-error);
+    .aura-alert-icon { color: var(--aura-error); }
+  }
+
+  // 信息
+  &&-info {
+    background: var(--aura-info-light);
+    border-color: var(--aura-info);
+    .aura-alert-icon { color: var(--aura-info); }
+  }
+}
+
+@keyframes aura-slide-down {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes aura-icon-pop {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+// 暗色模式
+[data-theme="dark"] {
+  .aura-alert {
+    color: var(--aura-text);
+    &-close:hover { background: rgba(255, 255, 255, 0.08); }
+  }
+}

@@ -2,95 +2,155 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-weight: 400;
-  white-space: nowrap;
-  text-align: center;
+  gap: var(--aura-spacing-2);
+  padding: 8px 16px;
+  font-size: var(--aura-font-size-md);
+  font-family: inherit;
+  line-height: 1.5;
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-bg);
+  color: var(--aura-text);
   cursor: pointer;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all var(--aura-duration-normal) var(--aura-easing);
   user-select: none;
-  line-height: 1.5714;
-  color: rgba(0, 0, 0, 0.88);
-  background: #fff;
+  white-space: nowrap;
 
   &:hover {
-    color: #6a5acd;
-    border-color: #6a5acd;
+    border-color: var(--aura-primary-700);
+    color: var(--aura-primary-700);
+    transform: translateY(-1px);
+    box-shadow: var(--aura-shadow-sm);
   }
-}
 
-.aura-btn-default {
-  background: #fff;
-}
-
-.aura-btn-primary {
-  color: #fff;
-  background: #6a5acd;
-  border-color: #6a5acd;
-
-  &:hover {
-    color: #fff;
-    background: #7b68ee;
-    border-color: #7b68ee;
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
   }
-}
 
-.aura-btn-dashed {
-  border-style: dashed;
-}
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--aura-primary-200);
+  }
 
-.aura-btn-text {
-  border-color: transparent;
-  background: transparent;
-}
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 
-.aura-btn-link {
-  border-color: transparent;
-  background: transparent;
-  color: #6a5acd;
-}
+  // Variants
+  &&-primary {
+    background: var(--aura-primary-700);
+    border-color: var(--aura-primary-700);
+    color: var(--aura-text-inverse);
 
-.aura-btn-small {
-  height: 24px;
-  padding: 0 7px;
-  font-size: 14px;
-}
+    &:hover {
+      background: var(--aura-primary-600);
+      border-color: var(--aura-primary-600);
+      color: var(--aura-text-inverse);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
 
-.aura-btn-middle {
-  height: 32px;
-  padding: 4px 15px;
-  font-size: 14px;
-}
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 4px rgba(124, 58, 237, 0.2);
+    }
 
-.aura-btn-large {
-  height: 40px;
-  padding: 6.4px 15px;
-  font-size: 16px;
-}
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--aura-primary-200);
+    }
+  }
 
-.aura-btn-disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
+  &&-dashed {
+    border-style: dashed;
+  }
 
-.aura-btn-loading {
-  cursor: wait;
-  opacity: 0.7;
-}
+  &&-text {
+    border: none;
+    background: transparent;
 
-.aura-btn-loading-icon {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: aura-spin 0.6s linear infinite;
+    &:hover {
+      background: var(--aura-bg-secondary);
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  &&-link {
+    border: none;
+    background: transparent;
+    color: var(--aura-primary-700);
+
+    &:hover {
+      color: var(--aura-primary-600);
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  // Sizes
+  &&-sm {
+    padding: 4px 12px;
+    font-size: var(--aura-font-size-sm);
+    border-radius: var(--aura-radius-sm);
+  }
+
+  &&-lg {
+    padding: 10px 24px;
+    font-size: var(--aura-font-size-lg);
+    border-radius: var(--aura-radius-lg);
+  }
+
+  // Loading
+  &-loading {
+    opacity: 0.65;
+    cursor: not-allowed;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  &-loading-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: aura-spin 0.6s linear infinite;
+  }
 }
 
 @keyframes aura-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@keyframes aura-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Dark mode glow
+[data-theme="dark"] {
+  .aura-btn {
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2), 0 0 20px rgba(124, 58, 237, 0.15);
+    }
+
+    &:hover {
+      box-shadow: 0 0 15px rgba(124, 58, 237, 0.15);
+    }
+
+    &-primary {
+      &:hover {
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.3), 0 4px 12px rgba(124, 58, 237, 0.2);
+      }
+    }
+  }
 }

@@ -1,0 +1,48 @@
+# Aura UI — AI 友好的 React 组件库
+
+> 基于 React 18 + TypeScript + CSS Variables，支持亮/暗双模式主题
+
+## 快速开始
+npm install @aura/ui
+
+## 组件列表
+- Button: 按钮 (variant: default/primary/dashed/text/link, size: sm/md/lg)
+- Typography: 排版 (Title/Text/Paragraph)
+- Space: 间距
+- Divider: 分割线
+- Input: 输入框 (Password/Search/Group)
+- Textarea: 文本域
+- Select: 选择器
+- Checkbox: 复选框 (CheckboxGroup)
+- Radio: 单选框 (RadioGroup)
+- Switch: 开关
+- Alert: 警告
+- Spin: 加载
+- Tag: 标签 (Checkable/Group)
+- Badge: 徽标
+- Avatar: 头像 (Group)
+- Tooltip: 文字提示 (8 placements, 3 triggers)
+- Card: 卡片 (Header/Title/Body/Actions/Footer/Cover, 4 variants)
+- Collapse: 折叠面板 (Item, accordion mode)
+- Tabs: 标签页 (Tab, 3 variants: default/card/pill)
+- Empty: 空状态 (Preset)
+- Message: 全局消息 (success/error/warning/info/loading)
+- Notification: 通知 (4 placements)
+- Menu: 菜单 (Item/SubMenu/Group, 3 modes)
+- Breadcrumb: 面包屑 (Item)
+- Pagination: 分页 (showSizeChanger/showQuickJumper)
+- Steps: 步骤条 (Step, 3 variants: default/dot/navigation)
+- Dropdown: 下拉菜单 (4 placements)
+- Slider: 滑动输入 (range, marks)
+- Rate: 评分 (allowHalf, allowClear)
+- Upload: 上传 (Dragger, 3 listTypes)
+- Form: 表单 (Item, validation rules)
+- Result: 结果页 (7 variants)
+- Popconfirm: 气泡确认 (4 placements)
+- Layout: 布局 (Header/Body/Sider/Footer)
+- Flex: 弹性布局
+- Scrollbar: 滚动条
+
+## 文档
+- 完整 API: /llms-full.txt
+- 语义结构: /llms-semantic.md

@@ -1,0 +1,135 @@
+.aura-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background: var(--aura-gray-300);
+  border-radius: var(--aura-radius-full);
+  cursor: pointer;
+  transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  padding: 0;
+  vertical-align: middle;
+  user-select: none;
+
+  &:hover:not(.aura-switch-disabled):not(.aura-switch-loading) {
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.08);
+  }
+
+  // 内部文字区域
+  &-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--aura-text-inverse);
+    font-size: var(--aura-font-size-xs);
+    line-height: 1;
+    overflow: hidden;
+    transition: opacity var(--aura-duration-normal) var(--aura-easing);
+  }
+
+  // 圆点手柄
+  &-handle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--aura-text-inverse);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  // 选中状态
+  &&-checked {
+    background: var(--aura-primary-700);
+
+    .aura-switch-handle {
+      transform: translateX(calc(100% + 2px));
+    }
+
+    &:hover:not(.aura-switch-disabled):not(.aura-switch-loading) {
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+    }
+  }
+
+  // 禁用状态
+  &&-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  // 加载状态
+  &&-loading {
+    cursor: not-allowed;
+  }
+
+  // 尺寸：sm 28×16px
+  &&-sm {
+    width: 28px;
+    height: 16px;
+
+    .aura-switch-inner { margin: 0 4px; font-size: 10px; }
+    .aura-switch-handle { width: 12px; height: 12px; }
+
+    &.aura-switch-checked {
+      .aura-switch-handle { transform: translateX(12px); }
+    }
+  }
+
+  // 尺寸：md 40×22px
+  &&-md {
+    width: 40px;
+    height: 22px;
+
+    .aura-switch-inner { margin: 0 8px; }
+    .aura-switch-handle { width: 18px; height: 18px; }
+
+    &.aura-switch-checked {
+      .aura-switch-handle { transform: translateX(18px); }
+    }
+  }
+
+  // 尺寸：lg 52×28px
+  &&-lg {
+    width: 52px;
+    height: 28px;
+
+    .aura-switch-inner { margin: 0 10px; font-size: var(--aura-font-size-sm); }
+    .aura-switch-handle { width: 24px; height: 24px; }
+
+    &.aura-switch-checked {
+      .aura-switch-handle { transform: translateX(24px); }
+    }
+  }
+
+  // 加载旋转图标
+  &-loading-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--aura-primary-700);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: aura-spin 0.6s linear infinite;
+  }
+}
+
+// 暗色模式光晕效果
+[data-theme="dark"] {
+  .aura-switch {
+    &:hover:not(.aura-switch-disabled):not(.aura-switch-loading) {
+      box-shadow: 0 0 8px rgba(124, 58, 237, 0.15);
+    }
+
+    &.aura-switch-checked {
+      box-shadow: 0 0 16px rgba(124, 58, 237, 0.35);
+
+      &:hover:not(.aura-switch-disabled):not(.aura-switch-loading) {
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+      }
+    }
+  }
+}

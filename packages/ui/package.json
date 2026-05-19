@@ -2,11 +2,20 @@
   "name": "@aura/ui",
   "version": "0.0.1",
   "description": "Aura 组件库",
-  "main": "lib/index.js",
   "module": "esm/index.js",
-  "types": "lib/index.d.ts",
-  "files": ["lib", "esm", "dist"],
+  "types": "esm/index.d.ts",
+  "files": ["esm", "dist"],
   "sideEffects": ["**/*.less"],
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "types": "./esm/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "father build",
+    "dev": "father dev"
+  },
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"

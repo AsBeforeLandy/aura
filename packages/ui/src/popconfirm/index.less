@@ -1,0 +1,229 @@
+/* ===== Popconfirm 组件样式 ===== */
+
+.aura-popconfirm-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.aura-popconfirm {
+  position: absolute;
+  z-index: 1070;
+  pointer-events: auto;
+  opacity: 0;
+  width: max-content;
+  transform: scale(0.9);
+  transition:
+    opacity var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  // ===== 出现状态 =====
+  &&-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // ===== 方位定位 =====
+  &&-top {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform-origin: center bottom;
+    transform: translateX(-50%) scale(0.9);
+
+    &.aura-popconfirm-visible {
+      transform: translateX(-50%) scale(1);
+    }
+  }
+
+  &&-bottom {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform-origin: center top;
+    transform: translateX(-50%) scale(0.9);
+
+    &.aura-popconfirm-visible {
+      transform: translateX(-50%) scale(1);
+    }
+  }
+
+  &&-left {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform-origin: right center;
+    transform: translateY(-50%) scale(0.9);
+
+    &.aura-popconfirm-visible {
+      transform: translateY(-50%) scale(1);
+    }
+  }
+
+  &&-right {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform-origin: left center;
+    transform: translateY(-50%) scale(0.9);
+
+    &.aura-popconfirm-visible {
+      transform: translateY(-50%) scale(1);
+    }
+  }
+}
+
+// ===== 气泡内容 =====
+.aura-popconfirm-content {
+  padding: var(--aura-spacing-4);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-bg);
+  border: 1px solid var(--aura-border);
+  box-shadow: var(--aura-shadow-lg);
+  min-width: 240px;
+}
+
+.aura-popconfirm-title {
+  font-size: var(--aura-font-size-md);
+  font-weight: 600;
+  color: var(--aura-text);
+  line-height: 1.5;
+}
+
+.aura-popconfirm-description {
+  margin-top: var(--aura-spacing-2);
+  font-size: var(--aura-font-size-sm);
+  color: var(--aura-text-secondary);
+  line-height: 1.5;
+}
+
+// ===== 按钮行 =====
+.aura-popconfirm-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--aura-spacing-2);
+  margin-top: var(--aura-spacing-3);
+}
+
+.aura-popconfirm-btn {
+  padding: 4px 12px;
+  font-size: var(--aura-font-size-sm);
+  font-family: inherit;
+  line-height: 1.5;
+  border-radius: var(--aura-radius-sm);
+  border: 1px solid var(--aura-border);
+  background: var(--aura-bg);
+  color: var(--aura-text);
+  cursor: pointer;
+  transition: all var(--aura-duration-normal) var(--aura-easing);
+
+  &:hover {
+    border-color: var(--aura-border-hover);
+  }
+
+  // 确认按钮 - primary
+  &&-primary {
+    background: var(--aura-primary-700);
+    border-color: var(--aura-primary-700);
+    color: var(--aura-text-inverse);
+
+    &:hover {
+      background: var(--aura-primary-600);
+      border-color: var(--aura-primary-600);
+    }
+  }
+
+  // 确认按钮 - warning
+  &&-warning {
+    background: var(--aura-warning);
+    border-color: var(--aura-warning);
+    color: var(--aura-text-inverse);
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  // 确认按钮 - error
+  &&-error {
+    background: var(--aura-error);
+    border-color: var(--aura-error);
+    color: var(--aura-text-inverse);
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}
+
+// ===== 箭头 =====
+.aura-popconfirm-arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--aura-bg);
+  border: 1px solid var(--aura-border);
+  transform: rotate(45deg);
+
+  .aura-popconfirm-top & {
+    bottom: -5px;
+    left: 50%;
+    margin-left: -4px;
+    border-top: none;
+    border-left: none;
+  }
+
+  .aura-popconfirm-bottom & {
+    top: -5px;
+    left: 50%;
+    margin-left: -4px;
+    border-bottom: none;
+    border-right: none;
+  }
+
+  .aura-popconfirm-left & {
+    right: -5px;
+    top: 50%;
+    margin-top: -4px;
+    border-bottom: none;
+    border-left: none;
+  }
+
+  .aura-popconfirm-right & {
+    left: -5px;
+    top: 50%;
+    margin-top: -4px;
+    border-top: none;
+    border-right: none;
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-popconfirm-content {
+    background: var(--aura-gray-800);
+    border-color: var(--aura-gray-700);
+  }
+
+  .aura-popconfirm-title {
+    color: var(--aura-gray-100);
+  }
+
+  .aura-popconfirm-description {
+    color: var(--aura-gray-400);
+  }
+
+  .aura-popconfirm-arrow {
+    background: var(--aura-gray-800);
+    border-color: var(--aura-gray-700);
+  }
+
+  .aura-popconfirm-btn {
+    background: var(--aura-gray-700);
+    border-color: var(--aura-gray-600);
+    color: var(--aura-gray-100);
+
+    &:hover {
+      border-color: var(--aura-gray-500);
+    }
+
+    &-cancel {
+      background: var(--aura-gray-700);
+    }
+  }
+}

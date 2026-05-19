@@ -1,14 +1,18 @@
 import React from 'react';
-import { Button } from '../index';
+import { Button, Space } from '@aura/ui';
 
-const App = () => (
-  <div style={{ display: 'flex', gap: 12 }}>
-    <Button type="primary">主要按钮</Button>
-    <Button type="default">默认按钮</Button>
-    <Button type="dashed">虚线按钮</Button>
-    <Button type="text">文字按钮</Button>
-    <Button type="link">链接按钮</Button>
-  </div>
+const Demo: React.FC = () => (
+  <Space wrap align="center" size="md">
+    <Button variant="default">Default</Button>
+    <Button variant="primary">Primary</Button>
+    <Button variant="dashed">Dashed</Button>
+    <Button variant="text">Text</Button>
+    <Button variant="link">Link</Button>
+    <Button variant="primary" size="sm">Small</Button>
+    <Button variant="primary" size="lg">Large</Button>
+    <Button disabled>Disabled</Button>
+    <Button loading>Loading</Button>
+  </Space>
 );
 
-export default App;
+export default Demo;

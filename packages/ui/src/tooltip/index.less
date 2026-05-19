@@ -1,0 +1,196 @@
+/* ===== Tooltip 组件样式 ===== */
+
+.aura-tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.aura-tooltip {
+  position: absolute;
+  z-index: 1070;
+  pointer-events: none;
+  opacity: 0;
+  width: max-content;
+  transform: scale(0.9);
+  transition:
+    opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // ===== 出现状态 =====
+  &&-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // ===== 方位定位 =====
+  &&-top {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform-origin: center bottom;
+    transform: translateX(-50%) scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: translateX(-50%) scale(1);
+    }
+  }
+
+  &&-bottom {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform-origin: center top;
+    transform: translateX(-50%) scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: translateX(-50%) scale(1);
+    }
+  }
+
+  &&-left {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform-origin: right center;
+    transform: translateY(-50%) scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: translateY(-50%) scale(1);
+    }
+  }
+
+  &&-right {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform-origin: left center;
+    transform: translateY(-50%) scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: translateY(-50%) scale(1);
+    }
+  }
+
+  &&-topLeft {
+    bottom: calc(100% + 8px);
+    left: 0;
+    transform-origin: left bottom;
+    transform: scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: scale(1);
+    }
+  }
+
+  &&-topRight {
+    bottom: calc(100% + 8px);
+    right: 0;
+    transform-origin: right bottom;
+    transform: scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: scale(1);
+    }
+  }
+
+  &&-bottomLeft {
+    top: calc(100% + 8px);
+    left: 0;
+    transform-origin: left top;
+    transform: scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: scale(1);
+    }
+  }
+
+  &&-bottomRight {
+    top: calc(100% + 8px);
+    right: 0;
+    transform-origin: right top;
+    transform: scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: scale(1);
+    }
+  }
+}
+
+// ===== 提示内容 =====
+.aura-tooltip-content {
+  padding: 6px 12px;
+  border-radius: var(--aura-radius-sm);
+  background: var(--aura-gray-800);
+  color: var(--aura-text-inverse);
+  font-size: var(--aura-font-size-sm);
+  line-height: 1.5;
+  white-space: nowrap;
+  box-shadow: var(--aura-shadow-md);
+  max-width: 300px;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+// ===== 箭头 =====
+.aura-tooltip-arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--aura-gray-800);
+  transform: rotate(45deg);
+
+  // 箭头根据方位定位
+  .aura-tooltip-top &,
+  .aura-tooltip-topLeft &,
+  .aura-tooltip-topRight & {
+    bottom: -4px;
+    left: 50%;
+    margin-left: -4px;
+  }
+
+  .aura-tooltip-topLeft & {
+    left: 16px;
+  }
+
+  .aura-tooltip-topRight & {
+    left: auto;
+    right: 16px;
+  }
+
+  .aura-tooltip-bottom &,
+  .aura-tooltip-bottomLeft &,
+  .aura-tooltip-bottomRight & {
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+  }
+
+  .aura-tooltip-bottomLeft & {
+    left: 16px;
+  }
+
+  .aura-tooltip-bottomRight & {
+    left: auto;
+    right: 16px;
+  }
+
+  .aura-tooltip-left & {
+    right: -4px;
+    top: 50%;
+    margin-top: -4px;
+  }
+
+  .aura-tooltip-right & {
+    left: -4px;
+    top: 50%;
+    margin-top: -4px;
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-tooltip-content {
+    background: var(--aura-gray-200);
+    color: var(--aura-gray-900);
+  }
+
+  .aura-tooltip-arrow {
+    background: var(--aura-gray-200);
+  }
+}

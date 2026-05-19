@@ -2,9 +2,18 @@
   "name": "@aura/shared",
   "version": "0.0.1",
   "description": "Aura 共享工具函数",
-  "main": "lib/index.js",
   "module": "esm/index.js",
-  "types": "lib/index.d.ts",
-  "files": ["lib", "esm", "dist"],
+  "types": "esm/index.d.ts",
+  "files": ["esm"],
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "types": "./esm/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "father build",
+    "dev": "father dev"
+  },
   "license": "MIT"
 }

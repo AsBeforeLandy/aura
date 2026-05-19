@@ -1,0 +1,115 @@
+/* ===== Divider 分割线 ===== */
+.aura-divider {
+  margin: 0;
+  border: none;
+  box-sizing: border-box;
+
+  /* 水平分割线 */
+  &&-horizontal {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 16px 0;
+    border-bottom: 1px solid var(--aura-border);
+  }
+
+  /* 垂直分割线 */
+  &&-vertical {
+    display: inline-block;
+    width: 1px;
+    height: 0.9em;
+    margin: 0 8px;
+    border-left: 1px solid var(--aura-border);
+    vertical-align: middle;
+  }
+
+  /* 虚线样式 */
+  &&-dashed {
+    &.aura-divider-horizontal {
+      border-bottom-style: dashed;
+    }
+
+    &.aura-divider-vertical {
+      border-left-style: dashed;
+    }
+  }
+
+  /* 带文字 */
+  &&-with-text {
+    border-bottom: none;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--aura-border);
+    }
+
+    &::before {
+      margin-right: 16px;
+    }
+
+    &::after {
+      margin-left: 16px;
+    }
+
+    /* 虚线 + 带文字 */
+    &.aura-divider-dashed {
+      &::before,
+      &::after {
+        border-bottom-style: dashed;
+      }
+    }
+  }
+
+  /* 文字位置 - left */
+  &&-with-text-left {
+    &::before {
+      flex: 0 0 5%;
+    }
+
+    &::after {
+      flex: 1;
+    }
+  }
+
+  /* 文字位置 - right */
+  &&-with-text-right {
+    &::before {
+      flex: 1;
+    }
+
+    &::after {
+      flex: 0 0 5%;
+    }
+  }
+
+  /* 文字位置 - center 是默认，不需要额外样式 */
+}
+
+/* 内部文字 */
+.aura-divider-inner-text {
+  display: inline-block;
+  padding: 0 4px;
+  font-size: var(--aura-font-size-md);
+  color: var(--aura-text);
+  white-space: nowrap;
+}
+
+/* ===== Dark mode ===== */
+[data-theme="dark"] {
+  .aura-divider-horizontal {
+    border-bottom-color: var(--aura-border);
+  }
+
+  .aura-divider-vertical {
+    border-left-color: var(--aura-border);
+  }
+
+  .aura-divider-with-text {
+    &::before,
+    &::after {
+      border-bottom-color: var(--aura-border);
+    }
+  }
+}

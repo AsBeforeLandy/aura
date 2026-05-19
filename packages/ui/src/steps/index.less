@@ -1,0 +1,375 @@
+/* ===== Steps 组件样式 ===== */
+
+.aura-steps {
+  display: flex;
+  align-items: flex-start;
+
+  /* ===== Direction: horizontal ===== */
+  &&-horizontal {
+    flex-direction: row;
+
+    .aura-steps-step-container {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    .aura-steps-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .aura-steps-step-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+    }
+
+    .aura-steps-tail {
+      position: absolute;
+      top: 16px;
+      left: calc(50% + 20px);
+      right: calc(-50% + 20px);
+      height: 2px;
+      background: var(--aura-border);
+      transition:
+        background var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+      &-completed {
+        background: var(--aura-primary-600);
+      }
+
+      &-pending {
+        background: var(--aura-border);
+      }
+    }
+  }
+
+  /* ===== Direction: vertical ===== */
+  &&-vertical {
+    flex-direction: column;
+
+    .aura-steps-step-container {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-bottom: var(--aura-spacing-4);
+    }
+
+    .aura-steps-step-header {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      cursor: pointer;
+      gap: var(--aura-spacing-3);
+    }
+
+    .aura-steps-tail {
+      position: absolute;
+      top: 32px;
+      left: 15px;
+      width: 2px;
+      bottom: var(--aura-spacing-4);
+      background: var(--aura-border);
+      transition:
+        background var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+      &-completed {
+        background: var(--aura-primary-600);
+      }
+
+      &-pending {
+        background: var(--aura-border);
+      }
+    }
+  }
+
+  /* ===== Size: sm ===== */
+  &&-sm {
+    .aura-steps-icon {
+      width: 24px;
+      height: 24px;
+      font-size: var(--aura-font-size-xs);
+    }
+
+    .aura-steps-step-title {
+      font-size: var(--aura-font-size-sm);
+    }
+
+    .aura-steps-step-description {
+      font-size: var(--aura-font-size-xs);
+    }
+
+    .aura-steps-dot-icon {
+      width: 8px;
+      height: 8px;
+    }
+  }
+}
+
+/* ===== Step Container ===== */
+.aura-steps-step-container {
+  &:last-child {
+    .aura-steps-tail {
+      display: none;
+    }
+  }
+}
+
+/* ===== Step ===== */
+.aura-steps-step {
+  transition: all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+  &-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    .aura-steps-step-header {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.aura-steps-step-header {
+  outline: none;
+
+  &:focus-visible {
+    .aura-steps-icon {
+      outline: 2px solid var(--aura-primary-500);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.aura-steps-step-content {
+  margin-top: var(--aura-spacing-2);
+  text-align: center;
+}
+
+.aura-steps-step-title {
+  font-size: var(--aura-font-size-md);
+  font-weight: 500;
+  color: var(--aura-text);
+  line-height: 1.4;
+}
+
+.aura-steps-step-description {
+  font-size: var(--aura-font-size-sm);
+  color: var(--aura-text-secondary);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* ===== Icon ===== */
+.aura-steps-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--aura-radius-full);
+  font-size: var(--aura-font-size-sm);
+  font-weight: 600;
+  color: var(--aura-text-secondary);
+  background: var(--aura-bg-secondary);
+  border: 2px solid var(--aura-border);
+  transition:
+    all var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &-completed {
+    color: var(--aura-text-inverse);
+    background: var(--aura-primary-600);
+    border-color: var(--aura-primary-600);
+  }
+
+  &-active {
+    color: var(--aura-primary-700);
+    border-color: var(--aura-primary-600);
+    background: var(--aura-primary-50);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
+}
+
+.aura-steps-number {
+  line-height: 1;
+}
+
+.aura-steps-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ===== Variant: dot ===== */
+.aura-steps-dot {
+  .aura-steps-icon {
+    width: auto;
+    height: auto;
+    background: transparent;
+    border: none;
+  }
+
+  .aura-steps-dot-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--aura-radius-full);
+    background: var(--aura-border);
+    transition:
+      all var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .aura-steps-icon-active .aura-steps-dot-icon {
+    background: var(--aura-primary-600);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  }
+
+  .aura-steps-icon-completed .aura-steps-dot-icon {
+    background: var(--aura-primary-600);
+  }
+}
+
+/* ===== Variant: navigation ===== */
+.aura-steps-navigation {
+  .aura-steps-step-container {
+    position: relative;
+  }
+
+  .aura-steps-step-active {
+    .aura-steps-step-title {
+      color: var(--aura-primary-700);
+      font-weight: 600;
+    }
+  }
+
+  .aura-steps-step-completed {
+    .aura-steps-step-title {
+      color: var(--aura-text-secondary);
+    }
+  }
+
+  /* 底部横线 */
+  .aura-steps-tail {
+    height: 3px;
+    border-radius: 2px;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    &-completed {
+      background: var(--aura-primary-600);
+    }
+  }
+
+  .aura-steps-step {
+    padding-bottom: var(--aura-spacing-2);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--aura-border);
+      border-radius: 2px;
+      transition:
+        background var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &-active::after {
+      background: var(--aura-primary-600);
+    }
+
+    &-completed::after {
+      background: var(--aura-primary-600);
+    }
+  }
+
+  .aura-steps-tail {
+    display: none;
+  }
+}
+
+/* ===== vertical 模式下 steps-step-content 对齐 ===== */
+.aura-steps-vertical {
+  .aura-steps-step-content {
+    text-align: left;
+    margin-top: 0;
+  }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-steps-icon {
+    color: var(--aura-text-secondary);
+    background: var(--aura-bg-tertiary);
+    border-color: var(--aura-border);
+
+    &-completed {
+      color: var(--aura-text-inverse);
+      background: var(--aura-primary-600);
+      border-color: var(--aura-primary-600);
+    }
+
+    &-active {
+      color: var(--aura-primary-400);
+      border-color: var(--aura-primary-500);
+      background: rgba(124, 58, 237, 0.1);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+    }
+  }
+
+  .aura-steps-step-title {
+    color: var(--aura-text);
+  }
+
+  .aura-steps-step-description {
+    color: var(--aura-text-tertiary);
+  }
+
+  .aura-steps-tail-pending {
+    background: var(--aura-border);
+  }
+
+  .aura-steps-navigation {
+    .aura-steps-step-active {
+      .aura-steps-step-title {
+        color: var(--aura-primary-400);
+      }
+    }
+
+    .aura-steps-step::after {
+      background: var(--aura-border);
+    }
+
+    .aura-steps-step-active::after,
+    .aura-steps-step-completed::after {
+      background: var(--aura-primary-500);
+    }
+  }
+
+  .aura-steps-dot {
+    .aura-steps-dot-icon {
+      background: var(--aura-border);
+    }
+
+    .aura-steps-icon-active .aura-steps-dot-icon {
+      background: var(--aura-primary-500);
+    }
+
+    .aura-steps-icon-completed .aura-steps-dot-icon {
+      background: var(--aura-primary-500);
+    }
+  }
+}

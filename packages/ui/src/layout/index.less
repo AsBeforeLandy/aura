@@ -1,0 +1,132 @@
+/* ===== Layout 组件样式 ===== */
+
+.aura-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  background: var(--aura-bg-secondary);
+
+  &&-has-sider {
+    flex-direction: row;
+  }
+}
+
+// ===== Header =====
+.aura-layout-header {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  flex-shrink: 0;
+  padding: 0 var(--aura-spacing-6);
+  background: var(--aura-bg);
+  border-bottom: 1px solid var(--aura-border);
+  color: var(--aura-text);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  z-index: 10;
+}
+
+// ===== Body =====
+.aura-layout-body {
+  flex: 1;
+  padding: var(--aura-spacing-6);
+  background: var(--aura-bg-secondary);
+  color: var(--aura-text);
+  overflow: auto;
+}
+
+// ===== Footer =====
+.aura-layout-footer {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  flex-shrink: 0;
+  padding: 0 var(--aura-spacing-6);
+  background: var(--aura-bg);
+  border-top: 1px solid var(--aura-border);
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-sm);
+}
+
+// ===== Sider =====
+.aura-layout-sider {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: var(--aura-bg);
+  border-right: 1px solid var(--aura-border);
+  transition: width var(--aura-duration-slow) cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  z-index: 9;
+
+  &&-collapsed {
+    .aura-layout-sider-content {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+}
+
+.aura-layout-sider-content {
+  flex: 1;
+  min-width: 0;
+  padding: var(--aura-spacing-4);
+  transition:
+    opacity var(--aura-duration-normal) var(--aura-easing),
+    transform var(--aura-duration-normal) var(--aura-easing);
+  overflow: hidden;
+}
+
+.aura-layout-sider-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  border-top: 1px solid var(--aura-border);
+  background: var(--aura-bg);
+  color: var(--aura-text-secondary);
+  cursor: pointer;
+  transition: all var(--aura-duration-normal) var(--aura-easing);
+
+  &:hover {
+    background: var(--aura-primary-50);
+    color: var(--aura-primary-700);
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-layout-header {
+    background: var(--aura-gray-900);
+    border-color: var(--aura-gray-700);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .aura-layout-body {
+    background: var(--aura-gray-900);
+  }
+
+  .aura-layout-footer {
+    background: var(--aura-gray-900);
+    border-color: var(--aura-gray-700);
+  }
+
+  .aura-layout-sider {
+    background: var(--aura-gray-900);
+    border-color: var(--aura-gray-700);
+  }
+
+  .aura-layout-sider-trigger {
+    background: var(--aura-gray-900);
+    border-color: var(--aura-gray-700);
+    color: var(--aura-gray-400);
+
+    &:hover {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--aura-primary-400);
+    }
+  }
+}

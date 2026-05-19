@@ -1,0 +1,148 @@
+/* ===== Slider 组件样式 ===== */
+
+.aura-slider {
+  position: relative;
+  width: 100%;
+  padding: var(--aura-spacing-3) 0;
+  user-select: none;
+  touch-action: none;
+
+  // 禁用状态
+  &&-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ===== 轨道 =====
+.aura-slider-track {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--aura-radius-full);
+  background: var(--aura-gray-200);
+  cursor: pointer;
+  transition: height var(--aura-duration-fast) var(--aura-easing);
+
+  &:hover {
+    height: 8px;
+  }
+}
+
+// ===== 已选区域 =====
+.aura-slider-track-selected {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: var(--aura-radius-full);
+  background: var(--aura-primary-700);
+  transition:
+    left var(--aura-duration-fast) var(--aura-easing),
+    width var(--aura-duration-fast) var(--aura-easing);
+
+  .aura-slider-disabled & {
+    background: var(--aura-gray-400);
+  }
+}
+
+// ===== 滑块手柄 =====
+.aura-slider-handle {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--aura-bg);
+  border: 2px solid var(--aura-primary-700);
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  z-index: 1;
+  transition:
+    box-shadow var(--aura-duration-normal) var(--aura-easing),
+    transform var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color var(--aura-duration-normal) var(--aura-easing);
+
+  &:hover {
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--aura-primary-200),
+      0 0 0 4px rgba(124, 58, 237, 0.15);
+  }
+
+  // 拖拽激活状态
+  &&-active {
+    width: 20px;
+    height: 20px;
+    cursor: grabbing;
+    box-shadow: var(--aura-shadow-md), 0 0 0 4px rgba(124, 58, 237, 0.2);
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .aura-slider-disabled & {
+    border-color: var(--aura-gray-400);
+    cursor: not-allowed;
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}
+
+// ===== 标记 =====
+.aura-slider-marks {
+  position: relative;
+  width: 100%;
+  margin-top: var(--aura-spacing-2);
+  height: 20px;
+}
+
+.aura-slider-mark {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: var(--aura-font-size-xs);
+  color: var(--aura-text-tertiary);
+  white-space: nowrap;
+  transition: color var(--aura-duration-fast) var(--aura-easing);
+
+  // 激活状态的标记
+  &&-active {
+    color: var(--aura-primary-700);
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-slider-track {
+    background: var(--aura-gray-700);
+  }
+
+  .aura-slider-track-selected {
+    background: var(--aura-primary-600);
+  }
+
+  .aura-slider-handle {
+    background: var(--aura-gray-800);
+    border-color: var(--aura-primary-600);
+
+    &:hover {
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.25);
+    }
+
+    &&-active {
+      box-shadow: var(--aura-shadow-lg), 0 0 0 4px rgba(124, 58, 237, 0.3);
+    }
+  }
+
+  .aura-slider-mark {
+    color: var(--aura-gray-400);
+
+    &&-active {
+      color: var(--aura-primary-400);
+    }
+  }
+}

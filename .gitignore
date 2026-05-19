@@ -2,8 +2,8 @@ node_modules
 dist
 lib
 esm
-.dumi
 .dumi/tmp
+.dumi/tmp-production
 .umi
 .umi-production
 .DS_Store

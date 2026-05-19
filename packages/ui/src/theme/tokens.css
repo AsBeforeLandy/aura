@@ -1,0 +1,148 @@
+/* ===== Aura Design Tokens — Light Theme (Default) ===== */
+:root {
+  /* Primary — Violet */
+  --aura-primary-50: #faf5ff;
+  --aura-primary-100: #f3e8ff;
+  --aura-primary-200: #e9d5ff;
+  --aura-primary-300: #d8b4fe;
+  --aura-primary-400: #c084fc;
+  --aura-primary-500: #a855f7;
+  --aura-primary-600: #9333ea;
+  --aura-primary-700: #7c3aed;
+  --aura-primary-800: #6d28d9;
+  --aura-primary-900: #5b21b6;
+  --aura-primary-950: #3b0764;
+
+  /* Gray */
+  --aura-gray-50: #f9fafb;
+  --aura-gray-100: #f3f4f6;
+  --aura-gray-200: #e5e7eb;
+  --aura-gray-300: #d1d5db;
+  --aura-gray-400: #9ca3af;
+  --aura-gray-500: #6b7280;
+  --aura-gray-600: #4b5563;
+  --aura-gray-700: #374151;
+  --aura-gray-800: #1f2937;
+  --aura-gray-900: #111827;
+  --aura-gray-950: #030712;
+
+  /* Semantic Colors */
+  --aura-success: #10b981;
+  --aura-success-light: #d1fae5;
+  --aura-warning: #f59e0b;
+  --aura-warning-light: #fef3c7;
+  --aura-error: #ef4444;
+  --aura-error-light: #fee2e2;
+  --aura-info: #3b82f6;
+  --aura-info-light: #dbeafe;
+
+  /* Background */
+  --aura-bg: #ffffff;
+  --aura-bg-secondary: #f9fafb;
+  --aura-bg-tertiary: #f3f4f6;
+
+  /* Text */
+  --aura-text: #111827;
+  --aura-text-secondary: #6b7280;
+  --aura-text-tertiary: #9ca3af;
+  --aura-text-inverse: #ffffff;
+
+  /* Border */
+  --aura-border: #e5e7eb;
+  --aura-border-hover: #d1d5db;
+
+  /* Spacing */
+  --aura-spacing-1: 4px;
+  --aura-spacing-2: 8px;
+  --aura-spacing-3: 12px;
+  --aura-spacing-4: 16px;
+  --aura-spacing-5: 20px;
+  --aura-spacing-6: 24px;
+  --aura-spacing-7: 28px;
+  --aura-spacing-8: 32px;
+  --aura-spacing-9: 36px;
+  --aura-spacing-10: 40px;
+  --aura-spacing-11: 44px;
+  --aura-spacing-12: 48px;
+
+  /* Border Radius */
+  --aura-radius-sm: 6px;
+  --aura-radius-md: 10px;
+  --aura-radius-lg: 14px;
+  --aura-radius-xl: 20px;
+  --aura-radius-full: 9999px;
+
+  /* Shadows */
+  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.3);
+
+  /* Font Size */
+  --aura-font-size-xs: 12px;
+  --aura-font-size-sm: 13px;
+  --aura-font-size-md: 14px;
+  --aura-font-size-lg: 16px;
+  --aura-font-size-xl: 18px;
+  --aura-font-size-2xl: 20px;
+  --aura-font-size-3xl: 24px;
+
+  /* Duration */
+  --aura-duration-fast: 150ms;
+  --aura-duration-normal: 200ms;
+  --aura-duration-slow: 300ms;
+  --aura-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Dark Theme ===== */
+[data-theme="dark"] {
+  --aura-primary-50: #3b0764;
+  --aura-primary-100: #4c1d95;
+  --aura-primary-200: #5b21b6;
+  --aura-primary-300: #6d28d9;
+  --aura-primary-400: #7c3aed;
+  --aura-primary-500: #8b5cf6;
+  --aura-primary-600: #a78bfa;
+  --aura-primary-700: #c4b5fd;
+  --aura-primary-800: #ddd6fe;
+  --aura-primary-900: #ede9fe;
+  --aura-primary-950: #faf5ff;
+
+  --aura-gray-50: #030712;
+  --aura-gray-100: #111827;
+  --aura-gray-200: #1f2937;
+  --aura-gray-300: #374151;
+  --aura-gray-400: #4b5563;
+  --aura-gray-500: #6b7280;
+  --aura-gray-600: #9ca3af;
+  --aura-gray-700: #d1d5db;
+  --aura-gray-800: #e5e7eb;
+  --aura-gray-900: #f3f4f6;
+  --aura-gray-950: #f9fafb;
+
+  --aura-success: #34d399;
+  --aura-success-light: rgba(16, 185, 129, 0.15);
+  --aura-warning: #fbbf24;
+  --aura-warning-light: rgba(245, 158, 11, 0.15);
+  --aura-error: #f87171;
+  --aura-error-light: rgba(239, 68, 68, 0.15);
+  --aura-info: #60a5fa;
+  --aura-info-light: rgba(59, 130, 246, 0.15);
+
+  --aura-bg: #0f0c29;
+  --aura-bg-secondary: #1a1a3e;
+  --aura-bg-tertiary: #252550;
+
+  --aura-text: #f3f4f6;
+  --aura-text-secondary: #9ca3af;
+  --aura-text-tertiary: #6b7280;
+  --aura-text-inverse: #111827;
+
+  --aura-border: rgba(139, 92, 246, 0.2);
+  --aura-border-hover: rgba(139, 92, 246, 0.4);
+
+  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.4);
+}

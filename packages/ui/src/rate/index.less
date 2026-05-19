@@ -1,0 +1,87 @@
+/* ===== Rate 组件样式 ===== */
+
+.aura-rate {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aura-spacing-1);
+
+  // 禁用状态
+  &&-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ===== 星星尺寸 =====
+.aura-rate-sm {
+  .aura-rate-star {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+}
+
+.aura-rate-md {
+  .aura-rate-star {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.aura-rate-lg {
+  .aura-rate-star {
+    width: 28px;
+    height: 28px;
+    font-size: 28px;
+  }
+}
+
+// ===== 单个星星 =====
+.aura-rate-star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--aura-gray-300);
+  transition:
+    transform var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1),
+    color var(--aura-duration-fast) var(--aura-easing);
+  position: relative;
+
+  &:hover {
+    transform: scale(1.15);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--aura-primary-200);
+    border-radius: 2px;
+  }
+
+  // 填充状态
+  &&-filled {
+    color: var(--aura-warning);
+  }
+
+  // 半星状态
+  &&-half {
+    color: var(--aura-warning);
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-rate-star {
+    color: var(--aura-gray-600);
+
+    &&-filled {
+      color: var(--aura-warning);
+    }
+
+    &&-half {
+      color: var(--aura-warning);
+    }
+  }
+}

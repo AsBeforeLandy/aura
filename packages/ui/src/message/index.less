@@ -1,0 +1,113 @@
+.aura-message-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--aura-spacing-4);
+  pointer-events: none;
+}
+
+.aura-message {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aura-spacing-2);
+  padding: var(--aura-spacing-2) var(--aura-spacing-4);
+  margin-bottom: var(--aura-spacing-2);
+  background: var(--aura-bg);
+  border-radius: var(--aura-radius-md);
+  box-shadow: var(--aura-shadow-md);
+  font-size: var(--aura-font-size-md);
+  color: var(--aura-text);
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity var(--aura-duration-normal) var(--aura-easing),
+              transform var(--aura-duration-normal) var(--aura-easing);
+
+  /* ===== 图标 ===== */
+  &-icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* ===== 内容 ===== */
+  &-content {
+    line-height: 1.5;
+  }
+
+  /* ===== 入场状态 ===== */
+  &-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== 退场状态 ===== */
+  &-leaving {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  /* ===== Variant 颜色 ===== */
+  &-success {
+    border-left: 3px solid var(--aura-success);
+
+    .aura-message-icon {
+      color: var(--aura-success);
+    }
+  }
+
+  &-error {
+    border-left: 3px solid var(--aura-error);
+
+    .aura-message-icon {
+      color: var(--aura-error);
+    }
+  }
+
+  &-warning {
+    border-left: 3px solid var(--aura-warning);
+
+    .aura-message-icon {
+      color: var(--aura-warning);
+    }
+  }
+
+  &-info {
+    border-left: 3px solid var(--aura-info);
+
+    .aura-message-icon {
+      color: var(--aura-info);
+    }
+  }
+
+  &-loading {
+    border-left: 3px solid var(--aura-primary-500);
+
+    .aura-message-icon {
+      color: var(--aura-primary-500);
+    }
+  }
+
+  /* ===== Loading 旋转动画 ===== */
+  &-loading-icon {
+    animation: aura-message-spin 0.8s linear infinite;
+  }
+}
+
+@keyframes aura-message-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-message {
+    background: var(--aura-bg-secondary);
+    box-shadow: var(--aura-shadow-lg);
+  }
+}

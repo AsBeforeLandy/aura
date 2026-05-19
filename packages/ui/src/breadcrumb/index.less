@@ -1,0 +1,108 @@
+/* ===== Breadcrumb 组件样式 ===== */
+
+.aura-breadcrumb {
+  font-size: var(--aura-font-size-md);
+  color: var(--aura-text-secondary);
+
+  &-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+  }
+}
+
+.aura-breadcrumb-item-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.aura-breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  color: var(--aura-text-secondary);
+  text-decoration: none;
+  padding: var(--aura-spacing-1) 0;
+  font-size: var(--aura-font-size-md);
+  cursor: default;
+  transition:
+    color var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    color: var(--aura-primary-700);
+  }
+
+  /* 链接样式 */
+  a& {
+    color: var(--aura-text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--aura-primary-700);
+    }
+
+    &:active {
+      color: var(--aura-primary-800);
+    }
+  }
+
+  /* 可点击的 span */
+  span&[role="button"] {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--aura-primary-700);
+    }
+  }
+
+  /* 最后一项加粗 */
+  &-last {
+    font-weight: 600;
+    color: var(--aura-text);
+    cursor: default;
+
+    &:hover {
+      color: var(--aura-text);
+    }
+  }
+}
+
+.aura-breadcrumb-separator {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 var(--aura-spacing-2);
+  color: var(--aura-text-tertiary);
+  user-select: none;
+  font-size: var(--aura-font-size-md);
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-breadcrumb-item {
+    color: var(--aura-text-secondary);
+
+    &:hover {
+      color: var(--aura-primary-400);
+    }
+
+    a&:hover {
+      color: var(--aura-primary-400);
+    }
+
+    &-last {
+      color: var(--aura-text);
+
+      &:hover {
+        color: var(--aura-text);
+      }
+    }
+  }
+
+  .aura-breadcrumb-separator {
+    color: var(--aura-text-tertiary);
+  }
+}

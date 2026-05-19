@@ -1,0 +1,231 @@
+/* ===== Card 组件样式 ===== */
+
+.aura-card {
+  position: relative;
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-lg);
+  background: var(--aura-bg);
+  color: var(--aura-text);
+  overflow: hidden;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // ===== 尺寸 =====
+  &&-sm {
+    .aura-card-header {
+      padding: 8px 12px;
+    }
+    .aura-card-body {
+      padding: 8px 12px;
+    }
+    .aura-card-footer {
+      padding: 6px 12px;
+    }
+  }
+
+  &&-md {
+    .aura-card-header {
+      padding: 14px 16px;
+    }
+    .aura-card-body {
+      padding: 14px 16px;
+    }
+    .aura-card-footer {
+      padding: 10px 16px;
+    }
+  }
+
+  &&-lg {
+    .aura-card-header {
+      padding: 18px 24px;
+    }
+    .aura-card-body {
+      padding: 18px 24px;
+    }
+    .aura-card-footer {
+      padding: 14px 24px;
+    }
+  }
+
+  // ===== 变体 =====
+
+  // elevated：阴影 + 无边框
+  &&-elevated {
+    border-color: transparent;
+    box-shadow: var(--aura-shadow-md);
+  }
+
+  // outlined：加粗边框
+  &&-outlined {
+    border: 2px solid var(--aura-border);
+  }
+
+  // glass：毛玻璃效果
+  &&-glass {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  // ===== Hoverable =====
+  &&-hoverable {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--aura-shadow-lg);
+      border-color: var(--aura-primary-200);
+    }
+
+    &:active {
+      transform: translateY(-2px);
+      transition-duration: 0.1s;
+    }
+  }
+}
+
+// ===== Header =====
+.aura-card-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--aura-border);
+}
+
+// ===== Title =====
+.aura-card-title {
+  font-size: var(--aura-font-size-lg);
+  font-weight: 600;
+  color: var(--aura-text);
+  line-height: 1.5;
+}
+
+// ===== Body =====
+.aura-card-body {
+  font-size: var(--aura-font-size-md);
+  line-height: 1.6;
+  color: var(--aura-text-secondary);
+}
+
+// ===== Actions =====
+.aura-card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--aura-spacing-2);
+  padding: 10px 16px;
+  border-top: 1px solid var(--aura-border);
+}
+
+// ===== Footer =====
+.aura-card-footer {
+  border-top: 1px solid var(--aura-border);
+  color: var(--aura-text-tertiary);
+  font-size: var(--aura-font-size-sm);
+}
+
+// ===== Cover =====
+.aura-card-cover {
+  overflow: hidden;
+
+  > img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .aura-card-hoverable:hover > & > img {
+    transform: scale(1.05);
+  }
+}
+
+// ===== 骨架屏 =====
+.aura-card-skeleton {
+  padding: var(--aura-spacing-4);
+}
+
+.aura-card-skeleton-header {
+  display: flex;
+  align-items: center;
+  gap: var(--aura-spacing-3);
+  margin-bottom: var(--aura-spacing-4);
+}
+
+.aura-card-skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    var(--aura-bg-tertiary) 25%,
+    var(--aura-bg-secondary) 50%,
+    var(--aura-bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: aura-skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.aura-card-skeleton-title {
+  flex: 1;
+  height: 16px;
+  border-radius: var(--aura-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--aura-bg-tertiary) 25%,
+    var(--aura-bg-secondary) 50%,
+    var(--aura-bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: aura-skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.aura-card-skeleton-row {
+  height: 12px;
+  margin-bottom: var(--aura-spacing-2);
+  border-radius: var(--aura-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--aura-bg-tertiary) 25%,
+    var(--aura-bg-secondary) 50%,
+    var(--aura-bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: aura-skeleton-loading 1.5s ease-in-out infinite;
+
+  &&-short {
+    width: 60%;
+  }
+}
+
+@keyframes aura-skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-card {
+    border-color: var(--aura-border);
+  }
+
+  .aura-card-elevated {
+    border-color: transparent;
+  }
+
+  .aura-card-glass {
+    background: rgba(15, 12, 41, 0.6);
+    border-color: rgba(139, 92, 246, 0.15);
+  }
+
+  .aura-card-hoverable:hover {
+    border-color: var(--aura-primary-500);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+  }
+}

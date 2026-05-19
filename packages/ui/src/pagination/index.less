@@ -1,0 +1,231 @@
+/* ===== Pagination 组件样式 ===== */
+
+.aura-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--aura-spacing-1);
+  user-select: none;
+  font-size: var(--aura-font-size-md);
+
+  /* ===== 页码容器 ===== */
+  &-pages {
+    display: flex;
+    align-items: center;
+    gap: var(--aura-spacing-1);
+  }
+}
+
+/* ===== 按钮（页码 & 前后翻页） ===== */
+.aura-pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  font-size: var(--aura-font-size-sm);
+  font-family: inherit;
+  line-height: 1;
+  color: var(--aura-text);
+  background: var(--aura-bg);
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-sm);
+  cursor: pointer;
+  transition:
+    all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover:not(:disabled) {
+    color: var(--aura-primary-700);
+    border-color: var(--aura-primary-300);
+    background: var(--aura-primary-50);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--aura-primary-500);
+    outline-offset: 2px;
+  }
+
+  /* 当前页激活 */
+  &-active {
+    color: var(--aura-text-inverse);
+    background: var(--aura-primary-600);
+    border-color: var(--aura-primary-600);
+    font-weight: 600;
+
+    &:hover {
+      color: var(--aura-text-inverse);
+      background: var(--aura-primary-700);
+      border-color: var(--aura-primary-700);
+    }
+  }
+
+  /* 禁用 */
+  &-disabled {
+    color: var(--aura-text-tertiary);
+    background: var(--aura-bg-secondary);
+    border-color: var(--aura-border);
+    cursor: not-allowed;
+    opacity: 0.6;
+
+    &:hover {
+      color: var(--aura-text-tertiary);
+      background: var(--aura-bg-secondary);
+      border-color: var(--aura-border);
+    }
+
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+/* ===== 省略号 ===== */
+.aura-pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  color: var(--aura-text-tertiary);
+  font-size: var(--aura-font-size-md);
+  letter-spacing: 2px;
+}
+
+/* ===== 每页条数选择器 ===== */
+.aura-pagination-size-changer {
+  height: 32px;
+  padding: 0 var(--aura-spacing-3);
+  margin-left: var(--aura-spacing-2);
+  font-size: var(--aura-font-size-sm);
+  font-family: inherit;
+  color: var(--aura-text);
+  background: var(--aura-bg);
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-sm);
+  cursor: pointer;
+  transition:
+    border-color var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    border-color: var(--aura-primary-300);
+  }
+
+  &:focus {
+    outline: 2px solid var(--aura-primary-500);
+    outline-offset: 2px;
+  }
+}
+
+/* ===== 快速跳转 ===== */
+.aura-pagination-jumper {
+  display: flex;
+  align-items: center;
+  gap: var(--aura-spacing-2);
+  margin-left: var(--aura-spacing-2);
+}
+
+.aura-pagination-jumper-text {
+  font-size: var(--aura-font-size-sm);
+  color: var(--aura-text-secondary);
+}
+
+.aura-pagination-jumper-input {
+  width: 50px;
+  height: 32px;
+  padding: 0 var(--aura-spacing-2);
+  font-size: var(--aura-font-size-sm);
+  font-family: inherit;
+  color: var(--aura-text);
+  background: var(--aura-bg);
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-sm);
+  text-align: center;
+  transition:
+    border-color var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    border-color: var(--aura-primary-300);
+  }
+
+  &:focus {
+    outline: 2px solid var(--aura-primary-500);
+    outline-offset: 2px;
+    border-color: var(--aura-primary-500);
+  }
+}
+
+/* ===== Size 变体 ===== */
+.aura-pagination-sm {
+  .aura-pagination-btn {
+    min-width: 28px;
+    height: 28px;
+    font-size: var(--aura-font-size-xs);
+    padding: 0 4px;
+  }
+
+  .aura-pagination-ellipsis {
+    min-width: 28px;
+    height: 28px;
+    font-size: var(--aura-font-size-xs);
+  }
+
+  .aura-pagination-size-changer {
+    height: 28px;
+    font-size: var(--aura-font-size-xs);
+  }
+
+  .aura-pagination-jumper-input {
+    width: 44px;
+    height: 28px;
+    font-size: var(--aura-font-size-xs);
+  }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-pagination-btn {
+    color: var(--aura-text);
+    background: var(--aura-bg-secondary);
+    border-color: var(--aura-border);
+
+    &:hover:not(:disabled) {
+      color: var(--aura-primary-400);
+      border-color: var(--aura-primary-600);
+      background: rgba(124, 58, 237, 0.1);
+    }
+
+    &-active {
+      color: var(--aura-text-inverse);
+      background: var(--aura-primary-600);
+      border-color: var(--aura-primary-600);
+
+      &:hover {
+        color: var(--aura-text-inverse);
+        background: var(--aura-primary-500);
+        border-color: var(--aura-primary-500);
+      }
+    }
+
+    &-disabled {
+      color: var(--aura-text-tertiary);
+      background: var(--aura-bg-tertiary);
+      border-color: var(--aura-border);
+    }
+  }
+
+  .aura-pagination-size-changer {
+    color: var(--aura-text);
+    background: var(--aura-bg-secondary);
+    border-color: var(--aura-border);
+  }
+
+  .aura-pagination-jumper-input {
+    color: var(--aura-text);
+    background: var(--aura-bg-secondary);
+    border-color: var(--aura-border);
+  }
+}

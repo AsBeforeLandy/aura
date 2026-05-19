@@ -1,0 +1,67 @@
+/* ===== Scrollbar 组件样式 ===== */
+
+.aura-scrollbar {
+  overflow: auto;
+  box-sizing: border-box;
+
+  // ===== 自定义 webkit 滚动条 =====
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: var(--aura-radius-full);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: var(--aura-radius-full);
+    transition: background var(--aura-duration-normal) var(--aura-easing);
+  }
+
+  // ===== 悬停时显示滚动条 =====
+  &:hover::-webkit-scrollbar-thumb {
+    background: var(--aura-primary-400);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--aura-primary-600);
+  }
+
+  // ===== 焦点时显示滚动条 =====
+  &:focus::-webkit-scrollbar-thumb {
+    background: var(--aura-primary-400);
+  }
+
+  // ===== 始终显示滚动条 =====
+  &&-always {
+    &::-webkit-scrollbar-thumb {
+      background: var(--aura-primary-400);
+    }
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-scrollbar {
+    &:hover::-webkit-scrollbar-thumb {
+      background: var(--aura-primary-500);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--aura-primary-400);
+    }
+
+    &:focus::-webkit-scrollbar-thumb {
+      background: var(--aura-primary-500);
+    }
+
+    &.aura-scrollbar-always {
+      &::-webkit-scrollbar-thumb {
+        background: var(--aura-primary-500);
+      }
+    }
+  }
+}

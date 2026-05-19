@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "dumi dev",
     "build": "dumi build",
-    "build:lib": "pnpm -C packages/ui build",
+    "build:lib": "pnpm -C packages/shared build && pnpm -C packages/request build && pnpm -C packages/ui build",
     "lint": "eslint packages/*/src --ext .ts,.tsx",
     "prepare": "dumi setup",
     "clean": "rm -rf packages/*/lib packages/*/esm packages/*/dist .dumi",
@@ -27,6 +27,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "dumi": "^2.4.26",
+    "father": "^4.6.19",
     "jsdom": "^29.1.1",
     "react": "^18",
     "react-dom": "^18",

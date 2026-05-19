@@ -1,0 +1,166 @@
+/* ===== 容器定位 ===== */
+.aura-notification-container {
+  position: fixed;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aura-spacing-3);
+  pointer-events: none;
+  max-height: 100vh;
+  overflow: hidden;
+
+  &-topLeft {
+    top: var(--aura-spacing-6);
+    left: var(--aura-spacing-6);
+  }
+
+  &-topRight {
+    top: var(--aura-spacing-6);
+    right: var(--aura-spacing-6);
+  }
+
+  &-bottomLeft {
+    bottom: var(--aura-spacing-6);
+    left: var(--aura-spacing-6);
+    flex-direction: column-reverse;
+  }
+
+  &-bottomRight {
+    bottom: var(--aura-spacing-6);
+    right: var(--aura-spacing-6);
+    flex-direction: column-reverse;
+  }
+}
+
+/* ===== 单条通知 ===== */
+.aura-notification {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--aura-spacing-3);
+  width: 360px;
+  padding: var(--aura-spacing-4);
+  background: var(--aura-bg);
+  border-radius: var(--aura-radius-lg);
+  box-shadow: var(--aura-shadow-lg);
+  border-left: 4px solid var(--aura-border);
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity var(--aura-duration-normal) var(--aura-easing),
+              transform var(--aura-duration-slow) var(--aura-easing);
+
+  /* ===== 图标 ===== */
+  &-icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ===== 主体内容 ===== */
+  &-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ===== 标题 ===== */
+  &-title {
+    font-size: var(--aura-font-size-md);
+    font-weight: 600;
+    color: var(--aura-text);
+    line-height: 1.5;
+    margin-bottom: var(--aura-spacing-1);
+  }
+
+  /* ===== 内容 ===== */
+  &-content {
+    font-size: var(--aura-font-size-sm);
+    color: var(--aura-text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ===== 关闭按钮 ===== */
+  &-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--aura-text-tertiary);
+    cursor: pointer;
+    border-radius: var(--aura-radius-sm);
+    transition: all var(--aura-duration-fast) var(--aura-easing);
+
+    &:hover {
+      color: var(--aura-text);
+      background: var(--aura-bg-tertiary);
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  /* ===== 入场状态 ===== */
+  &-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ===== 退场状态 ===== */
+  &-leaving {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  /* ===== Variant 颜色 ===== */
+  &-default {
+    border-left-color: var(--aura-border);
+  }
+
+  &-success {
+    border-left-color: var(--aura-success);
+
+    .aura-notification-icon {
+      color: var(--aura-success);
+    }
+  }
+
+  &-error {
+    border-left-color: var(--aura-error);
+
+    .aura-notification-icon {
+      color: var(--aura-error);
+    }
+  }
+
+  &-warning {
+    border-left-color: var(--aura-warning);
+
+    .aura-notification-icon {
+      color: var(--aura-warning);
+    }
+  }
+
+  &-info {
+    border-left-color: var(--aura-info);
+
+    .aura-notification-icon {
+      color: var(--aura-info);
+    }
+  }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-notification {
+    background: var(--aura-bg-secondary);
+
+    &-close:hover {
+      background: var(--aura-bg-tertiary);
+    }
+  }
+}

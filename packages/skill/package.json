@@ -1,0 +1,6 @@
+{
+  "name": "@aura/skill",
+  "version": "0.0.1",
+  "description": "Aura UI skill files for AI IDEs",
+  "files": ["skills"]
+}

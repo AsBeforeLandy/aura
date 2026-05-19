@@ -1,0 +1,67 @@
+.aura-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--aura-spacing-8) var(--aura-spacing-4);
+  text-align: center;
+  animation: aura-empty-fade-in var(--aura-duration-slow) var(--aura-easing);
+
+  /* ===== 图片区域 ===== */
+  &-image {
+    margin-bottom: var(--aura-spacing-4);
+
+    &-default {
+      opacity: 0.7;
+      transition: opacity var(--aura-duration-normal) var(--aura-easing);
+    }
+
+    /* 允许外部传入图片自适应 */
+    img,
+    svg {
+      max-width: 200px;
+      height: auto;
+    }
+  }
+
+  &:hover &-image-default {
+    opacity: 0.9;
+  }
+
+  /* ===== 描述文字 ===== */
+  &-description {
+    font-size: var(--aura-font-size-md);
+    color: var(--aura-text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ===== 附加内容（如操作按钮） ===== */
+  &-footer {
+    margin-top: var(--aura-spacing-3);
+  }
+}
+
+/* ===== 动画关键帧 ===== */
+@keyframes aura-empty-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-empty {
+    &-image-default {
+      opacity: 0.5;
+    }
+
+    &:hover &-image-default {
+      opacity: 0.7;
+    }
+  }
+}

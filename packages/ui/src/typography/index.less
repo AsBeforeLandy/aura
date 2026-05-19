@@ -1,0 +1,106 @@
+/* ===== Typography 基础 ===== */
+.aura-typography {
+  color: var(--aura-text);
+  font-size: var(--aura-font-size-md);
+  line-height: 1.6;
+}
+
+/* ===== Title ===== */
+.aura-typography-title {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--aura-text);
+
+  &&-1 {
+    font-size: var(--aura-font-size-3xl);
+  }
+
+  &&-2 {
+    font-size: var(--aura-font-size-2xl);
+  }
+
+  &&-3 {
+    font-size: var(--aura-font-size-xl);
+  }
+
+  &&-4 {
+    font-size: var(--aura-font-size-lg);
+  }
+
+  &&-5 {
+    font-size: var(--aura-font-size-md);
+  }
+}
+
+/* ===== Text ===== */
+.aura-typography-text {
+  font-size: var(--aura-font-size-md);
+  color: var(--aura-text);
+  line-height: 1.6;
+
+  /* 变体颜色 */
+  &&-secondary {
+    color: var(--aura-text-secondary);
+  }
+
+  &&-success {
+    color: var(--aura-success);
+  }
+
+  &&-warning {
+    color: var(--aura-warning);
+  }
+
+  &&-danger {
+    color: var(--aura-error);
+  }
+
+  /* 修饰符 */
+  &&-strong {
+    font-weight: 600;
+  }
+
+  &&-underline {
+    text-decoration: underline;
+  }
+
+  &&-code {
+    padding: 2px 6px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 85%;
+    background: var(--aura-bg-secondary);
+    border: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-sm);
+  }
+
+  &&-mark {
+    padding: 0 4px;
+    background: var(--aura-warning-light);
+    border-radius: var(--aura-radius-sm);
+  }
+}
+
+/* ===== Paragraph ===== */
+.aura-typography-paragraph {
+  margin: 0;
+  font-size: var(--aura-font-size-md);
+  color: var(--aura-text);
+  line-height: 1.8;
+
+  &&-ellipsis {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+}
+
+/* ===== Dark mode ===== */
+[data-theme="dark"] {
+  .aura-typography-text-code {
+    background: var(--aura-bg-tertiary);
+  }
+}

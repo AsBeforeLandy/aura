@@ -1,0 +1,257 @@
+.aura-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aura-spacing-4);
+
+  /* ===== size 变体 ===== */
+  &-sm {
+    gap: var(--aura-spacing-3);
+
+    .aura-form-item-label {
+      font-size: var(--aura-font-size-xs);
+    }
+  }
+
+  &-lg {
+    gap: var(--aura-spacing-5);
+
+    .aura-form-item-label {
+      font-size: var(--aura-font-size-md);
+    }
+  }
+
+  /* ===== inline 模式 ===== */
+  &&-inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--aura-spacing-3);
+
+    .aura-form-item {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--aura-spacing-2);
+
+      .aura-form-item-label {
+        padding-bottom: 0;
+      }
+    }
+
+    .aura-form-item-errors {
+      position: absolute;
+      top: 100%;
+      left: 0;
+    }
+  }
+
+  /* ===== FormItem ===== */
+  &-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--aura-spacing-1);
+    position: relative;
+    min-width: 0;
+
+    /* ===== horizontal 布局 ===== */
+    &-horizontal {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--aura-spacing-3);
+
+      .aura-form-item-label {
+        justify-content: flex-end;
+        width: 80px;
+        flex-shrink: 0;
+        padding-bottom: 0;
+      }
+
+      .aura-form-item-label-left {
+        justify-content: flex-start;
+      }
+
+      .aura-form-item-control {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .aura-form-item-errors {
+        position: absolute;
+        top: 100%;
+        left: 80px;
+      }
+    }
+
+    /* ===== vertical 布局（默认） ===== */
+    &-vertical {
+      flex-direction: column;
+    }
+
+    /* ===== 标签 ===== */
+    &-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 2px;
+      font-size: var(--aura-font-size-sm);
+      color: var(--aura-text);
+      line-height: 1.5;
+      padding-bottom: var(--aura-spacing-1);
+      white-space: nowrap;
+    }
+
+    /* ===== 冒号 ===== */
+    &-colon {
+      margin-left: 2px;
+    }
+
+    /* ===== 必填星号 ===== */
+    &-required-star {
+      color: var(--aura-error);
+      margin-right: 2px;
+      font-size: var(--aura-font-size-md);
+      line-height: 1;
+    }
+
+    /* ===== 控制区 ===== */
+    &-control {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aura-spacing-1);
+      flex: 1;
+    }
+
+    /* ===== 输入区 ===== */
+    &-input {
+      width: 100%;
+    }
+
+    /* ===== 错误信息 ===== */
+    &-errors {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      animation: aura-form-error-in var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &-error-text {
+      font-size: var(--aura-font-size-xs);
+      color: var(--aura-error);
+      line-height: 1.5;
+    }
+
+    /* ===== 错误状态 ===== */
+    &-error {
+      .aura-form-item-label {
+        color: var(--aura-error);
+      }
+    }
+
+    /* ===== 禁用状态 ===== */
+    &-disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+}
+
+/* ===== Form.List ===== */
+.aura-form-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aura-spacing-3);
+}
+
+/* 紧凑模式：同行 Input 无中间圆角、边框重叠，看起来一体 */
+.aura-form-list-compact {
+  .aura-input {
+    border-radius: 0;
+
+    &:focus-within {
+      transform: none;
+    }
+  }
+
+  > div > .aura-form-item + .aura-form-item .aura-input {
+    margin-left: -1px;
+  }
+
+  > div > .aura-form-item:first-of-type .aura-input {
+    border-top-left-radius: var(--aura-radius-md);
+    border-bottom-left-radius: var(--aura-radius-md);
+  }
+
+  > div > .aura-form-item:last-of-type .aura-input {
+    border-top-right-radius: var(--aura-radius-md);
+    border-bottom-right-radius: var(--aura-radius-md);
+  }
+
+  // 同行任一聚焦时，整行统一高亮
+  > div:focus-within .aura-input {
+    border-color: var(--aura-primary-500);
+  }
+}
+
+.aura-form-list-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-top: 4px;
+  border: none;
+  background: transparent;
+  color: var(--aura-text-tertiary);
+  border-radius: var(--aura-radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--aura-duration-normal) var(--aura-easing);
+
+  &:hover {
+    color: var(--aura-error);
+    background: rgba(255, 0, 0, 0.06);
+  }
+}
+
+.aura-form-list-add {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aura-spacing-1);
+  padding: 6px 12px;
+  border: 1px dashed var(--aura-border);
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-primary-700);
+  cursor: pointer;
+  font-size: var(--aura-font-size-sm);
+  width: 100%;
+  justify-content: center;
+  transition: all var(--aura-duration-normal) var(--aura-easing);
+
+  &:hover {
+    border-color: var(--aura-primary-700);
+    color: var(--aura-primary-700);
+  }
+}
+
+/* ===== 错误信息入场动画 ===== */
+@keyframes aura-form-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-form {
+    &-item {
+      &-label {
+        color: var(--aura-text);
+      }
+    }
+  }
+}

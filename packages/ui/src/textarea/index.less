@@ -1,0 +1,224 @@
+/* ===== Textarea 组件样式 ===== */
+
+.aura-textarea {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-bg);
+  color: var(--aura-text);
+  transition: all var(--aura-duration-normal) var(--aura-easing);
+
+  &:focus-within {
+    border-color: var(--aura-primary-500);
+    box-shadow: 0 0 0 2px var(--aura-primary-100);
+  }
+
+  &:hover {
+    border-color: var(--aura-primary-400);
+  }
+
+  // 文本区域元素
+  .aura-textarea-element {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    resize: vertical;
+    line-height: 1.5;
+
+    &::placeholder {
+      color: var(--aura-text-tertiary);
+    }
+  }
+
+  // ===== 尺寸 =====
+  &&-sm {
+    padding: 4px 10px;
+    font-size: var(--aura-font-size-sm);
+    border-radius: var(--aura-radius-sm);
+
+    .aura-textarea-element {
+      padding: 0;
+      font-size: var(--aura-font-size-sm);
+    }
+  }
+
+  &&-md {
+    padding: 6px 12px;
+    font-size: var(--aura-font-size-md);
+
+    .aura-textarea-element {
+      padding: 0;
+      font-size: var(--aura-font-size-md);
+    }
+  }
+
+  &&-lg {
+    padding: 8px 14px;
+    font-size: var(--aura-font-size-lg);
+    border-radius: var(--aura-radius-lg);
+
+    .aura-textarea-element {
+      padding: 0;
+      font-size: var(--aura-font-size-lg);
+    }
+  }
+
+  // ===== 变体 =====
+  &&-filled {
+    border-color: transparent;
+    background: var(--aura-bg-tertiary);
+    border-bottom: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-sm) var(--aura-radius-sm) 0 0;
+
+    &:hover {
+      background: var(--aura-bg-secondary);
+      border-bottom-color: var(--aura-primary-400);
+    }
+
+    &:focus-within {
+      background: var(--aura-bg-secondary);
+      border-bottom-color: var(--aura-primary-500);
+      box-shadow: none;
+    }
+  }
+
+  &&-bordered {
+    border: 2px solid var(--aura-border);
+
+    &:hover {
+      border-color: var(--aura-primary-400);
+    }
+
+    &:focus-within {
+      border-color: var(--aura-primary-500);
+      box-shadow: 0 0 0 2px var(--aura-primary-100);
+    }
+  }
+
+  // ===== 状态 =====
+  &&-error {
+    border-color: var(--aura-error);
+
+    &:hover {
+      border-color: var(--aura-error);
+    }
+
+    &:focus-within {
+      border-color: var(--aura-error);
+      box-shadow: 0 0 0 2px var(--aura-error-light);
+    }
+
+    &.aura-textarea-filled {
+      border-color: transparent;
+      border-bottom-color: var(--aura-error);
+
+      &:hover {
+        border-bottom-color: var(--aura-error);
+      }
+
+      &:focus-within {
+        border-bottom-color: var(--aura-error);
+        box-shadow: none;
+      }
+    }
+  }
+
+  &&-warning {
+    border-color: var(--aura-warning);
+
+    &:hover {
+      border-color: var(--aura-warning);
+    }
+
+    &:focus-within {
+      border-color: var(--aura-warning);
+      box-shadow: 0 0 0 2px var(--aura-warning-light);
+    }
+
+    &.aura-textarea-filled {
+      border-color: transparent;
+      border-bottom-color: var(--aura-warning);
+
+      &:hover {
+        border-bottom-color: var(--aura-warning);
+      }
+
+      &:focus-within {
+        border-bottom-color: var(--aura-warning);
+        box-shadow: none;
+      }
+    }
+  }
+
+  // ===== 禁用 =====
+  &&-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--aura-bg-secondary);
+
+    .aura-textarea-element {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      border-color: var(--aura-border);
+    }
+
+    &:focus-within {
+      border-color: var(--aura-border);
+      box-shadow: none;
+    }
+  }
+
+  // ===== 字符计数 =====
+  &-count {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: var(--aura-spacing-1);
+    padding-bottom: var(--aura-spacing-1);
+    padding-right: var(--aura-spacing-1);
+    font-size: var(--aura-font-size-xs);
+    color: var(--aura-text-tertiary);
+  }
+
+  &-show-count {
+    .aura-textarea-element {
+      resize: none;
+    }
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-textarea {
+    &:focus-within {
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2), 0 0 20px rgba(124, 58, 237, 0.15);
+    }
+
+    &-filled:focus-within {
+      box-shadow: none;
+    }
+
+    &-error:focus-within {
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+
+    &-warning:focus-within {
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    }
+
+    &-disabled {
+      &:focus-within {
+        box-shadow: none;
+      }
+    }
+  }
+}

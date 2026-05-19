@@ -1,0 +1,119 @@
+.aura-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aura-spacing-2);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--aura-font-size-md);
+  color: var(--aura-text);
+  line-height: 1.5;
+
+  // 隐藏原生 input
+  &-input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-input-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // 自定义 radio 外观
+  &-inner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--aura-border);
+    border-radius: var(--aura-radius-full);
+    background: var(--aura-bg);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    flex-shrink: 0;
+
+    // 选中状态的紫色圆点
+    &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: var(--aura-primary-700);
+      border-radius: var(--aura-radius-full);
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0;
+    }
+  }
+
+  // 选中状态
+  &&-checked {
+    .aura-radio-inner {
+      border-color: var(--aura-primary-700);
+
+      &::after {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+  }
+
+  // hover
+  &:hover .aura-radio-inner {
+    border-color: var(--aura-primary-700);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+  }
+
+  // focus
+  &-input:focus-visible + .aura-radio-inner {
+    box-shadow: 0 0 0 2px var(--aura-primary-200);
+  }
+
+  // 禁用状态
+  &&-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    &:hover .aura-radio-inner { border-color: var(--aura-border); box-shadow: none; }
+    &.aura-radio-checked .aura-radio-inner { border-color: var(--aura-border); }
+    .aura-radio-inner::after { background: var(--aura-text-tertiary); }
+  }
+
+  // 标签文本
+  &-label { font-size: inherit; line-height: inherit; }
+
+  // 尺寸
+  &&-sm {
+    font-size: var(--aura-font-size-sm);
+    .aura-radio-inner { width: 14px; height: 14px; &::after { width: 6px; height: 6px; } }
+  }
+
+  &&-lg {
+    font-size: var(--aura-font-size-lg);
+    .aura-radio-inner { width: 18px; height: 18px; &::after { width: 10px; height: 10px; } }
+  }
+}
+
+/* ===== Radio.Group ===== */
+.aura-radio-group {
+  display: flex;
+  gap: var(--aura-spacing-3);
+  &&-horizontal { flex-direction: row; flex-wrap: wrap; align-items: center; }
+  &&-vertical { flex-direction: column; }
+}
+
+// 暗色模式
+[data-theme="dark"] {
+  .aura-radio {
+    &-inner { border-color: rgba(139, 92, 246, 0.3); }
+    &:hover .aura-radio-inner { border-color: var(--aura-primary-600); }
+    &-input:focus-visible + .aura-radio-inner { box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2); }
+  }
+}

@@ -1,0 +1,371 @@
+.aura-upload {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--aura-spacing-2);
+
+  /* ===== 隐藏原生 input ===== */
+  &-input {
+    display: none;
+  }
+
+  /* ===== 触发按钮 ===== */
+  &-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aura-spacing-2);
+    padding: var(--aura-spacing-2) var(--aura-spacing-4);
+    font-size: var(--aura-font-size-sm);
+    font-family: inherit;
+    line-height: 1.5;
+    color: var(--aura-text);
+    background: var(--aura-bg);
+    border: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-md);
+    cursor: pointer;
+    transition: all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+
+    &:hover {
+      color: var(--aura-primary-700);
+      border-color: var(--aura-primary-700);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  /* ===== 禁用状态 ===== */
+  &&-disabled {
+    .aura-upload-trigger {
+      color: var(--aura-text-tertiary);
+      border-color: var(--aura-border);
+      background: var(--aura-bg-secondary);
+      cursor: not-allowed;
+
+      &:hover {
+        color: var(--aura-text-tertiary);
+        border-color: var(--aura-border);
+      }
+
+      &:active {
+        transform: none;
+      }
+    }
+  }
+
+  /* ===== 文件列表 ===== */
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--aura-spacing-1);
+    margin-top: var(--aura-spacing-2);
+  }
+
+  /* ===== 文件列表项 ===== */
+  &-file {
+    display: flex;
+    align-items: center;
+    gap: var(--aura-spacing-2);
+    padding: var(--aura-spacing-2) var(--aura-spacing-3);
+    background: var(--aura-bg-secondary);
+    border-radius: var(--aura-radius-sm);
+    font-size: var(--aura-font-size-sm);
+    color: var(--aura-text);
+    transition: all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    animation: aura-upload-fade-in var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      background: var(--aura-bg-tertiary);
+    }
+
+    /* 缩略图 */
+    &-thumbnail {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--aura-radius-sm);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--aura-bg-tertiary);
+      flex-shrink: 0;
+      color: var(--aura-text-tertiary);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    /* 文件信息 */
+    &-info {
+      display: flex;
+      align-items: center;
+      gap: var(--aura-spacing-2);
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* 文件名 */
+    &-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    /* 状态图标 */
+    &-uploading .aura-upload-status-icon {
+      animation: aura-upload-spin 1s linear infinite;
+      color: var(--aura-primary-700);
+    }
+
+    &-done {
+      /* 完成状态 */
+    }
+
+    &-error {
+      .aura-upload-file-name {
+        color: var(--aura-error);
+      }
+    }
+  }
+
+  /* ===== 状态图标 ===== */
+  &-status-icon {
+    flex-shrink: 0;
+  }
+
+  &-status-done {
+    color: var(--aura-success);
+  }
+
+  &-status-error {
+    color: var(--aura-error);
+  }
+
+  /* ===== 删除按钮 ===== */
+  &-file-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 2px;
+    border: none;
+    background: transparent;
+    color: var(--aura-text-tertiary);
+    cursor: pointer;
+    border-radius: var(--aura-radius-sm);
+    transition: all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+
+    &:hover {
+      color: var(--aura-error);
+      transform: scale(1.15);
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  &-file:hover .aura-upload-file-remove {
+    opacity: 1;
+  }
+
+  /* ===== picture-card 卡片模式 ===== */
+  &&-picture-card {
+    .aura-upload-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--aura-spacing-2);
+    }
+
+    .aura-upload-file {
+      width: 104px;
+      height: 104px;
+      flex-direction: column;
+      padding: var(--aura-spacing-1);
+      border: 1px solid var(--aura-border);
+      border-radius: var(--aura-radius-md);
+      position: relative;
+      background: var(--bg);
+      justify-content: center;
+
+      .aura-upload-file-thumbnail {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+      }
+
+      .aura-upload-file-info {
+        display: none;
+      }
+
+      .aura-upload-file-remove {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        border-radius: var(--aura-radius-full);
+        width: 20px;
+        height: 20px;
+
+        &:hover {
+          background: var(--aura-error);
+          color: #fff;
+        }
+      }
+    }
+
+    .aura-upload-trigger {
+      width: 104px;
+      height: 104px;
+      flex-direction: column;
+      justify-content: center;
+      border-style: dashed;
+      background: transparent;
+    }
+  }
+
+  /* ===== Dragger 拖拽区域 ===== */
+  &-dragger {
+    display: flex;
+    flex-direction: column;
+    gap: var(--aura-spacing-3);
+
+    &-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--aura-spacing-2);
+      padding: var(--aura-spacing-8) var(--aura-spacing-4);
+      border: 2px dashed var(--aura-border);
+      border-radius: var(--aura-radius-lg);
+      background: var(--aura-bg-secondary);
+      cursor: pointer;
+      transition: all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        border-color: var(--aura-primary-700);
+        background: var(--aura-primary-50);
+      }
+    }
+
+    &-hover {
+      .aura-upload-dragger-area {
+        border-color: var(--aura-primary-700);
+        background: var(--aura-primary-50);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+      }
+    }
+
+    &-disabled {
+      .aura-upload-dragger-area {
+        cursor: not-allowed;
+        border-color: var(--aura-border);
+        background: var(--aura-bg-tertiary);
+        color: var(--aura-text-tertiary);
+
+        &:hover {
+          border-color: var(--aura-border);
+          background: var(--aura-bg-tertiary);
+          box-shadow: none;
+        }
+      }
+    }
+
+    &-icon {
+      color: var(--aura-text-tertiary);
+      transition: color var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &-text {
+      font-size: var(--aura-font-size-md);
+      color: var(--aura-text);
+      margin: 0;
+    }
+
+    &-hint {
+      font-size: var(--aura-font-size-xs);
+      color: var(--aura-text-tertiary);
+      margin: 0;
+    }
+  }
+
+  /* ===== hover 时 Dragger 图标变色 ===== */
+  &-dragger-area:hover &-dragger-icon,
+  &-dragger-hover &-drgger-icon {
+    color: var(--aura-primary-700);
+  }
+}
+
+/* ===== 动画关键帧 ===== */
+@keyframes aura-upload-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes aura-upload-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 暗色模式 ===== */
+[data-theme="dark"] {
+  .aura-upload {
+    &-trigger {
+      background: var(--aura-bg-secondary);
+      border-color: var(--aura-border);
+
+      &:hover {
+        color: var(--aura-primary-400);
+        border-color: var(--aura-primary-400);
+      }
+    }
+
+    &&-picture-card {
+      .aura-upload-file {
+        border-color: var(--aura-border);
+        background: var(--aura-bg-secondary);
+      }
+    }
+
+    &-drgger-area {
+      background: var(--aura-bg-secondary);
+      border-color: var(--aura-border);
+
+      &:hover {
+        border-color: var(--aura-primary-400);
+        background: var(--aura-bg-tertiary);
+      }
+    }
+
+    &-dragger-hover {
+      .aura-upload-dragger-area {
+        border-color: var(--aura-primary-400);
+        background: var(--aura-bg-tertiary);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+      }
+    }
+
+    &-file {
+      background: var(--aura-bg-secondary);
+
+      &:hover {
+        background: var(--aura-bg-tertiary);
+      }
+    }
+  }
+}

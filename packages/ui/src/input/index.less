@@ -1,0 +1,306 @@
+/* ===== Input 组件样式 ===== */
+
+.aura-input {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-bg);
+  color: var(--aura-text);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    border-color: var(--aura-primary-400);
+  }
+
+  &:focus-within {
+    border-color: var(--aura-primary-500);
+    box-shadow: 0 0 0 3px var(--aura-primary-100);
+    transform: scale(1.005);
+  }
+
+  // 输入框元素
+  .aura-input-element {
+    flex: 1;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    line-height: 1.5;
+
+    &::placeholder {
+      color: var(--aura-text-tertiary);
+    }
+  }
+
+  // ===== 尺寸 =====
+  &&-sm {
+    padding: 4px 10px;
+    font-size: var(--aura-font-size-sm);
+    border-radius: var(--aura-radius-sm);
+
+    .aura-input-element {
+      padding: 0;
+      height: 28px;
+      font-size: var(--aura-font-size-sm);
+    }
+  }
+
+  &&-md {
+    padding: 6px 12px;
+    font-size: var(--aura-font-size-md);
+
+    .aura-input-element {
+      padding: 0;
+      height: 32px;
+      font-size: var(--aura-font-size-md);
+    }
+  }
+
+  &&-lg {
+    padding: 8px 14px;
+    font-size: var(--aura-font-size-lg);
+    border-radius: var(--aura-radius-lg);
+
+    .aura-input-element {
+      padding: 0;
+      height: 40px;
+      font-size: var(--aura-font-size-lg);
+    }
+  }
+
+  // ===== 变体 =====
+  &&-filled {
+    border-color: transparent;
+    background: var(--aura-bg-tertiary);
+    border-bottom: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-sm) var(--aura-radius-sm) 0 0;
+
+    &:hover {
+      background: var(--aura-bg-secondary);
+      border-bottom-color: var(--aura-primary-400);
+    }
+
+    &:focus-within {
+      background: var(--aura-bg-secondary);
+      border-bottom-color: var(--aura-primary-500);
+      box-shadow: none;
+    }
+  }
+
+  &&-bordered {
+    border: 2px solid var(--aura-border);
+
+    &:hover {
+      border-color: var(--aura-primary-400);
+    }
+
+    &:focus-within {
+      border-color: var(--aura-primary-500);
+      box-shadow: 0 0 0 2px var(--aura-primary-100);
+    }
+  }
+
+  // ===== 状态 =====
+  &&-error {
+    border-color: var(--aura-error);
+
+    &:hover {
+      border-color: var(--aura-error);
+    }
+
+    &:focus-within {
+      border-color: var(--aura-error);
+      box-shadow: 0 0 0 2px var(--aura-error-light);
+    }
+
+    &.aura-input-filled {
+      border-color: transparent;
+      border-bottom-color: var(--aura-error);
+
+      &:hover {
+        border-bottom-color: var(--aura-error);
+      }
+
+      &:focus-within {
+        border-bottom-color: var(--aura-error);
+        box-shadow: none;
+      }
+    }
+  }
+
+  &&-warning {
+    border-color: var(--aura-warning);
+
+    &:hover {
+      border-color: var(--aura-warning);
+    }
+
+    &:focus-within {
+      border-color: var(--aura-warning);
+      box-shadow: 0 0 0 2px var(--aura-warning-light);
+    }
+
+    &.aura-input-filled {
+      border-color: transparent;
+      border-bottom-color: var(--aura-warning);
+
+      &:hover {
+        border-bottom-color: var(--aura-warning);
+      }
+
+      &:focus-within {
+        border-bottom-color: var(--aura-warning);
+        box-shadow: none;
+      }
+    }
+  }
+
+  // ===== 禁用 =====
+  &&-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--aura-bg-secondary);
+
+    .aura-input-element {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      border-color: var(--aura-border);
+    }
+
+    &:focus-within {
+      border-color: var(--aura-border);
+      box-shadow: none;
+    }
+  }
+
+  // ===== 前后缀 =====
+  &-prefix,
+  &-suffix {
+    display: inline-flex;
+    align-items: center;
+    color: var(--aura-text-secondary);
+    flex-shrink: 0;
+  }
+
+  &-prefix {
+    margin-right: var(--aura-spacing-1);
+  }
+
+  &-suffix {
+    margin-left: var(--aura-spacing-1);
+  }
+
+  // ===== 清除按钮 =====
+  &-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin-left: var(--aura-spacing-1);
+    font-size: 14px;
+    line-height: 1;
+    color: var(--aura-text-tertiary);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all var(--aura-duration-fast) var(--aura-easing);
+    user-select: none;
+
+    &:hover {
+      color: var(--aura-text-secondary);
+      background: var(--aura-bg-tertiary);
+    }
+  }
+
+  // ===== 密码可见性切换 =====
+  &-eye {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--aura-text-tertiary);
+    transition: color var(--aura-duration-fast) var(--aura-easing);
+
+    &:hover {
+      color: var(--aura-text-secondary);
+    }
+  }
+
+  // ===== 搜索按钮 =====
+  &-search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--aura-text-tertiary);
+    transition: color var(--aura-duration-fast) var(--aura-easing);
+
+    &:hover {
+      color: var(--aura-primary-500);
+    }
+  }
+
+  // ===== 输入框组合容器 =====
+  &-group {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+
+    .aura-input {
+      border-radius: 0;
+
+      &:first-child {
+        border-radius: var(--aura-radius-md) 0 0 var(--aura-radius-md);
+      }
+
+      &:last-child {
+        border-radius: 0 var(--aura-radius-md) var(--aura-radius-md) 0;
+      }
+    }
+
+    .aura-input + .aura-input {
+      margin-left: -1px;
+    }
+
+    &&-compact {
+      .aura-input {
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+// ===== 暗色模式 =====
+[data-theme="dark"] {
+  .aura-input {
+    &:focus-within {
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2), 0 0 20px rgba(124, 58, 237, 0.15);
+    }
+
+    &-filled:focus-within {
+      box-shadow: none;
+    }
+
+    &-error:focus-within {
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+
+    &-warning:focus-within {
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    }
+
+    &-disabled {
+      &:focus-within {
+        box-shadow: none;
+      }
+    }
+  }
+}
