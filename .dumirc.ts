@@ -22,6 +22,7 @@ export default defineConfig({
   themeConfig: {
     name: 'Aura',
     logo: '/aura/logo.svg',
+    socialLinks: { github: 'https://github.com/AsBeforeLandy/aura' },
     footer:
       'Open-source MIT Licensed | Copyright © 2026-present Aura Team',
     prefersColor: { default: 'light', switch: true },
@@ -29,10 +30,6 @@ export default defineConfig({
       { title: '指南', link: '/guide' },
       { title: '组件', link: '/components/button' },
       { title: '更新日志', link: '/changelog' },
-      {
-        title: 'GitHub',
-        link: 'https://github.com/AsBeforeLandy/aura',
-      },
     ],
     sidebar: {
       '/guide': [
