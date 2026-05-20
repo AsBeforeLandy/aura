@@ -67,7 +67,7 @@ Webpack 4 / 5 同样开箱即用，无需额外配置。如果遇到 `ModulePars
 
 使用 `ThemeProvider` 包裹应用根组件即可：
 
-```tsx
+```tsx | pure
 import { ThemeProvider } from '@aura/ui';
 
 const App = () => (
