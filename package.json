@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "description": "Aura - 基于 React 18 的现代化 AI 友好组件库",
+  "packageManager": "pnpm@7.33.7",
   "scripts": {
     "dev": "dumi dev",
     "build": "dumi build",
