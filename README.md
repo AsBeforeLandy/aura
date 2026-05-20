@@ -9,7 +9,7 @@
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/AsBeforeLandy/aura/pulls)
   [![GitHub stars](https://img.shields.io/github/stars/AsBeforeLandy/aura.svg)](https://github.com/AsBeforeLandy/aura/stargazers)
 
-  [快速开始](#安装) · [在线文档](https://asbeforelandy.github.io/aura) · [更新日志](docs/changelog.md) · [贡献指南](#贡献) · [English](#english)
+  [快速开始](#安装) · [在线文档](https://asbeforelandy.github.io/aura) · [更新日志](docs/changelog.md) · [GitHub](https://github.com/AsBeforeLandy/aura) · [English](#english)
 
   <img src="https://img.shields.io/badge/react-18+-61dafb.svg" alt="React 18+" />
   <img src="https://img.shields.io/badge/typescript-6+-3178c6.svg" alt="TypeScript 6+" />
@@ -133,18 +133,6 @@ pnpm build:lib
 - [更新日志](docs/changelog.md)
 - [主题定制](docs/guide/theme.md)
 - [GitHub Issues](https://github.com/AsBeforeLandy/aura/issues)
-
-## 贡献
-
-欢迎参与 Aura 的开发！请遵循以下流程：
-
-1. Fork 本仓库
-2. 创建特性分支：`git checkout -b feature/my-feature`
-3. 提交更改：`git commit -m 'feat: add some feature'`
-4. 推送分支：`git push origin feature/my-feature`
-5. 提交 Pull Request
-
-> **Commit 规范**：使用 [Conventional Commits](https://www.conventionalcommits.org/) 格式（`feat:` / `fix:` / `docs:` / `chore:` 等）。
 
 ## 许可证
 

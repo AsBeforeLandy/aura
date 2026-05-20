@@ -17,10 +17,6 @@ export default defineConfig({
     '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura/request': path.resolve(__dirname, 'packages/request/src'),
   },
-  locales: [
-    { id: 'zh-CN', name: '中文' },
-    { id: 'en-US', name: 'EN' },
-  ],
   themeConfig: {
     name: 'Aura',
     logo: '/logo.svg',
@@ -46,7 +42,6 @@ export default defineConfig({
             { title: '安装', link: '/guide/installation' },
             { title: '主题定制', link: '/guide/theme' },
             { title: '常见问题', link: '/guide/faq' },
-            { title: '贡献指南', link: '/guide/contributing' },
           ],
         },
       ],
