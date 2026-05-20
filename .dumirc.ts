@@ -11,14 +11,11 @@ export default defineConfig({
     codeBlockMode: 'active',
     forceKebabCaseRouting: true,
   },
-  base: '/aura/',
-  publicPath: '/aura/',
   autoAlias: true,
   alias: {
     '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
     '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura/request': path.resolve(__dirname, 'packages/request/src'),
-    '@public': path.resolve(__dirname, 'public'),
   },
   themeConfig: {
     name: 'Aura',
