@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkaura=self.webpackChunkaura||[]).push([[1032],{40623:function(E,e,_){_.r(e);var n=_(48305),o=_.n(n),t=_(75271),r=_(44381),u=_(52676),l=function(){var s=(0,r.pC)(),m=(0,r.OI)(),d=o()(m,1),a=d[0];return t.useEffect(function(){document.documentElement.setAttribute("data-theme",a||"light")},[a]),(0,u.jsx)(u.Fragment,{children:s})};e.default=l}}]);
