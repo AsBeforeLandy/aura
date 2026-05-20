@@ -8,6 +8,7 @@
     "build": "dumi build",
     "build:lib": "pnpm -C packages/shared build && pnpm -C packages/request build && pnpm -C packages/ui build",
     "lint": "eslint packages/*/src --ext .ts,.tsx",
+    "deploy": "gh-pages -d dist",
     "prepare": "dumi setup",
     "clean": "rm -rf packages/*/lib packages/*/esm packages/*/dist .dumi",
     "test": "vitest run",
