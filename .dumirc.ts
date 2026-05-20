@@ -19,6 +19,10 @@ export default defineConfig({
     '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura/request': path.resolve(__dirname, 'packages/request/src'),
   },
+   favicons: [
+    // 本地图片路径，对应 public 目录下的文件
+    '/aura/favicon.ico',
+  ],
   themeConfig: {
     name: 'Aura',
     logo: '/aura/logo.svg',
