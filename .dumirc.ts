@@ -11,6 +11,8 @@ export default defineConfig({
     codeBlockMode: 'active',
     forceKebabCaseRouting: true,
   },
+  base: '/aura/',
+  publicPath: '/aura/',
   autoAlias: true,
   alias: {
     '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
@@ -19,7 +21,7 @@ export default defineConfig({
   },
   themeConfig: {
     name: 'Aura',
-    logo: '/logo.svg',
+    logo: '/aura/logo.svg',
     footer:
       'Open-source MIT Licensed | Copyright © 2026-present Aura Team',
     prefersColor: { default: 'light', switch: true },
