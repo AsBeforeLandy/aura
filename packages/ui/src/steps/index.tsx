@@ -5,6 +5,7 @@ import React, {
   useCallback,
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { CheckOutline } from '@aura/icons';
 import './index.less';
 
 /* ===== Context ===== */
@@ -80,18 +81,7 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
       if (isCompleted) {
         return (
           <span className={prefixCls('steps-check')}>
-            <svg
-              viewBox="0 0 24 24"
-              width="14"
-              height="14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
+            <CheckOutline size={14} />
           </span>
         );
       }

@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { ChevronLeft, ChevronRight } from '@aura/icons';
 import './index.less';
 
 /* ===== 页码范围计算 ===== */
@@ -157,18 +158,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
           disabled={prevDisabled}
           aria-label="上一页"
         >
-          <svg
-            viewBox="0 0 24 24"
-            width="14"
-            height="14"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
+          <ChevronLeft size={14} />
         </button>
 
         {/* 页码按钮 */}
@@ -216,18 +206,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
           disabled={nextDisabled}
           aria-label="下一页"
         >
-          <svg
-            viewBox="0 0 24 24"
-            width="14"
-            height="14"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
+          <ChevronRight size={14} />
         </button>
 
         {/* 每页条数选择器 */}

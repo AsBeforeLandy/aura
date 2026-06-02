@@ -5,6 +5,7 @@ import React, {
   HTMLAttributes,
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { ChevronLeft } from '@aura/icons';
 import './index.less';
 
 /* ===== LayoutHeader ===== */
@@ -94,22 +95,15 @@ const LayoutSider = forwardRef<HTMLElement, LayoutSiderProps>(
             aria-label={collapsed ? '展开侧边栏' : '收起侧边栏'}
             aria-expanded={!collapsed}
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="16"
-              height="16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <span
               style={{
+                display: 'inline-flex',
                 transition: 'transform var(--aura-duration-normal) var(--aura-easing)',
                 transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)',
               }}
             >
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
+              <ChevronLeft size={16} />
+            </span>
           </button>
         )}
       </aside>

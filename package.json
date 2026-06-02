@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "dumi dev",
     "build": "dumi build",
-    "build:lib": "pnpm -C packages/shared build && pnpm -C packages/request build && pnpm -C packages/ui build",
+    "build:lib": "pnpm -C packages/shared build && pnpm -C packages/request build && pnpm -C packages/icons build && pnpm -C packages/ui build",
     "lint": "eslint packages/*/src --ext .ts,.tsx",
     "deploy": "gh-pages -d dist",
     "prepare": "dumi setup",

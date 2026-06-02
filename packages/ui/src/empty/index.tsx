@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { EmptyDefault, Empty404 } from '@aura/icons';
 import './index.less';
 
 export interface EmptyProps {
@@ -19,37 +20,11 @@ export interface EmptyProps {
   children?: React.ReactNode;
 }
 
-/** 默认空状态 SVG 图标 */
+/** 默认空状态图标 */
 const DefaultEmptyImage: React.FC<{ style?: React.CSSProperties }> = ({
   style,
 }) => (
-  <svg
-    className={prefixCls('empty-image-default')}
-    viewBox="0 0 200 160"
-    width="200"
-    height="160"
-    style={style}
-  >
-    {/* 圆角矩形（文档/盒子） */}
-    <rect
-      x="30"
-      y="40"
-      width="140"
-      height="100"
-      rx="12"
-      ry="12"
-      fill="var(--aura-bg-tertiary)"
-      stroke="var(--aura-border)"
-      strokeWidth="1.5"
-    />
-    {/* 里面三条横线（文字行） */}
-    <line x1="56" y1="72" x2="144" y2="72" stroke="var(--aura-border)" strokeWidth="2" strokeLinecap="round" />
-    <line x1="56" y1="90" x2="120" y2="90" stroke="var(--aura-border)" strokeWidth="2" strokeLinecap="round" />
-    <line x1="56" y1="108" x2="132" y2="108" stroke="var(--aura-border)" strokeWidth="2" strokeLinecap="round" />
-    {/* 上方小圆圈（代表空） */}
-    <circle cx="100" cy="24" r="12" fill="var(--aura-bg-secondary)" stroke="var(--aura-border)" strokeWidth="1.5" />
-    <circle cx="100" cy="24" r="4" fill="var(--aura-border)" />
-  </svg>
+  <EmptyDefault size={200} className={prefixCls('empty-image-default')} style={style} />
 );
 
 /* ===== 预置空状态 ===== */
@@ -78,22 +53,7 @@ const presetConfig: Record<
   },
   404: {
     description: '抱歉，您访问的页面不存在',
-    image: (
-      <svg viewBox="0 0 200 160" width="200" height="160">
-        <text
-          x="100"
-          y="90"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize="60"
-          fontWeight="bold"
-          fill="var(--aura-text-tertiary)"
-        >
-          404
-        </text>
-        <line x1="30" y1="120" x2="170" y2="120" stroke="var(--aura-border)" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
+    image: <Empty404 size={200} />,
   },
 };
 

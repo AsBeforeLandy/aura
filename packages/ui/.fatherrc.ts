@@ -9,6 +9,8 @@ export default defineConfig({
     transformer: 'babel',
     alias: {
       '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
+      '@aura/icons': path.resolve(__dirname, '../icons/src'),
+      '@aura/shared': path.resolve(__dirname, '../shared/src'),
     }
   }
 });

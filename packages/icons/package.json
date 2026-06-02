@@ -1,0 +1,23 @@
+{
+  "name": "@aura/icons",
+  "version": "0.0.1",
+  "description": "Aura 图标库",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "files": ["esm"],
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "types": "./esm/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "father build",
+    "dev": "father dev"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "license": "MIT"
+}

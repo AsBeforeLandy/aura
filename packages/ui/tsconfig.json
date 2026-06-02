@@ -9,10 +9,10 @@
     "skipLibCheck": true,
     "declaration": true,
     "outDir": "./lib",
-    "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
       "@aura/ui": ["./src/index.ts"],
+      "@aura/icons": ["../icons/src/index.ts"],
       "@aura/shared": ["../../packages/shared/src/index.ts"],
       "@aura/request": ["../../packages/request/src/index.ts"]
     }

@@ -5,6 +5,7 @@ import React, {
   useRef,
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { StarFilled, StarEmpty, StarHalf } from '@aura/icons';
 import './index.less';
 
 export interface RateProps {
@@ -36,61 +37,14 @@ export interface RateProps {
   style?: React.CSSProperties;
 }
 
-/** 星星 SVG 组件 */
+/** 星星图标组件 */
 const StarIcon: React.FC<{ filled: boolean; half?: 'left' | 'right' }> = ({
   filled,
   half,
 }) => {
-  // 完整填充
-  if (filled && !half) {
-    return (
-      <svg viewBox="0 0 24 24" width="100%" height="100%">
-        <path
-          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-          fill="currentColor"
-        />
-      </svg>
-    );
-  }
-
-  // 半星
-  if (half) {
-    return (
-      <svg viewBox="0 0 24 24" width="100%" height="100%">
-        <defs>
-          <clipPath id={`clip-${half}`}>
-            <rect
-              x={half === 'left' ? '0' : '12'}
-              y="0"
-              width="12"
-              height="24"
-            />
-          </clipPath>
-        </defs>
-        <path
-          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-          fill="currentColor"
-          opacity={0.25}
-        />
-        <path
-          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-          fill="currentColor"
-          clipPath={`url(#clip-${half})`}
-        />
-      </svg>
-    );
-  }
-
-  // 空星
-  return (
-    <svg viewBox="0 0 24 24" width="100%" height="100%">
-      <path
-        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-        fill="currentColor"
-        opacity={0.25}
-      />
-    </svg>
-  );
+  if (filled && !half) return <StarFilled size={24} />;
+  if (half) return <StarHalf size={24} half={half} />;
+  return <StarEmpty size={24} />;
 };
 
 export const Rate = forwardRef<HTMLDivElement, RateProps>(

@@ -17,26 +17,53 @@ toc: content
 
 ### 安装核心组件库
 
-```bash
+:::code-group
+
+```bash [pnpm]
 # pnpm（推荐）
 pnpm add @aura/ui
+```
 
+```bash [yarn]
 # yarn
 yarn add @aura/ui
+```
 
+```bash [npm]
 # npm
 npm install @aura/ui
 ```
 
+:::
+
 ### 按需安装其他包
 
-```bash
+:::code-group
+
+```bash [pnpm]
 # 工具函数库
 pnpm add @aura/shared
 
 # HTTP 请求封装
 pnpm add @aura/request
 ```
+```bash [yarn]
+# 工具函数库
+yarn add @aura/shared
+
+# HTTP 请求封装
+yarn add @aura/request
+```
+
+```bash [npm]
+# 工具函数库
+npm install @aura/shared
+
+# HTTP 请求封装
+npm install @aura/request
+```
+
+:::
 
 | 包名 | 描述 | 依赖 |
 | --- | --- | --- |

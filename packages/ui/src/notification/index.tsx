@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { classNames, prefixCls } from '@aura/shared';
+import { CheckCircleFilled, CloseCircleFilled, WarningTriangleFilled, InfoCircleFilled, Close } from '@aura/icons';
 import './index.less';
 
 /* ===== 类型定义 ===== */
@@ -26,26 +27,10 @@ interface NotificationItem extends NotificationOptions {
 /* ===== 图标 ===== */
 const variantIcons: Record<NotificationVariant, React.ReactNode> = {
   default: null,
-  success: (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-    </svg>
-  ),
-  error: (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-    </svg>
-  ),
-  warning: (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-      <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
-    </svg>
-  ),
-  info: (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-    </svg>
-  ),
+  success: <CheckCircleFilled size={18} />,
+  error: <CloseCircleFilled size={18} />,
+  warning: <WarningTriangleFilled size={18} />,
+  info: <InfoCircleFilled size={18} />,
 };
 
 /* ===== 容器管理 ===== */
@@ -206,9 +191,7 @@ const NotificationItemComponent: React.FC<{
         onClick={handleClose}
         aria-label="关闭"
       >
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-        </svg>
+        <Close size={14} />
       </button>
     </div>
   );

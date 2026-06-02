@@ -6,6 +6,7 @@ import React, {
   useContext,
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { Close } from '@aura/icons';
 import './index.less';
 
 /* ===== Tag Context（用于 Tag.Group） ===== */
@@ -91,14 +92,7 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(
             role="button"
             aria-label="关闭"
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="12"
-              height="12"
-              fill="currentColor"
-            >
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-            </svg>
+            <Close size={12} />
           </span>
         )}
       </span>

@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { SpinIcon } from '@aura/icons';
 import './index.less';
 
 export interface SpinProps {
@@ -27,25 +28,7 @@ export interface SpinProps {
 const DefaultIndicator: React.FC<{ size: string }> = ({ size }) => {
   const sizeMap: Record<string, number> = { sm: 16, md: 24, lg: 36 };
   const s = sizeMap[size] ?? 24;
-  return (
-    <svg
-      className={prefixCls('spin-svg')}
-      width={s}
-      height={s}
-      viewBox="0 0 24 24"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeDasharray="31.4 31.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
+  return <SpinIcon size={s} className={prefixCls('spin-svg')} />;
 };
 
 export const Spin = forwardRef<HTMLDivElement, SpinProps>(

@@ -5,6 +5,7 @@ import React, {
   useCallback,
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { Uploading, CheckCircleFilled, CloseCircleFilled, Close, Upload as UploadIcon, CloudUpload, PicturePlaceholder } from '@aura/icons';
 import './index.less';
 
 /* ===== 类型定义 ===== */
@@ -54,42 +55,12 @@ function generateUid(): string {
 /** 状态图标 */
 const StatusIcon: React.FC<{ status: UploadFile['status'] }> = ({ status }) => {
   if (status === 'uploading') {
-    return (
-      <svg
-        className={prefixCls('upload-status-icon')}
-        viewBox="0 0 24 24"
-        width="16"
-        height="16"
-        fill="currentColor"
-      >
-        <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
-      </svg>
-    );
+    return <Uploading size={16} className={prefixCls('upload-status-icon')} />;
   }
   if (status === 'done') {
-    return (
-      <svg
-        className={classNames(prefixCls('upload-status-icon'), prefixCls('upload-status-done'))}
-        viewBox="0 0 24 24"
-        width="16"
-        height="16"
-        fill="currentColor"
-      >
-        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-      </svg>
-    );
+    return <CheckCircleFilled size={16} className={classNames(prefixCls('upload-status-icon'), prefixCls('upload-status-done'))} />;
   }
-  return (
-    <svg
-      className={classNames(prefixCls('upload-status-icon'), prefixCls('upload-status-error'))}
-      viewBox="0 0 24 24"
-      width="16"
-      height="16"
-      fill="currentColor"
-    >
-      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-    </svg>
-  );
+  return <CloseCircleFilled size={16} className={classNames(prefixCls('upload-status-icon'), prefixCls('upload-status-error'))} />;
 };
 
 /* ===== Upload 主组件 ===== */
@@ -231,9 +202,7 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
               {file.url ? (
                 <img src={file.url} alt={file.name} />
               ) : (
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-                </svg>
+                <PicturePlaceholder size={24} />
               )}
             </div>
           )}
@@ -250,9 +219,7 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
             aria-label={`删除 ${file.name}`}
             title="删除文件"
           >
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-            </svg>
+            <Close size={14} />
           </button>
         </div>
       );
@@ -278,9 +245,7 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
           disabled={disabled}
           aria-label="选择文件上传"
         >
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
-          </svg>
+          <UploadIcon size={16} />
           <span>点击上传</span>
         </button>
         {fileList.length > 0 && (
@@ -458,15 +423,7 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
           aria-label="拖拽文件到此区域上传"
           tabIndex={disabled ? -1 : 0}
         >
-          <svg
-            className={prefixCls('upload-dragger-icon')}
-            viewBox="0 0 24 24"
-            width="48"
-            height="48"
-            fill="currentColor"
-          >
-            <path d="M19.35 10.04A7.49 7.49 0 0012 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 000 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
-          </svg>
+          <CloudUpload size={48} className={prefixCls('upload-dragger-icon')} />
           <p className={prefixCls('upload-dragger-text')}>
             将文件拖拽到此区域上传
           </p>
@@ -495,9 +452,7 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
                     onClick={() => handleRemove(file.uid)}
                     aria-label={`删除 ${file.name}`}
                   >
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                    </svg>
+                    <Close size={14} />
                   </button>
                 </div>
               );

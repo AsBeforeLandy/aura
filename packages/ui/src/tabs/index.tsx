@@ -212,7 +212,13 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
           </div>
 
           {/* Tab 面板 */}
-          <div className={prefixCls('tabs-content')} role="tabpanel">
+          <div
+            className={classNames(
+              prefixCls('tabs-content'),
+              activeContent == null && prefixCls('tabs-content-empty'),
+            )}
+            role="tabpanel"
+          >
             <div
               key={resolvedActiveKey}
               className={prefixCls('tabs-panel')}

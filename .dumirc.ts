@@ -6,6 +6,7 @@ export default defineConfig({
     docDirs: ['docs'],
     atomDirs: [
       { type: 'components', dir: 'packages/ui/src' },
+      { type: 'components', dir: 'packages/icons/src' },
     ],
     entryFile: './packages/ui/src/index.ts',
     codeBlockMode: 'active',
@@ -15,6 +16,7 @@ export default defineConfig({
   publicPath: '/aura/',
   autoAlias: true,
   alias: {
+    '@aura/icons': path.resolve(__dirname, 'packages/icons/src'),
     '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
     '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura/request': path.resolve(__dirname, 'packages/request/src'),
@@ -53,6 +55,7 @@ export default defineConfig({
           title: '通用',
           children: [
             { title: 'Button 按钮', link: '/components/button' },
+            { title: 'Icon 图标', link: '/components/icons' },
             { title: 'Typography 排版', link: '/components/typography' },
             { title: 'Space 间距', link: '/components/space' },
             { title: 'Divider 分割线', link: '/components/divider' },

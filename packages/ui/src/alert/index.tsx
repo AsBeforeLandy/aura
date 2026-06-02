@@ -1,5 +1,6 @@
 import React, { forwardRef, useState } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
+import { CheckCircleFilled, WarningTriangleFilled, CloseCircleFilled, InfoCircleFilled, Close } from '@aura/icons';
 import './index.less';
 
 export interface AlertProps {
@@ -23,33 +24,13 @@ export interface AlertProps {
   children?: React.ReactNode;
 }
 
-/** 不同 variant 对应的图标 SVG */
+/** 不同 variant 对应的图标 */
 const variantIcons: Record<string, React.ReactNode> = {
-  success: (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-    </svg>
-  ),
-  warning: (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-      <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
-    </svg>
-  ),
-  error: (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-    </svg>
-  ),
-  info: (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-    </svg>
-  ),
-  default: (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-    </svg>
-  ),
+  success: <CheckCircleFilled size={16} />,
+  warning: <WarningTriangleFilled size={16} />,
+  error: <CloseCircleFilled size={16} />,
+  info: <InfoCircleFilled size={16} />,
+  default: <InfoCircleFilled size={16} />,
 };
 
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
@@ -100,9 +81,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
             onClick={handleClose}
             aria-label="关闭"
           >
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-            </svg>
+            <Close size={14} />
           </button>
         )}
       </div>

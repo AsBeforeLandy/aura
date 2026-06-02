@@ -6,7 +6,9 @@ toc: content
 
 ## 安装
 
-```bash
+:::code-group
+
+```bash [pnpm]
 # 安装组件库
 pnpm add @aura/ui
 
@@ -14,15 +16,53 @@ pnpm add @aura/ui
 pnpm add react@^18 react-dom@^18
 ```
 
+```bash [yarn]
+# 安装组件库
+yarn add @aura/ui
+
+# 安装 peer dependencies（如果尚未安装）
+yarn add react@^18 react-dom@^18
+```
+
+```bash [npm]
+# 安装组件库
+npm install @aura/ui
+
+# 安装 peer dependencies（如果尚未安装）
+npm install react@^18 react-dom@^18
+```
+
+:::
+
 如果需要额外的包：
 
-```bash
+:::code-group
+
+```bash [pnpm]
 # 共享工具函数
 pnpm add @aura/shared
 
 # HTTP 请求封装
 pnpm add @aura/request
 ```
+
+```bash [yarn]
+# 共享工具函数
+yarn add @aura/shared
+
+# HTTP 请求封装
+yarn add @aura/request
+```
+
+```bash [npm]
+# 共享工具函数
+npm install @aura/shared
+
+# HTTP 请求封装
+npm install @aura/request
+```
+
+:::
 
 ## 基本使用
 
