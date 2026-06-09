@@ -11,3 +11,4 @@ esm
 coverage
 .superpowers/
 .claude/**
+.worktrees

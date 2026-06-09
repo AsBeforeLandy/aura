@@ -1,17 +1,14 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { getWorkspacePath } from '../../utils/paths.js';
 
 function getPublicDir(): string {
-  return path.resolve(__dirname, '../../../../public');
+  return getWorkspacePath('public');
 }
 
 function getUiSourceDir(): string {
-  return path.resolve(__dirname, '../../ui/src');
+  return getWorkspacePath('packages/ui/src');
 }
 
 /**

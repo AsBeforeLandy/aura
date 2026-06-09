@@ -1,10 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { execSync } from 'child_process';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { getWorkspacePath } from '../../utils/paths.js';
 
 /**
  * 获取最近的 git changelog
@@ -27,11 +23,9 @@ function getRecentChangelog(): string {
 
 /**
  * 解析项目根目录
- * 编译后 __dirname 为 packages/cli/dist/mcp/tools
- * 向上 4 级到达项目根目录
  */
 function resolveProjectRoot(): string {
-  return path.resolve(__dirname, '../../../../');
+  return getWorkspacePath();
 }
 
 export function registerChangelogTool(server: McpServer): void {

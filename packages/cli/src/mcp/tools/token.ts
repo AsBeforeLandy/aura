@@ -1,16 +1,13 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { getWorkspacePath } from '../../utils/paths.js';
 
 /**
  * 获取 Design Token 列表（只输出 :root 下的亮色值）
  */
 function getDesignTokens(): string {
-  const uiSourceDir = path.resolve(__dirname, '../../ui/src');
+  const uiSourceDir = getWorkspacePath('packages/ui/src');
   const tokenPath = path.join(uiSourceDir, 'theme', 'tokens.css');
 
   if (!fs.existsSync(tokenPath)) {

@@ -1,11 +1,8 @@
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
+import { getWorkspacePath } from '../utils/paths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const SKILLS_DIR = path.resolve(__dirname, '../../skill/skills');
+const SKILLS_DIR = getWorkspacePath('packages/skill/skills');
 
 /**
  * 将 Skill 文件安装到 IDE 对应目录

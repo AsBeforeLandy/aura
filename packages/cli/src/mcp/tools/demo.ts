@@ -2,16 +2,13 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { getWorkspacePath } from '../../utils/paths.js';
 
 /**
  * 获取组件的示例代码
  */
 function getComponentDemo(componentName: string): string {
-  const uiSourceDir = path.resolve(__dirname, '../../ui/src');
+  const uiSourceDir = getWorkspacePath('packages/ui/src');
   const demoPath = path.join(uiSourceDir, componentName, 'demo', 'basic.tsx');
 
   if (!fs.existsSync(demoPath)) {
