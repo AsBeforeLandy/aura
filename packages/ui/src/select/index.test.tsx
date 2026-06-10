@@ -207,4 +207,40 @@ describe('Select', () => {
     fireEvent.keyDown(selector, { key: 'Escape' });
     expect(container.querySelector('.aura-select-dropdown')).toBeNull();
   });
+
+  it('should navigate and select options with keyboard arrow keys', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <Select options={fruitOptions} onChange={onChange} />,
+    );
+    const selector = container.querySelector(
+      '.aura-select-selector',
+    ) as HTMLElement;
+
+    expect(container.querySelector('.aura-select-dropdown')).toBeNull();
+
+    // 1. 按 ArrowDown 展开下拉面板
+    fireEvent.keyDown(selector, { key: 'ArrowDown' });
+    expect(container.querySelector('.aura-select-dropdown')).not.toBeNull();
+
+    // 2. 再次按 ArrowDown，应该聚焦到第一个选项（苹果）
+    fireEvent.keyDown(selector, { key: 'ArrowDown' });
+    let options = container.querySelectorAll('.aura-select-option');
+    expect(options[0].classList.contains('aura-select-option-active')).toBe(true);
+
+    // 3. 再次按 ArrowDown，应该聚焦到第二个选项（香蕉）
+    fireEvent.keyDown(selector, { key: 'ArrowDown' });
+    expect(options[0].classList.contains('aura-select-option-active')).toBe(false);
+    expect(options[1].classList.contains('aura-select-option-active')).toBe(true);
+
+    // 4. 再次按 ArrowDown，第三个是 disabled，所以应该循环回到第一个（苹果）
+    fireEvent.keyDown(selector, { key: 'ArrowDown' });
+    expect(options[0].classList.contains('aura-select-option-active')).toBe(true);
+    expect(options[1].classList.contains('aura-select-option-active')).toBe(false);
+
+    // 5. 按 Enter 选中当前高亮的第一个选项（苹果）
+    fireEvent.keyDown(selector, { key: 'Enter' });
+    expect(onChange).toHaveBeenCalledWith('apple');
+    expect(container.querySelector('.aura-select-dropdown')).toBeNull();
+  });
 });

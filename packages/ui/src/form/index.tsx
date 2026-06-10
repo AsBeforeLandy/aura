@@ -77,6 +77,8 @@ export interface FormItemProps {
   disabled?: boolean;
   /** 无样式模式，不渲染 Form.Item 的标签、布局和错误信息 */
   noStyle?: boolean;
+  /** 自定义值属性名，例如 Switch/Checkbox 使用 'checked'，默认自动检测 */
+  valuePropName?: string;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -94,6 +96,7 @@ const FormItem: React.FC<FormItemProps> = ({
   required,
   disabled: itemDisabled,
   noStyle = false,
+  valuePropName,
   className,
   style,
   children,
@@ -115,9 +118,19 @@ const FormItem: React.FC<FormItemProps> = ({
   }, [name, ctx, rules]);
 
   const handleChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    async (e: any) => {
       if (!name || !ctx) return;
-      const value = e.target.value;
+      
+      let value: any = e;
+      if (e && typeof e === 'object' && 'target' in e && e.target) {
+        const target = e.target;
+        if (target.type === 'checkbox' || target.type === 'radio') {
+          value = target.type === 'checkbox' ? target.checked : target.value;
+        } else {
+          value = target.value;
+        }
+      }
+      
       ctx.setFieldValue(name, value);
 
       // 实时验证
@@ -144,26 +157,33 @@ const FormItem: React.FC<FormItemProps> = ({
     labelStyle.flexShrink = 0;
   }
 
-  /** 克隆子元素注入 value、onChange、disabled */
+  /** 克隆子元素注入 value/checked、onChange、disabled */
   const renderChildren = () => {
-    if (!name || !ctx) {
-      if (React.isValidElement(children)) {
-        const childProps = (children as React.ReactElement<any>).props;
-        return React.cloneElement(children as React.ReactElement<any>, {
+    if (React.isValidElement(children)) {
+      const child = children as React.ReactElement<any>;
+      const childProps = child.props;
+      const childType = child.type as any;
+      const displayName = childType?.displayName || childType?.name || '';
+      
+      const isSwitchOrCheckbox = 
+        displayName === 'Switch' || 
+        displayName === 'Checkbox' || 
+        (typeof childType === 'string' && childType === 'input' && childProps.type === 'checkbox');
+        
+      const propName = valuePropName ?? (isSwitchOrCheckbox ? 'checked' : 'value');
+
+      if (!name || !ctx) {
+        return React.cloneElement(child, {
           ...(isDisabled ? { disabled: true } : {}),
           ...(ctx?.size && childProps.size === undefined ? { size: ctx.size } : {}),
         });
       }
-      return children;
-    }
 
-    const value = ctx.values[name] ?? '';
+      const value = ctx.values[name] ?? (isSwitchOrCheckbox ? false : '');
 
-    if (React.isValidElement(children)) {
-      const childProps = (children as React.ReactElement<any>).props;
-      return React.cloneElement(children as React.ReactElement<any>, {
-        value,
-        onChange: (e: React.ChangeEvent<any>) => {
+      return React.cloneElement(child, {
+        [propName]: value,
+        onChange: (e: any) => {
           handleChange(e);
           if (childProps.onChange) {
             childProps.onChange(e);

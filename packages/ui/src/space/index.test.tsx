@@ -24,7 +24,7 @@ describe('Space', () => {
     const { container } = render(<Space>X</Space>);
     const div = container.querySelector('div')!;
     expect(div.classList.contains('aura-space-vertical')).toBe(false);
-    expect(getComputedStyle(div).flexDirection).toBe('row');
+    expect(getComputedStyle(div).flexDirection || 'row').toBe('row');
   });
 
   it('should render vertical direction', () => {

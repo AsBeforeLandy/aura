@@ -103,10 +103,30 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const [open, setOpen] = useState(false);
     // 搜索关键字
     const [searchText, setSearchText] = useState('');
+    // 键盘聚焦高亮的选项索引
+    const [activeIndex, setActiveIndex] = useState<number>(-1);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const listId = useId();
+
+    // 监听打开状态或过滤关键字变化，重置高亮索引
+    useEffect(() => {
+      setActiveIndex(-1);
+    }, [open, searchText]);
+
+    // 当 activeIndex 变化时，自动将高亮项滚动到可视区域
+    useEffect(() => {
+      if (open && activeIndex >= 0) {
+        const dropdown = document.getElementById(listId);
+        if (dropdown) {
+          const activeEl = dropdown.querySelectorAll(`.${prefixCls('select-option')}`)[activeIndex] as HTMLElement;
+          if (activeEl && typeof activeEl.scrollIntoView === 'function') {
+            activeEl.scrollIntoView({ block: 'nearest' });
+          }
+        }
+      }
+    }, [activeIndex, open, listId]);
 
     // 点击外部关闭下拉面板
     useEffect(() => {
@@ -259,11 +279,61 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           tabIndex={disabled ? -1 : 0}
           onKeyDown={(e) => {
             if (disabled) return;
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setOpen((prev) => !prev);
+
+            const isInput = e.target instanceof HTMLInputElement;
+            if (isInput && e.key === ' ') {
+              return;
             }
-            if (e.key === 'Escape') {
+
+            if (!open) {
+              if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setOpen(true);
+              }
+              return;
+            }
+
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              if (filteredOptions.length === 0) return;
+              
+              let nextIndex = activeIndex;
+              let count = 0;
+              do {
+                nextIndex = (nextIndex + 1) % filteredOptions.length;
+                count++;
+              } while (filteredOptions[nextIndex].disabled && count < filteredOptions.length);
+              
+              if (!filteredOptions[nextIndex].disabled) {
+                setActiveIndex(nextIndex);
+              }
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              if (filteredOptions.length === 0) return;
+              
+              let prevIndex = activeIndex < 0 ? filteredOptions.length : activeIndex;
+              let count = 0;
+              do {
+                prevIndex = (prevIndex - 1 + filteredOptions.length) % filteredOptions.length;
+                count++;
+              } while (filteredOptions[prevIndex].disabled && count < filteredOptions.length);
+              
+              if (!filteredOptions[prevIndex].disabled) {
+                setActiveIndex(prevIndex);
+              }
+            } else if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              if (activeIndex >= 0 && activeIndex < filteredOptions.length) {
+                const activeOpt = filteredOptions[activeIndex];
+                if (!activeOpt.disabled) {
+                  handleSelect(activeOpt.value);
+                }
+              } else {
+                setOpen(false);
+                setSearchText('');
+              }
+            } else if (e.key === 'Escape') {
+              e.preventDefault();
               setOpen(false);
               setSearchText('');
             }
@@ -318,14 +388,16 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             ) : filteredOptions.length === 0 ? (
               <div className={prefixCls('select-empty')}>无匹配选项</div>
             ) : (
-              filteredOptions.map((opt) => {
+              filteredOptions.map((opt, index) => {
                 const selected = isSelected(currentValue, opt.value);
+                const active = activeIndex === index;
                 return (
                   <div
                     key={opt.value}
                     className={classNames(
                       prefixCls('select-option'),
                       selected && prefixCls('select-option-selected'),
+                      active && prefixCls('select-option-active'),
                       opt.disabled && prefixCls('select-option-disabled'),
                     )}
                     role="option"

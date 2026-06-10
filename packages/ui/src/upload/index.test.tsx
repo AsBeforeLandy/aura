@@ -5,6 +5,11 @@ import { Upload } from './index';
 
 const UploadComponent = Upload as unknown as React.FC<any> & { Dragger: any };
 
+if (typeof window !== 'undefined' && !window.URL.createObjectURL) {
+  window.URL.createObjectURL = () => 'mock-url';
+  window.URL.revokeObjectURL = () => {};
+}
+
 describe('Upload', () => {
   it('应该正确渲染上传组件', () => {
     const { container } = render(<UploadComponent />);

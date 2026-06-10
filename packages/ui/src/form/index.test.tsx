@@ -157,4 +157,63 @@ describe('Form', () => {
     expect(form.classList.contains('custom-form')).toBe(true);
     expect((form as HTMLElement).style.marginTop).toBe('10px');
   });
+
+  it('应该兼容使用 checked 属性和 boolean onChange 的 Switch 组件', async () => {
+    const onFinish = vi.fn();
+    const MockSwitch: React.FC<any> = ({ checked, onChange }) => (
+      <button data-testid="switch" onClick={() => onChange?.(!checked)}>
+        {checked ? 'ON' : 'OFF'}
+      </button>
+    );
+    MockSwitch.displayName = 'Switch';
+
+    render(
+      <FormComponent onFinish={onFinish} initialValues={{ status: true }}>
+        <FormComponent.Item name="status" label="状态">
+          <MockSwitch />
+        </FormComponent.Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+
+    const button = screen.getByTestId('switch');
+    expect(button.textContent).toBe('ON');
+
+    fireEvent.click(button);
+    expect(button.textContent).toBe('OFF');
+
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(onFinish).toHaveBeenCalledWith({ status: false });
+    });
+  });
+
+  it('应该兼容直接传递 value 的自定义 Select 组件', async () => {
+    const onFinish = vi.fn();
+    const MockSelect: React.FC<any> = ({ value, onChange }) => (
+      <button data-testid="select" onClick={() => onChange?.('b')}>
+        {value}
+      </button>
+    );
+
+    render(
+      <FormComponent onFinish={onFinish} initialValues={{ choice: 'a' }}>
+        <FormComponent.Item name="choice" label="选择">
+          <MockSelect />
+        </FormComponent.Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+
+    const btn = screen.getByTestId('select');
+    expect(btn.textContent).toBe('a');
+
+    fireEvent.click(btn);
+    expect(btn.textContent).toBe('b');
+
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(onFinish).toHaveBeenCalledWith({ choice: 'b' });
+    });
+  });
 });
