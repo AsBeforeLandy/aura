@@ -121,14 +121,28 @@
   color: #7c3aed !important;
 }
 
+.dumi-default-navbar > li > a.active,
+.dumi-default-navbar > li > a[data-active] {
+  color: #7c3aed !important;
+  font-weight: 600 !important;
+  border-bottom-color: #7c3aed !important;
+}
+
+.dumi-default-navbar > li > a.active::after,
+.dumi-default-navbar > li > a[data-active]::after {
+  background-color: #7c3aed !important;
+}
+
 .dumi-default-navbar > li > .dumi-default-navbar-dropdown {
   box-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
 }
 
 /* ===== Sidebar 侧边栏 ===== */
-.dumi-default-sidebar > dl > dd > a:hover,
-.dumi-default-sidebar > dl > dd > a.active {
+.dumi-default-sidebar > dl > dd > a:hover {
   color: #7c3aed !important;
+}
+.dumi-default-sidebar > dl > dd > a.active {
+  color: #fff !important;
 }
 
 /* ===== TOC 目录 ===== */
@@ -138,9 +152,12 @@
 }
 
 /* ===== Search 搜索 ===== */
+.dumi-default-search-bar input {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
 .dumi-default-search-bar input:focus {
   border-color: #7c3aed !important;
-  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15), 0 0 10px rgba(124, 58, 237, 0.15) !important;
 }
 
 .dumi-default-search-bar > svg {
@@ -255,62 +272,211 @@
 }
 
 /* ===== Hero 首页 ===== */
-.dumi-default-hero-title {
-  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%) !important;
+.dumi-default-hero {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 80% 20%, rgba(243, 232, 255, 0.4) 0%, transparent 40%),
+              radial-gradient(circle at 20% 80%, rgba(250, 245, 255, 0.6) 0%, transparent 50%) !important;
+}
+
+.dumi-default-hero-title,
+.dumi-default-hero-title span {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 25%, #c084fc 50%, #a855f7 75%, #7c3aed 100%) !important;
+  background-size: 200% 200% !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   text-shadow: none !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  display: inline-block !important;
+  animation: aura-gradient-flow 8s ease infinite !important;
 }
 
-.dumi-default-hero-title span {
-  color: #a78bfa !important;
+.dumi-default-hero-title:hover,
+.dumi-default-hero-title span:hover {
+  transform: translateY(-3px) !important;
+  filter: brightness(1.1) !important;
+}
+
+@keyframes aura-gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .dumi-default-hero > p {
-  color: #6b7280 !important;
+  color: var(--aura-text-secondary) !important;
 }
 
 .dumi-default-hero-actions > a:first-child {
-  background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+  background: linear-gradient(135deg, #7c3aed, #a855f7) !important;
   border: none !important;
   box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4) !important;
   color: #fff !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 20px !important;
 }
 
 .dumi-default-hero-actions > a:first-child:hover {
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5), 0 0 10px rgba(168, 85, 247, 0.3) !important;
   opacity: 1 !important;
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.02);
 }
 
 .dumi-default-hero-actions > a:not(:first-child) {
   color: #7c3aed !important;
   border-color: #7c3aed !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 20px !important;
 }
 
 .dumi-default-hero-actions > a:not(:first-child):hover {
-  background: rgba(124, 58, 237, 0.05) !important;
+  background: rgba(124, 58, 237, 0.08) !important;
+  border-color: #7c3aed !important;
+  color: #7c3aed !important;
   opacity: 1 !important;
+  transform: translateY(-4px);
 }
 
 /* ===== Features 特性区域 ===== */
 .dumi-default-features {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 32px !important;
   max-width: 1200px !important;
+  padding: 80px 24px !important;
+  margin: 0 auto !important;
+  clear: both !important;
 }
 
-.dumi-default-features > dl {
-  border-radius: 12px !important;
-  transition: all 0.3s ease !important;
+@media (max-width: 992px) {
+  .dumi-default-features {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
 }
 
-.dumi-default-features > dl:hover {
-  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.08) !important;
-  transform: translateY(-2px);
+@media (max-width: 768px) {
+  .dumi-default-features {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 40px 24px !important;
+  }
+}
+
+.dumi-default-features-item {
+  box-sizing: border-box !important;
+  width: auto !important;
+  float: none !important;
+  margin: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(245, 243, 255, 0.4) 100%) !important;
+  backdrop-filter: blur(20px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
+  border: 1px solid rgba(124, 58, 237, 0.1) !important;
+  border-radius: 24px !important;
+  padding: 36px 32px !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 4px 30px rgba(124, 58, 237, 0.02), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
+
+/* 极光背光微光效果 */
+.dumi-default-features-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 150px !important;
+  height: 150px !important;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(124, 58, 237, 0.04) 50%, transparent 100%) !important;
+  filter: blur(20px) !important;
+  opacity: 0 !important;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+.dumi-default-features-item:hover::before {
+  opacity: 1 !important;
+}
+
+.dumi-default-features-item:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(245, 243, 255, 0.6) 100%) !important;
+  border-color: rgba(124, 58, 237, 0.35) !important;
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.1), 0 0 1px rgba(124, 58, 237, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  transform: translateY(-8px) !important;
+}
+
+.dumi-default-features-item h3 {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--aura-text) !important;
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+  z-index: 1 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.dumi-default-features-item h3 a {
+  color: var(--aura-text) !important;
+  text-decoration: none !important;
+  transition: color 0.3s ease !important;
+}
+
+.dumi-default-features-item h3 a:hover {
+  color: #7c3aed !important;
+}
+
+.dumi-default-features-item i {
+  width: 48px !important;
+  height: 48px !important;
+  font-size: 22px !important;
+  font-style: normal !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(168, 85, 247, 0.04) 100%) !important;
+  border: 1px solid rgba(124, 58, 237, 0.12) !important;
+  margin-bottom: 20px !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  z-index: 1 !important;
+}
+
+.dumi-default-features-item:hover i {
+  transform: scale(1.15) rotate(8deg) !important;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.18) 0%, rgba(168, 85, 247, 0.08) 100%) !important;
+  border-color: rgba(124, 58, 237, 0.25) !important;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.08) !important;
+}
+
+.dumi-default-features-item p {
+  margin: 0 !important;
+  color: var(--aura-text-secondary) !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  z-index: 1 !important;
+  text-align: justify !important;
 }
 
 /* ===== Header 头部导航 ===== */
 .dumi-default-header {
   border-bottom: 1px solid rgba(124, 58, 237, 0.08) !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
 }
 
 .dumi-default-header-left .dumi-default-logo {
@@ -319,8 +485,45 @@
 
 /* ===== 暗色模式 ===== */
 
+[data-prefers-color="dark"] .dumi-default-hero {
+  background: radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+              #0f0c29 !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-features-item {
+  background: linear-gradient(135deg, rgba(15, 12, 41, 0.45) 0%, rgba(26, 26, 62, 0.35) 100%) !important;
+  border: 1px solid rgba(167, 139, 250, 0.12) !important;
+  box-shadow: 0 4px 30px rgba(15, 12, 41, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-features-item::before {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, rgba(124, 58, 237, 0.06) 50%, transparent 100%) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-features-item:hover {
+  background: linear-gradient(135deg, rgba(26, 26, 62, 0.6) 0%, rgba(15, 12, 41, 0.5) 100%) !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.25), 0 0 15px rgba(124, 58, 237, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-features-item i {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.12) 0%, rgba(139, 92, 246, 0.04) 100%) !important;
+  border-color: rgba(167, 139, 250, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-features-item:hover i {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.22) 0%, rgba(139, 92, 246, 0.08) 100%) !important;
+  border-color: rgba(167, 139, 250, 0.35) !important;
+  box-shadow: 0 8px 20px rgba(167, 139, 250, 0.1) !important;
+}
+
 [data-prefers-color="dark"] .dumi-default-header {
   border-bottom-color: rgba(139, 92, 246, 0.15) !important;
+  background: rgba(15, 12, 41, 0.75) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-header-left .dumi-default-logo {
@@ -332,9 +535,23 @@
   color: #a78bfa !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a:hover,
-[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a.active {
+[data-prefers-color="dark"] .dumi-default-navbar > li > a.active,
+[data-prefers-color="dark"] .dumi-default-navbar > li > a[data-active] {
   color: #a78bfa !important;
+  font-weight: 600 !important;
+  border-bottom-color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-navbar > li > a.active::after,
+[data-prefers-color="dark"] .dumi-default-navbar > li > a[data-active]::after {
+  background-color: #a78bfa !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a:hover {
+  color: #a78bfa !important;
+}
+[data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a.active {
+  color: #fff !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-toc > a.active {
@@ -344,7 +561,7 @@
 
 [data-prefers-color="dark"] .dumi-default-search-bar input:focus {
   border-color: #a78bfa !important;
-  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.15) !important;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2), 0 0 12px rgba(124, 58, 237, 0.2) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-search-bar > svg {
@@ -444,12 +661,24 @@
   border-left-color: #a78bfa !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-hero-title {
-  background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 50%, #8b5cf6 100%) !important;
+[data-prefers-color="dark"] .dumi-default-hero-title,
+[data-prefers-color="dark"] .dumi-default-hero-title span {
+  background: linear-gradient(135deg, #c4b5fd 0%, #d946ef 25%, #a78bfa 50%, #d946ef 75%, #c4b5fd 100%) !important;
+  background-size: 200% 200% !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
   text-shadow: none !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  display: inline-block !important;
+  animation: aura-gradient-flow 8s ease infinite !important;
+}
+
+[data-prefers-color="dark"] .dumi-default-hero-title:hover,
+[data-prefers-color="dark"] .dumi-default-hero-title span:hover {
+  transform: translateY(-3px) !important;
+  filter: brightness(1.15) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-hero-actions > a:first-child {
@@ -462,9 +691,6 @@
   border-color: #a78bfa !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-features > dl:hover {
-  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12) !important;
-}
 
 /* ===== 页脚样式增强 ===== */
 .dumi-default-footer {
@@ -779,25 +1005,26 @@ html {
   padding: 6px 24px !important;
   font-size: 14px !important;
   color: var(--aura-text-secondary) !important;
-  border-radius: 0 !important;
-  transition: all 0.15s ease !important;
+  border-radius: 8px !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
   border-left: 2px solid transparent !important;
-  margin: 0 0 0 8px !important;
+  margin: 2px 12px 2px 8px !important;
   padding-left: 16px !important;
 }
 
 /* 侧边栏链接 hover */
 .dumi-default-sidebar > dl > dd > a:hover {
-  color: var(--aura-text) !important;
-  background: rgba(124, 58, 237, 0.04) !important;
+  color: #7c3aed !important;
+  background: rgba(124, 58, 237, 0.05) !important;
+  padding-left: 20px !important;
 }
 
-/* 侧边栏活动项 — 左侧边框指示器 */
+/* 侧边栏活动项 */
 .dumi-default-sidebar > dl > dd > a.active {
-  color: #7c3aed !important;
+  color: #fff !important;
   font-weight: 500 !important;
-  background: rgba(124, 58, 237, 0.06) !important;
-  border-left-color: #7c3aed !important;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(168, 85, 247, 0.8)) !important;
+  border-left-color: transparent !important;
 }
 
 /* ===== 2e. 右侧 TOC 样式 ===== */
@@ -941,17 +1168,21 @@ html {
 
 [data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a {
   color: var(--aura-gray-400) !important;
+  border-radius: 8px !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  margin: 2px 12px 2px 8px !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a:hover {
-  color: var(--aura-gray-200) !important;
-  background: rgba(167, 139, 250, 0.06) !important;
+  color: #a78bfa !important;
+  background: rgba(167, 139, 250, 0.08) !important;
+  padding-left: 20px !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a.active {
-  color: #a78bfa !important;
-  background: rgba(167, 139, 250, 0.08) !important;
-  border-left-color: #a78bfa !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.95), rgba(139, 92, 246, 0.8)) !important;
+  border-left-color: transparent !important;
 }
 
 /* 暗色 — TOC */

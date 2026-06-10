@@ -10,6 +10,13 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@aura/ui": ["./packages/ui/src/index.ts"],
+      "@aura/icons": ["./packages/icons/src/index.ts"],
+      "@aura/shared": ["./packages/shared/src/index.ts"],
+      "@aura/request": ["./packages/request/src/index.ts"]
+    }
   }
 }
