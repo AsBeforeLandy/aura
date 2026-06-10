@@ -46,6 +46,7 @@ export default defineConfig({
             { title: '快速开始', link: '/guide/quick-start' },
             { title: '安装', link: '/guide/installation' },
             { title: '主题定制', link: '/guide/theme' },
+            { title: 'AI 智能协同', link: '/guide/ai' },
             { title: '常见问题', link: '/guide/faq' },
           ],
         },
