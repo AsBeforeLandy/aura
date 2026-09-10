@@ -1,16 +1,27 @@
+# ===== 依赖 =====
 node_modules
+
+# ===== 构建产物（CI 中生成，不入库） =====
 dist
 lib
 esm
+
+# ===== dumi / umi 临时文件 =====
 .dumi/tmp
 .dumi/tmp-production
 .umi
 .umi-production
-.DS_Store
-*.log
+
+# ===== 测试与日志 =====
 coverage
+*.log
+
+# ===== 系统与编辑器 =====
+.DS_Store
 .superpowers/
 .claude/**
+
+# ===== 工作区与工具 =====
 .worktrees
 .workbuddy
 .codebuddy

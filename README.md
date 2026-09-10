@@ -5,7 +5,7 @@
 
   基于 React 18 的现代化组件库，为构建优雅的用户界面而生。
 
-  [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AsBeforeLandy/aura/blob/main/LICENSE)
+  [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AsBeforeLandy/aura/blob/master/LICENSE)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/AsBeforeLandy/aura/pulls)
   [![GitHub stars](https://img.shields.io/github/stars/AsBeforeLandy/aura.svg)](https://github.com/AsBeforeLandy/aura/stargazers)
 
@@ -127,6 +127,18 @@ pnpm build
 pnpm build:lib
 ```
 
+## 部署
+
+文档站通过 **GitHub Actions** 自动部署到 GitHub Pages：
+
+1. 推送代码到 `master` 分支，自动触发 `.github/workflows/deploy.yml`
+2. CI 执行 `pnpm build`（dumi 构建）生成静态站点到 `dist/`
+3. 通过 `upload-pages-artifact` + `deploy-pages` 上传并发布
+
+> 无需手动部署。仓库 Settings → Pages 的 Source 需设为 **"GitHub Actions"**。
+
+在线访问：<https://asbeforelandy.github.io/aura>
+
 ## 链接
 
 - [在线文档](https://asbeforelandy.github.io/aura)
@@ -136,7 +148,7 @@ pnpm build:lib
 
 ## 许可证
 
-Aura 基于 [MIT License](https://github.com/AsBeforeLandy/aura/blob/main/LICENSE) 开源。
+Aura 基于 [MIT License](https://github.com/AsBeforeLandy/aura/blob/master/LICENSE) 开源。
 
 ---
 
