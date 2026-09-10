@@ -26,6 +26,7 @@
 - **⚡ React 18** — `forwardRef`、Compound Component 等 React 最新特性
 - **♿ 无障碍** — 支持 `aria-*` 属性、键盘导航
 - **🤖 AI 友好** — 内置 MCP Server，AI 助手可直接查询组件 API
+- **🧱 业务组件** — `@aura/business` 基于 antd 二次封装，覆盖中后台列表页、查询区、弹窗表单等高频场景
 
 ## 兼容环境
 
@@ -86,6 +87,7 @@ const App = () => (
 | **导航** | Menu、Breadcrumb、Pagination、Steps、Dropdown |
 | **表单高级** | Slider、Rate、Upload、Form |
 | **布局** | Layout、Flex、Scrollbar |
+| **业务** | PageContainer、SearchForm、ProTable、ModalForm（基于 antd） |
 
 ## 包结构
 
@@ -93,6 +95,7 @@ const App = () => (
 aura/
 ├── packages/
 │   ├── ui/        # @aura/ui — UI 组件库
+│   ├── business/  # @aura/business — 业务组件库（基于 antd 封装）
 │   ├── shared/    # @aura/shared — 工具函数（classNames、prefixCls 等）
 │   ├── request/   # @aura/request — HTTP 请求封装
 │   ├── cli/       # @aura/cli — MCP Server 与 CLI 工具

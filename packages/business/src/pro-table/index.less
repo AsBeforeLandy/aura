@@ -1,0 +1,18 @@
+/* ===== ProTable 高级表格 ===== */
+
+.aura-pro-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aura-spacing-4);
+
+  &-card {
+    border-radius: var(--aura-radius-md);
+    overflow: hidden;
+  }
+
+  /* 表头与工具栏保持在同一条视觉线上 */
+  &-card .ant-card-head {
+    min-height: 52px;
+    border-bottom: 1px solid var(--aura-border);
+  }
+}

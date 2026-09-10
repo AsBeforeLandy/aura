@@ -7,6 +7,7 @@ export default defineConfig({
     atomDirs: [
       { type: 'components', dir: 'packages/ui/src' },
       { type: 'components', dir: 'packages/icons/src' },
+      { type: 'business', dir: 'packages/business/src' },
     ],
     entryFile: './packages/ui/src/index.ts',
     codeBlockMode: 'active',
@@ -18,6 +19,7 @@ export default defineConfig({
   alias: {
     '@aura/icons': path.resolve(__dirname, 'packages/icons/src'),
     '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
+    '@aura/business': path.resolve(__dirname, 'packages/business/src'),
     '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura/request': path.resolve(__dirname, 'packages/request/src'),
   },
@@ -34,7 +36,10 @@ export default defineConfig({
     prefersColor: { default: 'light', switch: true },
     nav: [
       { title: '指南', link: '/guide' },
-      { title: '组件', link: '/components/button' },
+      { title: '组件', link: '/components' },
+      // 注意：dumi 会对 atomDirs.type 做英文复数化（pluralize），
+      // type: 'business' 实际生成的路由前缀是 /businesses，而非 /business。
+      { title: '业务组件', link: '/businesses' },
       { title: '更新日志', link: '/changelog' },
     ],
     sidebar: {
@@ -124,7 +129,17 @@ export default defineConfig({
             { title: 'Popconfirm 气泡确认框', link: '/components/popconfirm' },
           ],
         },
-        
+      ],
+      '/businesses': [
+        {
+          title: '业务组件',
+          children: [
+            { title: 'PageContainer 页面容器', link: '/businesses/page-container' },
+            { title: 'SearchForm 查询表单', link: '/businesses/search-form' },
+            { title: 'ProTable 高级表格', link: '/businesses/pro-table' },
+            { title: 'ModalForm 弹窗表单', link: '/businesses/modal-form' },
+          ],
+        },
       ],
     },
     showLineNum: true,

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "outDir": "./lib",
+    "baseUrl": ".",
+    "paths": {
+      "@aura/business": ["./src/index.ts"],
+      "@aura/shared": ["../shared/src/index.ts"],
+      "@aura/ui": ["../ui/src/index.ts"],
+      "@aura/icons": ["../icons/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

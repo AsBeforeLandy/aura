@@ -1,0 +1,26 @@
+/* ===== SearchForm 查询表单 ===== */
+
+.aura-search-form {
+  padding: var(--aura-spacing-4) var(--aura-spacing-4) 0;
+  background: var(--aura-bg);
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-md);
+
+  /* 字段与操作区共用底部间距，保证换行时对齐 */
+  &-field {
+    margin-bottom: var(--aura-spacing-4);
+  }
+
+  &-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--aura-spacing-4);
+  }
+}
+
+/* 暗色模式 */
+[data-theme='dark'] {
+  .aura-search-form {
+    background: var(--aura-bg-secondary);
+  }
+}

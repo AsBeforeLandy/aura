@@ -1,0 +1,28 @@
+{
+  "name": "@aura/business",
+  "version": "0.0.1",
+  "description": "Aura 业务组件库 — 基于 antd 二次封装的 B 端中后台业务组件",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "files": ["esm"],
+  "sideEffects": ["**/*.less"],
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "types": "./esm/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "father build",
+    "dev": "father dev"
+  },
+  "peerDependencies": {
+    "antd": ">=6.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@aura/shared": "workspace:*"
+  },
+  "license": "MIT"
+}
