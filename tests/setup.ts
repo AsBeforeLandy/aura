@@ -1,5 +1,15 @@
-import { vi, afterEach } from 'vitest';
+import { vi, afterEach, expect } from 'vitest';
 import { cleanup } from '@testing-library/react';
+import { toHaveNoViolations } from 'jest-axe';
+
+/**
+ * 注册 jest-axe 的 `toHaveNoViolations` 断言。
+ * jest-axe 基于 jest 的 expect.extend 接口实现，vitest 兼容该接口。
+ *
+ * 注意：jsdom 不进行真实布局与样式计算，因此 axe 的 color-contrast
+ * 规则在此环境下不生效，能覆盖的是语义层面（label / role / aria / 标题层级等）。
+ */
+expect.extend(toHaveNoViolations);
 
 /**
  * 每个用例结束后卸载 render 挂载的 DOM。

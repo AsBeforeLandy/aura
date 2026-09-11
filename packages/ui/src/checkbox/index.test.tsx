@@ -143,4 +143,45 @@ describe('CheckboxGroup', () => {
       orangeLabel.classList.contains('aura-checkbox-disabled'),
     ).toBe(true);
   });
+
+  // ---- 非受控用法（回归：此前没有内部状态，导致点不动、defaultChecked 被忽略）----
+  it('非受控：未传 checked 时可点击切换', () => {
+    const { container } = render(<Checkbox>同意协议</Checkbox>);
+    const input = container.querySelector('input') as HTMLInputElement;
+
+    expect(input.checked).toBe(false);
+    fireEvent.click(input);
+    expect(input.checked).toBe(true);
+    fireEvent.click(input);
+    expect(input.checked).toBe(false);
+  });
+
+  it('非受控：defaultChecked 生效', () => {
+    const { container } = render(<Checkbox defaultChecked>默认选中</Checkbox>);
+    const input = container.querySelector('input') as HTMLInputElement;
+    expect(input.checked).toBe(true);
+  });
+
+  it('非受控：切换时仍会回调 onChange', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <Checkbox onChange={onChange}>选项</Checkbox>,
+    );
+    const input = container.querySelector('input') as HTMLInputElement;
+
+    fireEvent.click(input);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(input.checked).toBe(true);
+  });
+
+  it('受控：checked 未变时点击不会改变自身状态（交由调用方决定）', () => {
+    const { container } = render(
+      <Checkbox checked={false} onChange={() => {}}>
+        受控
+      </Checkbox>,
+    );
+    const input = container.querySelector('input') as HTMLInputElement;
+    fireEvent.click(input);
+    expect(input.checked).toBe(false);
+  });
 });

@@ -9,7 +9,7 @@ import React, {
 import { classNames, prefixCls } from '@aura/shared';
 import './index.less';
 
-export interface SelectProps {
+export interface SelectProps extends React.AriaAttributes {
   /** 变体样式
    *  @default 'default'
    */
@@ -84,6 +84,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       onChange,
       className,
       style,
+      // role="combobox" 的元素无法被 <label> 关联，名称只能由 aria-* 提供
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
+      'aria-invalid': ariaInvalid,
     },
     ref,
   ) => {
@@ -278,6 +283,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           aria-expanded={open}
           aria-haspopup="listbox"
           aria-controls={open ? listId : undefined}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+          aria-invalid={ariaInvalid}
           tabIndex={disabled ? -1 : 0}
           onKeyDown={(e) => {
             if (disabled) return;

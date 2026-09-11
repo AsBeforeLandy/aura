@@ -8,7 +8,7 @@ import React, {
 import { classNames, prefixCls } from '@aura/shared';
 import './index.less';
 
-export interface SliderProps {
+export interface SliderProps extends React.AriaAttributes {
   /** 最小值
    *  @default 0
    */
@@ -66,6 +66,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       onChange,
       className,
       style,
+      // role="slider" 落在滑块本体上，名称需由调用方通过 aria-* 提供
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
     },
     ref,
   ) => {
@@ -231,17 +234,17 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       );
     };
 
+    /** 滑块的可访问名称：range 模式下两个滑块需要彼此可区分 */
+    const handleAriaLabel = (which: 'start' | 'end'): string | undefined => {
+      if (!range) return ariaLabel;
+      const suffix = which === 'start' ? '最小值' : '最大值';
+      return ariaLabel ? `${ariaLabel}·${suffix}` : suffix;
+    };
+
     return (
-      <div
-        ref={ref}
-        className={cls}
-        style={style}
-        role="slider"
-        aria-valuemin={min}
-        aria-valuemax={max}
-        aria-valuenow={range ? undefined : (currentValue as number)}
-        aria-disabled={disabled}
-      >
+      // 容器不是可聚焦控件，不应承担 role="slider"：否则容器与滑块体会重复表达
+      // 同一语义，且容器无名称可用（axe 报 aria-input-field-name）。语义交给滑块本体。
+      <div ref={ref} className={cls} style={style}>
         <div
           ref={trackRef}
           className={prefixCls('slider-track')}
@@ -270,6 +273,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
               aria-valuemin={min}
               aria-valuemax={max}
               aria-valuenow={startValue}
+              aria-label={handleAriaLabel('start')}
+              aria-labelledby={ariaLabelledBy}
+              aria-disabled={disabled}
               tabIndex={disabled ? -1 : 0}
             />
           )}
@@ -287,6 +293,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
             aria-valuemin={min}
             aria-valuemax={max}
             aria-valuenow={endValue}
+            aria-label={handleAriaLabel('end')}
+            aria-labelledby={ariaLabelledBy}
+            aria-disabled={disabled}
             tabIndex={disabled ? -1 : 0}
           />
         </div>

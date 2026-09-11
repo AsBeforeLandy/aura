@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Lint / Typecheck / Test / Build / Smoke
+    name: Lint / Typecheck / Coverage / Build / Size / Smoke
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -41,8 +41,9 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Unit tests
-        run: pnpm test
+      # 用覆盖率模式跑测试以强制 vitest 的 coverage.thresholds
+      - name: Unit tests (coverage)
+        run: pnpm test:coverage
 
       # 关键门禁：验证构建产物本身可交付。
       # 历史上"开发态正常、交付态断裂"类问题（声明文件缺失、
@@ -50,6 +51,10 @@ jobs:
       # 都无法被 lint / test 发现，只有构建 + 冒烟测试能拦住。
       - name: Build libraries
         run: pnpm build:lib
+
+      # 防止产物体积失控（阈值见 package.json 的 size-limit 配置）
+      - name: Size budget
+        run: pnpm size
 
       - name: Artifact smoke test
         run: pnpm smoke

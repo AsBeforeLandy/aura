@@ -2,7 +2,12 @@ import React, { forwardRef, useState, useCallback } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
 import './index.less';
 
-export interface SwitchProps {
+/**
+ * Switch 的可访问性依赖调用方通过 `aria-label` / `aria-labelledby` 提供名称，
+ * 因此这里继承 button 的原生属性并向下转发（`onChange` 因签名不同而排除）。
+ */
+export interface SwitchProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
   /** 开关尺寸
    *  @default 'md'
    */
@@ -40,6 +45,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       onChange,
       className,
       style,
+      ...rest
     },
     ref,
   ) => {
@@ -68,6 +74,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       <button
         ref={ref}
         type="button"
+        {...rest}
         role="switch"
         aria-checked={checked}
         className={cls}

@@ -4,6 +4,49 @@
 
 ## [Unreleased]
 
+### Fixed — 组件功能与无障碍缺陷（由新增的 a11y 测试发现）
+
+- **`Checkbox` 非受控用法完全失效**。单独使用 `<Checkbox>`（未传 `checked`）时，
+  实现里没有内部状态：input 被写成 `checked={false}` 且 `onChange` 为 `undefined`，
+  导致**无法点击切换**，组件文档与 demo 中使用的 `defaultChecked` 也被忽略。
+  现已补上内部状态，受控 / 非受控 / `defaultChecked` 三种用法均正确，
+  并补充 4 个回归测试。
+- **`Menu` 使用了 ARIA 规范不允许的属性**：`role="menuitem"` 不支持 `aria-selected`
+  （axe 规则 `aria-allowed-attr`），改用全局属性 `aria-current` 表达当前选中项。
+- **`Switch` 丢弃了 `aria-label`**：`SwitchProps` 未继承 button 原生属性，
+  读屏用户只能听到「开关」而不知道它在控制什么。现继承
+  `React.ButtonHTMLAttributes<HTMLButtonElement>` 并向下转发。
+- **`Select` 无法被标注**：`role="combobox"` 落在 div 上，`<label>` 无法关联它，
+  此前也没有任何 `aria-*` 出口。现继承 `React.AriaAttributes` 并把
+  `aria-label` / `aria-labelledby` / `aria-describedby` / `aria-invalid`
+  转发到 combobox 元素上。
+- **`Slider` 重复表达 slider 语义**：外层容器与滑块本体都写了 `role="slider"`，
+  容器不可聚焦也不该承担该角色。现语义只落在滑块本体，
+  并转发 `aria-label`；range 模式下两个滑块的可访问名称彼此可区分
+  （默认「最小值 / 最大值」，传 `aria-label` 时自动拼接）。
+
+### Added — 工程化工具链（提交门禁 / 体积预算 / 无障碍 / 覆盖率阈值）
+
+- **提交信息门禁**：接入 `@commitlint/cli` + `@commitlint/config-conventional`，
+  `.husky/commit-msg` 校验提交信息为 Conventional Commits 格式
+  （与仓库既有历史一致）；`pnpm commitlint` 可手动校验。
+- **pre-commit 钩子**：husky + lint-staged，对暂存的 `*.{ts,tsx}` 执行 `eslint --fix`。
+  说明：**尚未**在此接入 Prettier，避免在「整体格式化」完成前于每次提交中产生零散的格式改动。
+  `prepare` 脚本改为 `husky && dumi setup`（husky 先于 dumi 安装钩子）。
+- **产物体积预算**：接入 size-limit，按「全量 esm 汇总、brotli」实测并设置阈值
+  （shared 4 kB / icons 22 kB / ui 95 kB / business 36 kB，实测 2.69 / 17.21 / 79.61 / 29.24 kB）。
+  `pnpm size` 可单独运行，已加入 `verify` 与 CI。
+- **无障碍测试**：接入 jest-axe，新增 `packages/ui/src/a11y.test.tsx` 覆盖 21 个用例。
+  说明：jsdom 不做真实布局，axe 的 color-contrast 规则不生效，本测试覆盖语义层
+  （label / role / aria / 标题层级）。
+- **覆盖率阈值与统计口径修正**：vitest coverage 改为**正向白名单**口径
+  （只统计 `packages/*/src`，排除 demo / 测试文件 / 顶层 barrel）。
+  此前的全量口径会把 `esm/` 产物、demo、`scripts/` 都算进去，总覆盖率被拉到 41%，
+  失去防止回退的意义。修正后实测 语句 83.2% / 分支 86.76% / 函数 68.75% / 行 83.2%，
+  阈值据此设为 80 / 84 / 65 / 80（留有余量防止立即失败，提升覆盖率时应同步上调）。
+- CI 工作流更新：测试改用覆盖率模式以强制阈值，新增体积预算检查，
+  流水线为 `Lint → Typecheck → Coverage → Build → Size → Smoke`。
+
 ### Fixed — 消费侧类型解析（`.d.ts` 中的样式导入）
 
 - **从产出的 `.d.ts` 中剥离样式副作用导入**。组件源码遵循样式与逻辑分离，

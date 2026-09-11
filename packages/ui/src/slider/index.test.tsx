@@ -38,7 +38,9 @@ describe('Slider', () => {
     const { container } = render(<Slider disabled />);
     const slider = container.querySelector('.aura-slider');
     expect(slider?.classList.contains('aura-slider-disabled')).toBe(true);
-    expect(slider?.getAttribute('aria-disabled')).toBe('true');
+    // aria-disabled 跟随 role 落在滑块本体上
+    const handle = container.querySelector('.aura-slider-handle');
+    expect(handle?.getAttribute('aria-disabled')).toBe('true');
   });
 
   // marks 显示
@@ -117,12 +119,37 @@ describe('Slider', () => {
   });
 
   // aria 属性
-  it('should have correct aria attributes', () => {
+  // 注意：role="slider" 落在滑块本体（可聚焦元素）上，而不是外层容器。
+  // 容器同时带 role="slider" 会与滑块重复表达同一语义，且容器无名称可用
+  // （axe 的 aria-input-field-name 会报违规）。
+  it('aria 属性应落在滑块本体上', () => {
+    const { container } = render(<Slider min={0} max={100} value={50} />);
+    const handle = container.querySelector('.aura-slider-handle');
+    expect(handle?.getAttribute('role')).toBe('slider');
+    expect(handle?.getAttribute('aria-valuemin')).toBe('0');
+    expect(handle?.getAttribute('aria-valuemax')).toBe('100');
+    expect(handle?.getAttribute('aria-valuenow')).toBe('50');
+  });
+
+  it('外层容器不应承担 role="slider"', () => {
     const { container } = render(<Slider min={0} max={100} value={50} />);
     const slider = container.querySelector('.aura-slider');
-    expect(slider?.getAttribute('role')).toBe('slider');
-    expect(slider?.getAttribute('aria-valuemin')).toBe('0');
-    expect(slider?.getAttribute('aria-valuemax')).toBe('100');
-    expect(slider?.getAttribute('aria-valuenow')).toBe('50');
+    expect(slider?.getAttribute('role')).toBe(null);
+  });
+
+  it('应把 aria-label 传给滑块本体', () => {
+    const { container } = render(<Slider value={50} aria-label="音量" />);
+    const handle = container.querySelector('.aura-slider-handle');
+    expect(handle?.getAttribute('aria-label')).toBe('音量');
+  });
+
+  it('range 模式下两个滑块的可访问名称应可区分', () => {
+    const { container } = render(
+      <Slider range defaultValue={[20, 60]} aria-label="价格区间" />,
+    );
+    const handles = container.querySelectorAll('.aura-slider-handle');
+    expect(handles).toHaveLength(2);
+    expect(handles[0].getAttribute('aria-label')).toBe('价格区间·最小值');
+    expect(handles[1].getAttribute('aria-label')).toBe('价格区间·最大值');
   });
 });

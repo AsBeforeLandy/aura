@@ -20,11 +20,38 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "smoke": "node scripts/smoke.mjs",
-    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build:lib && pnpm smoke",
+    "size": "size-limit",
+    "commitlint": "commitlint",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build:lib && pnpm size && pnpm smoke",
     "prepublishOnly": "pnpm build:lib && pnpm smoke",
-    "prepare": "dumi setup",
+    "prepare": "husky && dumi setup",
     "clean": "rm -rf packages/*/lib packages/*/esm packages/*/dist .dumi"
   },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --fix"
+  },
+  "size-limit": [
+    {
+      "name": "shared (全量 esm)",
+      "path": "packages/shared/esm/**/*.js",
+      "limit": "4 kB"
+    },
+    {
+      "name": "icons (全量 esm)",
+      "path": "packages/icons/esm/**/*.js",
+      "limit": "22 kB"
+    },
+    {
+      "name": "ui (全量 esm)",
+      "path": "packages/ui/esm/**/*.js",
+      "limit": "95 kB"
+    },
+    {
+      "name": "business (全量 esm)",
+      "path": "packages/business/esm/**/*.js",
+      "limit": "36 kB"
+    }
+  ],
   "keywords": [
     "react",
     "component-library",
@@ -34,9 +61,13 @@
   "license": "MIT",
   "devDependencies": {
     "@ant-design/icons": "^6",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@size-limit/file": "^13.0.3",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@types/jest-axe": "^3.5.9",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
@@ -48,10 +79,14 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
     "father": "^4.6.19",
+    "husky": "^9.1.7",
+    "jest-axe": "^11.0.0",
     "jsdom": "^24.0.0",
+    "lint-staged": "^17.5.1",
     "prettier": "^3.9.6",
     "react": "^18",
     "react-dom": "^18",
+    "size-limit": "^13.0.3",
     "typescript": "^6.0.3",
     "vitest": "^1.6.0"
   }

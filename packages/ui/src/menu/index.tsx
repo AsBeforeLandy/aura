@@ -67,12 +67,14 @@ const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
     };
 
     return (
+      // 注意：role="menuitem" 不支持 aria-selected（axe 会报 aria-allowed-attr），
+      // 用全局属性 aria-current 表达「当前选中项」，这也是导航菜单的惯用写法。
       <div
         ref={ref}
         className={itemCls}
         style={style}
         role="menuitem"
-        aria-selected={isSelected}
+        aria-current={isSelected ? 'true' : undefined}
         aria-disabled={disabled}
         tabIndex={disabled ? -1 : 0}
         onClick={handleClick}

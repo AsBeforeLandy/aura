@@ -40,6 +40,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       indeterminate = false,
       disabled,
       checked: controlledChecked,
+      defaultChecked,
       onChange: controlledOnChange,
       className,
       children,
@@ -53,6 +54,11 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     const isDisabled = disabled ?? groupCtx?.disabled;
     const resolvedSize = size ?? groupCtx?.size ?? 'md';
+
+    // 单独 Checkbox 的非受控状态。
+    // 此前该分支直接取 `!!controlledChecked`，导致未传 checked 时 input 始终是
+    // checked={false} 且 onChange 为 undefined —— 既无法点击切换，defaultChecked 也被忽略。
+    const [innerChecked, setInnerChecked] = useState(Boolean(defaultChecked));
 
     // 受控：group > 单独 controlled > 非受控
     let isChecked: boolean;
@@ -72,8 +78,12 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       };
     } else {
       // 单独 Checkbox 模式
-      isChecked = !!controlledChecked;
-      handleChange = controlledOnChange;
+      const isControlled = controlledChecked !== undefined;
+      isChecked = isControlled ? !!controlledChecked : innerChecked;
+      handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!isControlled) setInnerChecked(e.target.checked);
+        controlledOnChange?.(e);
+      };
     }
 
     const cls = classNames(
