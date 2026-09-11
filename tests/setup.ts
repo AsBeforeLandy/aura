@@ -1,4 +1,14 @@
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
+
+/**
+ * 每个用例结束后卸载 render 挂载的 DOM。
+ * RTL 的自动 cleanup 在本项目的 vitest 版本组合下未生效，
+ * 不显式注册会导致「Found multiple elements」式泄漏（文本冲突误伤）。
+ */
+afterEach(() => {
+  cleanup();
+});
 
 /**
  * antd 在 jsdom 环境下依赖若干浏览器 API，集中在此处补齐。

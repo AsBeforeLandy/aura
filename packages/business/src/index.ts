@@ -21,6 +21,12 @@ export type { ProTableProps, ProTableParams, ProTableResult } from './pro-table'
 export { ModalForm } from './modal-form';
 export type { ModalFormProps } from './modal-form';
 
+export { CascaderPanel } from './cascader-panel';
+export type {
+  CascaderPanelProps,
+  CascaderOption,
+} from './cascader-panel';
+
 export { WeekTimeRange } from './week-time-range';
 export type {
   WeekTimeRangeProps,

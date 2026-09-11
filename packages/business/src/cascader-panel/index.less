@@ -1,0 +1,81 @@
+/* ===== CascaderPanel 级联多选面板 ===== */
+
+.aura-cascader-panel {
+  display: flex;
+  overflow-x: auto;
+
+  &-column {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    min-width: 160px;
+    max-height: 360px;
+    padding: var(--aura-spacing-2) 0;
+    border: 1px solid var(--aura-border);
+    border-right: none;
+    overflow-y: auto;
+
+    &:last-child {
+      border-right: 1px solid var(--aura-border);
+    }
+  }
+
+  &-column-title {
+    padding: 0 var(--aura-spacing-2) var(--aura-spacing-1);
+    border-bottom: 1px solid var(--aura-border);
+    font-size: var(--aura-font-size-xs);
+    font-weight: 500;
+    color: var(--aura-text-secondary);
+  }
+
+  &-check-all {
+    margin: var(--aura-spacing-2) var(--aura-spacing-2) 0;
+  }
+
+  &-column-list {
+    margin: 0 var(--aura-spacing-2);
+    overflow-y: auto;
+  }
+
+  &-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px var(--aura-spacing-1);
+    border-radius: var(--aura-radius-sm);
+    cursor: pointer;
+    line-height: 2;
+    transition: background var(--aura-duration-fast) var(--aura-easing);
+
+    &:hover {
+      background: var(--aura-bg-tertiary);
+    }
+  }
+
+  &-option-main {
+    display: flex;
+    align-items: center;
+  }
+
+  &-option-label {
+    margin-left: var(--aura-spacing-2);
+  }
+
+  &-option-arrow {
+    color: var(--aura-text-tertiary);
+    font-size: var(--aura-font-size-sm);
+  }
+
+  &-option-active {
+    background: var(--aura-primary-50);
+
+    .aura-cascader-panel-option-label {
+      color: var(--aura-primary-700);
+      font-weight: 500;
+    }
+
+    .aura-cascader-panel-option-arrow {
+      color: var(--aura-primary-700);
+    }
+  }
+}

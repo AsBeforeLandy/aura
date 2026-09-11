@@ -140,6 +140,7 @@ export default defineConfig({
             { title: 'ModalForm 弹窗表单', link: '/businesses/modal-form' },
             { title: 'WeekTimeRange 周时间段', link: '/businesses/week-time-range' },
             { title: 'YearCalendar 年历选择器', link: '/businesses/year-calendar' },
+            { title: 'CascaderPanel 级联多选面板', link: '/businesses/cascader-panel' },
           ],
         },
       ],

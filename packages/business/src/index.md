@@ -58,6 +58,9 @@ export default () => (
 | [SearchForm 查询表单](/businesses/search-form) | 声明式查询区，字段超限自动折叠 |
 | [ProTable 高级表格](/businesses/pro-table) | 搜索 + 表格 + 分页一体化 |
 | [ModalForm 弹窗表单](/businesses/modal-form) | 校验 → 提交 loading → 成功自动关闭 |
+| [WeekTimeRange 周时间段](/businesses/week-time-range) | 一周 × 时间粒度矩阵选择器，支持拖拽框选与区间合并 |
+| [YearCalendar 年历选择器](/businesses/year-calendar) | 全年连续网格，无空白位，支持拖拽框选 |
+| [CascaderPanel 级联多选面板](/businesses/cascader-panel) | 横向多列级联多选，勾选级联子孙，父级自动全选 / 半选 |
 
 ## 主题桥接
 
