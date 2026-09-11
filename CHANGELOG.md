@@ -4,6 +4,25 @@
 
 ## [Unreleased]
 
+### Changed — 结构与可维护性
+
+- **文档站侧边栏改为由文档 frontmatter 自动生成**。`.dumirc.ts` 此前手写 55 条链接，
+  与 atomDirs 自动生成的路由构成双份真相：新增组件页不会出现在导航，删除组件页会留死链。
+  现于配置求值期扫描 `packages/*/src/<组件>/index.md`，解析 frontmatter 的
+  `title` / `group` / `order` 生成侧边栏（兼容平铺 `group: x` 与嵌套
+  `group: { title: x }` 两种写法），生成的 45 条与原手写版逐条一致。
+  此后新增组件只需写好 frontmatter，导航即自动出现。
+- **三个最大业务组件抽出纯函数层 `utils.ts`**，渲染与逻辑解耦、可独立单测：
+
+  | 组件 | index.tsx | utils.ts |
+  | --- | --- | --- |
+  | `WeekTimeRange` | 475 → 385 行 | 时间解析 / 槽位生成 / 区间合并与裁剪（137 行） |
+  | `YearCalendar` | 435 → 360 行 | 全年周网格构建与日期格式化（92 行） |
+  | `CascaderPanel` | 389 → 273 行 | 级联树的勾选展开、聚合与状态重算（131 行） |
+
+  对外类型（`TimeRange` / `WeekTimeRangeValue` / `CascaderOption`）移至 utils 后
+  仍由组件入口原样再导出，公开 API 不变。
+
 ### Fixed — 组件功能与无障碍缺陷（由新增的 a11y 测试发现）
 
 - **`Checkbox` 非受控用法完全失效**。单独使用 `<Checkbox>`（未传 `checked`）时，
@@ -154,8 +173,13 @@
 - 新增根目录 `LICENSE`（MIT 正文）。此前 5 处声明 MIT 却无协议文件，企业合规审查会直接卡住。
 - 新增 `.npmrc`、`.nvmrc`、根 `package.json#engines`，锁定 Node 与 registry 行为。
 - **7 个包全部补齐 README**，此前 npm 页面为空白。
-- 新增 `packages/icons/src/index.md`，修复文档站 `/components/icons` 死链
-  （侧边栏有入口但无文档文件）。
+- 新增 `packages/business/src/provider/index.md` 并加入侧边栏导航；
+  `BusinessProvider` 此前无文档、不在导航中，而它正是主题接入的关键组件。
+- ~~新增 `packages/icons/src/index.md` 修复文档站 `/components/icons` 死链~~
+  **（本条为误判，已在后续提交撤销）**：`/components/icons` 一直有文档
+  （`packages/icons/src/icons/index.md`），而 `/components` 总览页由 dumi 依据
+  atomDirs 自动生成。新加的文件反而以 Icon 文档**覆盖了自动生成的组件总览页**，
+  已删除并回归验证。
 - 新增 `packages/business/src/provider/index.md` 并加入侧边栏导航；
   `BusinessProvider` 此前无文档、不在导航中，而它正是主题接入的关键组件。
 

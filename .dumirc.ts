@@ -1,5 +1,142 @@
 import { defineConfig } from 'dumi';
 import path from 'path';
+import fs from 'fs';
+
+/* =====================================================================
+ * 侧边栏自动生成
+ *
+ * 背景：atomDirs 会让 dumi 依据各组件目录下的 index.md 自动建路由，
+ * 但 themeConfig.sidebar 此前是手写的 55 条链接 —— 两份真相必然漂移：
+ * 新增组件页不会出现在导航里，删掉的组件页还会留下死链。
+ *
+ * 因此这里改为在配置求值期扫描文档文件、解析 frontmatter 生成侧边栏。
+ * 新增组件只需在 index.md 头部写好 title / group / order，导航即自动出现。
+ *
+ * 兼容两种 dumi 支持的 frontmatter 写法：
+ *   平铺：  group: 通用            （ui 与 business 的组件在用）
+ *   嵌套：  group: { title: 通用 } （icons 的文档在用）
+ * ===================================================================== */
+
+interface SidebarItem {
+  title: string;
+  link: string;
+}
+
+interface DocMeta {
+  title: string;
+  group: string;
+  order: number;
+}
+
+/** 解析单个 index.md 的 frontmatter；不是组件文档则返回 null */
+function readDocMeta(mdPath: string): DocMeta | null {
+  if (!fs.existsSync(mdPath)) return null;
+
+  const lines = fs.readFileSync(mdPath, 'utf-8').split('\n');
+  if (lines[0]?.trim() !== '---') return null;
+
+  const flat: Record<string, string> = {};
+  let nestedGroupTitle = '';
+  let inGroupObject = false;
+
+  for (const line of lines.slice(1)) {
+    if (line.trim() === '---') break;
+
+    // 嵌套写法：group: 下一行的缩进 title
+    if (inGroupObject) {
+      const nested = /^\s+title:\s*(.+)$/.exec(line);
+      if (nested) nestedGroupTitle = nested[1].trim();
+      continue;
+    }
+    // `group:` 后无值 → 进入嵌套对象
+    if (/^group:\s*$/.test(line)) {
+      inGroupObject = true;
+      continue;
+    }
+
+    const matched = /^(\w+):\s*(.*)$/.exec(line);
+    if (matched) flat[matched[1]] = matched[2].trim();
+  }
+
+  if (!flat.title) return null;
+
+  return {
+    title: flat.title,
+    group: flat.group ?? nestedGroupTitle ?? '其他',
+    order: Number(flat.order ?? 999),
+  };
+}
+
+/** 分组的展示顺序；未列出的分组会追加在末尾，不会丢失 */
+const GROUP_ORDER = [
+  '通用',
+  '布局',
+  '导航',
+  '表单',
+  '表单高级',
+  '数据展示',
+  '反馈',
+  '业务',
+];
+
+/** frontmatter 分组名 → 侧边栏展示名 */
+const GROUP_TITLE_OVERRIDES: Record<string, string> = {
+  业务: '业务组件',
+};
+
+/**
+ * 扫描若干 atomDir，按 frontmatter 的 group 聚合、order 排序，生成侧边栏分组。
+ * `dir` 为仓库内相对路径，`prefix` 为该包文档的路由前缀。
+ */
+function collectSidebarGroups(atoms: { dir: string; prefix: string }[]) {
+  const grouped = new Map<string, { order: number; item: SidebarItem }[]>();
+
+  for (const { dir, prefix } of atoms) {
+    const srcDir = path.resolve(__dirname, dir);
+
+    let entries: string[];
+    try {
+      entries = fs.readdirSync(srcDir);
+    } catch {
+      continue; // 目录不存在时跳过，不让文档构建被工具链问题打断
+    }
+
+    for (const name of entries) {
+      const meta = readDocMeta(path.join(srcDir, name, 'index.md'));
+      if (!meta) continue;
+
+      const list = grouped.get(meta.group) ?? [];
+      list.push({
+        order: meta.order,
+        item: { title: meta.title, link: `${prefix}/${name}` },
+      });
+      grouped.set(meta.group, list);
+    }
+  }
+
+  const orderedGroups = [
+    ...GROUP_ORDER,
+    ...[...grouped.keys()].filter((g) => !GROUP_ORDER.includes(g)),
+  ];
+
+  return orderedGroups
+    .map((group) => ({
+      title: GROUP_TITLE_OVERRIDES[group] ?? group,
+      children: (grouped.get(group) ?? [])
+        .sort((a, b) => a.order - b.order)
+        .map((entry) => entry.item),
+    }))
+    .filter((group) => group.children.length > 0);
+}
+
+const componentSidebar = collectSidebarGroups([
+  { dir: 'packages/ui/src', prefix: '/components' },
+  { dir: 'packages/icons/src', prefix: '/components' },
+]);
+
+const businessSidebar = collectSidebarGroups([
+  { dir: 'packages/business/src', prefix: '/businesses' },
+]);
 
 export default defineConfig({
   resolve: {
@@ -30,7 +167,7 @@ export default defineConfig({
     '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura/request': path.resolve(__dirname, 'packages/request/src'),
   },
-   favicons: [
+  favicons: [
     // 本地图片路径，对应 public 目录下的文件
     '/aura/favicon.ico',
   ],
@@ -50,6 +187,7 @@ export default defineConfig({
       { title: '更新日志', link: '/changelog' },
     ],
     sidebar: {
+      // 指南页数量少且非组件文档，仍手写维护
       '/guide': [
         {
           title: '开发指南',
@@ -63,95 +201,8 @@ export default defineConfig({
           ],
         },
       ],
-      '/components': [
-        {
-          title: '通用',
-          children: [
-            { title: 'Button 按钮', link: '/components/button' },
-            { title: 'Icon 图标', link: '/components/icons' },
-            { title: 'Typography 排版', link: '/components/typography' },
-            { title: 'Space 间距', link: '/components/space' },
-            { title: 'Divider 分割线', link: '/components/divider' },
-          ],
-        },
-        {
-          title: '布局',
-          children: [
-            { title: 'Layout 布局', link: '/components/layout' },
-            { title: 'Flex 弹性布局', link: '/components/flex' },
-            { title: 'Scrollbar 滚动条', link: '/components/scrollbar' },
-          ],
-        },
-        {
-          title: '导航',
-          children: [
-            { title: 'Menu 导航菜单', link: '/components/menu' },
-            { title: 'Breadcrumb 面包屑', link: '/components/breadcrumb' },
-            { title: 'Pagination 分页', link: '/components/pagination' },
-            { title: 'Steps 步骤条', link: '/components/steps' },
-            { title: 'Dropdown 下拉菜单', link: '/components/dropdown' },
-          ],
-        },
-        {
-          title: '表单',
-          children: [
-            { title: 'Input 输入框', link: '/components/input' },
-            { title: 'Textarea 文本域', link: '/components/textarea' },
-            { title: 'Select 选择器', link: '/components/select' },
-            { title: 'Checkbox 复选框', link: '/components/checkbox' },
-            { title: 'Radio 单选框', link: '/components/radio' },
-            { title: 'Switch 开关', link: '/components/switch' },
-          ],
-        },
-        {
-          title: '表单高级',
-          children: [
-            { title: 'Slider 滑动输入条', link: '/components/slider' },
-            { title: 'Rate 评分', link: '/components/rate' },
-            { title: 'Upload 上传', link: '/components/upload' },
-            { title: 'Form 表单', link: '/components/form' },
-          ],
-        },
-        {
-          title: '数据展示',
-          children: [
-            { title: 'Tag 标签', link: '/components/tag' },
-            { title: 'Badge 徽标数', link: '/components/badge' },
-            { title: 'Avatar 头像', link: '/components/avatar' },
-            { title: 'Tooltip 文字提示', link: '/components/tooltip' },
-            { title: 'Card 卡片', link: '/components/card' },
-            { title: 'Collapse 折叠面板', link: '/components/collapse' },
-            { title: 'Tabs 标签页', link: '/components/tabs' },
-            { title: 'Empty 空状态', link: '/components/empty' },
-          ],
-        },
-        {
-          title: '反馈',
-          children: [
-            { title: 'Alert 警告提示', link: '/components/alert' },
-            { title: 'Spin 加载中', link: '/components/spin' },
-            { title: 'Message 全局提示', link: '/components/message' },
-            { title: 'Notification 通知提醒框', link: '/components/notification' },
-            { title: 'Result 结果', link: '/components/result' },
-            { title: 'Popconfirm 气泡确认框', link: '/components/popconfirm' },
-          ],
-        },
-      ],
-      '/businesses': [
-        {
-          title: '业务组件',
-          children: [
-            { title: 'BusinessProvider 主题桥接', link: '/businesses/provider' },
-            { title: 'PageContainer 页面容器', link: '/businesses/page-container' },
-            { title: 'SearchForm 查询表单', link: '/businesses/search-form' },
-            { title: 'ProTable 高级表格', link: '/businesses/pro-table' },
-            { title: 'ModalForm 弹窗表单', link: '/businesses/modal-form' },
-            { title: 'WeekTimeRange 周时间段', link: '/businesses/week-time-range' },
-            { title: 'YearCalendar 年历选择器', link: '/businesses/year-calendar' },
-            { title: 'CascaderPanel 级联多选面板', link: '/businesses/cascader-panel' },
-          ],
-        },
-      ],
+      '/components': componentSidebar,
+      '/businesses': businessSidebar,
     },
     showLineNum: true,
     lastUpdated: true,

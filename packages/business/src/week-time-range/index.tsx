@@ -2,18 +2,21 @@ import React, { forwardRef, useMemo, useRef, useState } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
 import { useDragSelect } from '../_internal/useDragSelect';
 import type { DragRect, DragSelectMeta } from '../_internal/useDragSelect';
+import {
+  buildSlots,
+  createEmptyValue,
+  formatMinutes,
+  isCovered,
+  mergeRanges,
+  subtractRange,
+  WEEK_LABELS_MONDAY_FIRST,
+  WEEK_LABELS_SUNDAY_FIRST,
+} from './utils';
+import type { WeekTimeRangeValue } from './utils';
 import './index.less';
 
-/** 一个时间段（24 小时制） */
-export interface TimeRange {
-  /** 开始时间，格式 `HH:mm` */
-  start: string;
-  /** 结束时间，格式 `HH:mm` */
-  end: string;
-}
-
-/** 一周七天，每天若干互不重叠的时间段 */
-export type WeekTimeRangeValue = TimeRange[][];
+// 公开类型原先由本文件声明，现移至 utils.ts；此处保持导出不变
+export type { TimeRange, WeekTimeRangeValue } from './utils';
 
 export interface WeekTimeRangeProps {
   /** 受控值 */
@@ -62,99 +65,6 @@ export interface WeekTimeRangeProps {
   className?: string;
   /** 自定义样式 */
   style?: React.CSSProperties;
-}
-
-interface Slot {
-  /** 起始分钟数 */
-  start: number;
-  /** 结束分钟数 */
-  end: number;
-  /** `HH:mm-HH:mm` */
-  label: string;
-}
-
-const DAY_COUNT = 7;
-
-const WEEK_LABELS_MONDAY_FIRST = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-const WEEK_LABELS_SUNDAY_FIRST = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-
-/** 分钟数 → `HH:mm` */
-function formatMinutes(minutes: number): string {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-}
-
-/** `HH:mm` → 分钟数 */
-function parseTime(time: string): number {
-  const [h, m] = time.split(':').map(Number);
-  return h * 60 + m;
-}
-
-/** 生成时间槽 */
-function buildSlots(stepMinutes: number): Slot[] {
-  const count = (24 * 60) / stepMinutes;
-  return Array.from({ length: count }, (_, i) => {
-    const start = i * stepMinutes;
-    const end = (i + 1) * stepMinutes;
-    return { start, end, label: `${formatMinutes(start)}-${formatMinutes(end)}` };
-  });
-}
-
-function toMinutes(range: TimeRange): [number, number] {
-  return [parseTime(range.start), parseTime(range.end)];
-}
-
-/** 合并重叠 / 相邻的时间段 */
-function mergeRanges(ranges: TimeRange[]): TimeRange[] {
-  if (!ranges.length) return [];
-  const parsed = ranges.map(toMinutes).sort((a, b) => a[0] - b[0]);
-  const merged: Array<[number, number]> = [];
-  let [curStart, curEnd] = parsed[0];
-  for (let i = 1; i < parsed.length; i += 1) {
-    const [s, e] = parsed[i];
-    if (s <= curEnd) {
-      curEnd = Math.max(curEnd, e);
-    } else {
-      merged.push([curStart, curEnd]);
-      [curStart, curEnd] = [s, e];
-    }
-  }
-  merged.push([curStart, curEnd]);
-  return merged.map(([s, e]) => ({ start: formatMinutes(s), end: formatMinutes(e) }));
-}
-
-/** 从时间段集合中挖掉目标区间 */
-function subtractRange(ranges: TimeRange[], [ts, te]: [number, number]): TimeRange[] {
-  const result: Array<[number, number]> = [];
-  ranges.forEach((range) => {
-    const [s, e] = toMinutes(range);
-    if (ts <= s && te >= e) return; // 完全覆盖 → 整段移除
-    if (ts > s && te < e) {
-      // 命中中段 → 切成两段
-      result.push([s, ts], [te, e]);
-    } else if (ts > s && ts < e) {
-      result.push([s, ts]); // 截断尾部
-    } else if (te > s && te < e) {
-      result.push([te, e]); // 截断头部
-    } else {
-      result.push([s, e]);
-    }
-  });
-  return result.map(([s, e]) => ({ start: formatMinutes(s), end: formatMinutes(e) }));
-}
-
-/** 判断某个时间槽是否已被完全覆盖 */
-function isCovered(ranges: TimeRange[], [ss, se]: [number, number]): boolean {
-  return ranges.some((range) => {
-    const [s, e] = toMinutes(range);
-    return ss >= s && se <= e;
-  });
-}
-
-/** 生成 7 天的空值 */
-function createEmptyValue(): WeekTimeRangeValue {
-  return Array.from({ length: DAY_COUNT }, () => []);
 }
 
 /**
