@@ -1,6 +1,6 @@
 import React, {
   forwardRef,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -208,7 +208,9 @@ export const YearCalendar = forwardRef<HTMLDivElement, YearCalendarProps>(
       Record<number, { left: number; width: number }>
     >({});
 
-    useEffect(() => {
+    // useLayoutEffect：在浏览器绘制前完成测量并同步标签位置，
+    // 避免首帧标签隐藏 / 跳动的闪烁
+    useLayoutEffect(() => {
       const grid = gridRef.current;
       if (!grid) return;
       const cs = getComputedStyle(grid);

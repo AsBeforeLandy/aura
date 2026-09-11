@@ -1,5 +1,4 @@
 import React, { forwardRef, useMemo, useRef, useState } from 'react';
-import { Tooltip } from 'antd';
 import { classNames, prefixCls } from '@aura/shared';
 import { useDragSelect } from '../_internal/useDragSelect';
 import type { DragRect, DragSelectMeta } from '../_internal/useDragSelect';
@@ -398,28 +397,26 @@ export const WeekTimeRange = forwardRef<HTMLDivElement, WeekTimeRangeProps>(
                       [slot.start, slot.end],
                     );
                     return (
-                      <Tooltip
+                      // 336 个格子若逐个包裹 Tooltip 会带来可观的组件实例开销，
+                      // 改用原生 title 提示，功能等价且零渲染成本
+                      <div
                         key={slot.label}
+                        data-slot={`${dayIndex}-${slotIndex}`}
                         title={`${label} ${slot.label}`}
-                        mouseEnterDelay={0.6}
-                      >
-                        <div
-                          data-slot={`${dayIndex}-${slotIndex}`}
-                          className={classNames(
-                            `${prefix}-cell`,
-                            selected && `${prefix}-cell-selected`,
-                          )}
-                          style={
-                            selected
-                              ? { backgroundColor: color }
-                              : undefined
-                          }
-                          onClick={() => {
-                            if (suppressClickRef.current) return;
-                            toggleSlot(dayIndex, slotIndex);
-                          }}
-                        />
-                      </Tooltip>
+                        className={classNames(
+                          `${prefix}-cell`,
+                          selected && `${prefix}-cell-selected`,
+                        )}
+                        style={
+                          selected
+                            ? { backgroundColor: color }
+                            : undefined
+                        }
+                        onClick={() => {
+                          if (suppressClickRef.current) return;
+                          toggleSlot(dayIndex, slotIndex);
+                        }}
+                      />
                     );
                   })}
                 </React.Fragment>
