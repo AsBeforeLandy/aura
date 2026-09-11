@@ -20,3 +20,13 @@ export type { ProTableProps, ProTableParams, ProTableResult } from './pro-table'
 
 export { ModalForm } from './modal-form';
 export type { ModalFormProps } from './modal-form';
+
+export { WeekTimeRange } from './week-time-range';
+export type {
+  WeekTimeRangeProps,
+  WeekTimeRangeValue,
+  TimeRange,
+} from './week-time-range';
+
+export { YearCalendar } from './year-calendar';
+export type { YearCalendarProps } from './year-calendar';

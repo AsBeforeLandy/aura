@@ -138,6 +138,8 @@ export default defineConfig({
             { title: 'SearchForm 查询表单', link: '/businesses/search-form' },
             { title: 'ProTable 高级表格', link: '/businesses/pro-table' },
             { title: 'ModalForm 弹窗表单', link: '/businesses/modal-form' },
+            { title: 'WeekTimeRange 周时间段', link: '/businesses/week-time-range' },
+            { title: 'YearCalendar 年历选择器', link: '/businesses/year-calendar' },
           ],
         },
       ],

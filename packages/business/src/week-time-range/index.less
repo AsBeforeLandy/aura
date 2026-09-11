@@ -1,0 +1,174 @@
+/* ===== WeekTimeRange 周时间段选择器 ===== */
+
+.aura-week-time-range {
+  /* 可通过覆盖这些变量调整矩阵密度 */
+  --aura-wtr-label-width: 82px;
+  --aura-wtr-cell-width: 11px;
+  --aura-wtr-cell-height: 26px;
+  /* 单元格上下左右统一间隙（参考稿样式：独立块 + 间隙透底） */
+  --aura-wtr-gap: 2px;
+
+  /* 横向滚动容器（矩阵较宽） */
+  &-scroll {
+    overflow-x: auto;
+    padding-bottom: var(--aura-spacing-1);
+  }
+
+  /* 整体外框：包裹矩阵与摘要 */
+  &-frame {
+    display: inline-block;
+    border: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-sm);
+    overflow: hidden;
+  }
+
+  /* 统一网格：表头两行 + 数据行共用行列轨道，间隔天然一致 */
+  &-matrix {
+    display: grid;
+    column-gap: var(--aura-wtr-gap);
+    row-gap: var(--aura-wtr-gap);
+    padding: var(--aura-wtr-gap);
+    position: relative;
+    min-width: max-content;
+  }
+
+  /* ---------- 标签块（半天标题 / 小时刻度 / 星期标签） ---------- */
+  &-half,
+  &-hour,
+  &-week {
+    box-sizing: border-box;
+    height: 28px;
+    line-height: 26px;
+    text-align: center;
+    font-size: var(--aura-font-size-xs);
+    color: var(--aura-text-secondary);
+    background: var(--aura-bg-tertiary);
+    border: 1px solid var(--aura-border);
+    border-radius: 2px;
+  }
+
+  &-half {
+    color: var(--aura-text);
+    font-weight: 600;
+  }
+
+  /* 角标签：跨「半天标题 + 小时刻度」两行合并为一个单元格，文本居中 */
+  &-corner {
+    box-sizing: border-box;
+    grid-row: span 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--aura-font-size-xs);
+    font-weight: 500;
+    color: var(--aura-text);
+    background: var(--aura-bg-tertiary);
+    border: 1px solid var(--aura-border);
+    border-radius: 2px;
+  }
+
+  &-week {
+    font-weight: 500;
+  }
+
+  &-cell {
+    box-sizing: border-box;
+    height: var(--aura-wtr-cell-height);
+    /* 白底 + 浅描边：轮廓清晰，与选中态的实心色块形成干净对比 */
+    background: var(--aura-bg);
+    border: 1px solid var(--aura-border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background var(--aura-duration-fast) var(--aura-easing),
+      opacity var(--aura-duration-fast) var(--aura-easing);
+
+    &:hover {
+      background: var(--aura-primary-100);
+    }
+  }
+
+  /* 选中态背景色由内联 style 提供（便于 color 属性覆盖），此处只做 hover 反馈 */
+  &-cell-selected {
+    border-color: var(--aura-primary-700);
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  /* 拖拽选区遮罩 */
+  &-selection {
+    z-index: 2;
+    background: rgba(124, 58, 237, 0.22);
+    border: 1px solid var(--aura-primary-700);
+    border-radius: 2px;
+  }
+
+  /* ---------- 底部摘要（位于外框内，宽度随矩阵） ---------- */
+  &-summary {
+    padding: var(--aura-spacing-3);
+    font-size: var(--aura-font-size-sm);
+    color: var(--aura-text-secondary);
+    background: var(--aura-bg-secondary);
+    border-top: 1px solid var(--aura-border);
+  }
+
+  &-summary-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &-summary-row {
+    display: flex;
+    margin-top: var(--aura-spacing-1);
+    color: var(--aura-text);
+  }
+
+  &-summary-label {
+    flex: 0 0 56px;
+    color: var(--aura-text-secondary);
+  }
+
+  &-clear {
+    padding: 0;
+    color: var(--aura-primary-700);
+    font-size: var(--aura-font-size-sm);
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:disabled {
+      color: var(--aura-text-tertiary);
+      cursor: not-allowed;
+    }
+  }
+
+  /* ---------- 只读 ---------- */
+  &-disabled {
+    .aura-week-time-range-cell {
+      cursor: not-allowed;
+
+      &:hover {
+        background: var(--aura-bg-tertiary);
+      }
+    }
+
+    .aura-week-time-range-cell-selected:hover {
+      opacity: 1;
+    }
+  }
+}
+
+/* 暗色模式 */
+[data-theme='dark'] {
+  .aura-week-time-range {
+    &-cell:hover {
+      background: var(--aura-primary-900);
+    }
+
+    &-summary {
+      background: var(--aura-bg-secondary);
+    }
+  }
+}
