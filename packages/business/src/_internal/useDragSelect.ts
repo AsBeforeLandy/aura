@@ -63,6 +63,10 @@ export interface UseDragSelectResult {
  * 记录起止坐标 → 拖拽中实时渲染选区遮罩 → 抬起时回调归一化矩形。
  *
  * 命中判定交给调用方，因为不同网格结构（表格式 / 月块式）的判定方式不同。
+ *
+ * 性能说明：`mousemove` 的触发频率可高于屏幕刷新率，若每个事件都 setState，
+ * 会让整个网格（300+ 个单元格）按事件频率重渲染。此处用 `requestAnimationFrame`
+ * 把坐标更新合并为每帧至多一次，使拖拽渲染开销与事件频率解耦。
  */
 export function useDragSelect({
   containerRef,
@@ -75,10 +79,38 @@ export function useDragSelect({
   const [end, setEnd] = useState<DragPoint | null>(null);
   /** 本次拖拽累计的最大位移，用于区分「单击」与「拖拽」 */
   const movedRef = useRef(0);
+  /** 最新坐标（尚未提交到 state） */
+  const pendingRef = useRef<DragPoint | null>(null);
+  /** 待执行的 rAF 句柄 */
+  const rafRef = useRef<number | null>(null);
 
   // 用 ref 保存最新回调，避免拖拽过程中闭包过期
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+
+  /** 把待提交坐标落到 state（每帧至多一次） */
+  const flush = useCallback(() => {
+    rafRef.current = null;
+    const point = pendingRef.current;
+    if (point) {
+      pendingRef.current = null;
+      setEnd(point);
+    }
+  }, []);
+
+  const scheduleFlush = useCallback(() => {
+    if (rafRef.current != null) return;
+    rafRef.current = requestAnimationFrame(flush);
+  }, [flush]);
+
+  // 卸载时取消未执行的帧回调，避免在已卸载组件上 setState
+  useEffect(
+    () => () => {
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    },
+    [],
+  );
 
   // 拖拽期间禁止文本选中，避免出现浏览器默认的蓝色选区
   useEffect(() => {
@@ -106,6 +138,7 @@ export function useDragSelect({
       e.preventDefault();
       const point = toRelative(e);
       movedRef.current = 0;
+      pendingRef.current = null;
       setDragging(true);
       setStart(point);
       setEnd(point);
@@ -123,20 +156,28 @@ export function useDragSelect({
           Math.abs(point.x - start.x) + Math.abs(point.y - start.y),
         );
       }
-      setEnd(point);
+      pendingRef.current = point;
+      scheduleFlush();
     },
-    [dragging, start, toRelative],
+    [dragging, start, toRelative, scheduleFlush],
   );
 
   const finish = useCallback(() => {
+    // 抬起时可能仍有未提交的坐标，直接取用以免选区偏小
+    const finalEnd = pendingRef.current ?? end;
+    pendingRef.current = null;
+    if (rafRef.current != null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
     setDragging(false);
-    if (start && end) {
+    if (start && finalEnd) {
       onSelectRef.current(
         {
-          left: Math.min(start.x, end.x),
-          top: Math.min(start.y, end.y),
-          right: Math.max(start.x, end.x),
-          bottom: Math.max(start.y, end.y),
+          left: Math.min(start.x, finalEnd.x),
+          top: Math.min(start.y, finalEnd.y),
+          right: Math.max(start.x, finalEnd.x),
+          bottom: Math.max(start.y, finalEnd.y),
         },
         { isDrag: movedRef.current >= DRAG_THRESHOLD },
       );
@@ -161,16 +202,21 @@ export function useDragSelect({
     };
   }, [start, end, selectionStyle]);
 
-  return {
-    dragging,
-    overlayStyle,
-    containerProps: {
+  const containerProps = useMemo(
+    () => ({
       onMouseDown: handleMouseDown,
       onMouseMove: handleMouseMove,
       onMouseUp: finish,
       onMouseLeave: () => {
         if (dragging) finish();
       },
-    },
+    }),
+    [handleMouseDown, handleMouseMove, finish, dragging],
+  );
+
+  return {
+    dragging,
+    overlayStyle,
+    containerProps,
   };
 }

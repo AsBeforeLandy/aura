@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# 同一分支的重复推送只保留最新一次校验
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint / Typecheck / Test / Build / Smoke
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 7.33.7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      # --ignore-scripts 跳过 root 的 `prepare: dumi setup`：
+      # 该步骤在 CI 中会拖慢乃至卡住安装，且与本次校验无关。
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      # 关键门禁：验证构建产物本身可交付。
+      # 历史上"开发态正常、交付态断裂"类问题（声明文件缺失、
+      # 跨包导入被改写成仓库内相对路径、主题令牌未随包发布）
+      # 都无法被 lint / test 发现，只有构建 + 冒烟测试能拦住。
+      - name: Build libraries
+        run: pnpm build:lib
+
+      - name: Artifact smoke test
+        run: pnpm smoke

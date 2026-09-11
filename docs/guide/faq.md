@@ -30,7 +30,7 @@ Vite 开箱即用，只需安装 `@aura/ui` 并引入 CSS 即可：
 
 ```tsx | pure
 import { Button } from '@aura/ui';
-import '@aura/ui/dist/index.css';
+import '@aura/ui/style.css';
 ```
 
 ### 如何在 Next.js 项目中使用？
@@ -41,7 +41,7 @@ import '@aura/ui/dist/index.css';
 'use client';
 
 import { Button } from '@aura/ui';
-import '@aura/ui/dist/index.css';
+import '@aura/ui/style.css';
 ```
 
 ### 如何在 Webpack 项目中配置？
@@ -56,7 +56,7 @@ Webpack 4 / 5 同样开箱即用，无需额外配置。如果遇到 `ModulePars
 
 请检查以下几点：
 
-1. 是否正确引入了 CSS 文件：`import '@aura/ui/dist/index.css';`
+1. 是否正确引入了 CSS 文件：`import '@aura/ui/style.css';`
 2. 浏览器是否支持 CSS Variables（Chrome 80+、Firefox 80+、Safari 14+、Edge 80+）
 3. 是否有其他全局样式覆盖了 Aura 的 CSS Variables
 4. 如果使用了 CSS Modules 或 scoped 样式，确保没有影响 Aura 的类名选择器

@@ -17,6 +17,13 @@ export default defineConfig({
   publicPath: '/aura/',
   autoAlias: true,
   alias: {
+    // 必须排在 `@aura/ui` 之前：webpack 的 alias 为前缀匹配、按声明顺序命中，
+    // 若被 `@aura/ui` 先命中会解析成 packages/ui/src/style.css（不存在）。
+    // 该子路径同时由 @aura/ui 的 package.json#exports 对外暴露。
+    '@aura/ui/style.css': path.resolve(
+      __dirname,
+      'packages/ui/src/theme/tokens.css',
+    ),
     '@aura/icons': path.resolve(__dirname, 'packages/icons/src'),
     '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
     '@aura/business': path.resolve(__dirname, 'packages/business/src'),
@@ -134,6 +141,7 @@ export default defineConfig({
         {
           title: '业务组件',
           children: [
+            { title: 'BusinessProvider 主题桥接', link: '/businesses/provider' },
             { title: 'PageContainer 页面容器', link: '/businesses/page-container' },
             { title: 'SearchForm 查询表单', link: '/businesses/search-form' },
             { title: 'ProTable 高级表格', link: '/businesses/pro-table' },

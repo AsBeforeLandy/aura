@@ -1,15 +1,21 @@
 {
   "name": "@aura/request",
   "version": "0.0.1",
+  "private": true,
   "description": "基于原生 Fetch 的 HTTP 请求封装",
+  "type": "module",
+  "main": "esm/index.js",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
   "files": ["esm"],
+  "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./esm/index.d.ts",
       "import": "./esm/index.js",
-      "types": "./esm/index.d.ts"
-    }
+      "default": "./esm/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "father build",

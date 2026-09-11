@@ -70,7 +70,7 @@ npm install @aura/request
 
 ```tsx | pure
 import { Button, Space } from '@aura/ui';
-import '@aura/ui/src/theme/tokens.css';
+import '@aura/ui/style.css';
 
 const App = () => (
   <Space>
@@ -81,6 +81,12 @@ const App = () => (
   </Space>
 );
 ```
+
+> **关于主题令牌**：`@aura/ui/style.css` 子路径导出的是 Aura 的主题令牌（`--aura-*` CSS 变量），
+> 所有 Aura 组件的颜色、圆角、字号、间距都依赖它。
+> 引入 `@aura/ui` 时其入口已自动引入该文件；仅在**单独使用** `@aura/business`
+> 或需要手动控制样式加载顺序时，才需要显式写这一行。
+> 注意不要使用 `@aura/ui/src/...` 之类的源码路径 —— 发布包中只包含 `esm/` 产物。
 
 ## 主题
 

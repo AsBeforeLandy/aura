@@ -1,0 +1,9 @@
+node_modules
+dist
+esm
+lib
+coverage
+.dumi
+.worktrees
+.workbuddy
+pnpm-lock.yaml

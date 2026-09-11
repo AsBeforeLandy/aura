@@ -107,7 +107,9 @@ const SubMenu = forwardRef<HTMLDivElement, SubMenuProps>(
   ({ subKey, title, icon, className, style, children }, ref) => {
     const { selectedKey } = useMenuContext();
     const [open, setOpen] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
+    // 显式带上 `| null`：@types/react 18 下 `useRef<T>(null)` 返回只读的
+    // RefObject，无法在 ref 回调中赋值；`useRef<T | null>(null)` 才是可变的。
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     // 收集子项的 key，判断是否有子项被选中
     const childKeys = React.Children.map(children, (child) => {

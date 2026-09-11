@@ -37,8 +37,11 @@ jobs:
           node-version: 24
           cache: 'pnpm'
 
+      # --ignore-scripts 跳过 root 的 `prepare: dumi setup`：
+      # 该步骤在 CI 中会显著拖慢安装，且有卡住的风险。
+      # 代码质量门禁（lint / typecheck / test / build:lib / smoke）见 ci.yml。
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --ignore-scripts
 
       - name: Build project
         run: pnpm build

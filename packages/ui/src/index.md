@@ -41,7 +41,7 @@ npm install @aura/ui
 
 ```tsx | pure
 import { Button, Space } from '@aura/ui';
-import '@aura/ui/dist/index.css';
+import '@aura/ui/style.css';
 
 const App = () => (
   <Space>

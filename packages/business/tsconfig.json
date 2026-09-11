@@ -9,7 +9,6 @@
     "skipLibCheck": true,
     "declaration": true,
     "outDir": "./lib",
-    "baseUrl": ".",
     "paths": {
       "@aura/business": ["./src/index.ts"],
       "@aura/shared": ["../shared/src/index.ts"],

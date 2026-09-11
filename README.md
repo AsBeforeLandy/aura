@@ -54,7 +54,7 @@ npm install @aura/ui
 
 ```tsx
 import { Button, Space } from '@aura/ui';
-import '@aura/ui/dist/index.css';
+import '@aura/ui/style.css';
 
 const App = () => (
   <Space>
@@ -63,6 +63,10 @@ const App = () => (
   </Space>
 );
 ```
+
+> `@aura/ui/style.css` 导出的是主题令牌（`--aura-*` CSS 变量）。引入 `@aura/ui` 时其入口已自动引入该文件，
+> 这一行仅在你需要手动控制样式加载顺序时才需显式书写。请勿使用 `@aura/ui/src/...` 或
+> `@aura/ui/dist/...` 之类的路径——发布包只包含 `esm/` 产物。
 
 ### 主题切换
 
@@ -112,7 +116,8 @@ git clone https://github.com/AsBeforeLandy/aura.git
 cd aura
 
 # 安装依赖
-pnpm install
+# --ignore-scripts 用于跳过 `prepare: dumi setup`（在 CI 中会拖慢乃至卡住安装）
+pnpm install --ignore-scripts
 
 # 启动文档开发服务器
 pnpm dev
@@ -123,12 +128,37 @@ pnpm test
 # 监听模式测试
 pnpm test:watch
 
+# 类型检查（全仓）
+pnpm typecheck
+
+# 代码检查 / 格式化
+pnpm lint
+pnpm format
+
 # 构建文档站
 pnpm build
 
-# 构建组件库
+# 构建组件库（pnpm -r，按依赖拓扑自动排序）
 pnpm build:lib
+
+# 产物冒烟测试（校验 esm/ 产物是否真的可交付）
+pnpm smoke
+
+# 一键跑完 lint → typecheck → test → build:lib → smoke
+pnpm verify
 ```
+
+> **关于产物冒烟测试**：文档站通过 alias 直连 `src` 源码，产物 `esm/` 不在开发流程中被消费，
+> 因此「开发态正常、交付态断裂」类问题（声明文件缺失、跨包导入被改写成仓库内相对路径、
+> 主题令牌未随包发布）无法被 lint / test 发现。`pnpm smoke` 专门校验产物本身，请在构建后执行。
+
+### 代码风格
+
+仓库统一使用 **Prettier**（配置见 `.prettierrc.json`）与 **ESLint flat config**（`eslint.config.mjs`）。
+
+> ⚠️ 当前代码库尚未按新配置做整体格式化（`prettier --check` 约 242 个文件存在偏差）。
+> 请勿直接执行 `pnpm format` 与业务改动混在同一提交中，建议单独开一个纯格式化提交，
+> 之后再把 `prettier --check` 加入 CI 门禁。
 
 ## 部署
 
@@ -137,6 +167,8 @@ pnpm build:lib
 1. 推送代码到 `master` 分支，自动触发 `.github/workflows/deploy.yml`
 2. CI 执行 `pnpm build`（dumi 构建）生成静态站点到 `dist/`
 3. 通过 `upload-pages-artifact` + `deploy-pages` 上传并发布
+
+代码质量由 `.github/workflows/ci.yml` 把关：`lint → typecheck → test → build:lib → smoke`。
 
 > 无需手动部署。仓库 Settings → Pages 的 Source 需设为 **"GitHub Actions"**。
 

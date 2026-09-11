@@ -180,42 +180,46 @@ export const CascaderPanel = forwardRef<HTMLDivElement, CascaderPanelProps>(
       [],
     );
 
-    /** options / value 的序列化签名，作为同步 effect 的稳定依赖 */
-    const signature = `${JSON.stringify(options)}|${JSON.stringify(value)}`;
-
+    /**
+     * 同步受控 value
+     *
+     * 依赖直接用 options / value 本身，不再对整棵树做 JSON.stringify 生成签名：
+     * 序列化成本随节点数线性增长，且发生在每次渲染中，是大数据量下的热点。
+     */
     useEffect(() => {
       if (value) {
-        setSelectedValues([
-          ...expandWithDescendants(options, new Set(value)),
-        ]);
+        setSelectedValues([...expandWithDescendants(options, new Set(value))]);
       }
-    }, [signature]);
+    }, [options, value]);
 
     /** 提交一次状态变更：重算树状态并只触发一次 onChange */
-    const commit = (
-      values: Iterable<string>,
-      indeterminate: Iterable<string>,
-    ) => {
-      setSelectedValues([...values]);
-      setIndeterminateValues([...indeterminate]);
-      const selected = new Set(values);
-      const result = pickTopSelected(options, selected);
-      onChange?.(result.selectedValues, result.selectedOptions);
-    };
+    const commit = useCallback(
+      (values: Iterable<string>, indeterminate: Iterable<string>) => {
+        setSelectedValues([...values]);
+        setIndeterminateValues([...indeterminate]);
+        const selected = new Set(values);
+        const result = pickTopSelected(options, selected);
+        onChange?.(result.selectedValues, result.selectedOptions);
+      },
+      [options, onChange],
+    );
+
+    /** 选中态的 Set 视图：把逐项 includes 的 O(n) 查找降为 O(1) */
+    const selectedSet = useMemo(() => new Set(selectedValues), [selectedValues]);
 
     const isChecked = useCallback(
-      (val: string) => selectedValues.includes(val),
-      [selectedValues],
+      (val: string) => selectedSet.has(val),
+      [selectedSet],
     );
 
     const someSelectedFn = useCallback(
       (opts: CascaderOption[]): boolean =>
         opts.some(
           (opt) =>
-            selectedValues.includes(opt.value) ||
+            selectedSet.has(opt.value) ||
             (opt.children?.length ? someSelectedFn(opt.children) : false),
         ),
-      [selectedValues],
+      [selectedSet],
     );
 
     /** 点开某一级：截断展开路径并自动向右滚动 */
@@ -255,7 +259,11 @@ export const CascaderPanel = forwardRef<HTMLDivElement, CascaderPanelProps>(
           subtree.forEach((val) => values.delete(val));
         }
 
-        const state = refreshTreeStates(options, values, indeterminateValues);
+        const state = refreshTreeStates(
+          options,
+          values,
+          new Set(indeterminateValues),
+        );
         commit(state.values, state.indeterminate);
       },
       [
@@ -263,6 +271,7 @@ export const CascaderPanel = forwardRef<HTMLDivElement, CascaderPanelProps>(
         indeterminateValues,
         options,
         handleSelect,
+        commit,
       ],
     );
 
@@ -279,10 +288,14 @@ export const CascaderPanel = forwardRef<HTMLDivElement, CascaderPanelProps>(
           subtree.forEach((val) => values.delete(val));
         }
 
-        const state = refreshTreeStates(options, values, indeterminateValues);
+        const state = refreshTreeStates(
+          options,
+          values,
+          new Set(indeterminateValues),
+        );
         commit(state.values, state.indeterminate);
       },
-      [selectedValues, indeterminateValues, options],
+      [selectedValues, indeterminateValues, options, commit],
     );
 
     const renderColumn = (opts: CascaderOption[], level: number) => {

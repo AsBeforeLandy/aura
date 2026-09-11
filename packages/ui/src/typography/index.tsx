@@ -91,7 +91,7 @@ Paragraph.displayName = 'Paragraph';
 
 /* ===== Typography 复合组件 ===== */
 
-export interface TypographyProps extends HTMLAttributes<HTMLSpanElement> {}
+export type TypographyProps = HTMLAttributes<HTMLSpanElement>;
 
 const TypographyBase = forwardRef<HTMLSpanElement, TypographyProps>(
   ({ className, children, ...rest }, ref) => {

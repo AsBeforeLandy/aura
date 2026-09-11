@@ -76,7 +76,7 @@ npm install @aura/request
 使用组件时，需要引入全局样式文件：
 
 ```tsx | pure
-import '@aura/ui/dist/index.css';
+import '@aura/ui/style.css';
 ```
 
 > 如果框架支持按需加载（如 Vite、Next.js），CSS 文件会被自动 tree-shaking，无需担心打包体积。

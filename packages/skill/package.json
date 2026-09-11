@@ -1,6 +1,7 @@
 {
   "name": "@aura/skill",
   "version": "0.0.1",
-  "description": "Aura UI skill files for AI IDEs",
+  "private": true,
+  "description": "Aura UI skill files for AI IDEs（非代码包：仅包含 Markdown 提示词资产）",
   "files": ["skills"]
 }

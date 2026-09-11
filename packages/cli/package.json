@@ -1,8 +1,10 @@
 {
   "name": "@aura/cli",
   "version": "0.0.1",
+  "private": true,
   "description": "Aura UI CLI - MCP Server, Skill installation, and documentation tools",
   "type": "module",
+  "files": ["dist"],
   "bin": {
     "aura": "./dist/index.js"
   },
