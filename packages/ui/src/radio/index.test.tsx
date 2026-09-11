@@ -44,7 +44,7 @@ describe('Radio', () => {
   // 点击触发 onChange
   it('should handle onChange', () => {
     const onChange = vi.fn();
-    const { container } = render(
+    render(
       <Radio onChange={onChange}>可点击</Radio>,
     );
     fireEvent.click(screen.getByText('可点击'));
@@ -127,7 +127,7 @@ describe('RadioGroup', () => {
 
   // 禁用选项
   it('should disable individual option', () => {
-    const { container } = render(
+    render(
       <RadioGroup options={options} value="" />,
     );
     const orangeLabel = screen.getByText('橘子').closest('label')!;

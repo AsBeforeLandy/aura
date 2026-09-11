@@ -118,12 +118,13 @@ const FormItem: React.FC<FormItemProps> = ({
   }, [name, ctx, rules]);
 
   const handleChange = useCallback(
-    async (e: any) => {
+    async (e: unknown) => {
       if (!name || !ctx) return;
       
-      let value: any = e;
+      let value: unknown = e;
       if (e && typeof e === 'object' && 'target' in e && e.target) {
-        const target = e.target;
+        // 事件来自被克隆的子组件，此处只能按 DOM 事件的公共形态取值
+        const target = e.target as HTMLInputElement;
         if (target.type === 'checkbox' || target.type === 'radio') {
           value = target.type === 'checkbox' ? target.checked : target.value;
         } else {
@@ -160,10 +161,16 @@ const FormItem: React.FC<FormItemProps> = ({
   /** 克隆子元素注入 value/checked、onChange、disabled */
   const renderChildren = () => {
     if (React.isValidElement(children)) {
-      const child = children as React.ReactElement<any>;
+      const child = children as React.ReactElement<Record<string, unknown>>;
       const childProps = child.props;
-      const childType = child.type as any;
-      const displayName = childType?.displayName || childType?.name || '';
+      // 子组件可能是组件（函数 / 类，取 displayName 或 name）或宿主元素（字符串标签名）
+      const childType = child.type as
+        | { displayName?: string; name?: string }
+        | string;
+      const displayName =
+        typeof childType === 'string'
+          ? childType
+          : childType?.displayName || childType?.name || '';
       
       const isSwitchOrCheckbox = 
         displayName === 'Switch' || 
@@ -183,11 +190,12 @@ const FormItem: React.FC<FormItemProps> = ({
 
       return React.cloneElement(child, {
         [propName]: value,
-        onChange: (e: any) => {
+        onChange: (e: unknown) => {
           handleChange(e);
-          if (childProps.onChange) {
-            childProps.onChange(e);
-          }
+          const childOnChange = childProps.onChange as
+            | ((ev: unknown) => void)
+            | undefined;
+          childOnChange?.(e);
         },
         ...(isDisabled ? { disabled: true } : {}),
         ...(ctx.size && childProps.size === undefined ? { size: ctx.size } : {}),
@@ -269,6 +277,9 @@ const FormList: React.FC<FormListProps> = ({ name, compact, children, className,
     if (arr.length > 0 && keys.length === 0) {
       setKeys(arr.map(() => ++listKeyCounter));
     }
+    // 刻意只在挂载时初始化一次：这里读到的 getArray / keys.length 只作初始快照，
+    // 一旦加入依赖，每次表单值变化都会重跑并可能重置 keys。
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 见上
   }, []);
 
   const add = useCallback((defaultValue?: Record<string, unknown>) => {

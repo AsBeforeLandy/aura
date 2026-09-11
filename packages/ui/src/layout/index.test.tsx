@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import { Layout } from './index';
@@ -156,7 +156,7 @@ describe('Layout', () => {
 
   // ===== 完整布局 =====
   it('should render complete layout', () => {
-    const { container } = render(
+    render(
       <Layout hasSider>
         <Layout.Sider>侧边栏</Layout.Sider>
         <Layout>

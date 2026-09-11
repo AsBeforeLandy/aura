@@ -91,7 +91,7 @@ describe('Select', () => {
 
   // 选中后显示标签
   it('should display selected option label', () => {
-    const { container, rerender } = render(
+    render(
       <Select options={fruitOptions} value="banana" />,
     );
     expect(screen.getByText('香蕉')).toBeDefined();

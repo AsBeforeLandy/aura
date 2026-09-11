@@ -127,13 +127,34 @@ for (const pkg of LIB_PACKAGES) {
   });
 
   // 3) 声明文件
+  const dtsFiles = existsSync(esmDir)
+    ? walk(esmDir).filter((f) => f.endsWith('.d.ts'))
+    : [];
+
   check('产物包含至少一个 .d.ts', () => {
     assert(
       existsSync(esmDir),
       `产物目录不存在：${relative(ROOT, esmDir)}（请先执行 pnpm build:lib）`,
     );
-    const dts = walk(esmDir).filter((f) => f.endsWith('.d.ts'));
-    assert(dts.length > 0, '未产出任何 .d.ts，产物无法被 TypeScript 消费');
+    assert(
+      dtsFiles.length > 0,
+      '未产出任何 .d.ts，产物无法被 TypeScript 消费',
+    );
+  });
+
+  // 声明文件里保留样式副作用导入会让消费者在 skipLibCheck: false 下逐文件
+  // 报 TS2882。scripts/postbuild-dts.mjs 负责剥离，这里确保它确实生效。
+  check('声明文件中不含样式副作用导入', () => {
+    const offenders = dtsFiles.filter((f) =>
+      /^\s*import\s+['"][^'"]+\.(?:less|css)['"]/m.test(readFileSync(f, 'utf-8')),
+    );
+    assert(
+      offenders.length === 0,
+      `以下声明文件仍含样式导入（消费者会报 TS2882）：\n         ${offenders
+        .slice(0, 5)
+        .map((f) => relative(ROOT, f))
+        .join('\n         ')}`,
+    );
   });
 
   // 4/5/6) 扫描 JS 产物

@@ -10,6 +10,9 @@ export interface CascaderOption {
   /** 选项提示文案（悬停显示） */
   tooltips?: string;
   children?: CascaderOption[];
+  // 索引签名用于承载调用方的自定义字段并在回调中原样回传。
+  // 收窄为 unknown 会让所有读取端被迫逐个断言，属对外 API 破坏性变更，故保留 any。
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 见上
   [key: string]: any;
 }
 

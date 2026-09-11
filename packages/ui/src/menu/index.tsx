@@ -104,7 +104,7 @@ export interface SubMenuProps {
 }
 
 const SubMenu = forwardRef<HTMLDivElement, SubMenuProps>(
-  ({ subKey, title, icon, className, style, children }, ref) => {
+  ({ title, icon, className, style, children }, ref) => {
     const { selectedKey } = useMenuContext();
     const [open, setOpen] = useState(false);
     // 显式带上 `| null`：@types/react 18 下 `useRef<T>(null)` 返回只读的
@@ -259,7 +259,6 @@ const MenuBase = forwardRef<HTMLDivElement, MenuProps>(
       selectedKey: controlledKey,
       defaultSelectedKey,
       onSelect,
-      collapsible,
       className,
       style,
       children,

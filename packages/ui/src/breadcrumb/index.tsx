@@ -1,8 +1,4 @@
-import React, {
-  forwardRef,
-  createContext,
-  useContext,
-} from 'react';
+import React, { forwardRef, createContext } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
 import './index.less';
 
@@ -33,7 +29,6 @@ export interface BreadcrumbItemProps {
 
 const BreadcrumbItem = forwardRef<HTMLSpanElement, BreadcrumbItemProps>(
   ({ href, onClick, className, style, children }, ref) => {
-    const ctx = useContext(BreadcrumbContext);
     const itemCls = classNames(prefixCls('breadcrumb-item'), className);
 
     return (

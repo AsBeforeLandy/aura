@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, fireEvent, screen, cleanup } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import React from 'react';
 import { Dropdown } from './index';
 
@@ -48,7 +48,7 @@ describe('Dropdown', () => {
   // 菜单项点击回调
   it('should call onMenuClick when menu item is clicked', () => {
     const onMenuClick = vi.fn();
-    const { getByText, container } = render(
+    const { getByText } = render(
       <Dropdown menu={menuItems} trigger="click" onMenuClick={onMenuClick}>
         <button>更多</button>
       </Dropdown>,
@@ -73,7 +73,7 @@ describe('Dropdown', () => {
 
   // 危险项 className
   it('should apply danger class for danger items', () => {
-    const { getByText, container } = render(
+    const { getByText } = render(
       <Dropdown menu={menuItems} trigger="click">
         <button>更多</button>
       </Dropdown>,
@@ -87,7 +87,7 @@ describe('Dropdown', () => {
 
   // 禁用项 className
   it('should apply disabled class for disabled items', () => {
-    const { getByText, container } = render(
+    const { getByText } = render(
       <Dropdown menu={menuItems} trigger="click">
         <button>更多</button>
       </Dropdown>,

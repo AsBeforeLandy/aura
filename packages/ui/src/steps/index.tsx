@@ -44,7 +44,7 @@ export interface StepProps {
 
 const Step = forwardRef<HTMLDivElement, StepProps>(
   ({ title, description, icon, disabled = false, className, style }, ref) => {
-    const { current, variant, size, onChange, totalSteps } = useStepsContext();
+    const { current, variant, onChange } = useStepsContext();
     const index = useContext(StepIndexContext);
     const isCompleted = index < current;
     const isCurrent = index === current;

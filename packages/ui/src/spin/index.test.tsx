@@ -154,7 +154,6 @@ describe('Spin', () => {
   // ----- delay -----
   it('should show spinner immediately when delay is 0', () => {
     const { container } = render(<Spin delay={0} />);
-    const overlay = container.querySelector('.aura-spin-overlay');
     // 无 children 时直接渲染内容，不隐藏
     const spin = getFirstChild(container);
     expect(spin.classList.contains('aura-spin-hidden')).toBe(false);

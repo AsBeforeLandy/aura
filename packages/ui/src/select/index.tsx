@@ -187,7 +187,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           setSearchText('');
         }
       },
-      [controlledValue, multiple, onChange],
+      // currentValue 参与 nextValue 的计算（多选分支读取当前数组），
+      // 遗漏它会让连续两次选择都基于同一份过期快照而互相覆盖。
+      [controlledValue, currentValue, multiple, onChange],
     );
 
     // 清除选择

@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-} from 'react';
+import React, { forwardRef, useState, useCallback } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
 import { ChevronLeft, ChevronRight } from '@aura/icons';
 import './index.less';

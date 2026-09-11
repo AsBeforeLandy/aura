@@ -1,4 +1,11 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Card, Table } from 'antd';
 import type { TableProps } from 'antd';
 import { classNames, prefixCls } from '@aura/shared';
@@ -108,15 +115,34 @@ function ProTableInner<T extends Record<string, unknown>>(
     };
   }, [current, pageSize, searchValues]);
 
-  const handleSearch = (values: Record<string, unknown>) => {
+  // 以下三个值都往下传给了 SearchForm / Table，用 useCallback / useMemo 稳住引用，
+  // 避免父组件每次渲染都击穿子组件的浅比较而触发无谓重渲染。
+  const handleSearch = useCallback((values: Record<string, unknown>) => {
     setSearchValues(values);
     setCurrent(1);
-  };
+  }, []);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setSearchValues({});
     setCurrent(1);
-  };
+  }, []);
+
+  const handlePageChange = useCallback((page: number, size: number) => {
+    setCurrent(page);
+    setPageSize(size);
+  }, []);
+
+  const pagination = useMemo(
+    () => ({
+      current,
+      pageSize,
+      total,
+      showSizeChanger: true,
+      showTotal: (t: number) => `共 ${t} 条`,
+      onChange: handlePageChange,
+    }),
+    [current, pageSize, total, handlePageChange],
+  );
 
   return (
     <div ref={ref} className={classNames(prefix, className)} style={style}>
@@ -143,17 +169,7 @@ function ProTableInner<T extends Record<string, unknown>>(
           dataSource={data}
           loading={loading}
           className={`${prefix}-table`}
-          pagination={{
-            current,
-            pageSize,
-            total,
-            showSizeChanger: true,
-            showTotal: (t) => `共 ${t} 条`,
-            onChange: (page, size) => {
-              setCurrent(page);
-              setPageSize(size);
-            },
-          }}
+          pagination={pagination}
         />
       </Card>
     </div>

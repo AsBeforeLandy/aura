@@ -72,7 +72,7 @@ describe('Switch', () => {
   });
 
   it('should render checkedChildren and unCheckedChildren', () => {
-    const { getByRole, getByText, rerender } = render(
+    const { getByRole, getByText } = render(
       <Switch defaultChecked checkedChildren="ON" unCheckedChildren="OFF" />,
     );
     expect(getByText('ON')).toBeDefined();

@@ -43,16 +43,16 @@ import { CheckCircleFilled, Search, StarFilled } from '@aura/icons';
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| `size` | 图标尺寸 | `number \| string` | `1em` |
-| `color` | 图标颜色 | `string` | 继承 `currentColor` |
-| `spin` | 是否旋转（加载态） | `boolean` | `false` |
-| `className` | 自定义类名 | `string` | - |
-| `style` | 自定义样式 | `CSSProperties` | - |
+| `size` | 图标尺寸（px，同时作用于宽高） | `number` | `24` |
+| `color` | 图标颜色 | `string` | `'currentColor'` |
+| `className` | 附加 CSS 类名 | `string` | - |
+| `style` | 行内样式 | `CSSProperties` | - |
 
-TwoTone 图标额外接收 `TwoToneIconProps`，可通过 `twoToneColor` 指定主色。
+TwoTone 图标额外接收 `TwoToneIconProps`，可通过 `twoToneColor` 指定辅色。
 
 ## 设计约定
 
-- 图标默认 `1em`，因此**跟随父级字号**缩放，无需逐个指定尺寸。
-- 颜色默认 `currentColor`，随文本颜色变化，便于在按钮、菜单内直接复用。
+- `size` 默认 `24`，需要更小或更大时显式传入（如 `size={16}`）。
+- `color` 默认 `currentColor`，因此**不传时自动继承父级文本颜色**，可直接放进按钮、菜单等元素中。
 - 与文字并排时建议由 `Space` 或 `Typography` 控制间距，而不是给图标加 margin。
+

@@ -161,7 +161,6 @@ const NotificationItemComponent: React.FC<{
     }, 300);
   };
 
-  const isLeft = item._placement.includes('Left');
   const cls = classNames(
     prefixCls('notification'),
     prefixCls(`notification-${item.variant ?? 'default'}`),

@@ -10,10 +10,10 @@
   "scripts": {
     "dev": "dumi dev",
     "build": "dumi build",
-    "build:lib": "pnpm -r build",
+    "build:lib": "pnpm -r build && node scripts/postbuild-dts.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint packages/*/src",
-    "lint:fix": "eslint packages/*/src --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write \"{packages,tests,docs}/**/*.{ts,tsx,js,jsx,json,css,less,md}\"",
     "format:check": "prettier --check \"{packages,tests,docs}/**/*.{ts,tsx,js,jsx,json,css,less,md}\"",
     "test": "vitest run",

@@ -15,8 +15,9 @@ pnpm add @aura/icons
 ```tsx
 import { CheckCircleFilled, Search, StarFilled } from '@aura/icons';
 
-// 尺寸跟随父级字号（默认 1em），颜色跟随 currentColor
+// size 默认 24（px），按需显式传入
 <Search size={16} />
+// color 默认 currentColor，不传即继承父级文本颜色
 <StarFilled color="#f59e0b" />
 ```
 
@@ -24,13 +25,12 @@ import { CheckCircleFilled, Search, StarFilled } from '@aura/icons';
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| `size` | 图标尺寸 | `number \| string` | `1em` |
-| `color` | 图标颜色 | `string` | 继承 `currentColor` |
-| `spin` | 是否旋转（加载态） | `boolean` | `false` |
-| `className` | 自定义类名 | `string` | - |
-| `style` | 自定义样式 | `CSSProperties` | - |
+| `size` | 图标尺寸（px，同时作用于宽高） | `number` | `24` |
+| `color` | 图标颜色 | `string` | `'currentColor'` |
+| `className` | 附加 CSS 类名 | `string` | - |
+| `style` | 行内样式 | `CSSProperties` | - |
 
-TwoTone 形态的图标额外支持 `twoToneColor` 指定主色。
+TwoTone 形态的图标额外支持 `twoToneColor` 指定辅色。
 
 ## 图标分组
 

@@ -55,7 +55,7 @@ describe('Checkbox', () => {
   // 点击触发 onChange
   it('should handle onChange', () => {
     const onChange = vi.fn();
-    const { container } = render(
+    render(
       <Checkbox onChange={onChange}>可点击</Checkbox>,
     );
     fireEvent.click(screen.getByText('可点击'));

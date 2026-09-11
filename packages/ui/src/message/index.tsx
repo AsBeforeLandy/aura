@@ -41,7 +41,7 @@ function getContainer(): HTMLDivElement {
 }
 
 function renderMessages() {
-  const container = getContainer();
+  getContainer();
   if (rootInstance) {
     const root = rootInstance;
     flushSync(() => {

@@ -4,6 +4,52 @@
 
 ## [Unreleased]
 
+### Fixed — 消费侧类型解析（`.d.ts` 中的样式导入）
+
+- **从产出的 `.d.ts` 中剥离样式副作用导入**。组件源码遵循样式与逻辑分离，
+  每个 `index.tsx` 都 `import './index.less'`，father 会把它保留进声明文件；
+  消费者在 `skipLibCheck: false` 下会逐文件报
+  `TS2882: Cannot find module or type declarations for side-effect import`（实测约 45 个文件）。
+  新增 `scripts/postbuild-dts.mjs` 在构建后清理，并接入 `build:lib`；
+  同时顺带清理 father 对 triple-slash 路径引用的错误改写产物。
+  冒烟测试新增对应断言以防回归。
+
+### Fixed — 代码质量
+
+- **ESLint 告警由 172 条清零**（其中 2 条 error）：移除未使用的导入与解构绑定、
+  删除 `icons` 中从未被引用的 `IconWrapper` 死代码、`message` 保留 `getContainer()`
+  的副作用而仅去掉无用绑定、`steps` 精简上下文解构。
+- **修正 `select` 的 `handleSelect` 遗漏依赖 `currentValue`**：多选分支读取当前数组，
+  依赖缺失会让连续两次选择基于同一份过期快照而互相覆盖。
+- **`form` 内的 5 处 `any` 收敛为 `unknown`** 并补充必要的窄化；
+  `renderChildren` 的 `childType` 改为「组件对象 | 宿主标签名」联合类型，比原 `any` 更准确。
+- **两处刻意写法改为带理由的行内豁免**：`cascader-panel` 的公开索引签名
+  `[key: string]: any`（用于透传调用方自定义字段，收窄属破坏性变更）、
+  `form` 中只在挂载时执行的初始化 effect。
+- **修正 ESLint 配置覆盖面**：`files` 原先只匹配 `packages/*/src`，导致 `tests/`
+  退回默认解析器并在 TS 语法处解析失败；现覆盖全仓 `**/*.{ts,tsx}`，`lint` 脚本改为 `eslint .`。
+- **修正 `icons` 的 API 文档**：`size` 默认值由误写的 `1em` 更正为 `24`（`number`），
+  并移除并不存在的 `spin` 属性说明。
+- 新增 `ignoreRestSiblings` 选项，覆盖「解构出来只为排除出 `...rest`」的写法。
+
+### Performance
+
+- **`ProTable` 消除无谓重渲染**：`pagination` 对象与 `handleSearch` / `handleReset`
+  此前每次渲染都重建并透传给 `SearchForm` / `Table`，必然击穿子组件的浅比较；
+  现分别以 `useMemo` / `useCallback` 收敛。
+
+### 待决策（已知的未实现 prop）
+
+以下 prop 已在类型与文档中声明但从未生效，属功能缺口而非风格问题，需产品侧决定「实现」或「从类型中移除」：
+
+| 组件 | prop | 现状 |
+| --- | --- | --- |
+| `Upload` | `action`、`headers` | JSDoc 标注为「模拟使用」，为对齐 antd API 保留的占位；组件本身只做本地选择，不发请求 |
+| `Dragger` | `children` | 已声明未使用 |
+| `Menu` | `subKey` | 声明为必填「唯一标识」但未被使用 |
+| `Menu` | `collapsible` | 已声明未使用（折叠菜单未实现） |
+| `Input.Search` | `searchButtonText` | 已声明未使用（自定义按钮文案未实现） |
+
 ### Fixed — 交付链路（产物此前无法被下游消费）
 
 - **恢复 `@aura/business` 的声明文件产出**。`cascader-panel` 中两处把 `string[]` 传入

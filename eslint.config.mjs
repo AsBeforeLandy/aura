@@ -17,9 +17,11 @@ export default [
     ],
   },
 
-  // 组件库源码
+  // 组件库源码与测试：统一使用 TypeScript 解析器。
+  // 注意 files 需覆盖 tests/ 等非 packages 目录，否则这些文件会退回默认
+  // 解析器（espree）并在 TS 语法处直接解析失败。
   {
-    files: ['packages/*/src/**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -55,10 +57,18 @@ export default [
       // 类型安全：允许知情妥协，但必须显式标注
       '@typescript-eslint/no-explicit-any': 'warn',
 
-      // 未使用变量：允许以 _ 开头显式忽略
+      // 未使用变量：
+      // - `^_` 前缀表示「显式声明为不使用」
+      // - ignoreRestSiblings 覆盖「解构出来只为把它排除出 ...rest」这一常见模式，
+      //   例如 Upload 解构 action / headers 后不再往下传。若把这些变量删掉，
+      //   它们会重新进入 ...rest 并被 spread 到 DOM 上，属于行为回归。
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
       ],
 
       // 组件库不应向控制台输出

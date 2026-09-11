@@ -1,4 +1,4 @@
-import React, { forwardRef, HTMLAttributes, CSSProperties } from 'react';
+import React, { forwardRef, HTMLAttributes } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
 import './index.less';
 

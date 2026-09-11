@@ -128,6 +128,9 @@ export interface SearchProps extends Omit<InputProps, 'suffix'> {
 }
 
 const Search = forwardRef<HTMLInputElement, SearchProps>(
+  // searchButtonText 已在类型中声明但尚未实现。必须保留解构：一旦移除，
+  // 它会落入 ...rest 并被 spread 到 DOM 上，成为非法的 HTML 属性。
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- 见上
   ({ searchButtonText = '搜索', onSearch, onKeyDown, ...rest }, ref) => {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') onSearch?.(e.currentTarget.value);

@@ -19,7 +19,7 @@ describe('Form', () => {
 
   it('提交时应触发 onFinish', async () => {
     const onFinish = vi.fn();
-    const { container } = render(
+    render(
       <FormComponent onFinish={onFinish} initialValues={{ name: '测试' }}>
         <FormComponent.Item name="name" label="名称">
           <input />
@@ -37,7 +37,7 @@ describe('Form', () => {
   it('必填验证应显示错误信息', async () => {
     const onFinish = vi.fn();
     const onFinishFailed = vi.fn();
-    const { container } = render(
+    render(
       <FormComponent onFinish={onFinish} onFinishFailed={onFinishFailed}>
         <FormComponent.Item name="email" label="邮箱" rules={[{ required: true, message: '请输入邮箱' }]}>
           <input value="" onChange={() => {}} />
@@ -59,7 +59,7 @@ describe('Form', () => {
   it('pattern 验证应正常工作', async () => {
     const onFinish = vi.fn();
     const onFinishFailed = vi.fn();
-    const { container } = render(
+    render(
       <FormComponent
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
