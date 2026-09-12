@@ -121,7 +121,9 @@
   /* 拖拽选区遮罩 */
   &-selection {
     z-index: 2;
-    background: rgba(124, 58, 237, 0.22);
+    // 由主色派生的透明遮罩：跟随主题令牌（暗色下主色不同，遮罩随之变化）。
+    // color-mix 需 Chrome 111+ / Safari 16.2+ / Firefox 113+。
+    background: color-mix(in srgb, var(--aura-primary-700) 22%, transparent);
     border: 1px solid var(--aura-primary-700);
     border-radius: 2px;
   }

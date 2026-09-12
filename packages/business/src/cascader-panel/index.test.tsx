@@ -42,7 +42,7 @@ const checkAllInput = (container: HTMLElement, col = 0): HTMLInputElement =>
     col
   ] as HTMLInputElement;
 
-const lastValues = (onChange: { mock: { calls: any[] } } ) =>
+const lastValues = (onChange: { mock: { calls: unknown[][] } }) =>
   onChange.mock.calls.at(-1)![0] as string[];
 
 describe('CascaderPanel', () => {

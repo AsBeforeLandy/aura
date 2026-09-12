@@ -4,6 +4,23 @@
 
 ## [Unreleased]
 
+### Added — 开发规范与性能指标文档
+
+- 新增 `docs/guide/standards.md`（指南 →「开发规范与性能指标」），把此前的审计结论
+  固化为文档：文件结构 / 样式 / TypeScript / 状态与交互 / 无障碍 / 测试六类规范条款，
+  以及体积预算、交互性能要求、覆盖率、耗时基线等实测指标，并列出每条条款对应的守护门禁。
+- 文档同时记录测量方式（`pnpm size` / `pnpm test:coverage`）与复测入口，便于后续维护者核对。
+
+### Fixed — 审计发现的规范违规（2 处）
+
+- **拖拽选区遮罩硬编码色值**：`WeekTimeRange` 与 `YearCalendar` 的选区遮罩此前写死
+  `rgba(124, 58, 237, 0.22)`（主色 22% 透明），主题被定制或切到暗色时不会跟随。
+  改为 `color-mix(in srgb, var(--aura-primary-700) 22%, transparent)`，由主题令牌派生。
+  说明：`color-mix` 需 Chrome 111+ / Safari 16.2+ / Firefox 113+，已在样式中注释。
+  复测 `@aura/business` 硬编码色值 **0** 处、`!important` **0** 处。
+- **测试辅助函数使用 `any[]`**：`cascader-panel` 测试中读取 mock 调用参数的辅助函数
+  改为 `unknown[][]` 并在使用处收窄。
+
 ### Changed — 结构与可维护性
 
 - **文档站侧边栏改为由文档 frontmatter 自动生成**。`.dumirc.ts` 此前手写 55 条链接，
