@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
 import { Uploading, CheckCircleFilled, CloseCircleFilled, Close, Upload as UploadIcon, CloudUpload, PicturePlaceholder } from '@aura/icons';
+import { requestUpload } from './request';
 import './index.less';
 
 /* ===== 类型定义 ===== */
@@ -31,9 +32,13 @@ export interface UploadProps {
    *  @default 'text'
    */
   listType?: 'text' | 'picture' | 'picture-card';
-  /** 上传地址（模拟使用） */
+  /**
+   * 上传接口地址。
+   * 配置后选择文件即发起真实 POST（multipart/form-data，字段名 `file`），
+   * 成功置为 `done`、失败置为 `error`；不配置则保持本地模拟流程。
+   */
   action?: string;
-  /** 自定义请求头 */
+  /** 随上传请求附加的请求头（仅在配置了 `action` 时生效） */
   headers?: Record<string, string>;
   /** 文件列表变化回调 */
   onChange?: (fileList: UploadFile[]) => void;
@@ -73,6 +78,8 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
       disabled = false,
       maxSize,
       listType = 'text',
+      action,
+      headers,
       onChange,
       beforeUpload,
       className,
@@ -92,7 +99,19 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
       [onChange],
     );
 
-    /** 模拟上传过程 */
+    /** 按 uid 局部更新单个文件并同步回调 */
+    const patchFile = useCallback(
+      (uid: string, patch: Partial<UploadFile>) => {
+        setFileList((prev) => {
+          const next = prev.map((f) => (f.uid === uid ? { ...f, ...patch } : f));
+          onChange?.(next);
+          return next;
+        });
+      },
+      [onChange],
+    );
+
+    /** 模拟上传过程（未配置 action 时保持原行为，便于演示与测试） */
     const simulateUpload = useCallback(
       (uploadFile: UploadFile) => {
         // 模拟上传中状态
@@ -107,6 +126,24 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
         }, 1500);
       },
       [onChange],
+    );
+
+    /**
+     * 发起上传。
+     * 配置了 `action` 走真实请求（成功 → done，失败 → error）；
+     * 未配置时保持原有的定时模拟流程。
+     */
+    const startUpload = useCallback(
+      (uploadFile: UploadFile) => {
+        if (!action || !uploadFile.file) {
+          simulateUpload(uploadFile);
+          return;
+        }
+        requestUpload({ file: uploadFile.file, action, headers })
+          .then(() => patchFile(uploadFile.uid, { status: 'done' as const }))
+          .catch(() => patchFile(uploadFile.uid, { status: 'error' as const }));
+      },
+      [action, headers, simulateUpload, patchFile],
     );
 
     /** 处理文件选择 */
@@ -154,13 +191,13 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
         const updatedList = [...fileList, ...newFiles];
         updateFileList(updatedList);
 
-        // 模拟上传
-        newFiles.forEach((f) => simulateUpload(f));
+        // 配置了 action 走真实请求，否则走定时模拟
+        newFiles.forEach((f) => startUpload(f));
 
         // 重置 input
         if (inputRef.current) inputRef.current.value = '';
       },
-      [fileList, maxSize, beforeUpload, updateFileList, simulateUpload],
+      [fileList, maxSize, beforeUpload, updateFileList, startUpload],
     );
 
     /** 点击触发文件选择 */
@@ -271,10 +308,13 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
       multiple = false,
       disabled = false,
       maxSize,
+      action,
+      headers,
       onChange,
       beforeUpload,
       className,
       style,
+      children,
     },
     ref,
   ) => {
@@ -286,6 +326,18 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
       (newList: UploadFile[]) => {
         setFileList(newList);
         onChange?.(newList);
+      },
+      [onChange],
+    );
+
+    /** 按 uid 局部更新单个文件并同步回调 */
+    const patchFile = useCallback(
+      (uid: string, patch: Partial<UploadFile>) => {
+        setFileList((prev) => {
+          const next = prev.map((f) => (f.uid === uid ? { ...f, ...patch } : f));
+          onChange?.(next);
+          return next;
+        });
       },
       [onChange],
     );
@@ -303,6 +355,24 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
         }, 1500);
       },
       [onChange],
+    );
+
+    /**
+     * 发起上传。
+     * 配置了 `action` 走真实请求（成功 → done，失败 → error）；
+     * 未配置时保持原有的定时模拟流程。
+     */
+    const startUpload = useCallback(
+      (uploadFile: UploadFile) => {
+        if (!action || !uploadFile.file) {
+          simulateUpload(uploadFile);
+          return;
+        }
+        requestUpload({ file: uploadFile.file, action, headers })
+          .then(() => patchFile(uploadFile.uid, { status: 'done' as const }))
+          .catch(() => patchFile(uploadFile.uid, { status: 'error' as const }));
+      },
+      [action, headers, simulateUpload, patchFile],
     );
 
     const processFiles = useCallback(
@@ -339,9 +409,9 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
 
         const updatedList = [...fileList, ...newFiles];
         updateFileList(updatedList);
-        newFiles.forEach((f) => simulateUpload(f));
+        newFiles.forEach((f) => startUpload(f));
       },
-      [fileList, maxSize, beforeUpload, updateFileList, simulateUpload],
+      [fileList, maxSize, beforeUpload, updateFileList, startUpload],
     );
 
     const handleDragOver = useCallback(
@@ -418,13 +488,17 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
           aria-label="拖拽文件到此区域上传"
           tabIndex={disabled ? -1 : 0}
         >
-          <CloudUpload size={48} className={prefixCls('upload-dragger-icon')} />
-          <p className={prefixCls('upload-dragger-text')}>
-            将文件拖拽到此区域上传
-          </p>
-          <p className={prefixCls('upload-dragger-hint')}>
-            支持单个或批量上传
-          </p>
+          {children ?? (
+            <>
+              <CloudUpload size={48} className={prefixCls('upload-dragger-icon')} />
+              <p className={prefixCls('upload-dragger-text')}>
+                将文件拖拽到此区域上传
+              </p>
+              <p className={prefixCls('upload-dragger-hint')}>
+                支持单个或批量上传
+              </p>
+            </>
+          )}
         </div>
         {fileList.length > 0 && (
           <div className={prefixCls('upload-list')} role="list">

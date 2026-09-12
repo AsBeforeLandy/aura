@@ -8,7 +8,7 @@ import React, {
   useRef,
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
-import { ChevronDown } from '@aura/icons';
+import { ChevronDown, DoubleLeft, DoubleRight } from '@aura/icons';
 import './index.less';
 
 /* ===== Context ===== */
@@ -106,12 +106,18 @@ export interface SubMenuProps {
 }
 
 const SubMenu = forwardRef<HTMLDivElement, SubMenuProps>(
-  ({ title, icon, className, style, children }, ref) => {
+  ({ subKey, title, icon, className, style, children }, ref) => {
     const { selectedKey } = useMenuContext();
     const [open, setOpen] = useState(false);
     // 显式带上 `| null`：@types/react 18 下 `useRef<T>(null)` 返回只读的
     // RefObject，无法在 ref 回调中赋值；`useRef<T | null>(null)` 才是可变的。
     const containerRef = useRef<HTMLDivElement | null>(null);
+
+    // subKey 为子菜单提供稳定标识：生成确定性的面板 id，
+    // 供标题通过 aria-controls 关联，也便于测试与上层持久化展开状态。
+    const panelId = subKey
+      ? prefixCls(`menu-submenu-panel-${subKey}`)
+      : undefined;
 
     // 收集子项的 key，判断是否有子项被选中
     const childKeys = React.Children.map(children, (child) => {
@@ -157,11 +163,17 @@ const SubMenu = forwardRef<HTMLDivElement, SubMenuProps>(
     };
 
     return (
-      <div ref={(node) => {
-        containerRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }} className={subCls} style={style} role="menu">
+      <div
+        ref={(node) => {
+          containerRef.current = node;
+          if (typeof ref === 'function') ref(node);
+          else if (ref) ref.current = node;
+        }}
+        className={subCls}
+        style={style}
+        role="menu"
+        data-sub-key={subKey}
+      >
         <div
           className={titleCls}
           onClick={handleToggle}
@@ -169,6 +181,7 @@ const SubMenu = forwardRef<HTMLDivElement, SubMenuProps>(
           role="menuitem"
           tabIndex={0}
           aria-expanded={open}
+          aria-controls={open && panelId ? panelId : undefined}
         >
           {icon && <span className={prefixCls('menu-item-icon')}>{icon}</span>}
           <span className={prefixCls('menu-item-text')}>{title}</span>
@@ -182,6 +195,7 @@ const SubMenu = forwardRef<HTMLDivElement, SubMenuProps>(
           </span>
         </div>
         <div
+          id={panelId}
           className={classNames(
             prefixCls('menu-submenu-content'),
             open && prefixCls('menu-submenu-content-open'),
@@ -261,6 +275,7 @@ const MenuBase = forwardRef<HTMLDivElement, MenuProps>(
       selectedKey: controlledKey,
       defaultSelectedKey,
       onSelect,
+      collapsible = false,
       className,
       style,
       children,
@@ -270,6 +285,9 @@ const MenuBase = forwardRef<HTMLDivElement, MenuProps>(
     const [internalKey, setInternalKey] = useState<string | undefined>(
       defaultSelectedKey,
     );
+    // 折叠态仅由内部维护：折叠是纯展示形态，受控语义（openKeys / defaultOpenKeys）
+    // 需要另立 API，这里不越权扩展
+    const [collapsed, setCollapsed] = useState(false);
     const isControlled = controlledKey !== undefined;
     const activeKey = isControlled ? controlledKey : internalKey;
 
@@ -287,9 +305,13 @@ const MenuBase = forwardRef<HTMLDivElement, MenuProps>(
       mode,
     };
 
+    // 折叠只对纵向菜单有意义；横向菜单本就横向排布，没有可折叠的宽度收益
+    const canCollapse = collapsible && mode !== 'horizontal';
+
     const menuCls = classNames(
       prefixCls('menu'),
       prefixCls(`menu-${mode}`),
+      canCollapse && collapsed && prefixCls('menu-collapsed'),
       className,
     );
 
@@ -302,6 +324,17 @@ const MenuBase = forwardRef<HTMLDivElement, MenuProps>(
           role="menu"
           aria-orientation={mode === 'horizontal' ? 'horizontal' : 'vertical'}
         >
+          {canCollapse && (
+            <button
+              type="button"
+              className={prefixCls('menu-collapse-trigger')}
+              aria-label={collapsed ? '展开菜单' : '折叠菜单'}
+              aria-expanded={!collapsed}
+              onClick={() => setCollapsed((prev) => !prev)}
+            >
+              {collapsed ? <DoubleRight size={14} /> : <DoubleLeft size={14} />}
+            </button>
+          )}
           {children}
         </div>
       </MenuContext.Provider>

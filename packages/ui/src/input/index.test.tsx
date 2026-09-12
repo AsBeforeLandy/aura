@@ -194,4 +194,36 @@ describe('Input.Group', () => {
   it('should have group display name', () => {
     expect(Input.Group.displayName).toBe('Input.Group');
   });
+
+  // ===== Input.Search =====
+  it('Search 不传 searchButtonText 时展示图标，可访问名称为「搜索」', () => {
+    const { container } = render(<Input.Search placeholder="搜索" />);
+    const btn = container.querySelector('.aura-input-search-btn')!;
+    expect(btn).not.toBeNull();
+    expect(btn.getAttribute('aria-label')).toBe('搜索');
+    expect(btn.querySelector('svg')).not.toBeNull();
+    expect(btn.textContent).toBe('');
+  });
+
+  it('Search 传入 searchButtonText 时以文案替代图标', () => {
+    const { container } = render(<Input.Search searchButtonText="查一下" />);
+    const btn = container.querySelector('.aura-input-search-btn')!;
+    expect(btn.getAttribute('aria-label')).toBe('查一下');
+    expect(btn.textContent).toBe('查一下');
+    expect(btn.querySelector('svg')).toBeNull();
+  });
+
+  it('Search 按 Enter 或点击按钮都会触发 onSearch', () => {
+    const onSearch = vi.fn();
+    const { container } = render(
+      <Input.Search searchButtonText="搜索" onSearch={onSearch} />,
+    );
+    const input = container.querySelector('input')!;
+    fireEvent.change(input, { target: { value: '关键词' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(onSearch).toHaveBeenCalledWith('关键词');
+
+    fireEvent.click(container.querySelector('.aura-input-search-btn')!);
+    expect(onSearch).toHaveBeenCalledTimes(2);
+  });
 });

@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback } from 'react';
+import React, { forwardRef, useState, useCallback, useRef } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
 import { EyeOpen, EyeClosed, Search as SearchIcon } from '@aura/icons';
 import './index.less';
@@ -123,25 +123,61 @@ Password.displayName = 'Input.Password';
 /* ===== Input.Search ===== */
 
 export interface SearchProps extends Omit<InputProps, 'suffix'> {
+  /**
+   * 自定义搜索按钮文案。
+   * 不传时展示搜索图标（默认形态）；传入时以该文案替代图标，
+   * 并同时作为按钮的可访问名称。
+   */
   searchButtonText?: string;
   onSearch?: (value: string) => void;
 }
 
 const Search = forwardRef<HTMLInputElement, SearchProps>(
-  // searchButtonText 已在类型中声明但尚未实现。必须保留解构：一旦移除，
-  // 它会落入 ...rest 并被 spread 到 DOM 上，成为非法的 HTML 属性。
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- 见上
-  ({ searchButtonText = '搜索', onSearch, onKeyDown, ...rest }, ref) => {
+  ({ searchButtonText, onSearch, onKeyDown, ...rest }, ref) => {
+    // 持有内部 input 引用：点击按钮时需要读取当前输入值
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') onSearch?.(e.currentTarget.value);
       onKeyDown?.(e);
     };
+
+    const triggerSearch = () => onSearch?.(inputRef.current?.value ?? '');
+
+    const label = searchButtonText ?? '搜索';
     const suffix = (
-      <span className={prefixCls('input-search-btn')} role="button" aria-label="搜索">
-        <SearchIcon size={16} />
+      <span
+        className={prefixCls('input-search-btn')}
+        role="button"
+        aria-label={label}
+        tabIndex={0}
+        onClick={triggerSearch}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            triggerSearch();
+          }
+        }}
+      >
+        {searchButtonText ? (
+          <span className={prefixCls('input-search-btn-text')}>{searchButtonText}</span>
+        ) : (
+          <SearchIcon size={16} />
+        )}
       </span>
     );
-    return <InputBase ref={ref} suffix={suffix} onKeyDown={handleKeyDown} {...rest} />;
+    return (
+      <InputBase
+        ref={(node) => {
+          inputRef.current = node;
+          if (typeof ref === 'function') ref(node);
+          else if (ref) ref.current = node;
+        }}
+        suffix={suffix}
+        onKeyDown={handleKeyDown}
+        {...rest}
+      />
+    );
   },
 );
 

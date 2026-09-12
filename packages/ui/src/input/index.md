@@ -66,8 +66,8 @@ import { Input } from "@aura/ui";
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| searchButtonText | 搜索按钮文字 | `string` | `'搜索'` |
-| onSearch | 搜索回调（回车触发） | `(value: string) => void` | - |
+| searchButtonText | 自定义搜索按钮文案。不传时展示搜索图标；传入时以文案替代图标，并作为按钮的可访问名称 | `string` | - |
+| onSearch | 搜索回调（回车或点击按钮触发） | `(value: string) => void` | - |
 
 ### Input.Group
 

@@ -41,7 +41,7 @@ import { Menu } from "@aura/ui";
 | selectedKey | 受控选中项 | `string` | - |
 | defaultSelectedKey | 默认选中项 | `string` | - |
 | onSelect | 选中回调 | `(key: string) => void` | - |
-| collapsible | 是否可折叠（inline 模式） | `boolean` | `false` |
+| collapsible | 是否可折叠。开启后在菜单顶部渲染折叠开关，折叠态仅展示图标（横向模式下无宽度收益，不生效） | `boolean` | `false` |
 
 继承 `HTMLAttributes<HTMLDivElement>`。
 
@@ -57,7 +57,7 @@ import { Menu } from "@aura/ui";
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| subKey | 唯一标识 | `string` | - |
+| subKey | 唯一标识，用于生成确定性的子菜单面板 id（`aura-menu-submenu-panel-<subKey>`），并在展开时通过 `aria-controls` 关联 | `string` | - |
 | title | 标题 | `ReactNode` | - |
 | icon | 图标 | `ReactNode` | - |
 

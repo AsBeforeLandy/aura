@@ -42,8 +42,8 @@ import { Upload } from "@aura/ui";
 | disabled | 是否禁用 | `boolean` | `false` |
 | maxSize | 文件大小上限（bytes） | `number` | - |
 | listType | 文件列表展示风格 | `'text' \| 'picture' \| 'picture-card'` | `'text'` |
-| action | 上传地址 | `string` | - |
-| headers | 自定义请求头 | `Record<string, string>` | - |
+| action | 上传接口地址。配置后选择文件即发起真实 POST（multipart/form-data，字段名 `file`），成功置为 `done`、失败置为 `error`；不配置则保持本地模拟流程 | `string` | - |
+| headers | 随上传请求附加的请求头（仅在配置了 `action` 时生效） | `Record<string, string>` | - |
 | onChange | 文件列表变化回调 | `(fileList: UploadFile[]) => void` | - |
 | beforeUpload | 上传前钩子 | `(file: File) => boolean \| Promise<File>` | - |
 

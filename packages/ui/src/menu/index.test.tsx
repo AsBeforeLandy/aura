@@ -201,4 +201,73 @@ describe('Menu', () => {
     const item = container.querySelector('.aura-menu-item')!;
     expect(item.getAttribute('aria-disabled')).toBe('true');
   });
+
+  // ===== SubMenu.subKey =====
+  it('SubMenu 的 subKey 应生成确定性面板 id，并在展开时通过 aria-controls 关联', () => {
+    const { container } = render(
+      <MenuDemo>
+        <MenuDemo.SubMenu subKey="org" title="组织架构">
+          <MenuDemo.Item itemKey="a">研发部</MenuDemo.Item>
+        </MenuDemo.SubMenu>
+      </MenuDemo>,
+    );
+
+    const submenu = container.querySelector('.aura-menu-submenu')!;
+    expect(submenu.getAttribute('data-sub-key')).toBe('org');
+
+    const title = container.querySelector('.aura-menu-submenu-title')!;
+    // 未展开时不应暴露 aria-controls
+    expect(title.getAttribute('aria-controls')).toBe(null);
+
+    fireEvent.click(title);
+    expect(title.getAttribute('aria-controls')).toBe(
+      'aura-menu-submenu-panel-org',
+    );
+    expect(
+      container.querySelector('#aura-menu-submenu-panel-org'),
+    ).not.toBeNull();
+  });
+
+  // ===== collapsible =====
+  it('collapsible 时渲染折叠开关，点击后进入折叠态', () => {
+    const { container } = render(
+      <MenuDemo collapsible>
+        <MenuDemo.Item itemKey="a">首页</MenuDemo.Item>
+      </MenuDemo>,
+    );
+
+    const trigger = container.querySelector('.aura-menu-collapse-trigger')!;
+    expect(trigger).not.toBeNull();
+    expect(trigger.getAttribute('aria-label')).toBe('折叠菜单');
+
+    fireEvent.click(trigger);
+
+    const menu = container.querySelector('.aura-menu')!;
+    expect(menu.classList.contains('aura-menu-collapsed')).toBe(true);
+    expect(trigger.getAttribute('aria-label')).toBe('展开菜单');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('再次点击折叠开关应恢复展开态', () => {
+    const { container } = render(
+      <MenuDemo collapsible>
+        <MenuDemo.Item itemKey="a">首页</MenuDemo.Item>
+      </MenuDemo>,
+    );
+    const trigger = container.querySelector('.aura-menu-collapse-trigger')!;
+    const menu = container.querySelector('.aura-menu')!;
+
+    fireEvent.click(trigger);
+    fireEvent.click(trigger);
+    expect(menu.classList.contains('aura-menu-collapsed')).toBe(false);
+  });
+
+  it('horizontal 模式下不渲染折叠开关', () => {
+    const { container } = render(
+      <MenuDemo mode="horizontal" collapsible>
+        <MenuDemo.Item itemKey="a">首页</MenuDemo.Item>
+      </MenuDemo>,
+    );
+    expect(container.querySelector('.aura-menu-collapse-trigger')).toBeNull();
+  });
 });

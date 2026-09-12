@@ -9,6 +9,56 @@
   list-style: none;
   margin: 0;
 
+  /* ===== 折叠开关（collapsible 时渲染） ===== */
+  &-collapse-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - var(--aura-spacing-2));
+    margin: 0 var(--aura-spacing-1) var(--aura-spacing-1);
+    padding: 6px 0;
+    border: none;
+    background: transparent;
+    color: var(--aura-text-tertiary);
+    cursor: pointer;
+    border-radius: var(--aura-radius-sm);
+    transition:
+      color var(--aura-duration-fast) var(--aura-easing),
+      background var(--aura-duration-fast) var(--aura-easing);
+
+    &:hover {
+      color: var(--aura-primary-700);
+      background: var(--aura-primary-50);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--aura-primary-500);
+      outline-offset: -2px;
+    }
+  }
+
+  /* ===== 折叠态：仅展示图标 ===== */
+  &&-collapsed {
+    width: 56px;
+
+    .aura-menu-item-text,
+    .aura-menu-submenu-arrow,
+    .aura-menu-group-title {
+      display: none;
+    }
+
+    .aura-menu-item,
+    .aura-menu-submenu-title {
+      justify-content: center;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .aura-menu-item-icon {
+      margin-right: 0;
+    }
+  }
+
   /* ===== Mode: vertical ===== */
   &&-vertical {
     width: fit-content;

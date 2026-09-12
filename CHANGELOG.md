@@ -100,17 +100,27 @@
   此前每次渲染都重建并透传给 `SearchForm` / `Table`，必然击穿子组件的浅比较；
   现分别以 `useMemo` / `useCallback` 收敛。
 
-### 待决策（已知的未实现 prop）
+### Added — 补齐声明了却从未生效的 prop
 
-以下 prop 已在类型与文档中声明但从未生效，属功能缺口而非风格问题，需产品侧决定「实现」或「从类型中移除」：
+以下 prop 此前已写进类型与文档、却没有任何实现（见「待决策」的历史记录），现已全部落地：
 
-| 组件 | prop | 现状 |
-| --- | --- | --- |
-| `Upload` | `action`、`headers` | JSDoc 标注为「模拟使用」，为对齐 antd API 保留的占位；组件本身只做本地选择，不发请求 |
-| `Dragger` | `children` | 已声明未使用 |
-| `Menu` | `subKey` | 声明为必填「唯一标识」但未被使用 |
-| `Menu` | `collapsible` | 已声明未使用（折叠菜单未实现） |
-| `Input.Search` | `searchButtonText` | 已声明未使用（自定义按钮文案未实现） |
+- **`Menu` 的 `collapsible`**：开启后在菜单顶部渲染折叠开关，折叠态仅展示图标
+  （隐藏文字、箭头与分组标题，图标居中收窄）。横向模式没有可折叠的宽度收益，不生效。
+  折叠态为纯内部展示状态，未引入 `openKeys` 之类的新 API。
+- **`Menu.SubMenu` 的 `subKey`**：用于生成确定性的子菜单面板 id
+  （`aura-menu-submenu-panel-<subKey>`），展开时由标题通过 `aria-controls` 关联，
+  并在根节点输出 `data-sub-key`，便于测试与上层持久化展开状态。
+- **`Input.Search` 的 `searchButtonText`**：不传时保持图标形态（默认不变）；
+  传入时以文案替代图标，并作为按钮的可访问名称。
+  **顺带修复**：搜索按钮此前只有 `role="button"` 却没有任何点击行为，
+  现支持点击与键盘（Enter / Space）触发 `onSearch`。
+- **`Dragger` 的 `children`**：用于替换默认拖拽区内容，未传时保持原样。
+- **`Upload` / `Dragger` 的 `action` 与 `headers`**：配置 `action` 后选择文件即发起
+  真实 POST（multipart/form-data，字段名 `file`），成功置为 `done`、失败置为 `error`；
+  `headers` 原样附加。未配置 `action` 时保持原有的本地模拟流程，行为向后兼容。
+  请求逻辑抽到 `packages/ui/src/upload/request.ts`，与渲染解耦、便于 mock。
+
+以上共补充 15 个测试用例（合计 666 个）。
 
 ### Fixed — 交付链路（产物此前无法被下游消费）
 
