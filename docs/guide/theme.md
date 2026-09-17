@@ -18,6 +18,7 @@ Aura 使用 CSS Variables 作为 Design Token 的载体，支持灵活的主题�
 | 背景 | `--aura-bg` 等 | `--aura-bg: #ffffff` |
 | 文字 | `--aura-text` 等 | `--aura-text: #111827` |
 | 边框 | `--aura-border` 等 | `--aura-border: #e5e7eb` |
+| 派生色 | `--aura-selection-*` | `--aura-selection-bg: rgba(124, 58, 237, 0.22)` |
 | 圆角 | `--aura-radius-*` | `--aura-radius-md: 10px` |
 | 阴影 | `--aura-shadow-*` | `--aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.3)` |
 | 间距 | `--aura-spacing-*` | `--aura-spacing-4: 16px` |
@@ -102,6 +103,11 @@ const MyComponent = () => {
   --aura-bg: #0a0a0a;
 }
 ```
+
+> **换主色时记得同步派生色**：`--aura-selection-bg`（拖拽选区遮罩底色）等
+> 派生令牌是主色的透明变体，默认值写死为默认主色。改主色后若不同步覆盖它，
+> 遮罩会仍是紫罗兰色。这正是把派生色做成独立令牌的原因——换肤只需改令牌，
+> 无需改组件样式。
 
 ## BEM 类名
 

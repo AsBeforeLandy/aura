@@ -29,19 +29,21 @@ packages/<pkg>/src/<组件名>/
 
 - 单文件 `index.tsx` 以 **400 行**为软上限；超出应把纯逻辑抽入 `utils.ts`，把视觉块拆成子组件。
 - `utils.ts` 中的函数**不得依赖 React**，保证可以不渲染组件就完成单测。
-- 业务包（`@aura/business`）当前 8 个组件全部符合该结构。
+- 业务包（`@aura/business`）当前 9 个组件全部符合该结构。
 
 ### 2. 样式规范
 
 | 条款 | 说明 |
 | --- | --- |
 | 只用设计令牌 | 颜色、圆角、间距一律 `var(--aura-*)`，**禁止硬编码色值**（hex / rgb / rgba） |
-| 主色透明派生 | 需要「主色 + 透明度」时用 `color-mix(in srgb, var(--aura-primary-700) 22%, transparent)`，保证暗色主题与主题定制时自动跟随 |
+| 派生色收敛到令牌层 | 需要「主色 + 透明度」这类派生色时，**必须**在 `tokens.css` 中新增令牌（亮 / 暗两套值，如 `--aura-selection-bg`），组件样式直接消费令牌；**不要**在组件里用 `color-mix` 临时派生——那会把浏览器特性下限从 Chrome 84 抬到 111 |
 | 禁止 `!important` | 优先级问题通过选择器结构解决 |
 | 令牌缺失即失效 | `.less` 不设 fallback，主题令牌由 `@aura/ui/style.css` 提供（依赖链已声明） |
 
-> 现状实测：`@aura/business` 硬编码色值 **0** 处、`!important` **0** 处。
-> （曾有两处拖拽选区遮罩硬编码 `rgba(124,58,237,.22)`，已改为 `color-mix` 派生。）
+> 现状实测：`@aura/business` 硬编码色值 **0** 处、`!important` **0** 处，
+> 且不依赖 `color-mix` 等较新特性（浏览器下限见「安装 → 浏览器兼容性」）。
+> 拖拽选区遮罩曾硬编码 `rgba(124,58,237,.22)`，一度改为 `color-mix` 派生，
+> 最终收敛为令牌 `--aura-selection-bg`：既无硬编码，也不抬高特性下限。
 
 ### 3. TypeScript 规范
 

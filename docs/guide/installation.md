@@ -83,12 +83,25 @@ import '@aura/ui/style.css';
 
 ## 浏览器兼容性
 
-| 浏览器 | 版本 |
+| 浏览器 | 最低版本 |
 | --- | --- |
-| Chrome | 80+ |
-| Firefox | 80+ |
-| Safari | 14+ |
-| Edge | 80+ |
+| Chrome / Edge | 84+ |
+| Firefox | 63+ |
+| Safari | 14.1+ |
+
+产物以 `chrome 80` 为 **JS 编译目标**（原生 `async/await`，不做语法降级，
+详见「开发规范与性能指标」的构建规范）。实际下限由所用 **CSS 特性** 决定：
+
+| 依赖的特性 | 最低版本 | 用在哪 |
+| --- | --- | --- |
+| Flexbox `gap` | Chrome 84 / Safari 14.1 / Firefox 63 | 组件内的弹性间距（24 个样式文件） |
+| CSS 自定义属性（变量） | Chrome 49 / Safari 9.1 | 全部主题令牌 `--aura-*` |
+| Pointer Events | Chrome 55 / Safari 13 | 拖拽交互（WeekTimeRange、YearCalendar、PdfViewer） |
+
+> 本库**不依赖** `color-mix` 等较新的 CSS 特性：需要「主色 + 透明度」的派生色
+> 统一收敛在令牌层（如 `--aura-selection-bg` 同时提供亮 / 暗两套值），
+> 既保住浏览器下限，也让换肤只需改令牌。
+> 若需支持更老的浏览器，请在应用侧自行提供 polyfill，本库不做语法降级。
 
 ## 本地开发
 

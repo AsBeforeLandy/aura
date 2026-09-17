@@ -51,6 +51,11 @@
   --aura-border: #e5e7eb;
   --aura-border-hover: #d1d5db;
 
+  /* Selection — 拖拽选区遮罩底色
+   * 主色带透明度的派生色收在令牌层，而非在组件样式中用 color-mix 临时派生：
+   * rgba 全浏览器可用，且换主题只需改这一处。 */
+  --aura-selection-bg: rgba(124, 58, 237, 0.22);
+
   /* Spacing */
   --aura-spacing-1: 4px;
   --aura-spacing-2: 8px;
@@ -140,6 +145,8 @@
 
   --aura-border: rgba(139, 92, 246, 0.2);
   --aura-border-hover: rgba(139, 92, 246, 0.4);
+
+  --aura-selection-bg: rgba(196, 181, 253, 0.22);
 
   --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);

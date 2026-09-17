@@ -19,7 +19,7 @@ export default defineConfig({
     // 编译目标显式对齐 antd 的浏览器底线：
     // 1. chrome 80 原生支持 async/await，babel 不再把 async 降级为 generator，
     //    否则每个含 async 的文件都会内联约 15 kB 的 regenerator helper（按文件重复）；
-    // 2. 样式层已使用 color-mix（Chrome 111+），实际兼容下限本就不低于 80，
+    // 2. 样式层实际下限由 Flexbox `gap` 决定（Chrome 84），本就高于 80，
     //    此处收紧目标只减体积、不损失可用范围。
     targets: { chrome: 80 },
   },

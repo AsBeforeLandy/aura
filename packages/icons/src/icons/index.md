@@ -1,10 +1,10 @@
 ---
-title: 图标 Icon
-nav:
-  title: 图标
-  order: 0
-group:
-  title: 通用
+title: Icon
+subtitle: 图标
+group: 通用
+category: Components
+description: 语义化的矢量图标库，涵盖状态、导航、操作、结果页等场景，支持尺寸与颜色定制。
+order: 4
 toc: content
 ---
 
@@ -27,6 +27,16 @@ yarn add @aura/icons
 ```
 
 :::
+
+```tsx | pure
+import { Search, CheckCircleFilled, StarFilled } from "@aura/icons";
+```
+
+## 何时使用
+
+- 需要用图形代替或补充文字，降低界面的文字密度（如工具栏、操作列）
+- 需要表达状态语义：成功、警告、错误、加载中（状态图标按语义分组，见图标列表）
+- 需要在按钮、菜单、表格等组件中嵌入视觉锚点
 
 ## 图标列表
 

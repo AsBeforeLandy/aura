@@ -26,11 +26,19 @@ import { Typography, Title, Text, Paragraph } from "@aura/ui";
 - 需要对长文本进行省略时
 
 ## 代码演示
+
+<code src="./demo/basic.tsx" description="标题、文本、段落与各类修饰的总览。">基本用法</code>
+
 <code src="./demo/title.tsx" description="通过 `Title` 组件展示 1-5 级标题，使用 `level` 属性控制级别。">标题</code>
+
 <code src="./demo/color-variant.tsx" description="色彩变体。">色彩变体</code>
+
 <code src="./demo/modifier.tsx" description="修饰符。">修饰符</code>
+
 <code src="./demo/combined.tsx" description="组合使用。">组合使用</code>
+
 <code src="./demo/paragraph.tsx" description="`Paragraph` 组件用于展示段落文本，设置 `ellipsis` 可开启单行省略。">段落与省略</code>
+
 ## API
 
 ### Typography

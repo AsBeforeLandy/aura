@@ -93,3 +93,6 @@ import { WeekTimeRange } from "@aura/business";
   --aura-wtr-label-width: 82px;  /* 左侧星期标签列宽 */
 }
 ```
+
+拖拽选区遮罩的底色取自主色派生令牌 `--aura-selection-bg`（亮 / 暗各一套值）。
+换主色时需同步覆盖它，否则遮罩仍为默认紫罗兰色——详见「主题定制 → 自定义令牌」。

@@ -5,6 +5,8 @@ group: 业务
 category: Components
 description: 将 Aura 设计令牌映射到 antd 主题系统，使业务组件与自研组件保持一致的视觉语言。
 order: 0
+demo:
+  cols: 1
 toc: content
 ---
 
@@ -43,6 +45,14 @@ const App = () => (
   </BusinessProvider>
 );
 ```
+
+## 代码演示
+
+<code src="./demo/basic.tsx" description="切换暗色 / 紧凑模式，观察 antd 组件（按钮、标签、输入框）如何跟随 Aura 令牌；链接按钮会呈现品牌主色而非语义蓝。">主题切换</code>
+
+> 注意：`dark` 只切换 antd 的暗色算法。若 Aura 自研组件也要变暗，
+> 需同时切换 Aura 令牌作用域（`document.documentElement.dataset.theme = 'dark'`），
+> 示例中限定在容器上演示。
 
 ## 样式引入
 

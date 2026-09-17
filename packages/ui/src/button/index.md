@@ -24,10 +24,17 @@ import { Button } from "@aura/ui";
 标记了一个（或封装一组）操作命令，响应用户点击行为，触发对应的业务逻辑。
 
 ## 代码演示
+
+<code src="./demo/basic.tsx" description="按钮的五种变体、三种尺寸，以及禁用与加载状态总览。">基本用法</code>
+
 <code src="./demo/variant.tsx" description="按钮有五种变体：主按钮、虚线按钮、文字按钮和链接按钮。主按钮在同一个操作区域最多出现一次。">按钮类型</code>
+
 <code src="./demo/size.tsx" description="按钮提供 `sm`、`md`、`lg` 三种尺寸，默认为 `md`。">按钮尺寸</code>
+
 <code src="./demo/loading.tsx" description="添加 `loading` 属性即可让按钮处于加载状态，点击不会触发回调。">加载中</code>
+
 <code src="./demo/disabled.tsx" description="按钮的禁用状态。">禁用状态</code>
+
 ## API
 
 ### ButtonProps

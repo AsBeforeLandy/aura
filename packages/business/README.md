@@ -39,7 +39,7 @@ const App = () => (
 
 建议在应用根节点包裹 `BusinessProvider`，使 antd 的主题与 Aura 品牌色（主色 `#7c3aed`）保持一致。
 
-## 组件总览（8 个）
+## 组件总览（9 个）
 
 | 组件 | 说明 |
 | --- | --- |
@@ -51,6 +51,11 @@ const App = () => (
 | `CascaderPanel` | 级联多选面板，适用于组织架构 / 类目树 |
 | `WeekTimeRange` | 周时间段选择器，支持单击与拖拽框选 |
 | `YearCalendar` | 年历选择器，一年一张连续网格，支持拖拽框选 |
+| `PdfViewer` | 基于 pdf.js 的弹窗式 PDF 预览，支持翻页 / 缩放 / 旋转 / 拖拽平移 |
+
+> `PdfViewer` 由 `pdfjs-dist` 提供渲染能力，该依赖已随包声明（常规依赖，安装即得）。
+> worker 默认使用与依赖同版本的资源文件，由打包器解析；webpack 4 等场景
+> 可通过 `workerSrc` 传入同源副本地址，详见文档站。
 
 完整 API 与在线示例见文档站「业务组件」。
 

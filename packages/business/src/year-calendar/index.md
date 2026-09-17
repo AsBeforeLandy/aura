@@ -81,3 +81,6 @@ import { YearCalendar } from "@aura/business";
   --aura-yc-month-gap: 8px;  /* 月份块间距 */
 }
 ```
+
+拖拽选区遮罩的底色取自主色派生令牌 `--aura-selection-bg`（亮 / 暗各一套值）。
+换主色时需同步覆盖它，否则遮罩仍为默认紫罗兰色——详见「主题定制 → 自定义令牌」。

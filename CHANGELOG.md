@@ -4,6 +4,37 @@
 
 ## [Unreleased]
 
+### Docs — 组件文档补全（46 个文档，六类缺口清零）
+
+先做全量体检再动手，逐项量化后在插件层补全：
+
+- **`Button` / `Typography` 的孤儿示例**：两份文档各有 1 个 `demo/basic.tsx`
+  已写但未在任何位置引用（用户看不到），且文档是以「按钮类型」「标题」开头、
+  缺「基本用法」。现补为各自的第一个示例，并修正示例块之间缺失的空行。
+- **`Icon` 文档缺 4 项**：是唯一缺 `description` / `order` / 「何时使用」/
+  导入片段的文档；同时把唯一的嵌套 frontmatter 写法（`nav` + `group: { title }`）
+  统一为与其余 45 个文档一致的平铺写法。
+- **`BusinessProvider` 无可运行示例**（46 个文档中唯一 demo 数为 0）：新增
+  `demo/basic.tsx`，演示暗色 / 紧凑切换如何驱动 antd 主题，并说明 `dark`
+  只切 antd 算法、Aura 令牌需 `data-theme` 作用域——这是接入时最易踩的点。
+- **`@aura/business` README 漏列 `PdfViewer`**：组件总览仍写「8 个」，
+  npm 页面会少列一个新组件；补齐组件表并说明 `pdfjs-dist` 依赖与 worker 配置。
+- **`standards.md` 统计过期**：「业务包当前 8 个组件」→ 9 个。
+
+### Fixed — 浏览器兼容性声明与实现不符
+
+- 上一轮把拖拽选区遮罩改为 `color-mix`（需 Chrome 111+），而 `installation.md`
+  声明的下限是 Chrome 80 / Safari 14——**Chrome 90 用户会看到选区遮罩完全消失**。
+  现把该派生色收敛为令牌 `--aura-selection-bg`（亮 / 暗各一套值），组件样式直接
+  消费令牌：既无硬编码色值，也不抬高 CSS 特性下限，换肤时只需改令牌。
+  同步修正 `.fatherrc.ts` 中已失效的注释。
+- 重写「浏览器兼容性」章节：区分 **JS 编译目标**（`chrome 80`）与 **CSS 特性下限**
+  （由 Flexbox `gap` 决定，Chrome 84 / Safari 14.1 / Firefox 63），并逐条列出
+  所依赖特性、最低版本与用在哪，便于使用者自查。
+- `theme.md` 令牌表补充「派生色」类别，并明确提示：换主色时需同步覆盖
+  `--aura-selection-bg`，否则选区遮罩仍是默认紫罗兰色；
+  `WeekTimeRange` / `YearCalendar` 文档也各加了同样一句。
+
 ### Added — 新组件
 
 - **`PdfViewer`（PDF 预览，业务组件）**：基于 pdf.js 的弹窗式预览，支持翻页 / 缩放 /
