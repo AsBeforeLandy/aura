@@ -76,6 +76,47 @@ function deriveWorkerUrl(pdfjsSrc: string): string {
   return pdfjsSrc.replace(/pdf(?:\.min)?\.mjs$/, 'pdf.worker.min.mjs');
 }
 
+/** `Promise.try` 的规范实现（转发参数；回调同步抛错时 reject） */
+function specPromiseTry(
+  fn: (...args: unknown[]) => unknown,
+  ...args: unknown[]
+): Promise<unknown> {
+  return new Promise((resolve) => resolve(fn(...args)));
+}
+
+/**
+ * 确保 `Promise.try` 会**转发参数**。
+ *
+ * pdf.js 通过 `Promise.try(action, data)` 把消息参数交给处理器，因此对
+ * `Promise.try` 的参数转发有硬依赖。而某些运行时 polyfill 提供的实现会丢弃参数——
+ * 实测 dumi / umi 的运行时即如此，后果是 pdf.js 的 worker 收到空消息，抛出与实际
+ * 原因毫无关系的错误（`Cannot destructure property 'docId' …`、
+ * `Cannot set properties of undefined (setting 'onPull')`）。
+ *
+ * 每次加载前做一次特性探测（成本仅一次微任务），仅在检测到确有缺陷时恢复规范实现；
+ * `Promise.try` 本身缺失时不做兜底（交回给 pdf.js 报错，避免掩盖环境问题）。
+ */
+async function ensurePromiseTry(): Promise<void> {
+  const holder = Promise as PromiseConstructor & {
+    try?: (
+      fn: (...args: unknown[]) => unknown,
+      ...args: unknown[]
+    ) => Promise<unknown>;
+  };
+  const current = holder.try;
+  if (typeof current !== 'function') return;
+
+  try {
+    const received = await current((...args: unknown[]) => args, 1, 2);
+    if (Array.isArray(received) && received[0] === 1 && received[1] === 2) {
+      return; // 参数转发正常
+    }
+  } catch {
+    // 探测失败，按缺陷处理
+  }
+  holder.try = specPromiseTry as NonNullable<typeof holder.try>;
+}
+
 /**
  * 默认资源基地址：按**运行时版本**推导的官方 CDN。
  *
@@ -237,6 +278,8 @@ const PdfViewer = forwardRef<HTMLDivElement, PdfViewerProps>(
       setError(null);
 
       const load = async () => {
+        // pdf.js 的消息通道依赖 Promise.try 转发参数，先确保其行为正确
+        await ensurePromiseTry();
         const pdfjs = await resolvePdfjs(pdfjsSrc);
 
         if (pdfjsSrc) {

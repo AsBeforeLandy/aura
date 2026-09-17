@@ -29,24 +29,25 @@
 - 排查证据（含产物中 webpack 把 pdf.js 的 `import.meta.url` 替换为构建机 `file://`
   绝对路径的现象）已写入组件文档「已知问题」。
 
-#### 最终定位：文档站的实时示例无法加载 PDF（组件本身无问题）
+#### 根因与修复：umi/dumi 的 `Promise.try` 不转发参数
 
-用本机真实 Chrome 152 复现（此前用旧版 Chromium 得出的「浏览器版本不足」推测**已作废**），
-逐层二分后得到决定性对照：
+**根因（已定位并修复）**：pdf.js 通过 `Promise.try(action, data)` 把消息参数交给处理器，
+而 **dumi / umi 运行时下的 `Promise.try` 会丢弃参数**：`Promise.try((a,b)=>[a,b], 1, 2)`
+在纯静态页返回 `[1,2]`，在 umi 页面返回 `[null,null]`。参数被吞后 worker 收到空消息，
+于是抛出与真实原因毫无关系的 `Cannot destructure property 'docId'` /
+`Cannot set properties of undefined (setting 'onPull')`。
 
-| 场景 | 结果 |
-| --- | --- |
-| 纯静态 HTML 页 + 原样 pdf.js（主库 + worker，主线程模式） | ✅ 正常加载并渲染 |
-| **完全相同**的代码与参数，改在 dumi/umi 页面中执行 | ❌ `Cannot destructure property 'docId'` |
-| 打包后的 pdf.js（4.x / 6.x、关闭压缩、保留 class 私有字段） | ❌ 同类协议错误 |
-| 改用独立线程渲染（`workerSrc`） | ❌ `Cannot set properties of undefined (setting 'onPull')` |
-| 全局 API 是否被替换 / 是否已有 `pdfjsWorker` 全局 / 尾斜杠 / 参数组合 / 并发 | 均无差异，均非触发条件 |
+定位路径：同一段代码跨页面跑（纯静态页 ✅ / 任何 umi 页 ❌）→ 插桩 pdf.js 消息通道
+（**消息带着数据发出、事件也带着数据投递，但处理器收到 undefined**）→ 逐项排查
+`structuredClone`、`MessageHandler` 分发、全局 API 原生性 → 最终锁定 `Promise.try`。
 
-即：**pdf.js 的同页消息通道在 umi 运行时下被干扰**，与组件、与打包方式都无关
-（在纯静态页中同一段手写代码可以跑通）。因此文档站的实时示例仍会失败，组件在
-普通业务项目中可用；相应证据与规避手段已写入组件文档「已知问题」。
+**修复**：组件在每次加载前做一次特性探测，**仅在检测到该缺陷时**把 `Promise.try`
+恢复为规范实现（正常环境不做任何改动；`Promise.try` 缺失时不兜底，避免掩盖环境问题）。
+修复后实测：文档站示例默认用法即可加载并渲染文档（`canvas 480x300`、页码 `1 / 2`、
+无错误态）。
 
-> 说明：结论基于上图对照实验；组件侧 12 个单测（含 worker 策略）全部通过。
+> 至此此前记录的所有失败模式（`Unexpected token 'export'`、`docId`、`onPull`）
+> 均已解释并解决。组件侧 13 个单测（新增 `Promise.try` 缺陷恢复用例）全部通过。
 
 ### Docs — 组件文档补全（46 个文档，六类缺口清零）
 

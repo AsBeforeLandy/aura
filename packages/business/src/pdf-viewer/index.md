@@ -104,27 +104,26 @@ cp node_modules/pdfjs-dist/build/pdf.worker.min.mjs public/
 > 却把顶层 `export` 留在函数体内），产物不再是合法模块，运行时报
 > `SyntaxError: Unexpected token 'export'`。放进 `public/` 目录可保证原样发布。
 
-### 已知问题：文档站的实时示例无法加载 PDF
+### 环境要求：`Promise.try` 必须转发参数
 
-**结论先说：这不是组件的问题。** 在纯静态 HTML 页中，用**完全相同**的代码与参数加载
-同一份 pdf.js（原样文件、主线程模式），可以正常加载并渲染；而在本仓库文档站
-（dumi / umi 运行时）的任何页面中——组件页、业务页、以及 dumi 的 demo iframe 页——
-都会失败，报错形如 `Cannot destructure property 'docId' of 'e' as it is undefined`。
+pdf.js 通过 `Promise.try(action, data)` 把消息参数交给处理器，因此对
+**`Promise.try` 的参数转发**有硬依赖。部分运行时 polyfill 的实现会丢弃参数
+（实测 dumi / umi 的运行时如此），症状是 pdf.js 的 worker 收到空消息，抛出与真实
+原因毫无关系的错误：
 
-对照实验（均可在无头 Chrome 中复现）：
+```text
+Cannot destructure property 'docId' of 'e' as it is undefined
+Cannot set properties of undefined (setting 'onPull')
+```
 
-| 场景 | 结果 |
-| --- | --- |
-| 纯静态页 + 原样 pdf.js（主库 + worker，主线程模式） | ✅ 正常加载并渲染 |
-| **相同代码、相同参数**，改在 dumi/umi 页面中执行 | ❌ 上述错误 |
-| 打包后的 pdf.js（4.x 与 6.x、关掉压缩、保留 class 私有字段） | ❌ 同类协议错误 |
-| 改用独立线程渲染（传 `workerSrc`） | ❌ `Cannot set properties of undefined (setting 'onPull')` |
-| 全局 API 是否被替换 / 是否已有 `pdfjsWorker` 全局 / URL 尾斜杠 / 参数组合 / 并发 | 均无差异，均非触发条件 |
+定位过程（可在无头 Chrome 中复现）：同一段代码在纯静态页正常、在 umi 页面失败 →
+插桩发现消息**带着数据发出、事件也带着数据投递**，但处理器收到 undefined →
+再测 `Promise.try` 行为：纯静态页 `(fn,1,2) → [1,2]`，umi 页 `(fn,1,2) → [null,null]`。
 
-现象是**worker 侧收不到消息数据**，即 pdf.js 的同页消息通道在 umi 运行时下受到干扰。
-因此**业务项目一般不受影响**（普通 React 应用已验证可用）。若宿主构建确实无法正确打包
-pdf.js（例如打包器把 `import.meta.url` 改写成了构建机路径），可用 `pdfjsSrc` 指定
-运行时加载原样 pdf.js、`assetBaseUrl` 指定自托管资源目录来规避。
+**组件已内置处理**：每次加载前做一次特性探测，检测到该缺陷时恢复 `Promise.try` 的
+规范实现（仅在此类环境生效，正常环境不做任何改动），因此**调用方无需额外处理**。
+若你的启动代码也依赖该特性，可参考 `packages/business/src/pdf-viewer/index.tsx`
+中的 `ensurePromiseTry`。
 
 ## 浏览器要求
 

@@ -205,6 +205,27 @@ describe('PdfViewer', () => {
   });
 
   // ---- worker 策略 ----
+  it('Promise.try 丢失参数时会被替换为规范实现（pdf.js 依赖它传消息参数）', async () => {
+    const holder = Promise as PromiseConstructor & { try?: unknown };
+    const original = holder.try;
+    // 注入「不转发参数」的缺陷实现（dumi/umi 运行时的真实行为）
+    holder.try = (() => Promise.resolve([])) as unknown as typeof holder.try;
+    try {
+      openViewer();
+      await waitFor(() => expect(getDocumentMock).toHaveBeenCalledTimes(1));
+
+      const received = (await (
+        holder.try as (
+          fn: (...a: unknown[]) => unknown,
+          ...a: unknown[]
+        ) => Promise<unknown>
+      )((...args: unknown[]) => args, 1, 2)) as unknown[];
+      expect(received).toEqual([1, 2]);
+    } finally {
+      holder.try = original;
+    }
+  });
+
   it('默认（未传 workerSrc）：挂载主线程 handler，走主线程渲染', async () => {
     openViewer();
     await waitFor(() => expect(getDocumentMock).toHaveBeenCalledTimes(1));
