@@ -13,6 +13,13 @@
   - `buildXThemeConfig` 作为命名导出，便于测试与装饰器场景复用；
   - `--aura-x-*` 令牌组（气泡 / 代码块 / 画布底色，亮暗两套）进入 `tokens.css`；
   - 文档站新增顶级导航「**AI 组件**」（路由前缀 `/x-components`）。
+- **M2 数据层**：
+  - **`useXStream`**：流式传输层 Hook——fetch + 读流 + SSE / 纯文本两种解析 +
+    abort 生命周期（abort 静默结束，卸载自动中止）；解析器 `parseSSEStream`
+    为纯函数可独立使用（兼容 BOM / CRLF / 多行 data / 心跳帧，`[DONE]` 哨兵由消费方过滤）；
+  - **`useXChat`**：对话消息编排 Hook——user/assistant 成对追加、增量更新、
+    loading / 错误态、中止保留部分内容、清空；传输由 `onRequest` 注入，与 useXStream 正交；
+  - 文档站新增 `useXStream` / `useXChat` 两个 API 页（含组合示例）。
 - **重构**：Aura 令牌 → antd token 的映射收敛到 `@aura/shared` 的
   `antdTokenOverrides()`（纯数据，零 antd 依赖），`BusinessProvider` 同步改用，
   消除与 `@aura/x` 之间的映射重复。
