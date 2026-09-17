@@ -77,6 +77,7 @@ const GROUP_ORDER = [
   '数据展示',
   '反馈',
   '业务',
+  'AI 组件',
 ];
 
 /** frontmatter 分组名 → 侧边栏展示名 */
@@ -138,6 +139,10 @@ const businessSidebar = collectSidebarGroups([
   { dir: 'packages/business/src', prefix: '/businesses' },
 ]);
 
+const xSidebar = collectSidebarGroups([
+  { dir: 'packages/x/src', prefix: '/x-components' },
+]);
+
 export default defineConfig({
   resolve: {
     docDirs: ['docs'],
@@ -145,6 +150,8 @@ export default defineConfig({
       { type: 'components', dir: 'packages/ui/src' },
       { type: 'components', dir: 'packages/icons/src' },
       { type: 'business', dir: 'packages/business/src' },
+      // dumi 会对 type 做英文复数化：'x-component' → 路由前缀 /x-components
+      { type: 'x-component', dir: 'packages/x/src' },
     ],
     entryFile: './packages/ui/src/index.ts',
     codeBlockMode: 'active',
@@ -186,6 +193,7 @@ export default defineConfig({
     '@aura/icons': path.resolve(__dirname, 'packages/icons/src'),
     '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
     '@aura/business': path.resolve(__dirname, 'packages/business/src'),
+    '@aura/x': path.resolve(__dirname, 'packages/x/src'),
     '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura/request': path.resolve(__dirname, 'packages/request/src'),
   },
@@ -206,6 +214,7 @@ export default defineConfig({
       // 注意：dumi 会对 atomDirs.type 做英文复数化（pluralize），
       // type: 'business' 实际生成的路由前缀是 /businesses，而非 /business。
       { title: '业务组件', link: '/businesses' },
+      { title: 'AI 组件', link: '/x-components' },
       { title: '更新日志', link: '/changelog' },
     ],
     sidebar: {

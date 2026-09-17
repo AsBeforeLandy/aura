@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ConfigProvider, theme as antdTheme } from 'antd';
 import type { Locale } from 'antd/es/locale';
 import zhCN from 'antd/locale/zh_CN';
-import { auraTokens } from '@aura/shared';
+import { antdTokenOverrides } from '@aura/shared';
 
 export interface BusinessProviderProps {
   children: React.ReactNode;
@@ -47,25 +47,12 @@ export const BusinessProvider: React.FC<BusinessProviderProps> = ({
     const algorithms = [dark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm];
     if (compact) algorithms.push(antdTheme.compactAlgorithm);
 
-    const primary = colorPrimary ?? auraTokens.colors.primary[700];
-
     return {
       algorithm: algorithms,
+      // Aura 令牌 → antd token 的映射收敛在 @aura/shared（与 @aura/x 共用单一数据源）
       token: {
-        colorPrimary: primary,
-        // antd 的 colorLink 默认派生自 colorInfo（见 genColorMapToken）。
-        // 若 colorInfo 为语义蓝，链接型元素（Button type="link"、a 标签等）
-        // 会呈现蓝色而与品牌主色脱节，故此处显式让链接色跟随主色。
-        colorLink: primary,
-        colorSuccess: auraTokens.colors.success,
-        colorWarning: auraTokens.colors.warning,
-        colorError: auraTokens.colors.error,
-        colorInfo: auraTokens.colors.info,
+        ...antdTokenOverrides(colorPrimary),
         borderRadius,
-        borderRadiusLG: 14,
-        borderRadiusSM: 6,
-        fontSize: 14,
-        controlHeight: 34,
       },
     };
   }, [dark, colorPrimary, borderRadius, compact]);

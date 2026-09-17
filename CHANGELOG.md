@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 
+### Added — 新包 `@aura/x`（AI 组件库，M1 脚手架）
+
+- 第 8 个包 `@aura/x`：Aura 生态的 AI 对话组件库，对标 `@ant-design/x`。
+  M1 交付包骨架与主题桥接层：
+  - **`XProvider`**：antd 主题桥接（暗色 / 紧凑 / 主色），令牌映射与
+    `BusinessProvider` 共用单一数据源；
+  - `buildXThemeConfig` 作为命名导出，便于测试与装饰器场景复用；
+  - `--aura-x-*` 令牌组（气泡 / 代码块 / 画布底色，亮暗两套）进入 `tokens.css`；
+  - 文档站新增顶级导航「**AI 组件**」（路由前缀 `/x-components`）。
+- **重构**：Aura 令牌 → antd token 的映射收敛到 `@aura/shared` 的
+  `antdTokenOverrides()`（纯数据，零 antd 依赖），`BusinessProvider` 同步改用，
+  消除与 `@aura/x` 之间的映射重复。
+
 ### Fixed — PdfViewer 的 pdf.js 加载方式与版本升级
 
 **结论：不是路径问题。** 同一浏览器、同一 PDF 的对照实验显示——原样 pdf.js 完全正常，

@@ -97,6 +97,14 @@
   --aura-duration-normal: 200ms;
   --aura-duration-slow: 300ms;
   --aura-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ===== AI 组件（@aura/x） ===== */
+  --aura-x-bubble-ai-bg: #f4f4f5;
+  --aura-x-bubble-user-bg: #7c3aed;
+  --aura-x-bubble-user-text: #ffffff;
+  --aura-x-bubble-border: #e5e7eb;
+  --aura-x-code-bg: #f6f8fa;
+  --aura-x-stage-bg: #fafafa;
 }
 
 /* ===== Dark Theme ===== */
@@ -152,4 +160,12 @@
   --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
   --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
   --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.4);
+
+  /* ===== AI 组件（@aura/x） ===== */
+  --aura-x-bubble-ai-bg: #1a1a3e;
+  --aura-x-bubble-user-bg: #6d28d9;
+  --aura-x-bubble-user-text: #f3f4f6;
+  --aura-x-bubble-border: rgba(139, 92, 246, 0.2);
+  --aura-x-code-bg: #111827;
+  --aura-x-stage-bg: #0f0c29;
 }

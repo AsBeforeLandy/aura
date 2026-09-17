@@ -9,6 +9,8 @@
 - 第 9 个业务组件 **PdfViewer**：pdf.js 渲染，支持缩放 / 旋转 / 平移 / 翻页 / 错误重试
 - 弹窗宽度参数 `width`（默认 **A4 纸宽度** 210mm）与「适合宽度」`autoFitWidth`（默认开启）
 - 46 个组件文档全量体检补全（孤儿示例、frontmatter、导入片段等六类缺口）
+- 新增第 8 个包 `@aura/x`（AI 对话组件库，对标 Ant Design X）：M1 交付 `XProvider`
+  主题桥接、`--aura-x-*` 令牌组与「AI 组件」导航；令牌映射收敛到 `@aura/shared` 共享
 - 文档站更新日志与根 CHANGELOG 同步（本条）
 
 ### 修复

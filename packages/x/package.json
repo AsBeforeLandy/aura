@@ -1,0 +1,38 @@
+{
+  "name": "@aura/x",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Aura AI 组件库 — 对话式 AI 界面的原子组件与数据流 Hooks（对标 Ant Design X 的 Aura 实现）",
+  "type": "module",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "files": [
+    "esm"
+  ],
+  "sideEffects": [
+    "**/*.less",
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./esm/index.d.ts",
+      "import": "./esm/index.js",
+      "default": "./esm/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "father build",
+    "dev": "father dev"
+  },
+  "peerDependencies": {
+    "antd": ">=6.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@aura/shared": "workspace:*"
+  },
+  "license": "MIT"
+}
