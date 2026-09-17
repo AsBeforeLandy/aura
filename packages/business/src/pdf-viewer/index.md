@@ -62,8 +62,9 @@ import { PdfViewer } from "@aura/business";
 | title | 弹窗标题 | `ReactNode` | `'文档预览'` |
 | initialScale | 初始缩放比例（1 = 100%） | `number` | `1` |
 | scaleRange | 缩放范围 `[最小, 最大]` | `[number, number]` | `[0.5, 3]` |
-| workerSrc | pdf.js worker 脚本地址，见下方「worker 配置」 | `string` | 随包 worker 文件 |
-| cMapUrl | CMap 字体映射资源地址（渲染 CJK 文档时需要）；传空串禁用 | `string` | jsdelivr CDN |
+| workerSrc | pdf.js worker 脚本地址；传入后用独立线程渲染 | `string` | -（主线程渲染） |
+| assetBaseUrl | pdf.js 资源基地址（cmaps / wasm / iccs / standard_fonts） | `string` | 按运行时版本推导的 CDN |
+| pdfjsSrc | 运行时加载 pdf.js 主模块的地址（绕开打包器），见「已知问题」 | `string` | -（用打包进产物的实例） |
 | onPageChange | 页码变化回调 | `(page: number) => void` | - |
 | className | 自定义类名 | `string` | - |
 | style | 自定义样式 | `CSSProperties` | - |
@@ -74,26 +75,63 @@ import { PdfViewer } from "@aura/business";
 | --- | --- | --- |
 | --aura-pdf-viewer-body-height | 预览区高度 | `70vh` |
 
-## worker 配置
+## worker 与渲染模式
 
-组件默认以 `new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url)` 引入与依赖同版本的 worker，webpack 5 / Vite 均可自动解析，**大多数项目零配置可用**。
+pdf.js 需要在独立线程或主线程中解析文档，因此必须能拿到 worker。组件按以下顺序决策：
 
-以下场景需通过 `workerSrc` 显式传入同源副本地址：
+1. 传入 `workerSrc`（或宿主已设置 `GlobalWorkerOptions.workerSrc`）→ **独立线程**渲染；
+2. 否则 → **主线程**渲染（挂载 `globalThis.pdfjsWorker`，由 pdf.js 直接使用其 handler）。
 
-- webpack 4 等不支持 `new URL(..., import.meta.url)` 资源解析的构建器
-- 微前端（qiankun 等）子应用资源路径被重写的环境
-- 希望与其他模块共用同一份 pdf.js worker 时
+### 默认：主线程渲染（零配置）
+
+不创建独立 worker、不请求任何外部文件，因此不受打包器对 worker 文件的处理方式影响，
+也没有 CDN / 同源 / MIME 的额外约束。代价是解析占用主线程，超大文档可能影响交互流畅度。
+
+### 需要独立线程时：自托管 worker
+
+```bash
+# 从依赖里复制（务必保持文件原样，不要经过任何构建处理）
+cp node_modules/pdfjs-dist/build/pdf.worker.min.mjs public/
+```
 
 ```tsx | pure
-// 典型做法：把 worker 文件复制到 public 目录，或从 CDN 下载后同源自托管
 <PdfViewer url={url} workerSrc="/pdf.worker.min.mjs" />
 ```
 
-> 跨域 CDN 地址（如 jsdelivr）受同源策略限制，**不能**直接充当 `workerSrc`。
+> ⚠️ worker 是 **ES Module**，不要用 `import` 或
+> `new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url)` 引用它：
+> 一旦进入打包器的 JS 处理管线就可能被改写（实测 dumi/webpack 会把它包进 IIFE、
+> 却把顶层 `export` 留在函数体内），产物不再是合法模块，运行时报
+> `SyntaxError: Unexpected token 'export'`。放进 `public/` 目录可保证原样发布。
+
+### 已知问题：打包后的 pdf.js 主库
+
+pdfjs-dist 4.x 被 webpack 一类打包器处理后会**出现协议层错误**——本仓库文档站的
+dumi/webpack 构建即复现：预览时「文档加载失败」，报错形如
+`Cannot destructure property 'docId' of 'e' as it is undefined`。
+
+对照实验（同一浏览器、同一 PDF）：
+
+| 加载方式 | 结果 |
+| --- | --- |
+| 原样 `pdf.min.mjs` + 原样 `pdf.worker.min.mjs`（不经打包器） | ✅ 正常渲染 |
+| 原样 worker + **被打包的主库** | ❌ 同上协议错误 |
+| 关闭 JS 压缩 / 保留 class 私有字段后重试 | ❌ 仍然失败 |
+
+可见问题出在**打包器对 pdf.js 主库的处理**，与 worker、压缩、语法降级均无关。
+若你的项目遇到同类报错，可用 `pdfjsSrc` 指定**运行时加载**地址（我们文档站即传 `pdfjsSrc` + `assetBaseUrl` 指向自托管副本，见 `scripts/copy-pdfjs-vendor.mjs`）以规避，
+并向构建工具侧反馈；本组件侧已尽可能移除对打包器行为的依赖（不再用
+`new URL(...)` 资源方式引用 worker）。
+
+## 浏览器要求
+
+pdfjs-dist 6.x 使用了较新的平台 API（如 `URL.parse`），对浏览器版本要求较高：
+**Chrome / Edge 126+、Safari 18+、Firefox 126+**（均为 2024 年中及以后版本）。
+需要覆盖更老的浏览器时，请把依赖降到与该浏览器匹配的 pdfjs-dist 版本。
 
 ## 注意事项
 
 - 服务端需允许跨域读取（同源部署最佳），否则文档加载失败并展示错误提示
-- `cMapUrl` 默认指向 jsdelivr CDN，渲染含 CJK 字体的文档时需要；内网环境可将 `cmaps/` 目录自托管后传入
+- `assetBaseUrl` 默认按**运行时版本**（`pdfjs.version`）推导 jsdelivr CDN 地址，用于 cmaps（CJK 字体映射）、wasm（部分图像解码）、iccs、standard_fonts；内网环境可自托管这些目录后传入
 - 组件以「受控 / 非受控」双模式工作：传 `open` 即受控，交由调用方决定显隐；未传时内部自持状态
 - `pdfjs-dist` 为外部依赖，不会被打进组件产物；业务侧引用时按打包器常规按需加载

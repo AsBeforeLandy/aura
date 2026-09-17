@@ -4,6 +4,35 @@
 
 ## [Unreleased]
 
+### Fixed — PdfViewer 的 pdf.js 加载方式与版本升级
+
+**结论：不是路径问题。** 同一浏览器、同一 PDF 的对照实验显示——原样 pdf.js 完全正常，
+经打包器处理后必然失败，与版本、压缩、语法降级均无关（4.10.38 与 6.3.289 表现一致）。
+
+- **升级 `pdfjs-dist` 4.10.38 → 6.3.289**，并适配其破坏性变更：文档销毁入口由
+  `PDFDocumentProxy.destroy()` 改为 **`PDFDocumentLoadingTask.destroy()`**；
+  `page.render()` 改为传 `canvas`（6.x 推荐写法）。
+- **移除硬编码版本号**：资源地址（cmaps / wasm / iccs / standard_fonts）改为按
+  **运行时 `pdfjs.version`** 推导——写死常量会在依赖升级后与实际版本漂移。
+- **移除 `new URL(第三方文件, import.meta.url)` 的 worker 引用方式**：该写法会让 worker
+  文件进入打包器的 JS 处理管线，实测 dumi/webpack 会把它包进 IIFE、却把顶层 `export`
+  留在函数体内，产物不再是合法 ES Module，运行时抛
+  `SyntaxError: Unexpected token 'export'`——这正是「文档加载失败」的成因之一。
+  现默认改为**主线程渲染**（挂载 `globalThis.pdfjsWorker`，零配置、无外部请求）。
+- **新增三个逃生口**（宿主构建无法正确打包 pdf.js 时使用）：`pdfjsSrc`（运行时加载
+  原样 pdf.js）、`assetBaseUrl`（自托管资源目录）、`workerSrc`（独立线程渲染）。
+  运行时加载以 `new Function` 包裹动态 import，确保不被打包器改写。
+- 文档站新增 `scripts/copy-pdfjs-vendor.mjs`：把 pdf.js 原样文件与资源目录复制到
+  `public/pdf-viewer/vendor/`（已 gitignore），示例以 `pdfjsSrc` + `assetBaseUrl` 使用。
+- 文档新增「浏览器要求」：pdfjs-dist 6.x 依赖 `URL.parse` 等新 API，需
+  **Chrome / Edge 126+、Safari 18+、Firefox 126+**；覆盖更老浏览器需降版本。
+- 排查证据（含产物中 webpack 把 pdf.js 的 `import.meta.url` 替换为构建机 `file://`
+  绝对路径的现象）已写入组件文档「已知问题」。
+
+> 说明：逃生口的**端到端验证受限于本地测试浏览器（Chrome 123）**——pdf.js 6.x 需要
+> Chrome 126+，本机只能补齐 `URL.parse` 模拟，模拟下仍无法完成真实渲染验证；
+> 组件侧 12 个单测（含 worker 策略）已覆盖。
+
 ### Docs — 组件文档补全（46 个文档，六类缺口清零）
 
 先做全量体检再动手，逐项量化后在插件层补全：

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 // @ts-ignore — dumi 运行时导出了这些 hooks，但 .d.ts 类型声明不完整
 import { useOutlet, usePrefersColor } from 'dumi';
+import { BusinessProvider } from '@aura/business';
 
 // ===== 蒲公英粒子物理背景（柔美写意版）=====
 interface Seed {
@@ -310,7 +311,15 @@ const GlobalLayout: React.FC = () => {
   return (
     <>
       {isHome && <DandelionCanvas />}
-      {outlet}
+      {/*
+        业务组件文档统一主题：把 Aura 设计令牌桥接到 antd，使 @aura/business 的
+        示例（ProTable / ModalForm / PdfViewer 等）与 Aura 自研组件呈现同一套视觉语言。
+        在此统一包裹而非逐个 demo 包裹，可覆盖当前与将来所有业务组件示例，
+        且 dark 跟随文档站的明暗模式实时切换。
+        注意：dumi 自身的导航/侧边栏不依赖 antd，因此不会被此处改动影响。
+        需要演示主题切换本身的示例（如 BusinessProvider）可在 demo 内再包一层覆盖。
+      */}
+      <BusinessProvider dark={color === 'dark'}>{outlet}</BusinessProvider>
     </>
   );
 };

@@ -215,7 +215,7 @@ describe('真实上传（配置 action / headers）', () => {
 
 describe('Dragger 自定义内容', () => {
   it('children 应替换默认拖拽区内容', () => {
-    const { container } = render(
+    render(
       <UploadComponent.Dragger>
         <div>自定义拖拽区内容</div>
       </UploadComponent.Dragger>,

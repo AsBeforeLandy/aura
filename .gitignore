@@ -25,3 +25,6 @@ coverage
 .worktrees
 .workbuddy
 .codebuddy
+
+# 文档站的 pdf.js 原样文件（由 scripts/copy-pdfjs-vendor.mjs 生成）
+public/pdf-viewer/vendor/

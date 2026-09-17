@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import { GlobalWorkerOptions } from 'pdfjs-dist';
 import { PdfViewer } from './index';
 
 const { getDocumentMock, renderMock, destroyMock, getViewportMock } =
@@ -13,8 +14,16 @@ const { getDocumentMock, renderMock, destroyMock, getViewportMock } =
 
 // pdf.js 依赖真实 canvas 与 worker，单测中整体 mock 渲染层，只验证交互与状态流转
 vi.mock('pdfjs-dist', () => ({
+  // 组件用运行时版本推导资源地址，桩里需提供
+  version: '6.3.289',
   GlobalWorkerOptions: { workerSrc: '' },
   getDocument: getDocumentMock,
+}));
+
+// 默认（未传 workerSrc）走主线程渲染，会动态导入 worker 模块——单测中同样 mock，
+// 避免真的加载 1.3 MB 的 worker 文件；断言点在于「是否挂载了 globalThis.pdfjsWorker」
+vi.mock('pdfjs-dist/build/pdf.worker.min.mjs', () => ({
+  WorkerMessageHandler: { setup: vi.fn() },
 }));
 
 /** 构造假的 PDF 文档代理：3 页，视口 100 x 141 */
@@ -25,6 +34,13 @@ function makeFakeDoc() {
       getViewport: getViewportMock,
       render: renderMock,
     })),
+  };
+}
+
+/** pdf.js 6.x 的销毁入口在 loadingTask 上 */
+function makeFakeLoadingTask() {
+  return {
+    promise: Promise.resolve(makeFakeDoc()),
     destroy: destroyMock,
   };
 }
@@ -38,9 +54,9 @@ beforeAll(() => {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  getDocumentMock.mockImplementation(() => ({
-    promise: Promise.resolve(makeFakeDoc()),
-  }));
+  delete (globalThis as { pdfjsWorker?: unknown }).pdfjsWorker;
+  GlobalWorkerOptions.workerSrc = '';
+  getDocumentMock.mockImplementation(() => makeFakeLoadingTask());
   // 与 pdfjs RenderTask 同形：渲染 promise + 可取消
   renderMock.mockReturnValue({ promise: Promise.resolve(), cancel: vi.fn() });
   getViewportMock.mockImplementation(
@@ -188,10 +204,31 @@ describe('PdfViewer', () => {
     await waitFor(() => expect(getDocumentMock).toHaveBeenCalledTimes(2));
   });
 
+  // ---- worker 策略 ----
+  it('默认（未传 workerSrc）：挂载主线程 handler，走主线程渲染', async () => {
+    openViewer();
+    await waitFor(() => expect(getDocumentMock).toHaveBeenCalledTimes(1));
+    expect(
+      (globalThis as { pdfjsWorker?: unknown }).pdfjsWorker,
+    ).toBeDefined();
+  });
+
+  it('传入 workerSrc：启用独立线程，不挂载主线程 handler', async () => {
+    render(
+      <PdfViewer url="/a.pdf" defaultOpen workerSrc="/pdf.worker.min.js" />,
+    );
+    await waitFor(() => expect(getDocumentMock).toHaveBeenCalledTimes(1));
+    expect(GlobalWorkerOptions.workerSrc).toBe('/pdf.worker.min.js');
+    expect(
+      (globalThis as { pdfjsWorker?: unknown }).pdfjsWorker,
+    ).toBeUndefined();
+  });
+
   // ---- 异常 ----
   it('异常：加载失败展示错误态，可通过重试恢复', async () => {
     getDocumentMock.mockImplementationOnce(() => ({
       promise: Promise.reject(new Error('网络超时')),
+      destroy: destroyMock,
     }));
     openViewer();
 
@@ -200,7 +237,8 @@ describe('PdfViewer', () => {
     expect(alert.textContent).toContain('网络超时');
 
     fireEvent.click(button('重试'));
-    expect(getDocumentMock).toHaveBeenCalledTimes(2);
+    // 加载前需先确保主线程 handler 就绪，故为异步发起，需等待
+    await waitFor(() => expect(getDocumentMock).toHaveBeenCalledTimes(2));
     await waitFor(() => expect(screen.getByText('1 / 3')).toBeDefined());
     expect(screen.queryByRole('alert')).toBeNull();
   });

@@ -153,6 +153,28 @@ export default defineConfig({
   base: '/aura/',
   publicPath: '/aura/',
   autoAlias: true,
+  /**
+   * 修正 pdf.js 在产物中的资源地址推导。
+   *
+   * pdf.js 依赖 `import.meta.url` 推导其 WASM / 字体等资源目录。webpack 默认会把它
+   * 替换成**源文件在构建机上的绝对路径**（实测产物中出现
+   * `file:///Users/.../node_modules/.../pdf.worker.min.mjs`），运行时再据此推导 URL
+   * 必然失败，症状为预览「文档加载失败」（报错形如
+   * `Cannot destructure property 'docId' ...`）。
+   *
+   * 设为 'relative' 后，webpack 改为在运行时基于 publicPath 计算相对 URL，
+   * pdf.js 的资源推导随之恢复正常。
+   */
+  chainWebpack(memo) {
+    // webpack-chain 未暴露 parser()，用 merge 写入原生配置
+    memo.merge({
+      module: {
+        parser: {
+          javascript: { importMeta: { url: 'relative' } },
+        },
+      },
+    });
+  },
   alias: {
     // 必须排在 `@aura/ui` 之前：webpack 的 alias 为前缀匹配、按声明顺序命中，
     // 若被 `@aura/ui` 先命中会解析成 packages/ui/src/style.css（不存在）。

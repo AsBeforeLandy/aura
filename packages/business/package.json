@@ -34,7 +34,7 @@
   "dependencies": {
     "@aura/shared": "workspace:*",
     "@aura/ui": "workspace:*",
-    "pdfjs-dist": "4.10.38"
+    "pdfjs-dist": "6.3.289"
   },
   "license": "MIT"
 }
