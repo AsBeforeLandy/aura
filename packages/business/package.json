@@ -7,8 +7,13 @@
   "main": "esm/index.js",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
-  "files": ["esm"],
-  "sideEffects": ["**/*.less", "**/*.css"],
+  "files": [
+    "esm"
+  ],
+  "sideEffects": [
+    "**/*.less",
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./esm/index.d.ts",
@@ -28,7 +33,8 @@
   },
   "dependencies": {
     "@aura/shared": "workspace:*",
-    "@aura/ui": "workspace:*"
+    "@aura/ui": "workspace:*",
+    "pdfjs-dist": "4.10.38"
   },
   "license": "MIT"
 }

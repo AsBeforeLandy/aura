@@ -45,3 +45,6 @@ export type {
 
 export { YearCalendar } from './year-calendar';
 export type { YearCalendarProps } from './year-calendar';
+
+export { PdfViewer } from './pdf-viewer';
+export type { PdfViewerProps } from './pdf-viewer';

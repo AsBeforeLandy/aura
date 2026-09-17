@@ -72,6 +72,17 @@ packages/<pkg>/src/<组件名>/
 | 覆盖率阈值 | 语句 ≥ 80%、分支 ≥ 84%、函数 ≥ 65%、行 ≥ 80%（见 vitest 配置，随实测上调） |
 | 覆盖率口径 | 只统计 `packages/*/src`，demo / 顶层 barrel / 构建产物不计入 |
 
+### 6. 构建规范
+
+| 条款 | 说明 |
+| --- | --- |
+| 编译目标显式声明 | 各包 `.fatherrc.ts` 统一 `targets: { chrome: 80 }`（与 antd 浏览器底线对齐）。**禁止依赖默认目标**：默认目标含过老浏览器，babel 会把 `async/await` 降级为 generator，并**按文件**内联约 15 kB 的 regenerator helper——体积随含 async 的文件数线性膨胀 |
+| 新增 async 模块需复查产物 | 合入前跑 `pnpm build:lib && pnpm size`，确认产物无 `_regeneratorRuntime` 内联且体积预算未超 |
+
+> 案例：收录 `PdfViewer`（首个在组件文件中使用 `async/await` 的业务组件）时，
+> 体积门禁拦截了 +9 kB 的预算超标，溯源发现 ui 包产物因此前的默认目标已被
+> regenerator 撑大近一倍。显式声明目标后，ui 83.39 → 43.8 kB、business 31.95 → 22.49 kB（brotli）。
+
 ## 二、性能指标（实测）
 
 ### 1. 产物体积预算
@@ -80,10 +91,10 @@ packages/<pkg>/src/<组件名>/
 
 | 包 | 实测 | 预算 | 余量 | 状态 |
 | --- | --- | --- | --- | --- |
-| `@aura/shared` | 2.69 kB | 4 kB | 32.8% | ✅ |
-| `@aura/icons` | 17.21 kB | 22 kB | 21.8% | ✅ |
-| `@aura/ui` | 83.39 kB | 95 kB | 12.2% | ✅ |
-| `@aura/business` | 31.95 kB | 36 kB | 11.3% | ✅ |
+| `@aura/shared` | 1.42 kB | 4 kB | 64.5% | ✅ |
+| `@aura/icons` | 8.96 kB | 22 kB | 59.3% | ✅ |
+| `@aura/ui` | 43.8 kB | 95 kB | 53.9% | ✅ |
+| `@aura/business` | 22.49 kB | 36 kB | 37.5% | ✅ |
 
 > 规则：**新增功能超过预算余量的一半时，先优化再合入**。阈值在根 `package.json` 的 `size-limit` 配置中，CI 会强制校验。
 
@@ -91,10 +102,10 @@ packages/<pkg>/src/<组件名>/
 
 | 组件 | 体积 | 组件 | 体积 |
 | --- | --- | --- | --- |
-| WeekTimeRange | 40 kB | ProTable | 20 kB |
-| YearCalendar | 32 kB | SearchForm | 20 kB |
-| CascaderPanel | 32 kB | PageContainer | 12 kB |
-| ModalForm | 24 kB | Provider | 8 kB |
+| WeekTimeRange | 32 kB | SearchForm | 16 kB |
+| YearCalendar | 28 kB | ProTable | 12 kB |
+| PdfViewer | 28 kB | PageContainer | 12 kB |
+| CascaderPanel | 24 kB | ModalForm | 12 kB |
 
 ### 2. 交互性能要求
 
@@ -117,6 +128,7 @@ packages/<pkg>/src/<组件名>/
 | SearchForm | 99.1% | 96% | 100% | 99.1% |
 | ProTable | 96.7% | 92.3% | 100% | 96.7% |
 | YearCalendar | 92.7% | 91.2% | 100% | 92.7% |
+| PdfViewer | 88.2% | 80% | 68.8% | 88.2% |
 | WeekTimeRange | 88.9% | 89.2% | 100% | 88.9% |
 | useDragSelect（内部） | 89.2% | 78.9% | 50% | 89.2% |
 
@@ -126,9 +138,9 @@ packages/<pkg>/src/<组件名>/
 
 | 指标 | 实测 |
 | --- | --- |
-| 全量测试 | 666 个用例，约 10 ~ 12 s |
+| 全量测试 | 676 个用例，约 10 ~ 12 s |
 | `pnpm verify` 全链路 | 约 35 s（lint → typecheck → test → build → size → smoke） |
-| 文档站构建 | 约 25 ~ 30 s（280 个页面） |
+| 文档站构建 | 约 30 s（284 个页面） |
 
 ## 三、守护机制
 

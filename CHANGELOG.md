@@ -4,6 +4,35 @@
 
 ## [Unreleased]
 
+### Added — 新组件
+
+- **`PdfViewer`（PDF 预览，业务组件）**：基于 pdf.js 的弹窗式预览，支持翻页 / 缩放 /
+  旋转 / 拖拽平移。相对其来源项目中的原型，按组件库规范重写：
+  - **依赖归位**：原型基于 antd-mobile（移动端库），现以 antd v6 重写；
+    `pdfjs-dist@4.10.38` 为常规依赖（原型硬编码 2.10.377 的 CDN worker，
+    与 npm 包版本错配会导致渲染崩溃，现 worker 随依赖同版本、经打包器解析，
+    并提供 `workerSrc` 覆盖口）。
+  - **边界修正**：触发按钮不再内置于组件（调用方组合触发方式）；`open` 受控 /
+    非受控双模式；拖拽平移改用 Pointer 事件并经 rAF 按帧合并（原实现高频
+    `mousemove` 直接触发 setState）；加载失败呈现错误态与重试按钮（原实现只
+    `console.error`，用户面对无限 loading）。
+  - **资源安全**：关闭 / 切换 `url` / 卸载时 `destroy()` 文档并取消未完成的
+    渲染任务（原型两者皆缺，存在内存泄漏与渲染竞态）。
+  - 删除原型遗留的 `console.log('aaa')`；样式全部走 `prefixCls` + 设计令牌；
+    纯函数（缩放 / 旋转 / 页码钳制）抽至 `utils.ts`。
+  - 新增 10 个测试（含加载 / 翻页 / 缩放钳制 / 旋转归一化 / 销毁 / 受控 /
+    失败重试），合计 676 个；文档含 worker 配置与跨域注意事项。
+
+### Fixed — 构建目标导致的产物膨胀（体积近乎腰斩）
+
+- 各包 `.fatherrc.ts` 显式声明 `targets: { chrome: 80 }`（对齐 antd 浏览器底线）。
+  此前依赖默认目标，babel 将 `async/await` 降级为 generator 并**按文件**内联
+  约 15 kB 的 regenerator helper。收录 `PdfViewer`（业务包首个在组件文件使用
+  async 的组件）时被体积门禁拦截，溯源发现该问题早已存在。修正后 brotli 体积：
+  **ui 83.39 → 43.8 kB、business 31.95 → 22.49 kB、icons 17.21 → 8.96 kB、
+  shared 2.69 → 1.42 kB**；实际兼容下限由样式层的 `color-mix`（Chrome 111+）
+  决定，收紧目标不损失可用范围。该条款已写入开发规范文档（构建规范）。
+
 ### Added — 开发规范与性能指标文档
 
 - 新增 `docs/guide/standards.md`（指南 →「开发规范与性能指标」），把此前的审计结论
