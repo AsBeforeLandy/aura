@@ -62,6 +62,8 @@ import { PdfViewer } from "@aura/business";
 | title | 弹窗标题 | `ReactNode` | `'文档预览'` |
 | initialScale | 初始缩放比例（1 = 100%） | `number` | `1` |
 | scaleRange | 缩放范围 `[最小, 最大]` | `[number, number]` | `[0.5, 3]` |
+| width | 弹窗宽度。默认取 **A4 纸宽度**（`210mm` ≈ 794px），使 A4 文档恰好按 100% 呈现；数字按 px，也可传任意 CSS 长度（如 `'96%'`），窄屏下由 antd 按视口自动收敛 | `number \| string` | `'210mm'` |
+| autoFitWidth | 文档加载完成后按容器宽度自动适配缩放（「适合宽度」）。pdf.js 的 `scale = 1` 是「1pt = 1px」，A4 只渲染 595px 宽，放进 A4 弹窗会留白；开启后按可用宽度反推缩放并钳制在 `scaleRange` 内，用户手动缩放后不再干预 | `boolean` | `true` |
 | workerSrc | pdf.js worker 脚本地址；传入后用独立线程渲染 | `string` | -（主线程渲染） |
 | assetBaseUrl | pdf.js 资源基地址（cmaps / wasm / iccs / standard_fonts） | `string` | 按运行时版本推导的 CDN |
 | pdfjsSrc | 运行时加载 pdf.js 主模块的地址（绕开打包器），见「已知问题」 | `string` | -（用打包进产物的实例） |

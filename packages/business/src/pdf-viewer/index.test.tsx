@@ -204,6 +204,43 @@ describe('PdfViewer', () => {
     await waitFor(() => expect(getDocumentMock).toHaveBeenCalledTimes(2));
   });
 
+  it('默认按 A4 纸宽度渲染弹窗，并可通过 width 覆盖', async () => {
+    const { unmount } = render(<PdfViewer url="/a.pdf" defaultOpen />);
+    await waitFor(() => expect(screen.getByText('1 / 3')).toBeDefined());
+
+    const dialog = document.querySelector('.ant-modal') as HTMLElement;
+    expect(dialog.style.width).toBe('210mm');
+    unmount();
+
+    render(<PdfViewer url="/a.pdf" defaultOpen width={600} />);
+    await waitFor(() =>
+      expect(document.querySelector('.ant-modal')).not.toBeNull(),
+    );
+    expect(
+      (document.querySelector('.ant-modal') as HTMLElement).style.width,
+    ).toBe('600px');
+  });
+
+  it('默认开启「适合宽度」：按容器宽度反推缩放并钳制在 scaleRange 内', async () => {
+    // jsdom 的 clientWidth 恒为 0，这里桩成 800px 模拟真实容器
+    const spy = vi
+      .spyOn(HTMLElement.prototype, 'clientWidth', 'get')
+      .mockReturnValue(800);
+    try {
+      // 假页面在 scale=1 时宽 100px → 800/100 = 8，被 scaleRange 上限 3 钳制
+      render(<PdfViewer url="/a.pdf" defaultOpen scaleRange={[0.5, 3]} />);
+      await waitFor(() => expect(screen.getByText('300%')).toBeDefined());
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it('autoFitWidth=false 时不干预缩放', async () => {
+    render(<PdfViewer url="/a.pdf" defaultOpen autoFitWidth={false} />);
+    await waitFor(() => expect(screen.getByText('1 / 3')).toBeDefined());
+    expect(screen.getByText('100%')).toBeDefined();
+  });
+
   // ---- worker 策略 ----
   it('Promise.try 丢失参数时会被替换为规范实现（pdf.js 依赖它传消息参数）', async () => {
     const holder = Promise as PromiseConstructor & { try?: unknown };

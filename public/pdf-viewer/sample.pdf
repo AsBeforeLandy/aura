@@ -6,25 +6,29 @@ endobj
 << /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 480 300] /Resources << /Font << /F1 7 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 7 0 R >> >> /Contents 5 0 R >>
 endobj
 4 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 480 300] /Resources << /Font << /F1 7 0 R >> >> /Contents 6 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 7 0 R >> >> /Contents 6 0 R >>
 endobj
 5 0 obj
-<< /Length 174 >>
+<< /Length 333 >>
 stream
-BT /F1 24 Tf 40 240 Td (Aura PdfViewer) Tj ET
-BT /F1 14 Tf 40 190 Td (Sample page 1 of 2) Tj ET
-BT /F1 12 Tf 40 160 Td (Use toolbar to zoom, rotate, pan and navigate.) Tj ET
+BT /F1 34 Tf 56 722 Td (Aura PdfViewer) Tj ET
+BT /F1 16 Tf 56 672 Td (Sample page 1 of 2) Tj ET
+BT /F1 13 Tf 56 637 Td (A4 page: 595 x 842 pt. Use the toolbar to zoom,) Tj ET
+BT /F1 13 Tf 56 614 Td (rotate, pan and navigate between pages.) Tj ET
+BT /F1 11 Tf 56 542 Td (Generated for the Aura component library documentation.) Tj ET
 endstream
 endobj
 6 0 obj
-<< /Length 174 >>
+<< /Length 333 >>
 stream
-BT /F1 24 Tf 40 240 Td (Aura PdfViewer) Tj ET
-BT /F1 14 Tf 40 190 Td (Sample page 2 of 2) Tj ET
-BT /F1 12 Tf 40 160 Td (Use toolbar to zoom, rotate, pan and navigate.) Tj ET
+BT /F1 34 Tf 56 722 Td (Aura PdfViewer) Tj ET
+BT /F1 16 Tf 56 672 Td (Sample page 2 of 2) Tj ET
+BT /F1 13 Tf 56 637 Td (A4 page: 595 x 842 pt. Use the toolbar to zoom,) Tj ET
+BT /F1 13 Tf 56 614 Td (rotate, pan and navigate between pages.) Tj ET
+BT /F1 11 Tf 56 542 Td (Generated for the Aura component library documentation.) Tj ET
 endstream
 endobj
 7 0 obj
@@ -38,10 +42,10 @@ xref
 0000000121 00000 n 
 0000000247 00000 n 
 0000000373 00000 n 
-0000000597 00000 n 
-0000000821 00000 n 
+0000000756 00000 n 
+0000001139 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-891
+1209
 %%EOF

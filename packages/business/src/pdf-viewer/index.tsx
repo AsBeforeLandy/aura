@@ -14,6 +14,7 @@ import type {
 } from 'pdfjs-dist';
 import { classNames, prefixCls } from '@aura/shared';
 import {
+  clamp,
   clampPage,
   DEFAULT_SCALE_RANGE,
   isRenderCancelled,
@@ -62,6 +63,9 @@ function hasExplicitWorkerSrc(workerSrc?: string): boolean {
  */
 const nativeImport = <T,>(url: string): Promise<T> =>
   (new Function('u', 'return import(u)') as (u: string) => Promise<T>)(url);
+
+/** A4 纸宽度（CSS 的 mm 即物理毫米，210mm ≈ 794px） */
+const A4_WIDTH = '210mm';
 
 /** 解析实际使用的 pdf.js 实例 */
 async function resolvePdfjs(src?: string): Promise<typeof pdfjsLib> {
@@ -152,6 +156,12 @@ export interface PdfViewerProps {
    */
   scaleRange?: [number, number];
   /**
+   * 弹窗宽度。默认取 **A4 纸宽度**（`210mm` ≈ 794px），使 A4 文档恰好按 100% 呈现。
+   * 数字按 px，也可传任意 CSS 长度（如 `'96%'`）；窄屏下 antd 会按视口宽度自动收敛。
+   * @default '210mm'
+   */
+  width?: number | string;
+  /**
    * 运行时加载 pdf.js 的地址（不经打包器，`import(url)` 直取）。
    *
    * 用于宿主构建无法正确打包 pdf.js 的场景（详见文档「已知问题」）：
@@ -175,6 +185,15 @@ export interface PdfViewerProps {
   assetBaseUrl?: string;
   /** 页码变化回调 */
   onPageChange?: (page: number) => void;
+  /**
+   * 文档加载完成后按容器宽度自动适配缩放（「适合宽度」）。
+   *
+   * pdf.js 的 `scale = 1` 是「1pt = 1px」：A4（595pt 宽）只渲染 595px，
+   * 放进 A4 宽的弹窗里会明显留白。开启后会用容器可用宽度反推初始缩放，
+   * 并钳制在 `scaleRange` 内；用户手动缩放后不再干预。
+   * @default true
+   */
+  autoFitWidth?: boolean;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -200,6 +219,8 @@ const PdfViewer = forwardRef<HTMLDivElement, PdfViewerProps>(
       title = '文档预览',
       initialScale = 1,
       scaleRange = DEFAULT_SCALE_RANGE,
+      width = A4_WIDTH,
+      autoFitWidth = true,
       pdfjsSrc,
       workerSrc,
       assetBaseUrl,
@@ -210,6 +231,10 @@ const PdfViewer = forwardRef<HTMLDivElement, PdfViewerProps>(
     ref,
   ) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    /** 预览区容器，用于「适合宽度」时量取可用宽度 */
+    const stageRef = useRef<HTMLDivElement | null>(null);
+    /** 文档刚加载完，待执行一次「适合宽度」 */
+    const fitPendingRef = useRef(false);
     const loadingTaskRef = useRef<PDFDocumentLoadingTask | null>(null);
     const renderTaskRef = useRef<RenderTask | null>(null);
 
@@ -327,6 +352,7 @@ const PdfViewer = forwardRef<HTMLDivElement, PdfViewerProps>(
           setPdfDoc(doc);
           setNumPages(doc.numPages);
           setPageNumber(1);
+          fitPendingRef.current = true;
         })
         .catch((err: unknown) => {
           if (cancelled) return;
@@ -358,6 +384,25 @@ const PdfViewer = forwardRef<HTMLDivElement, PdfViewerProps>(
           const page = await pdfDoc.getPage(pageNumber);
           const canvas = canvasRef.current;
           if (cancelled || !canvas) return;
+
+          // 「适合宽度」：用容器可用宽度反推缩放比例，钳制在 scaleRange 内；
+          // 仅在文档刚加载完执行一次，之后交由用户手动缩放（不再干预）
+          if (autoFitWidth && fitPendingRef.current) {
+            fitPendingRef.current = false;
+            const available = stageRef.current?.clientWidth ?? 0;
+            if (available > 0) {
+              const baseWidth = page.getViewport({ scale: 1, rotation }).width;
+              const fitted = clamp(
+                Number((available / baseWidth).toFixed(3)),
+                scaleRange[0],
+                scaleRange[1],
+              );
+              if (fitted !== scale) {
+                setScale(fitted);
+                return; // 等 setScale 触发下一轮渲染
+              }
+            }
+          }
           // 画布按设备像素比放大，避免高倍屏下模糊
           const dpr = window.devicePixelRatio || 1;
           const viewport = page.getViewport({ scale: scale * dpr, rotation });
@@ -381,7 +426,7 @@ const PdfViewer = forwardRef<HTMLDivElement, PdfViewerProps>(
       return () => {
         cancelled = true;
       };
-    }, [pdfDoc, pageNumber, scale, rotation, visible]);
+    }, [pdfDoc, pageNumber, scale, rotation, visible, autoFitWidth, scaleRange]);
 
     // 卸载兜底：组件销毁时释放文档与未完成的帧回调
     useEffect(
@@ -474,7 +519,7 @@ const PdfViewer = forwardRef<HTMLDivElement, PdfViewerProps>(
           onCancel={() => setOpen(false)}
           title={title}
           centered
-          width="96%"
+          width={width}
           footer={
             <div className={prefixCls('pdf-viewer-toolbar')}>
               <Space size={4}>
@@ -540,6 +585,7 @@ const PdfViewer = forwardRef<HTMLDivElement, PdfViewerProps>(
             </div>
           ) : (
             <div
+              ref={stageRef}
               className={stageCls}
               onPointerDown={handlePanStart}
               onPointerMove={handlePanMove}
