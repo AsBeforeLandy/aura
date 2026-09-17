@@ -28,8 +28,9 @@ toc: content
 
 将应用包裹在 `XProvider` 内，AI 组件即获得 Aura 的主色、圆角与语义色。
 与 `BusinessProvider` 共用同一份令牌映射（来自 `@aura/shared`），两者可并存。
+下例中的 `YourAIChatApp` 为你的应用组件占位（`| pure` 表示静态代码，不做 live demo）：
 
-```tsx
+```tsx | pure
 import React from 'react';
 import { XProvider } from '@aura/x';
 
