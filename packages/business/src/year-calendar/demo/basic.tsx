@@ -12,7 +12,7 @@ const Demo: React.FC = () => {
 
   return (
     <BusinessProvider>
-      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+      <Space orientation="vertical" size="middle" style={{ display: 'flex' }}>
         <YearCalendar
           year={2026}
           value={dates}

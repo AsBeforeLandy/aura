@@ -17,7 +17,7 @@ const Demo = () => {
   const [current, setCurrent] = useState<FileItem | null>(null);
 
   return (
-    <Space direction="vertical" size="small" style={{ width: 300 }}>
+    <Space orientation="vertical" size="small" style={{ width: 300 }}>
       <Typography.Text type="secondary" style={{ fontSize: 12 }}>
         多文档共用一个预览实例：url 切换时自动重新加载；第二个文件演示失败态。
       </Typography.Text>
@@ -35,10 +35,6 @@ const Demo = () => {
 
       <PdfViewer
         url={current?.url}
-        // 文档站示例：运行时加载原样 pdf.js 与资源（本仓库构建链会改写打包后的 pdf.js，
-        // 详见组件文档「已知问题」）；业务项目中通常无需传这两个属性
-        pdfjsSrc="/aura/pdf-viewer/vendor/pdf.min.mjs"
-        assetBaseUrl="/aura/pdf-viewer/vendor/"
         open={!!current}
         onOpenChange={(next) => {
           if (!next) setCurrent(null);

@@ -35,7 +35,7 @@ const Demo = () => {
       <div data-theme={dark ? 'dark' : 'light'}>
         <BusinessProvider dark={dark} compact={compact}>
           <Card size="small" title="桥接后的 antd 组件">
-            <Space direction="vertical" style={{ width: '100%' }}>
+            <Space orientation="vertical" style={{ width: '100%' }}>
               <Space wrap>
                 <Button type="primary">主要按钮</Button>
                 <Button>默认按钮</Button>

@@ -18,7 +18,7 @@ const Demo: React.FC = () => {
 
   return (
     <BusinessProvider>
-      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+      <Space orientation="vertical" size="middle" style={{ display: 'flex' }}>
         <WeekTimeRange value={value} onChange={setValue} />
         <Typography.Text type="secondary">
           支持单击切换、按住鼠标拖拽框选；相邻时段会自动合并。

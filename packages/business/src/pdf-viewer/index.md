@@ -104,24 +104,27 @@ cp node_modules/pdfjs-dist/build/pdf.worker.min.mjs public/
 > 却把顶层 `export` 留在函数体内），产物不再是合法模块，运行时报
 > `SyntaxError: Unexpected token 'export'`。放进 `public/` 目录可保证原样发布。
 
-### 已知问题：打包后的 pdf.js 主库
+### 已知问题：文档站的实时示例无法加载 PDF
 
-pdfjs-dist 4.x 被 webpack 一类打包器处理后会**出现协议层错误**——本仓库文档站的
-dumi/webpack 构建即复现：预览时「文档加载失败」，报错形如
-`Cannot destructure property 'docId' of 'e' as it is undefined`。
+**结论先说：这不是组件的问题。** 在纯静态 HTML 页中，用**完全相同**的代码与参数加载
+同一份 pdf.js（原样文件、主线程模式），可以正常加载并渲染；而在本仓库文档站
+（dumi / umi 运行时）的任何页面中——组件页、业务页、以及 dumi 的 demo iframe 页——
+都会失败，报错形如 `Cannot destructure property 'docId' of 'e' as it is undefined`。
 
-对照实验（同一浏览器、同一 PDF）：
+对照实验（均可在无头 Chrome 中复现）：
 
-| 加载方式 | 结果 |
+| 场景 | 结果 |
 | --- | --- |
-| 原样 `pdf.min.mjs` + 原样 `pdf.worker.min.mjs`（不经打包器） | ✅ 正常渲染 |
-| 原样 worker + **被打包的主库** | ❌ 同上协议错误 |
-| 关闭 JS 压缩 / 保留 class 私有字段后重试 | ❌ 仍然失败 |
+| 纯静态页 + 原样 pdf.js（主库 + worker，主线程模式） | ✅ 正常加载并渲染 |
+| **相同代码、相同参数**，改在 dumi/umi 页面中执行 | ❌ 上述错误 |
+| 打包后的 pdf.js（4.x 与 6.x、关掉压缩、保留 class 私有字段） | ❌ 同类协议错误 |
+| 改用独立线程渲染（传 `workerSrc`） | ❌ `Cannot set properties of undefined (setting 'onPull')` |
+| 全局 API 是否被替换 / 是否已有 `pdfjsWorker` 全局 / URL 尾斜杠 / 参数组合 / 并发 | 均无差异，均非触发条件 |
 
-可见问题出在**打包器对 pdf.js 主库的处理**，与 worker、压缩、语法降级均无关。
-若你的项目遇到同类报错，可用 `pdfjsSrc` 指定**运行时加载**地址（我们文档站即传 `pdfjsSrc` + `assetBaseUrl` 指向自托管副本，见 `scripts/copy-pdfjs-vendor.mjs`）以规避，
-并向构建工具侧反馈；本组件侧已尽可能移除对打包器行为的依赖（不再用
-`new URL(...)` 资源方式引用 worker）。
+现象是**worker 侧收不到消息数据**，即 pdf.js 的同页消息通道在 umi 运行时下受到干扰。
+因此**业务项目一般不受影响**（普通 React 应用已验证可用）。若宿主构建确实无法正确打包
+pdf.js（例如打包器把 `import.meta.url` 改写成了构建机路径），可用 `pdfjsSrc` 指定
+运行时加载原样 pdf.js、`assetBaseUrl` 指定自托管资源目录来规避。
 
 ## 浏览器要求
 

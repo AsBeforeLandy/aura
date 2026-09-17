@@ -45,7 +45,7 @@ const Demo: React.FC = () => {
 
   return (
     <BusinessProvider>
-      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+      <Space orientation="vertical" size="middle" style={{ display: 'flex' }}>
         <CascaderPanel
           options={OPTIONS}
           title="全部大区"

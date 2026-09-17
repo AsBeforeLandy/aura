@@ -16,7 +16,7 @@ const Demo: React.FC = () => {
 
   return (
     <BusinessProvider>
-      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+      <Space orientation="vertical" size="middle" style={{ display: 'flex' }}>
         <Typography.Text type="secondary">
           cellWidth=18、cellHeight=32：格子更宽松，适合触屏场景
         </Typography.Text>

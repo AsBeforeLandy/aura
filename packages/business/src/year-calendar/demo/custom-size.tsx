@@ -10,7 +10,7 @@ const Demo: React.FC = () => {
 
   return (
     <BusinessProvider>
-      <Space direction="vertical" size="large" style={{ display: 'flex' }}>
+      <Space orientation="vertical" size="large" style={{ display: 'flex' }}>
         <Typography.Text type="secondary">
           cellSize=18：格子更大，更易点选（触屏友好）
         </Typography.Text>

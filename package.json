@@ -8,8 +8,8 @@
     "node": "^20.19.0 || ^22.13.0 || >=24"
   },
   "scripts": {
-    "dev": "node scripts/copy-pdfjs-vendor.mjs && dumi dev",
-    "build": "node scripts/copy-pdfjs-vendor.mjs && dumi build",
+    "dev": "dumi dev",
+    "build": "dumi build",
     "build:lib": "pnpm -r build && node scripts/postbuild-dts.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
