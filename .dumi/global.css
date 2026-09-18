@@ -1309,7 +1309,8 @@ html {
 
 /* 分组标题：14px 上间距 + 6px 下间距，无额外盒子 */
 .dumi-default-sidebar > dl > dt {
-  padding: 14px 16px 6px !important;
+  padding: 10px 16px 2px !important;
+  line-height: 1.4 !important;
   font-size: 12px !important;
   font-weight: 600 !important;
   color: var(--aura-text-tertiary) !important;
@@ -1320,35 +1321,57 @@ html {
   padding-top: 2px !important;
 }
 
-/* 链接：固定内距（hover 不再发生位移），高度收紧至 ~28px */
+/* 链接：四角圆角胶囊，轻呼吸间距（替代此前的宽间隔） */
 .dumi-default-sidebar > dl > dd > a {
   display: block !important;
-  padding: 5px 12px 5px 16px !important;
-  margin: 0 !important;
-  border-left: 2px solid transparent !important;
-  border-radius: 0 8px 8px 0 !important;
+  padding: 4px 10px 4px 14px !important;
+  margin: 0 6px !important;
+  border: none !important;
+  border-radius: 8px !important;
   font-size: 13px !important;
   line-height: 1.5 !important;
   color: var(--aura-text-secondary) !important;
   transition:
     background var(--aura-duration-fast) var(--aura-easing),
-    color var(--aura-duration-fast) var(--aura-easing),
-    border-color var(--aura-duration-fast) var(--aura-easing) !important;
+    color var(--aura-duration-fast) var(--aura-easing) !important;
 }
 
 .dumi-default-sidebar > dl > dd > a:hover {
-  padding-left: 16px !important;
   background: var(--aura-x-accent-soft) !important;
   color: var(--aura-x-accent) !important;
 }
 
-/* 激活：主题渐变胶囊（无位移） */
+/* 激活：极光渐变胶囊（品牌紫 → 品红 → 亮紫，缓慢流动） */
 .dumi-default-sidebar > dl > dd > a.active {
-  padding-left: 16px !important;
-  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%) !important;
+  background: linear-gradient(120deg, #7c3aed 0%, #a855f7 40%, #d946ef 80%, #a855f7 100%) !important;
+  background-size: 200% 200% !important;
   color: #fff !important;
   font-weight: 500 !important;
-  box-shadow: 0 4px 12px -4px rgba(124, 58, 237, 0.5) !important;
+  box-shadow: 0 4px 14px -4px rgba(124, 58, 237, 0.55) !important;
+  animation: aura-x-sidebar-aurora 6s ease infinite !important;
+}
+
+@keyframes aura-x-sidebar-aurora {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-x-bubble,
+  .aura-x-bubble-dots i {
+    animation: none !important;
+  }
+
+  .dumi-default-sidebar > dl > dd > a.active {
+    animation: none !important;
+    background: linear-gradient(120deg, #7c3aed 0%, #a855f7 50%, #d946ef 100%) !important;
+  }
 }
 
 /* ---- 右侧目录：高优先级收口（宽度 / 中文标题 / 主题色竖线） ---- */
