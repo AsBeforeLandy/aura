@@ -47,6 +47,8 @@
   - **`Sender` 增强**：`submitType`（enter / shiftEnter 两种提交键位）、
     `autoSize`（textarea 行数范围透传）、`header` / `footer` 插槽；
   - 文档站新增 Actions / Conversations 两页（含 demo）。
+- **文档站界面精修**：侧栏加宽至 240px、去除分组割裂横线、滚动条细化且按需出现；
+  右侧目录收窄至 148px、标题中文化为「目录」、激活竖线改用主题色。
 - **文档站侧栏分组**：AI 组件按 RICH 阶段分为「主题桥接 / 数据流 / 交互 / 反馈 /
   会话 / 引导 / 推理」七组（嵌套 `group.order` frontmatter 驱动，dumi 自动生成）。
 - **`@aura/icons` 收录新图标**：`ThumbUp` / `ThumbDown`（描边风格，与 action 组一致）；

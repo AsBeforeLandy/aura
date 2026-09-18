@@ -1200,3 +1200,92 @@ html {
   border-left-color: #a78bfa !important;
   background: rgba(167, 139, 250, 0.06) !important;
 }
+
+/* ===================================================================
+   3. AI 文档站精修 — 侧栏分组 / 滚动条 / 右侧目录（用户反馈三项）
+   =================================================================== */
+
+/* ---- 3a. 左侧菜单：加宽 + 去割裂横线 + 滚动条 auto 且细化 ---- */
+
+.dumi-default-sidebar {
+  width: 240px !important;
+  min-width: 240px !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin; /* Firefox：细滚动条，悬停才明显 */
+  scrollbar-color: rgba(124, 58, 237, 0.25) transparent;
+}
+
+.dumi-default-sidebar::-webkit-scrollbar {
+  width: 4px; /* WebKit：常态 4px 细条 */
+}
+
+.dumi-default-sidebar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.18);
+}
+
+.dumi-default-sidebar:hover::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.35);
+}
+
+.dumi-default-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 分组之间的横线：去除割裂感，仅保留分组标题的呼吸间距 */
+.dumi-default-sidebar > dl > dt {
+  border-top: none !important;
+  margin-top: var(--aura-spacing-3, 12px) !important;
+  padding-top: var(--aura-spacing-2, 8px) !important;
+}
+
+.dumi-default-sidebar > dl:first-of-type > dt {
+  margin-top: 0 !important;
+}
+
+/* ---- 3b. 右侧目录：收窄 + 标题中文化 + 激活竖线用主题色 ---- */
+
+.dumi-default-doc-layout-toc-wrapper {
+  width: 148px !important;
+  min-width: 148px !important;
+}
+
+/* 「TABLE OF CONTENTS」→「目录」 */
+.dumi-default-doc-layout-toc-wrapper > h4 {
+  font-size: 0 !important;
+  margin-bottom: var(--aura-spacing-2, 8px) !important;
+}
+
+.dumi-default-doc-layout-toc-wrapper > h4::before {
+  content: '目录';
+  display: inline-block;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--aura-text-tertiary) !important;
+}
+
+/* 激活竖线：主题紫罗兰（亮色） */
+.dumi-default-toc > a.active {
+  border-left: 2px solid var(--aura-primary-500) !important;
+  color: var(--aura-primary-600) !important;
+  font-weight: 500 !important;
+}
+
+/* 暗色同步 */
+[data-prefers-color='dark'] .dumi-default-sidebar {
+  scrollbar-color: rgba(167, 139, 250, 0.3) transparent;
+}
+
+[data-prefers-color='dark'] .dumi-default-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(167, 139, 250, 0.28);
+}
+
+[data-prefers-color='dark'] .dumi-default-sidebar > dl > dt {
+  border-top: none !important;
+}
+
+[data-prefers-color='dark'] .dumi-default-toc > a.active {
+  border-left: 2px solid var(--aura-primary-400) !important;
+  color: var(--aura-primary-300) !important;
+}

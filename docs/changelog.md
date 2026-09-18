@@ -14,6 +14,8 @@
   （mock 逐字流式对话闭环、Markdown 安全渲染演示、输入框交互演示）
 - `Welcome` / `Prompts` / `Suggestion` / `Think` 外围组件与文档页
   （欢迎引导、提示词卡片、快捷建议、思考过程折叠，axe 无障碍基线全覆盖）
+- 文档站界面精修：侧栏加宽至 240px 并去除分组割裂横线、滚动条细化且仅按需出现、
+  右侧目录收窄至 148px、标题「TABLE OF CONTENTS」中文化为「目录」、激活竖线改主题色
 - 文档与 demo 补全：新增 7 个可交互 demo（XProvider 主色切换、SSE 实况解析、
   消息状态机、变体矩阵、插槽组合、Sender 键位、Prompts 方向），XProvider 页新增组件总览表
 - `Actions`（消息操作组）与 `Conversations`（会话管理列表）两个新组件；
