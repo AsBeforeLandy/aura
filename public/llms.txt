@@ -43,6 +43,83 @@ npm install @aura/ui
 - Flex: 弹性布局
 - Scrollbar: 滚动条
 
+## 业务组件（@aura/business）
+
+基于 antd v6 二次封装的 B 端业务组件（依赖 @aura/ui 与 @aura/shared）。
+使用前以 `BusinessProvider` 包裹（暗色 / 主色 / 紧凑桥接），文档路由前缀 `/businesses`。
+
+- ProTable: 高级表格
+- SearchForm: 搜索表单
+- PageContainer: 页面容器
+- ModalForm: 弹窗表单
+- CascaderPanel: 级联多选面板
+- WeekTimeRange: 周时间段选择
+- YearCalendar: 年历
+- PdfViewer: PDF 预览（pdfjs-dist 6.3.289，弹窗式，缩放/旋转/平移/错误重试）
+- BusinessProvider: 主题桥接（antd 算法 + Aura 令牌）
+
+## AI 组件（@aura/x）
+
+对话式 AI 界面组件库（对标 Ant Design X 的 Aura 实现）。
+样式需一次性引入：`import '@aura/x/style.css'`。
+文档路由前缀 `/x-components`。
+
+- XProvider: 主题桥接（antd 算法 + `--aura-x-*` 令牌，dark/compact/colorPrimary）
+- Bubble / Bubble.List: 消息气泡（role 分侧、loading 打字动画、contentRender 扩展点、列表自动滚动）
+- Sender: 输入框（Enter 提交、Shift+Enter 换行、IME 组词保护、loading 时按钮变「停止」）
+- MarkdownContent: 安全 Markdown 渲染（react-markdown 为可选 peer 依赖；
+  不渲染原始 HTML、链接协议白名单 http/https/mailto、代码块纯展示）
+- Welcome / Prompts / Suggestion: 欢迎区与引导（extra 插槽、卡片列表、快捷建议）
+- Think: 思考过程折叠面板（thinking 中强制展开，完成后可回看，支持 duration）
+- useXStream: 流式传输 Hook（SSE 与纯文本增量两种模式，abort 生命周期，
+  解析器 parseSSEStream 可独立使用；`data: [DONE]` 哨兵由消费方过滤）
+- useXChat: 消息编排 Hook（user/assistant 成对追加、增量更新 assistant 占位、
+  错误态、stop 保留部分内容、clear；传输经 onRequest 注入，signal 必须透传给 fetch）
+
+### 最小对话示例
+
+```tsx
+import "@aura/x/style.css";
+import { Bubble, Sender, useXChat, useXStream, XProvider } from "@aura/x";
+
+function Chat() {
+  const { fetchData } = useXStream();
+  const { messages, loading, send, stop } = useXChat({
+    onRequest: async ({ message, signal, update }) => {
+      let acc = "";
+      await fetchData({
+        url: "/api/chat",
+        body: { message },
+        signal,
+        onMessage: (chunk) => {
+          if (chunk.data === "[DONE]") return;
+          acc += chunk.data;
+          update({ content: acc });
+        },
+      });
+    },
+  });
+  return (
+    <XProvider>
+      <Bubble.List
+        items={messages.map((m) => ({
+          key: m.id, role: m.role, content: m.content,
+          loading: m.status === "loading" && !m.content,
+          contentRender: m.role === "assistant" ? (c) => <MarkdownContent>{c}</MarkdownContent> : undefined,
+        }))}
+      />
+      <Sender loading={loading} onSubmit={send} onCancel={stop} />
+    </XProvider>
+  );
+}
+```
+
+### 已知环境要求
+
+- pdfjs-dist 6.x（PdfViewer）需要 Chrome / Edge 126+、Safari 18+、Firefox 126+
+- 运行时若存在**不转发参数的 `Promise.try`** polyfill（实测 umi/dumi 如此），
+  PdfViewer 会报 `Cannot destructure property 'docId'` —— 组件已内置探测并自动恢复
+
 ## 文档
 - 完整 API: /llms-full.txt
 - 语义结构: /llms-semantic.md

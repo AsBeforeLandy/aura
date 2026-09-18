@@ -20,10 +20,11 @@
       "import": "./esm/index.js",
       "default": "./esm/index.js"
     },
+    "./style.css": "./esm/style.css",
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "father build",
+    "build": "father build && node scripts/build-styles.mjs",
     "dev": "father dev"
   },
   "peerDependencies": {
@@ -36,6 +37,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "less": "^4.9.1",
     "react-markdown": "^10.1.0"
   }
 }
