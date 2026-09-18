@@ -874,14 +874,14 @@ html {
   padding: 12px 24px !important;
   font-size: 13px !important;
   color: var(--aura-text-secondary) !important;
-  border-top: 1px solid var(--aura-border) !important;
+  /* border-top: 1px solid var(--aura-border) !important; */
   background: var(--aura-bg) !important;
 }
 
 /* Demo 操作按钮区 */
 .dumi-default-previewer-actions {
   border-top: 1px solid var(--aura-border) !important;
-  background: var(--aura-bg) !important;
+  /* background: var(--aura-bg) !important; */
   padding: 8px 12px !important;
 }
 
