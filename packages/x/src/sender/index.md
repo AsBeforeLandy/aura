@@ -23,6 +23,12 @@ toc: content
 
 <code src="./demo/basic.tsx" description="Enter 提交、loading 时按钮变为「停止」、提交记录回显。">基本用法</code>
 
+### 提交键位与插槽
+
+`submitType` 切换提交键位；`header` / `footer` 插槽展示附件条与字数统计。
+
+<code src="./demo/submit-type.tsx" description="shiftEnter 键位 + header/footer 插槽 + 字数统计。">键位与插槽</code>
+
 ## API
 
 ### SenderProps

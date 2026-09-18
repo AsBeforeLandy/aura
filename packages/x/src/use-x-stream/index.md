@@ -23,6 +23,12 @@ abort 生命周期。**不做消息状态管理**——那是 [`useXChat`](/x-co
 
 ## 代码演示
 
+### SSE 实况解析（Blob URL 模拟服务端）
+
+点击按钮，观察消息**逐条到达**：SSE 帧解析、`[DONE]` 哨兵过滤全部由 `useXStream` 完成。
+
+<code src="./demo/sse.tsx" description="Blob URL 模拟 SSE 服务端，展示逐条解析与哨兵过滤。">SSE 实况解析</code>
+
 ### 基本用法（SSE）
 
 ```tsx | pure

@@ -14,6 +14,8 @@
   （mock 逐字流式对话闭环、Markdown 安全渲染演示、输入框交互演示）
 - `Welcome` / `Prompts` / `Suggestion` / `Think` 外围组件与文档页
   （欢迎引导、提示词卡片、快捷建议、思考过程折叠，axe 无障碍基线全覆盖）
+- 文档与 demo 补全：新增 7 个可交互 demo（XProvider 主色切换、SSE 实况解析、
+  消息状态机、变体矩阵、插槽组合、Sender 键位、Prompts 方向），XProvider 页新增组件总览表
 - `Actions`（消息操作组）与 `Conversations`（会话管理列表）两个新组件；
   `Sender` 新增 `submitType` / `autoSize` / `header` / `footer`，文档页同步更新；Actions 与图标包接入——@aura/icons 收录 ThumbUp / ThumbDown，Actions demo 改用 Copy / Refresh / ThumbUp / Delete 图标
 - **M5 收尾**：全组件视觉升级（玻璃拟态 + 品牌渐变 + 光晕，`prefers-reduced-motion`

@@ -61,6 +61,10 @@
   - **视觉升级**：全组件玻璃拟态 + 品牌渐变 + 光晕聚焦（详见前述设计说明与
     令牌扩充），`prefers-reduced-motion` 下关闭动效；
   - llms.txt 补齐业务组件与 @aura/x 的 AI 摘要（含最小示例与环境要求）。
+- **文档与 demo 补全**：新增 7 个可交互 demo——XProvider 主色即时切换、
+  useXStream 的 SSE 实况解析（Blob URL 模拟服务端）、useXChat 消息状态机可视化、
+  Bubble 变体矩阵 / 插槽组合、Sender 键位与插槽、Prompts 排列方向；
+  XProvider 页新增 RICH 交互范式的组件总览表。
 - **重构**：Aura 令牌 → antd token 的映射收敛到 `@aura/shared` 的
   `antdTokenOverrides()`（纯数据，零 antd 依赖），`BusinessProvider` 同步改用，
   消除与 `@aura/x` 之间的映射重复。

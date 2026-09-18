@@ -17,6 +17,13 @@ toc: content
 
 ## 代码演示
 
+### 消息状态机实况
+
+直接可视化 Hook 维护的状态：每条消息的 `role` / `status` / 增量 `content`，
+以及 `send` / `stop` / `clear` 三个动作。
+
+<code src="./demo/basic.tsx" description="逐字流式写入 assistant 占位，展示 role/status/增量内容。">消息状态机</code>
+
 ### 与 useXStream 组合（SSE 打字机）
 
 ```tsx | pure

@@ -29,6 +29,18 @@ toc: content
 
 <code src="./demo/basic.tsx" description="消息气泡 + 打字动画 + 自动滚动到底部的最小对话闭环。">基本对话</code>
 
+### 变体与方向
+
+三种变体（filled / outlined / shadow）× 两种角色的渲染对比。
+
+<code src="./demo/variants.tsx" description="3 变体 × 2 角色 = 6 种组合。">变体矩阵</code>
+
+### 插槽组合
+
+avatar / header / footer 三个插槽，footer 里放 Actions 操作组。
+
+<code src="./demo/slots.tsx" description="avatar + header + footer(Actions) 完整插槽。">插槽组合</code>
+
 ## API
 
 ### BubbleProps

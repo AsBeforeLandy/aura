@@ -25,6 +25,10 @@ toc: content
 
 <code src="./demo/basic.tsx" description="纵向卡片列表，含图标与描述，点击回调。">基本用法</code>
 
+### 排列方向
+
+<code src="./demo/direction.tsx" description="横向工具入口与纵向对话引导两种排列。">排列方向</code>
+
 ## API
 
 ### PromptsProps
