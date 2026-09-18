@@ -1289,3 +1289,98 @@ html {
   border-left: 2px solid var(--aura-primary-400) !important;
   color: var(--aura-primary-300) !important;
 }
+
+/* ===================================================================
+   4. AI 文档站侧栏精修 v2（测量驱动：压缩间隔 / 清除边框残影）
+   =================================================================== */
+
+/* 结构层清零：dl / dt / dd / li 全部去边框、去 margin，间距统一由
+   标题 padding 与链接 padding 承担——根除分组之间的“空盒子”与宽间隔 */
+.dumi-default-sidebar > dl,
+.dumi-default-sidebar > dl > dt,
+.dumi-default-sidebar > dl > dd,
+.dumi-default-sidebar ul,
+.dumi-default-sidebar li {
+  border: none !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* 分组标题：14px 上间距 + 6px 下间距，无额外盒子 */
+.dumi-default-sidebar > dl > dt {
+  padding: 14px 16px 6px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--aura-text-tertiary) !important;
+  letter-spacing: 0.04em !important;
+}
+
+.dumi-default-sidebar > dl:first-of-type > dt {
+  padding-top: 2px !important;
+}
+
+/* 链接：固定内距（hover 不再发生位移），高度收紧至 ~28px */
+.dumi-default-sidebar > dl > dd > a {
+  display: block !important;
+  padding: 5px 12px 5px 16px !important;
+  margin: 0 !important;
+  border-left: 2px solid transparent !important;
+  border-radius: 0 8px 8px 0 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  color: var(--aura-text-secondary) !important;
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    color var(--aura-duration-fast) var(--aura-easing),
+    border-color var(--aura-duration-fast) var(--aura-easing) !important;
+}
+
+.dumi-default-sidebar > dl > dd > a:hover {
+  padding-left: 16px !important;
+  background: var(--aura-x-accent-soft) !important;
+  color: var(--aura-x-accent) !important;
+}
+
+/* 激活：主题渐变胶囊（无位移） */
+.dumi-default-sidebar > dl > dd > a.active {
+  padding-left: 16px !important;
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%) !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+  box-shadow: 0 4px 12px -4px rgba(124, 58, 237, 0.5) !important;
+}
+
+/* ---- 右侧目录：高优先级收口（宽度 / 中文标题 / 主题色竖线） ---- */
+
+html body .dumi-default-doc-layout-toc-wrapper {
+  width: 150px !important;
+  min-width: 150px !important;
+}
+
+html body .dumi-default-doc-layout-toc-wrapper > h4 {
+  font-size: 0 !important;
+  margin: 0 0 var(--aura-spacing-2, 8px) !important;
+}
+
+html body .dumi-default-doc-layout-toc-wrapper > h4::before {
+  content: '目录';
+  display: inline-block;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--aura-text-tertiary) !important;
+}
+
+html body .dumi-default-toc > a.active {
+  border-left: 2px solid var(--aura-primary-500) !important;
+  color: var(--aura-primary-600) !important;
+  font-weight: 500 !important;
+  background: var(--aura-x-accent-soft) !important;
+}
+
+[data-prefers-color='dark'] html body .dumi-default-toc > a.active {
+  border-left-color: var(--aura-primary-400) !important;
+  color: var(--aura-primary-300) !important;
+  background: rgba(139, 92, 246, 0.1) !important;
+}
