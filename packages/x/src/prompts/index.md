@@ -4,7 +4,7 @@ subtitle: 提示词集
 group: AI 组件
 category: Components
 description: 可点击的提示词卡片列表，引导用户快速开口；支持纵向 / 横向排列与图标、描述。
-order: 7
+order: 9
 demo:
   cols: 1
 toc: content

@@ -14,6 +14,8 @@
   （mock 逐字流式对话闭环、Markdown 安全渲染演示、输入框交互演示）
 - `Welcome` / `Prompts` / `Suggestion` / `Think` 外围组件与文档页
   （欢迎引导、提示词卡片、快捷建议、思考过程折叠，axe 无障碍基线全覆盖）
+- `Actions`（消息操作组）与 `Conversations`（会话管理列表）两个新组件；
+  `Sender` 新增 `submitType` / `autoSize` / `header` / `footer`，文档页同步更新
 - **M5 收尾**：全组件视觉升级（玻璃拟态 + 品牌渐变 + 光晕，`prefers-reduced-motion`
   下关闭动效）；修复样式打包缺口（新增 `@aura/x/style.css`，esm 剥离 less 导入）；
   在 Next.js 14 应用（AIChat Pro）中完成真实消费方验证；

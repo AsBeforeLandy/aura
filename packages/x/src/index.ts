@@ -23,3 +23,12 @@ export { Suggestion } from './suggestion';
 export type { SuggestionProps, SuggestionItem } from './suggestion';
 export { Think } from './think';
 export type { ThinkProps } from './think';
+export { Actions } from './actions';
+export type { ActionsProps, ActionItem } from './actions';
+export { Conversations } from './conversations';
+export type {
+  ConversationsProps,
+  ConversationItem,
+  ConversationMenuConfig,
+  ConversationMenuItem,
+} from './conversations';

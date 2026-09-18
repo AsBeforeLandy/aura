@@ -1,0 +1,138 @@
+/* Conversations — 会话管理列表 */
+
+.aura-x-conversations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: var(--aura-spacing-1);
+  list-style: none;
+}
+
+.aura-x-conversations-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: var(--aura-radius-md);
+  transition: background var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-conversations-item:hover,
+.aura-x-conversations-item--active {
+  background: var(--aura-x-accent-soft);
+}
+
+.aura-x-conversations-item--active .aura-x-conversations-item-label {
+  color: var(--aura-x-accent);
+  font-weight: 500;
+}
+
+.aura-x-conversations-item-main {
+  display: flex;
+  flex: 1;
+  gap: var(--aura-spacing-2);
+  align-items: center;
+  min-width: 0;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3);
+  border: none;
+  background: transparent;
+  color: var(--aura-text);
+  font-size: var(--aura-fontSize-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.aura-x-conversations-item-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.aura-x-conversations-item-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aura-x-conversations-item-time {
+  flex-shrink: 0;
+  font-size: var(--aura-fontSize-xs);
+  color: var(--aura-text-tertiary);
+}
+
+.aura-x-conversations-item-menu {
+  position: relative;
+  display: none;
+  flex-shrink: 0;
+}
+
+.aura-x-conversations-item:hover .aura-x-conversations-item-menu,
+.aura-x-conversations-menu-btn--open {
+  display: inline-flex;
+}
+
+.aura-x-conversations-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-text-tertiary);
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-conversations-menu-btn:hover,
+.aura-x-conversations-menu-btn--open {
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+}
+
+.aura-x-conversations-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 120px;
+  padding: var(--aura-spacing-1);
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-bubble-ai-bg);
+  backdrop-filter: var(--aura-x-glass-blur);
+  -webkit-backdrop-filter: var(--aura-x-glass-blur);
+  box-shadow: var(--aura-x-glow);
+}
+
+.aura-x-conversations-menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--aura-spacing-1) var(--aura-spacing-3);
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-text);
+  font-size: var(--aura-fontSize-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-conversations-menu-item:hover {
+  background: var(--aura-x-accent-soft);
+}
+
+.aura-x-conversations-menu-item--danger {
+  color: var(--aura-error);
+}
+
+.aura-x-conversations-menu-item--danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+}

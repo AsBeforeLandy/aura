@@ -4,6 +4,7 @@
   display: flex;
   gap: var(--aura-spacing-2);
   align-items: flex-end;
+  flex-wrap: wrap;
   padding: var(--aura-spacing-2) var(--aura-spacing-2) var(--aura-spacing-2) var(--aura-spacing-4);
   border: 1px solid var(--aura-x-bubble-border);
   border-radius: var(--aura-radius-lg);
@@ -20,14 +21,20 @@
   }
 
   .ant-input {
+    flex: 1;
+    min-width: 0;
     border: none;
     background: transparent;
     box-shadow: none;
     resize: none;
   }
 
-  .ant-btn {
+  .aura-x-sender-actions {
+    display: inline-flex;
     flex-shrink: 0;
+  }
+
+  .ant-btn {
     border: none;
     color: #fff;
     background: var(--aura-x-accent-gradient);
@@ -46,6 +53,14 @@
   .ant-btn:not(:disabled):active {
     transform: translateY(0);
   }
+}
+
+/* 插槽 */
+.aura-x-sender-header,
+.aura-x-sender-footer {
+  flex-basis: 100%;
+  font-size: var(--aura-fontSize-xs);
+  color: var(--aura-text-tertiary);
 }
 
 .aura-x-sender--disabled {

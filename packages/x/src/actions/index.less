@@ -1,0 +1,59 @@
+/* Actions — 消息操作组 */
+
+.aura-x-actions {
+  display: flex;
+  gap: var(--aura-spacing-1);
+  align-items: center;
+}
+
+.aura-x-actions--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.aura-x-actions-item {
+  display: inline-flex;
+  gap: var(--aura-spacing-1);
+  align-items: center;
+  justify-content: center;
+  padding: var(--aura-spacing-1) var(--aura-spacing-2);
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-fontSize-xs);
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    color var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-actions-item:not(:disabled):hover {
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+}
+
+.aura-x-actions-item:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-actions-item--active {
+  color: var(--aura-x-accent);
+  background: var(--aura-x-accent-soft);
+}
+
+.aura-x-actions-item--danger:not(:disabled):hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--aura-error);
+}
+
+.aura-x-actions-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.aura-x-actions--vertical .aura-x-actions-item {
+  justify-content: flex-start;
+}

@@ -4,7 +4,7 @@ subtitle: 快捷建议
 group: AI 组件
 category: Components
 description: 跟随输入的快捷续写建议列表；open 受控开合，空列表或关闭时渲染 null。
-order: 8
+order: 10
 demo:
   cols: 1
 toc: content

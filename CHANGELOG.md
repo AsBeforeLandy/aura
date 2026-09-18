@@ -39,6 +39,14 @@
   - **`Think`**：思考过程折叠面板——思考中强制展开并脉冲提示（不可收起），
     完成后默认折叠可回看，标题展示用时；
   - 四个组件均带文档页与 demo，axe 无障碍基线全覆盖。
+- **M6 功能完善（参考 antd X）**：
+  - **`Actions`**：消息操作组——复制 / 重新生成 / 点赞 / 删除；
+    `role="toolbar"` 语义、danger / active / disabled 态、纵向排列；
+  - **`Conversations`**：会话管理列表——激活高亮、时间戳、可配置操作菜单
+    （重命名 / 删除，菜单点击自动关闭、点外部收起）；
+  - **`Sender` 增强**：`submitType`（enter / shiftEnter 两种提交键位）、
+    `autoSize`（textarea 行数范围透传）、`header` / `footer` 插槽；
+  - 文档站新增 Actions / Conversations 两页（含 demo）。
 - **M5 打包修复与真机验证**：
   - **样式打包缺口修复**：组件内 `.less` 导入会让无 less 管线的消费方构建失败
     （Next.js 实测）。新增构建后处理 `scripts/build-styles.mjs`——把全部 less

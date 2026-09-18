@@ -38,6 +38,10 @@ toc: content
 | placeholder | 占位文本 | `string` | 输入消息，Enter 发送… |
 | disabled | 禁用 | `boolean` | `false` |
 | clearOnSubmit | 提交后清空输入（仅非受控模式生效） | `boolean` | `true` |
+| submitType | 提交键位：`enter` = Enter 提交 / Shift+Enter 换行；`shiftEnter` = Shift+Enter 提交 / Enter 换行 | `&'enter' \| 'shiftEnter'` | `'enter'` |
+| autoSize | textarea 行数范围（透传 antd autoSize） | `{ minRows?: number; maxRows?: number }` | `{ minRows: 1, maxRows: 6 }` |
+| header | 顶部插槽（如附件条、提示条） | `ReactNode` | - |
+| footer | 底部插槽（如字数统计、免责声明） | `ReactNode` | - |
 | autoFocus | 自动聚焦 | `boolean` | `false` |
 
 ## 注意事项

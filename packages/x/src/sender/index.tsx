@@ -23,6 +23,19 @@ export interface SenderProps {
    */
   clearOnSubmit?: boolean;
   autoFocus?: boolean;
+  /**
+   * 提交键位：
+   * - `enter`：Enter 提交，Shift + Enter 换行（默认）
+   * - `shiftEnter`：Shift + Enter 提交，Enter 换行
+   * @default 'enter'
+   */
+  submitType?: 'enter' | 'shiftEnter';
+  /** textarea 行数范围（透传 antd autoSize） */
+  autoSize?: { minRows?: number; maxRows?: number };
+  /** 顶部插槽（如附件条、提示条） */
+  header?: React.ReactNode;
+  /** 底部插槽（如字数统计、免责声明） */
+  footer?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -45,6 +58,10 @@ export const Sender: React.FC<SenderProps> = ({
   disabled = false,
   clearOnSubmit = true,
   autoFocus = false,
+  submitType = 'enter',
+  autoSize = { minRows: 1, maxRows: 6 },
+  header,
+  footer,
   className,
   style,
 }) => {
@@ -67,7 +84,11 @@ export const Sender: React.FC<SenderProps> = ({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // 中文输入法组词过程中不提交
     if (event.nativeEvent.isComposing) return;
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.key !== 'Enter') return;
+
+    const shouldSubmit =
+      submitType === 'enter' ? !event.shiftKey : Boolean(event.shiftKey);
+    if (shouldSubmit) {
       event.preventDefault();
       triggerSubmit();
     }
@@ -82,6 +103,7 @@ export const Sender: React.FC<SenderProps> = ({
       )}
       style={style}
     >
+      {header ? <div className={prefixCls('x-sender-header')}>{header}</div> : null}
       <Input.TextArea
         value={current}
         onChange={handleChange}
@@ -89,18 +111,21 @@ export const Sender: React.FC<SenderProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         autoFocus={autoFocus}
-        autoSize={{ minRows: 1, maxRows: 6 }}
+        autoSize={autoSize}
         aria-label="消息输入框"
       />
-      <Button
-        type="primary"
-        shape="round"
-        disabled={disabled}
-        onClick={loading ? onCancel : triggerSubmit}
-        aria-label={loading ? '停止生成' : '发送'}
-      >
-        {loading ? '停止' : '发送'}
-      </Button>
+      <div className={prefixCls('x-sender-actions')}>
+        <Button
+          type="primary"
+          shape="round"
+          disabled={disabled}
+          onClick={loading ? onCancel : triggerSubmit}
+          aria-label={loading ? '停止生成' : '发送'}
+        >
+          {loading ? '停止' : '发送'}
+        </Button>
+      </div>
+      {footer ? <div className={prefixCls('x-sender-footer')}>{footer}</div> : null}
     </div>
   );
 };
