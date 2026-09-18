@@ -10,6 +10,8 @@
 - 弹窗宽度参数 `width`（默认 **A4 纸宽度** 210mm）与「适合宽度」`autoFitWidth`（默认开启）
 - `useXStream` / `useXChat` 数据流 Hooks：SSE 与纯文本流解析、消息编排（增量更新、
   中止保留部分内容、错误态），并新增两个 API 文档页
+- `Bubble` / `Bubble.List` / `Sender` / `MarkdownContent` 组件与三个可交互文档页
+  （mock 逐字流式对话闭环、Markdown 安全渲染演示、输入框交互演示）
 - 46 个组件文档全量体检补全（孤儿示例、frontmatter、导入片段等六类缺口）
 - 新增第 8 个包 `@aura/x`（AI 对话组件库，对标 Ant Design X）：M1 交付 `XProvider`
   主题桥接、`--aura-x-*` 令牌组与「AI 组件」导航；令牌映射收敛到 `@aura/shared` 共享

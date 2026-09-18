@@ -1,0 +1,31 @@
+/* Sender — 对话输入框 */
+
+.aura-x-sender {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: flex-end;
+  padding: var(--aura-spacing-2);
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-lg);
+  background: var(--aura-x-bubble-ai-bg);
+  transition: border-color var(--aura-duration-normal) var(--aura-easing);
+
+  &:focus-within {
+    border-color: var(--aura-primary-500);
+  }
+
+  .ant-input {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    resize: none;
+  }
+
+  .ant-btn {
+    flex-shrink: 0;
+  }
+}
+
+.aura-x-sender--disabled {
+  opacity: 0.6;
+}

@@ -9,3 +9,9 @@ export type {
   XMessage,
   XChatRequestContext,
 } from './use-x-chat';
+export { Bubble } from './bubble';
+export type { BubbleProps, BubbleListItem, BubbleListProps } from './bubble';
+export { MarkdownContent } from './markdown-content';
+export type { MarkdownContentProps } from './markdown-content';
+export { Sender } from './sender';
+export type { SenderProps } from './sender';

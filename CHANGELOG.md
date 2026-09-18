@@ -20,6 +20,16 @@
   - **`useXChat`**：对话消息编排 Hook——user/assistant 成对追加、增量更新、
     loading / 错误态、中止保留部分内容、清空；传输由 `onRequest` 注入，与 useXStream 正交；
   - 文档站新增 `useXStream` / `useXChat` 两个 API 页（含组合示例）。
+- **M3 组件闭环**：
+  - **`Bubble` / `Bubble.List`**：按角色分侧（user 右 / assistant 左）、loading 三点动画
+    （aria-busy）、`contentRender` 扩展点、avatar / header / footer 插槽、列表自动滚动到底；
+  - **`Sender`**：Enter 提交 / Shift + Enter 换行 / 中文输入法组词保护；
+    loading 时按钮变为「停止」（触发 `onCancel`）；受控与非受控两种用法；
+  - **`MarkdownContent`**：基于 react-markdown（可选 peer 依赖）的安全渲染器——
+    不渲染原始 HTML、链接协议白名单（http/https/mailto）、外链 `_blank + noreferrer`、
+    代码块纯展示；支持流式未闭合语法的块级容错渲染；
+  - 文档站新增 Bubble / Sender / MarkdownContent 三个组件页（含可交互 demo：
+    mock 逐字流式对话闭环）。
 - **重构**：Aura 令牌 → antd token 的映射收敛到 `@aura/shared` 的
   `antdTokenOverrides()`（纯数据，零 antd 依赖），`BusinessProvider` 同步改用，
   消除与 `@aura/x` 之间的映射重复。

@@ -16,7 +16,8 @@
       "@aura/icons": ["./packages/icons/src/index.ts"],
       "@aura/shared": ["./packages/shared/src/index.ts"],
       "@aura/request": ["./packages/request/src/index.ts"],
-      "@aura/business": ["./packages/business/src/index.ts"]
+      "@aura/business": ["./packages/business/src/index.ts"],
+      "@aura/x": ["./packages/x/src/index.ts"]
     }
   },
   "include": ["packages/*/src", "tests"],
