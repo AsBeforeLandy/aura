@@ -1,13 +1,39 @@
-/* Bubble — AI 对话气泡 */
+/* Bubble — AI 对话气泡（玻璃拟态 + 品牌渐变） */
 
 .aura-x-bubble {
   display: flex;
   gap: var(--aura-spacing-3);
   align-items: flex-start;
+  animation: aura-x-bubble-in var(--aura-duration-normal) var(--aura-easing);
 }
 
+@keyframes aura-x-bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 用户消息在右侧 */
 .aura-x-bubble--end {
   flex-direction: row-reverse;
+}
+
+.aura-x-bubble-avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--aura-radius-full);
+  overflow: hidden;
+  border: 1px solid var(--aura-x-bubble-border);
+  background: var(--aura-x-stage-bg);
 }
 
 .aura-x-bubble-main {
@@ -22,6 +48,13 @@
   align-items: flex-end;
 }
 
+.aura-x-bubble-header,
+.aura-x-bubble-footer {
+  font-size: var(--aura-fontSize-xs);
+  color: var(--aura-text-tertiary);
+  padding: 0 var(--aura-spacing-1);
+}
+
 .aura-x-bubble-content {
   padding: var(--aura-spacing-3) var(--aura-spacing-4);
   border-radius: var(--aura-radius-lg);
@@ -29,36 +62,50 @@
   line-height: 1.65;
   word-break: break-word;
   white-space: pre-wrap;
-  transition: background var(--aura-duration-normal) var(--aura-easing);
+  transition:
+    background var(--aura-duration-normal) var(--aura-easing),
+    box-shadow var(--aura-duration-normal) var(--aura-easing);
 }
 
-/* 变体 */
-.aura-x-bubble--filled .aura-x-bubble-content {
+/* 气泡尖角朝向说话者（现代聊天形态） */
+.aura-x-bubble--start .aura-x-bubble-content {
+  border-top-left-radius: var(--aura-radius-sm);
+}
+
+.aura-x-bubble--end .aura-x-bubble-content {
+  border-top-right-radius: var(--aura-radius-sm);
+}
+
+/* AI：玻璃拟态 */
+.aura-x-bubble--start.aura-x-bubble--filled .aura-x-bubble-content {
   background: var(--aura-x-bubble-ai-bg);
-}
-
-.aura-x-bubble--outlined .aura-x-bubble-content {
-  background: transparent;
   border: 1px solid var(--aura-x-bubble-border);
+  backdrop-filter: var(--aura-x-glass-blur);
+  -webkit-backdrop-filter: var(--aura-x-glass-blur);
 }
 
-.aura-x-bubble--shadow .aura-x-bubble-content {
-  background: var(--aura-x-bubble-ai-bg);
-  box-shadow: var(--aura-shadow-sm);
-}
-
-/* 用户气泡：主色底 + 反色文字 */
+/* 用户：品牌渐变 + 光晕投影 */
 .aura-x-bubble--end.aura-x-bubble--filled .aura-x-bubble-content {
   background: var(--aura-x-bubble-user-bg);
   color: var(--aura-x-bubble-user-text);
+  box-shadow: 0 6px 18px -6px rgba(124, 58, 237, 0.55);
 }
 
-.aura-x-bubble--end.aura-x-bubble--shadow .aura-x-bubble-content {
-  background: var(--aura-x-bubble-user-bg);
-  color: var(--aura-x-bubble-user-text);
+/* outlined：细边框玻璃 */
+.aura-x-bubble--outlined .aura-x-bubble-content {
+  background: var(--aura-x-bubble-ai-bg);
+  border: 1px solid var(--aura-x-bubble-border);
 }
 
-/* 生成中 */
+/* shadow：玻璃 + 光晕 */
+.aura-x-bubble--shadow .aura-x-bubble-content {
+  background: var(--aura-x-bubble-ai-bg);
+  backdrop-filter: var(--aura-x-glass-blur);
+  -webkit-backdrop-filter: var(--aura-x-glass-blur);
+  box-shadow: var(--aura-x-glow);
+}
+
+/* 生成中：品牌色光点 */
 .aura-x-bubble-dots {
   display: inline-flex;
   gap: 4px;
@@ -69,8 +116,8 @@
   width: 6px;
   height: 6px;
   border-radius: var(--aura-radius-full);
-  background: currentColor;
-  opacity: 0.4;
+  background: var(--aura-x-accent);
+  opacity: 0.35;
   animation: aura-x-bubble-blink 1.2s infinite ease-in-out;
 }
 
@@ -86,11 +133,25 @@
   0%,
   80%,
   100% {
-    opacity: 0.25;
+    opacity: 0.2;
+    transform: scale(0.85);
   }
 
   40% {
-    opacity: 0.9;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 无障碍：偏好减少动效时关闭入场与打点动画 */
+@media (prefers-reduced-motion: reduce) {
+  .aura-x-bubble {
+    animation: none;
+  }
+
+  .aura-x-bubble-dots i {
+    animation: none;
+    opacity: 0.6;
   }
 }
 

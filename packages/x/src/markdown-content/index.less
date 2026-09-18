@@ -1,4 +1,4 @@
-/* MarkdownContent — AI 消息的 Markdown 排版 */
+/* MarkdownContent — AI 消息的 Markdown 排版（科技感微调） */
 
 .aura-x-markdown {
   font-size: var(--aura-fontSize-md);
@@ -38,8 +38,35 @@
     margin: 4px 0;
   }
 
+  /* 行内代码：品牌色点染 */
+  code {
+    padding: 2px 6px;
+    border-radius: var(--aura-radius-sm);
+    background: var(--aura-x-accent-soft);
+    color: var(--aura-x-accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.92em;
+  }
+
+  /* 代码块：暗色科技底 + 细边框 */
+  pre {
+    margin: var(--aura-spacing-3) 0;
+    padding: var(--aura-spacing-3) var(--aura-spacing-4);
+    border-radius: var(--aura-radius-md);
+    border: 1px solid var(--aura-x-bubble-border);
+    background: var(--aura-x-code-bg);
+    overflow-x: auto;
+  }
+
+  pre code {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--aura-text);
+  }
+
   a {
-    color: var(--aura-primary-600);
+    color: var(--aura-x-accent);
     text-decoration: none;
 
     &:hover {
@@ -47,32 +74,13 @@
     }
   }
 
-  code {
-    padding: 2px 6px;
-    border-radius: var(--aura-radius-sm);
-    background: var(--aura-x-code-bg);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 0.92em;
-  }
-
-  pre {
-    margin: var(--aura-spacing-3) 0;
-    padding: var(--aura-spacing-3) var(--aura-spacing-4);
-    border-radius: var(--aura-radius-md);
-    background: var(--aura-x-code-bg);
-    overflow-x: auto;
-  }
-
-  pre code {
-    padding: 0;
-    background: transparent;
-  }
-
+  /* 引用块：渐变左边线 + 品牌浅底 */
   blockquote {
     margin: var(--aura-spacing-3) 0;
     padding: var(--aura-spacing-2) var(--aura-spacing-4);
-    border-left: 3px solid var(--aura-primary-500);
-    background: var(--aura-primary-50);
+    border-left: 3px solid var(--aura-x-accent);
+    border-radius: 0 var(--aura-radius-sm) var(--aura-radius-sm) 0;
+    background: var(--aura-x-accent-soft);
     color: var(--aura-text-secondary);
   }
 
@@ -91,7 +99,7 @@
 
   th {
     font-weight: 600;
-    background: var(--aura-primary-50);
+    background: var(--aura-x-accent-soft);
   }
 
   hr {

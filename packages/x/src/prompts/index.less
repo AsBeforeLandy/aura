@@ -1,4 +1,4 @@
-/* Prompts — 提示词集 */
+/* Prompts — 提示词集（玻璃卡片 + 渐变图标底座 + 悬停上浮） */
 
 .aura-x-prompts-title {
   margin-bottom: var(--aura-spacing-2);
@@ -22,7 +22,7 @@
 
 .aura-x-prompts-item {
   display: flex;
-  gap: var(--aura-spacing-2);
+  gap: var(--aura-spacing-3);
   align-items: flex-start;
   width: 100%;
   padding: var(--aura-spacing-3) var(--aura-spacing-4);
@@ -34,17 +34,21 @@
   cursor: pointer;
   transition:
     border-color var(--aura-duration-normal) var(--aura-easing),
-    background var(--aura-duration-normal) var(--aura-easing);
+    background var(--aura-duration-normal) var(--aura-easing),
+    box-shadow var(--aura-duration-normal) var(--aura-easing),
+    transform var(--aura-duration-fast) var(--aura-easing);
 }
 
 .aura-x-prompts-item:hover {
-  border-color: var(--aura-primary-500);
-  background: var(--aura-primary-50);
+  border-color: var(--aura-x-accent);
+  background: var(--aura-x-accent-soft);
+  box-shadow: var(--aura-x-glow);
+  transform: translateY(-2px);
 }
 
 .aura-x-prompts-item:focus-visible {
-  outline: 2px solid var(--aura-primary-500);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
 }
 
 .aura-x-prompts--horizontal .aura-x-prompts-item {
@@ -53,15 +57,25 @@
   flex: 1 1 220px;
 }
 
+/* 图标底座：渐变圆角方块 */
 .aura-x-prompts-item-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-accent-gradient);
+  color: #fff;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1;
 }
 
 .aura-x-prompts-item-body {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
 .aura-x-prompts-item-label {
@@ -72,4 +86,10 @@
 .aura-x-prompts-item-description {
   font-size: var(--aura-fontSize-xs);
   color: var(--aura-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-x-prompts-item:hover {
+    transform: none;
+  }
 }

@@ -1,17 +1,22 @@
-/* Sender — 对话输入框 */
+/* Sender — 对话输入框（玻璃容器 + 聚焦光晕 + 渐变按钮） */
 
 .aura-x-sender {
   display: flex;
   gap: var(--aura-spacing-2);
   align-items: flex-end;
-  padding: var(--aura-spacing-2);
+  padding: var(--aura-spacing-2) var(--aura-spacing-2) var(--aura-spacing-2) var(--aura-spacing-4);
   border: 1px solid var(--aura-x-bubble-border);
   border-radius: var(--aura-radius-lg);
   background: var(--aura-x-bubble-ai-bg);
-  transition: border-color var(--aura-duration-normal) var(--aura-easing);
+  backdrop-filter: var(--aura-x-glass-blur);
+  -webkit-backdrop-filter: var(--aura-x-glass-blur);
+  transition:
+    border-color var(--aura-duration-normal) var(--aura-easing),
+    box-shadow var(--aura-duration-normal) var(--aura-easing);
 
   &:focus-within {
-    border-color: var(--aura-primary-500);
+    border-color: var(--aura-x-accent);
+    box-shadow: var(--aura-x-focus-ring);
   }
 
   .ant-input {
@@ -23,9 +28,32 @@
 
   .ant-btn {
     flex-shrink: 0;
+    border: none;
+    color: #fff;
+    background: var(--aura-x-accent-gradient);
+    box-shadow: 0 4px 12px -4px rgba(124, 58, 237, 0.5);
+    transition:
+      transform var(--aura-duration-fast) var(--aura-easing),
+      box-shadow var(--aura-duration-fast) var(--aura-easing),
+      opacity var(--aura-duration-fast) var(--aura-easing);
+  }
+
+  .ant-btn:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px -4px rgba(124, 58, 237, 0.65);
+  }
+
+  .ant-btn:not(:disabled):active {
+    transform: translateY(0);
   }
 }
 
 .aura-x-sender--disabled {
   opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-x-sender .ant-btn:not(:disabled):hover {
+    transform: none;
+  }
 }

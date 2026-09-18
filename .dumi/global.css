@@ -865,7 +865,6 @@ html {
 
 /* Demo 预览区域 */
 .dumi-default-previewer-demo {
-  background: #ffffff !important;
   padding: 32px 24px !important;
   min-height: 80px !important;
 }

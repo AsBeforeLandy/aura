@@ -1,4 +1,4 @@
-/* Suggestion — 快捷建议 */
+/* Suggestion — 快捷建议（玻璃下拉 + 品牌高亮） */
 
 .aura-x-suggestion-list {
   display: flex;
@@ -10,6 +10,9 @@
   border: 1px solid var(--aura-x-bubble-border);
   border-radius: var(--aura-radius-md);
   background: var(--aura-x-bubble-ai-bg);
+  backdrop-filter: var(--aura-x-glass-blur);
+  -webkit-backdrop-filter: var(--aura-x-glass-blur);
+  box-shadow: var(--aura-x-glow);
 }
 
 .aura-x-suggestion-item {
@@ -17,20 +20,25 @@
   width: 100%;
   padding: var(--aura-spacing-2) var(--aura-spacing-3);
   border: none;
+  border-left: 2px solid transparent;
   border-radius: var(--aura-radius-sm);
   background: transparent;
   color: var(--aura-text);
   font-size: var(--aura-fontSize-sm);
   text-align: left;
   cursor: pointer;
-  transition: background var(--aura-duration-fast) var(--aura-easing);
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    border-color var(--aura-duration-fast) var(--aura-easing);
 }
 
 .aura-x-suggestion-item:hover {
-  background: var(--aura-primary-50);
+  background: var(--aura-x-accent-soft);
+  border-left-color: var(--aura-x-accent);
 }
 
 .aura-x-suggestion-item:focus-visible {
-  outline: 2px solid var(--aura-primary-500);
-  outline-offset: -2px;
+  outline: none;
+  background: var(--aura-x-accent-soft);
+  border-left-color: var(--aura-x-accent);
 }

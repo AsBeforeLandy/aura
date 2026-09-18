@@ -1,4 +1,4 @@
-/* Welcome — 欢迎区 */
+/* Welcome — 欢迎区（顶部光晕 + 渐变图标底座） */
 
 .aura-x-welcome {
   display: flex;
@@ -7,23 +7,38 @@
   gap: var(--aura-spacing-3);
   padding: var(--aura-spacing-6) var(--aura-spacing-4);
   text-align: center;
+  overflow: hidden;
 }
 
 .aura-x-welcome--board {
   border: 1px solid var(--aura-x-bubble-border);
   border-radius: var(--aura-radius-lg);
-  background: var(--aura-x-bubble-ai-bg);
+  background:
+    radial-gradient(560px 180px at 50% -60px, var(--aura-x-accent-soft), transparent 70%),
+    var(--aura-x-bubble-ai-bg);
+  backdrop-filter: var(--aura-x-glass-blur);
+  -webkit-backdrop-filter: var(--aura-x-glass-blur);
 }
 
+/* 图标底座：渐变圆角方块 + 光晕 */
 .aura-x-welcome-icon {
-  font-size: 32px;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--aura-radius-lg);
+  background: var(--aura-x-accent-gradient);
+  color: #fff;
+  font-size: 28px;
   line-height: 1;
+  box-shadow: var(--aura-x-glow);
 }
 
 .aura-x-welcome-title {
-  font-size: var(--aura-fontSize-xl);
+  font-size: var(--aura-fontSize-2xl);
   font-weight: 600;
   color: var(--aura-text);
+  letter-spacing: 0.2px;
 }
 
 .aura-x-welcome-description {

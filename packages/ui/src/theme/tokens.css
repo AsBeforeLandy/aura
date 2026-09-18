@@ -99,12 +99,18 @@
   --aura-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ===== AI 组件（@aura/x） ===== */
-  --aura-x-bubble-ai-bg: #f4f4f5;
-  --aura-x-bubble-user-bg: #7c3aed;
+  --aura-x-bubble-ai-bg: rgba(255, 255, 255, 0.72);
+  --aura-x-bubble-user-bg: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
   --aura-x-bubble-user-text: #ffffff;
-  --aura-x-bubble-border: #e5e7eb;
+  --aura-x-bubble-border: rgba(124, 58, 237, 0.22);
   --aura-x-code-bg: #f6f8fa;
   --aura-x-stage-bg: #fafafa;
+  --aura-x-accent: #7c3aed;
+  --aura-x-accent-soft: rgba(124, 58, 237, 0.08);
+  --aura-x-accent-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  --aura-x-glass-blur: saturate(180%) blur(14px);
+  --aura-x-glow: 0 0 0 1px rgba(124, 58, 237, 0.16), 0 12px 32px -8px rgba(124, 58, 237, 0.28);
+  --aura-x-focus-ring: 0 0 0 3px rgba(124, 58, 237, 0.16);
 }
 
 /* ===== Dark Theme ===== */
@@ -162,10 +168,16 @@
   --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.4);
 
   /* ===== AI 组件（@aura/x） ===== */
-  --aura-x-bubble-ai-bg: #1a1a3e;
-  --aura-x-bubble-user-bg: #6d28d9;
+  --aura-x-bubble-ai-bg: rgba(26, 26, 62, 0.55);
+  --aura-x-bubble-user-bg: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
   --aura-x-bubble-user-text: #f3f4f6;
-  --aura-x-bubble-border: rgba(139, 92, 246, 0.2);
-  --aura-x-code-bg: #111827;
+  --aura-x-bubble-border: rgba(139, 92, 246, 0.35);
+  --aura-x-code-bg: rgba(3, 7, 18, 0.6);
   --aura-x-stage-bg: #0f0c29;
+  --aura-x-accent: #a78bfa;
+  --aura-x-accent-soft: rgba(167, 139, 250, 0.12);
+  --aura-x-accent-gradient: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+  --aura-x-glass-blur: saturate(180%) blur(16px);
+  --aura-x-glow: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 12px 32px -8px rgba(139, 92, 246, 0.4);
+  --aura-x-focus-ring: 0 0 0 3px rgba(139, 92, 246, 0.28);
 }
