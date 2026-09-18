@@ -1,7 +1,9 @@
 ---
 title: useXStream
 subtitle: 流式传输层
-group: AI 组件
+group:
+  title: 数据流
+  order: 401
 category: Components
 description: fetch + 读流 + SSE / 纯文本两种模式解析 + abort 生命周期。不做消息状态管理，与 useXChat 正交。
 order: 1

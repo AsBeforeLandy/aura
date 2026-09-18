@@ -1,7 +1,9 @@
 ---
 title: Welcome
 subtitle: 欢迎区
-group: AI 组件
+group:
+  title: 引导
+  order: 405
 category: Components
 description: 对话开始前的欢迎区：图标 + 标题 + 描述居中展示，extra 插槽常放 Prompts 提示词集引导用户开口。
 order: 8

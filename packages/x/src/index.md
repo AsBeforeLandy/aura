@@ -1,7 +1,9 @@
 ---
 title: XProvider
 subtitle: AI 组件主题桥接
-group: AI 组件
+group:
+  title: 主题桥接
+  order: 400
 category: Components
 description: 将 Aura 设计令牌映射到 antd 主题系统，为 AI 对话组件提供统一的暗色 / 主色 / 紧凑模式配置。
 order: 0

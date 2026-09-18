@@ -1,7 +1,9 @@
 ---
 title: Conversations
 subtitle: 会话管理
-group: AI 组件
+group:
+  title: 会话
+  order: 404
 category: Components
 description: 多会话侧栏列表：激活高亮、时间戳、可配置操作菜单（重命名 / 置顶 / 删除），菜单点击自动关闭。
 order: 7

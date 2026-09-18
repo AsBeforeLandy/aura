@@ -47,6 +47,8 @@
   - **`Sender` 增强**：`submitType`（enter / shiftEnter 两种提交键位）、
     `autoSize`（textarea 行数范围透传）、`header` / `footer` 插槽；
   - 文档站新增 Actions / Conversations 两页（含 demo）。
+- **文档站侧栏分组**：AI 组件按 RICH 阶段分为「主题桥接 / 数据流 / 交互 / 反馈 /
+  会话 / 引导 / 推理」七组（嵌套 `group.order` frontmatter 驱动，dumi 自动生成）。
 - **`@aura/icons` 收录新图标**：`ThumbUp` / `ThumbDown`（描边风格，与 action 组一致）；
   Actions demo 接入 `Copy` / `Refresh` / `ThumbUp` / `Delete` 四枚图标。
 - **M5 打包修复与真机验证**：

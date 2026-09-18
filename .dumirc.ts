@@ -78,6 +78,13 @@ const GROUP_ORDER = [
   '反馈',
   '业务',
   'AI 组件',
+  // 以下为 @aura/x（AI 组件）的侧栏子分组
+  '主题桥接',
+  '数据流',
+  '交互',
+  '会话',
+  '引导',
+  '推理',
 ];
 
 /** frontmatter 分组名 → 侧边栏展示名 */
@@ -139,9 +146,10 @@ const businessSidebar = collectSidebarGroups([
   { dir: 'packages/business/src', prefix: '/businesses' },
 ]);
 
-const xSidebar = collectSidebarGroups([
-  { dir: 'packages/x/src', prefix: '/x-components' },
-]);
+// 注意：文档路由（含 /x-components）的侧栏由 dumi 依据 frontmatter 的
+// 嵌套 group（title + order）自动生成，这里无需（也无法）用 themeConfig
+// sidebar 干预——要调整各包组件文档的分组与排序，请改对应 index.md 的
+// group.title / group.order。
 
 export default defineConfig({
   resolve: {

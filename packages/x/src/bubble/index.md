@@ -1,7 +1,9 @@
 ---
 title: Bubble
 subtitle: 对话气泡
-group: AI 组件
+group:
+  title: 交互
+  order: 402
 category: Components
 description: AI 对话的原子气泡：按角色分侧渲染，支持 loading 打字态、内容渲染扩展点与列表自动滚动。
 order: 3

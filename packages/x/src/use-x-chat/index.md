@@ -1,7 +1,9 @@
 ---
 title: useXChat
 subtitle: 对话消息编排
-group: AI 组件
+group:
+  title: 数据流
+  order: 401
 category: Components
 description: 对话消息列表状态机：user/assistant 成对追加、loading 态、增量更新、错误态、中止与清空。与 useXStream 正交。
 order: 2

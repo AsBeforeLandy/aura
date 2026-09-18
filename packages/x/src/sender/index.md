@@ -1,7 +1,9 @@
 ---
 title: Sender
 subtitle: 对话输入框
-group: AI 组件
+group:
+  title: 交互
+  order: 402
 category: Components
 description: Enter 发送、Shift + Enter 换行、中文输入法组词保护；loading 时按钮变为「停止」。
 order: 5

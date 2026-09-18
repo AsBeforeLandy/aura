@@ -1,7 +1,9 @@
 ---
 title: Actions
 subtitle: 消息操作组
-group: AI 组件
+group:
+  title: 反馈
+  order: 403
 category: Components
 description: 消息气泡下方的操作按钮组：复制、重新生成、点赞、删除等；支持 danger / active / disabled 态与纵向排列。
 order: 6

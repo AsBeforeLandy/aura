@@ -1,7 +1,9 @@
 ---
 title: Prompts
 subtitle: 提示词集
-group: AI 组件
+group:
+  title: 引导
+  order: 405
 category: Components
 description: 可点击的提示词卡片列表，引导用户快速开口；支持纵向 / 横向排列与图标、描述。
 order: 9

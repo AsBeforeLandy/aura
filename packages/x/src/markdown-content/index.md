@@ -1,7 +1,9 @@
 ---
 title: MarkdownContent
 subtitle: 消息 Markdown 渲染
-group: AI 组件
+group:
+  title: 反馈
+  order: 403
 category: Components
 description: 基于 react-markdown 的安全渲染器：不渲染原始 HTML、链接协议白名单、代码块纯展示，支持流式未闭合语法。
 order: 4

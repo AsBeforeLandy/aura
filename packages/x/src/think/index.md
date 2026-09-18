@@ -1,7 +1,9 @@
 ---
 title: Think
 subtitle: 思考过程
-group: AI 组件
+group:
+  title: 推理
+  order: 406
 category: Components
 description: 折叠面板形态的思考过程展示：思考中自动展开并脉冲提示，完成后默认折叠、点击可回看。
 order: 11
