@@ -4,6 +4,29 @@
 
 ## [Unreleased]
 
+### Changed — 文档站界面定稿（侧栏 / 目录 / 源码块 / 死代码清理）
+
+- **侧栏菜单**：项高 48px → **40px**；hover 文本右移（`padding-left` 14→20px）纳入
+  0.25s `cubic-bezier(0.4, 0, 0.2, 1)` 过渡——此前位移属性不在 transition 列表导致瞬间跳变，
+  rAF 逐帧采样验证 16 帧平滑插值。分组标题下方新增品牌色渐变淡出线
+  （透明 → 紫 32% → 透明），组标题呈现「标签 + 下划线」形态，分组归属一目了然。
+- **右侧目录激活态**：改回 dumi 原生竖线样式，仅把指示线与文字换成主题紫
+  （亮 `#7c3aed` / 暗 `#a78bfa`，替代 dumi 默认蓝 `#1677ff`）——与左侧菜单的
+  极光渐变胶囊拉开视觉权重，主次分明。根因修复：此前 global.css 的
+  `.dumi-default-toc > a` 系列选择器与真实 DOM（`> li > a`）不匹配从未生效，
+  dumi 默认蓝线一直裸奔，本次一并清理收敛。
+- **修复 demo 源码块圆角断裂**：源码容器 `.dumi-default-source-code` 自带
+  `0 0 4px 4px` 圆角，套在 12px 圆角卡片底部形成双层圆角错位缺角；改为
+  `.dumi-default-previewer .dumi-default-source-code { border-radius: 0 0 11px 11px;
+  overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代码块上也复用，
+  规则以 `.dumi-default-previewer` 前缀限定作用域，独立块保持 dumi 原样。
+- **死代码清理 38 处**：以「全站 6 类页面 × 亮暗双模式 CDP 选择器匹配」找出零命中规则——
+  dumi 1 时代 `.dumi-default-doc-content` 全家族 29 处（实际容器是 `.markdown`，
+  原文件均为成对选择器，删死留活）、结构上不可能命中的 `[data-prefers-color="dark"] html`、
+  侧栏清零规则里永不匹配的 `ul / li` 选择器、过时墓碑注释 6 条；
+  `.dumi/global.css` 1400+ 行 → 1325 行，花括号平衡、回归计算样式全部通过，
+  页面渲染零变化。previewer / tabs / search 等仅在交互态渲染的主题组件样式刻意保留。
+
 ### Added — 新包 `@aura/x`（AI 组件库，M1 脚手架）
 
 - 第 8 个包 `@aura/x`：Aura 生态的 AI 对话组件库，对标 `@ant-design/x`。

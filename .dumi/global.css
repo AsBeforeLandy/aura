@@ -145,12 +145,6 @@
   color: #fff !important;
 }
 
-/* ===== TOC 目录 ===== */
-.dumi-default-toc > a.active {
-  border-inline-start-color: #7c3aed !important;
-  color: #7c3aed !important;
-}
-
 /* ===== Search 搜索 ===== */
 .dumi-default-search-bar input {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -229,13 +223,11 @@
 }
 
 /* ===== 文档内容链接 ===== */
-.markdown a,
-.dumi-default-doc-content a {
+.markdown a {
   color: #7c3aed !important;
 }
 
-.markdown a:hover,
-.dumi-default-doc-content a:hover {
+.markdown a:hover {
   color: #8b5cf6 !important;
 }
 
@@ -554,11 +546,6 @@
   color: #fff !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-toc > a.active {
-  border-inline-start-color: #a78bfa !important;
-  color: #a78bfa !important;
-}
-
 [data-prefers-color="dark"] .dumi-default-search-bar input:focus {
   border-color: #a78bfa !important;
   box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2), 0 0 12px rgba(124, 58, 237, 0.2) !important;
@@ -622,13 +609,11 @@
   color: #a78bfa !important;
 }
 
-[data-prefers-color="dark"] .markdown a,
-[data-prefers-color="dark"] .dumi-default-doc-content a {
+[data-prefers-color="dark"] .markdown a {
   color: #a78bfa !important;
 }
 
-[data-prefers-color="dark"] .markdown a:hover,
-[data-prefers-color="dark"] .dumi-default-doc-content a:hover {
+[data-prefers-color="dark"] .markdown a:hover {
   color: #c4b5fd !important;
 }
 
@@ -793,11 +778,7 @@ html {
   background: #0f0c29 !important;
 }
 
-[data-prefers-color="dark"] html {
-  background: #0f0c29 !important;
-}
 /* 页面标题区域 */
-.dumi-default-doc-content > h1,
 .markdown > h1:first-child {
   font-size: 30px !important;
   font-weight: 600 !important;
@@ -807,7 +788,6 @@ html {
 }
 
 /* 标题下方副标题 */
-.dumi-default-doc-content > h1 + p,
 .markdown > h1:first-child + p {
   font-size: 14px !important;
   color: var(--aura-text-secondary) !important;
@@ -816,7 +796,6 @@ html {
 }
 
 /* h2 标题样式 */
-.dumi-default-doc-content > h2,
 .markdown > h2 {
   font-size: 20px !important;
   font-weight: 600 !important;
@@ -828,7 +807,6 @@ html {
 }
 
 /* h3 标题样式（Demo 标题） */
-.dumi-default-doc-content > h3,
 .markdown > h3 {
   font-size: 16px !important;
   font-weight: 600 !important;
@@ -838,7 +816,6 @@ html {
 }
 
 /* 段落文字 */
-.dumi-default-doc-content p,
 .markdown p {
   font-size: 14px !important;
   line-height: 1.8 !important;
@@ -846,7 +823,6 @@ html {
 }
 
 /* 导入语句区块样式 */
-.dumi-default-doc-content pre,
 .markdown pre {
   border-radius: 8px !important;
   margin-bottom: 24px !important;
@@ -898,16 +874,18 @@ html {
   background: rgba(124, 58, 237, 0.06) !important;
 }
 
-/* 源码展开区域 */
-.dumi-default-previewer-source {
-  border-top: 1px solid var(--aura-border) !important;
+/* 源码展开区（仅限 previewer 内部；页顶独立代码块不受影响）：
+   底部圆角与卡片对齐（卡片外 12px − 边框 1px = 内 11px），
+   overflow hidden 裁剪内部 pre 的方角，消除两层圆角不重合的断裂感 */
+.dumi-default-previewer .dumi-default-source-code {
+  border-radius: 0 0 11px 11px !important;
+  overflow: hidden !important;
 }
 
 /* ===== 2c. API 表格美化 ===== */
 
 /* 表格整体 */
-.markdown table,
-.dumi-default-doc-content table {
+.markdown table {
   width: 100% !important;
   border-collapse: collapse !important;
   border: 1px solid var(--aura-border) !important;
@@ -918,8 +896,7 @@ html {
 }
 
 /* 表头 */
-.markdown table thead th,
-.dumi-default-doc-content table thead th {
+.markdown table thead th {
   background: var(--aura-bg-secondary) !important;
   font-weight: 600 !important;
   color: var(--aura-text) !important;
@@ -931,8 +908,7 @@ html {
 }
 
 /* 表格单元格 */
-.markdown table tbody td,
-.dumi-default-doc-content table tbody td {
+.markdown table tbody td {
   padding: 10px 16px !important;
   border-bottom: 1px solid var(--aura-border) !important;
   color: var(--aura-text-secondary) !important;
@@ -941,20 +917,17 @@ html {
   vertical-align: top !important;
 }
 
-.markdown table tbody tr:last-child td,
-.dumi-default-doc-content table tbody tr:last-child td {
+.markdown table tbody tr:last-child td {
   border-bottom: none !important;
 }
 
 /* 表格行 hover */
-.markdown table tbody tr:hover,
-.dumi-default-doc-content table tbody tr:hover {
+.markdown table tbody tr:hover {
   background: var(--aura-bg-secondary) !important;
 }
 
 /* 属性名列（第一列）等宽字体 */
-.markdown table tbody td:first-child,
-.dumi-default-doc-content table tbody td:first-child {
+.markdown table tbody td:first-child {
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace !important;
   font-size: 13px !important;
   color: #7c3aed !important;
@@ -963,16 +936,14 @@ html {
 }
 
 /* 类型列代码样式 */
-.markdown table tbody td:nth-child(3),
-.dumi-default-doc-content table tbody td:nth-child(3) {
+.markdown table tbody td:nth-child(3) {
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace !important;
   font-size: 12px !important;
   color: var(--aura-text-secondary) !important;
 }
 
 /* 表格内代码标签 */
-.markdown table code,
-.dumi-default-doc-content table code {
+.markdown table code {
   background: var(--aura-bg-tertiary) !important;
   padding: 2px 6px !important;
   border-radius: 4px !important;
@@ -1026,67 +997,43 @@ html {
   border-left-color: transparent !important;
 }
 
-/* ===== 2e. 右侧 TOC 样式 ===== */
+/* ===== 2e. 右侧 TOC 样式 =====
+   注意：真实 DOM 是 .dumi-default-toc > li > a（a 外层有 li 包裹）。
+   设计定位：右侧目录是二级导航，激活态沿用 dumi 原生竖线样式、仅改主题紫，
+   不与左侧菜单的极光渐变胶囊争权重（2026-09-18 用户反馈：主次性要明确） */
 
-/* TOC 整体 */
-.dumi-default-toc {
-  padding: 16px 0 !important;
-}
-
-/* TOC 链接 */
-.dumi-default-toc > a {
-  font-size: 13px !important;
-  padding: 4px 12px !important;
-  color: var(--aura-text-secondary) !important;
-  border-left: 2px solid var(--aura-border) !important;
-  transition: all 0.15s ease !important;
-  line-height: 1.6 !important;
-}
-
-/* TOC 二级标题缩进 */
-.dumi-default-toc > a[data-level="3"] {
-  padding-left: 24px !important;
-}
-
-/* TOC hover */
-.dumi-default-toc > a:hover {
-  color: var(--aura-text) !important;
-  border-left-color: var(--aura-border-hover) !important;
-}
-
-/* TOC 活动项 */
-.dumi-default-toc > a.active {
+/* TOC 激活：主题紫竖线 + 紫字（替代 dumi 默认蓝 #1677ff），其余几何交给 dumi 默认 */
+.dumi-default-toc > li > a.active {
+  border-inline-start-color: #7c3aed !important;
   color: #7c3aed !important;
-  border-left-color: #7c3aed !important;
-  font-weight: 500 !important;
-  background: rgba(124, 58, 237, 0.04) !important;
+}
+
+/* 暗色同步 */
+[data-prefers-color="dark"] .dumi-default-toc > li > a.active {
+  border-inline-start-color: #a78bfa !important;
+  color: #a78bfa !important;
 }
 
 /* ===== 2f. 暗色模式适配 ===== */
 
 /* 暗色 — 内容区标题 */
-[data-prefers-color="dark"] .dumi-default-doc-content > h1,
 [data-prefers-color="dark"] .markdown > h1:first-child {
   color: var(--aura-gray-50) !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-doc-content > h1 + p,
 [data-prefers-color="dark"] .markdown > h1:first-child + p {
   color: var(--aura-gray-400) !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-doc-content > h2,
 [data-prefers-color="dark"] .markdown > h2 {
   color: var(--aura-gray-50) !important;
   border-bottom-color: rgba(139, 92, 246, 0.15) !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-doc-content > h3,
 [data-prefers-color="dark"] .markdown > h3 {
   color: var(--aura-gray-50) !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-doc-content p,
 [data-prefers-color="dark"] .markdown p {
   color: var(--aura-gray-400) !important;
 }
@@ -1117,41 +1064,33 @@ html {
   background: rgba(167, 139, 250, 0.1) !important;
 }
 
-[data-prefers-color="dark"] .dumi-default-previewer-source {
-  border-top-color: rgba(139, 92, 246, 0.12) !important;
-}
+/* 暗色源码区几何与亮色共用（圆角/裁剪不随模式变化），无需单独规则 */
 
 /* 暗色 — API 表格 */
-[data-prefers-color="dark"] .markdown table,
-[data-prefers-color="dark"] .dumi-default-doc-content table {
+[data-prefers-color="dark"] .markdown table {
   border-color: rgba(139, 92, 246, 0.12) !important;
 }
 
-[data-prefers-color="dark"] .markdown table thead th,
-[data-prefers-color="dark"] .dumi-default-doc-content table thead th {
+[data-prefers-color="dark"] .markdown table thead th {
   background: var(--aura-bg-tertiary) !important;
   color: var(--aura-gray-200) !important;
   border-bottom-color: rgba(139, 92, 246, 0.15) !important;
 }
 
-[data-prefers-color="dark"] .markdown table tbody td,
-[data-prefers-color="dark"] .dumi-default-doc-content table tbody td {
+[data-prefers-color="dark"] .markdown table tbody td {
   border-bottom-color: rgba(139, 92, 246, 0.08) !important;
   color: var(--aura-gray-400) !important;
 }
 
-[data-prefers-color="dark"] .markdown table tbody tr:hover,
-[data-prefers-color="dark"] .dumi-default-doc-content table tbody tr:hover {
+[data-prefers-color="dark"] .markdown table tbody tr:hover {
   background: rgba(139, 92, 246, 0.06) !important;
 }
 
-[data-prefers-color="dark"] .markdown table tbody td:first-child,
-[data-prefers-color="dark"] .dumi-default-doc-content table tbody td:first-child {
+[data-prefers-color="dark"] .markdown table tbody td:first-child {
   color: #a78bfa !important;
 }
 
-[data-prefers-color="dark"] .markdown table code,
-[data-prefers-color="dark"] .dumi-default-doc-content table code {
+[data-prefers-color="dark"] .markdown table code {
   background: rgba(139, 92, 246, 0.12) !important;
   color: #c4b5fd !important;
 }
@@ -1182,23 +1121,6 @@ html {
   color: #fff !important;
   background: linear-gradient(135deg, rgba(167, 139, 250, 0.95), rgba(139, 92, 246, 0.8)) !important;
   border-left-color: transparent !important;
-}
-
-/* 暗色 — TOC */
-[data-prefers-color="dark"] .dumi-default-toc > a {
-  color: var(--aura-gray-500) !important;
-  border-left-color: rgba(139, 92, 246, 0.15) !important;
-}
-
-[data-prefers-color="dark"] .dumi-default-toc > a:hover {
-  color: var(--aura-gray-300) !important;
-  border-left-color: rgba(139, 92, 246, 0.3) !important;
-}
-
-[data-prefers-color="dark"] .dumi-default-toc > a.active {
-  color: #a78bfa !important;
-  border-left-color: #a78bfa !important;
-  background: rgba(167, 139, 250, 0.06) !important;
 }
 
 /* ===================================================================
@@ -1232,15 +1154,29 @@ html {
   background: transparent;
 }
 
-/* 分组之间的横线：去除割裂感，仅保留分组标题的呼吸间距 */
+/* 分组标题：小号标签字 + 渐变淡出线（置于标题与组内条目之间，标签下划线式） */
 .dumi-default-sidebar > dl > dt {
   border-top: none !important;
-  margin-top: var(--aura-spacing-3, 12px) !important;
-  padding-top: var(--aura-spacing-2, 8px) !important;
+  margin-top: 16px !important;
+  padding: 0 16px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--aura-text-tertiary) !important;
+  letter-spacing: 0.06em !important;
 }
 
+.dumi-default-sidebar > dl > dt::after {
+  content: '';
+  display: block;
+  height: 1px;
+  margin: 6px 2px 10px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.32), transparent);
+}
+
+/* 第一个分组与顶部贴近些；标题下方同样保留分隔线，保持节奏一致 */
 .dumi-default-sidebar > dl:first-of-type > dt {
-  margin-top: 0 !important;
+  margin-top: 4px !important;
 }
 
 /* ---- 3b. 右侧目录：收窄 + 标题中文化 + 激活竖线用主题色 ---- */
@@ -1265,13 +1201,6 @@ html {
   color: var(--aura-text-tertiary) !important;
 }
 
-/* 激活竖线：主题紫罗兰（亮色） */
-.dumi-default-toc > a.active {
-  border-left: 2px solid var(--aura-primary-500) !important;
-  color: var(--aura-primary-600) !important;
-  font-weight: 500 !important;
-}
-
 /* 暗色同步 */
 [data-prefers-color='dark'] .dumi-default-sidebar {
   scrollbar-color: rgba(167, 139, 250, 0.3) transparent;
@@ -1285,24 +1214,21 @@ html {
   border-top: none !important;
 }
 
-[data-prefers-color='dark'] .dumi-default-toc > a.active {
-  border-left: 2px solid var(--aura-primary-400) !important;
-  color: var(--aura-primary-300) !important;
-}
-
 /* ===================================================================
    4. AI 文档站侧栏精修 v2（测量驱动：压缩间隔 / 清除边框残影）
    =================================================================== */
 
-/* 结构层清零：dl / dt / dd / li 全部去边框、去 margin，间距统一由
+/* 结构层清零：dl / dt / dd 全部去边框、去 margin，间距统一由
    标题 padding 与链接 padding 承担——根除分组之间的“空盒子”与宽间隔 */
 .dumi-default-sidebar > dl,
 .dumi-default-sidebar > dl > dt,
-.dumi-default-sidebar > dl > dd,
-.dumi-default-sidebar ul,
-.dumi-default-sidebar li {
+.dumi-default-sidebar > dl > dd {
   border: none !important;
   margin: 0 !important;
+  /* 项间距 8px：上下各 4px；font-size 0 消除空白文本节点的行盒 */
+  padding: 4px 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -1321,19 +1247,22 @@ html {
   padding-top: 2px !important;
 }
 
-/* 链接：四角圆角胶囊，轻呼吸间距（替代此前的宽间隔） */
+/* 链接：四角圆角胶囊，40px 高度，柔和过渡 */
 .dumi-default-sidebar > dl > dd > a {
-  display: block !important;
-  padding: 4px 10px 4px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 40px !important;
+  padding: 0 10px 0 14px !important;
   margin: 0 6px !important;
   border: none !important;
   border-radius: 8px !important;
   font-size: 13px !important;
-  line-height: 1.5 !important;
   color: var(--aura-text-secondary) !important;
   transition:
-    background var(--aura-duration-fast) var(--aura-easing),
-    color var(--aura-duration-fast) var(--aura-easing) !important;
+    background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .dumi-default-sidebar > dl > dd > a:hover {
@@ -1393,17 +1322,4 @@ html body .dumi-default-doc-layout-toc-wrapper > h4::before {
   font-weight: 600 !important;
   letter-spacing: 0.08em !important;
   color: var(--aura-text-tertiary) !important;
-}
-
-html body .dumi-default-toc > a.active {
-  border-left: 2px solid var(--aura-primary-500) !important;
-  color: var(--aura-primary-600) !important;
-  font-weight: 500 !important;
-  background: var(--aura-x-accent-soft) !important;
-}
-
-[data-prefers-color='dark'] html body .dumi-default-toc > a.active {
-  border-left-color: var(--aura-primary-400) !important;
-  color: var(--aura-primary-300) !important;
-  background: rgba(139, 92, 246, 0.1) !important;
 }
