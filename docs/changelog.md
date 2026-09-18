@@ -14,6 +14,10 @@
   （mock 逐字流式对话闭环、Markdown 安全渲染演示、输入框交互演示）
 - `Welcome` / `Prompts` / `Suggestion` / `Think` 外围组件与文档页
   （欢迎引导、提示词卡片、快捷建议、思考过程折叠，axe 无障碍基线全覆盖）
+- **M5 收尾**：全组件视觉升级（玻璃拟态 + 品牌渐变 + 光晕，`prefers-reduced-motion`
+  下关闭动效）；修复样式打包缺口（新增 `@aura/x/style.css`，esm 剥离 less 导入）；
+  在 Next.js 14 应用（AIChat Pro）中完成真实消费方验证；
+  llms.txt 补齐业务组件与 AI 组件摘要
 - 46 个组件文档全量体检补全（孤儿示例、frontmatter、导入片段等六类缺口）
 - 新增第 8 个包 `@aura/x`（AI 对话组件库，对标 Ant Design X）：M1 交付 `XProvider`
   主题桥接、`--aura-x-*` 令牌组与「AI 组件」导航；令牌映射收敛到 `@aura/shared` 共享

@@ -39,6 +39,18 @@
   - **`Think`**：思考过程折叠面板——思考中强制展开并脉冲提示（不可收起），
     完成后默认折叠可回看，标题展示用时；
   - 四个组件均带文档页与 demo，axe 无障碍基线全覆盖。
+- **M5 打包修复与真机验证**：
+  - **样式打包缺口修复**：组件内 `.less` 导入会让无 less 管线的消费方构建失败
+    （Next.js 实测）。新增构建后处理 `scripts/build-styles.mjs`——把全部 less
+    编译合并为 `esm/style.css`（新增 exports `./style.css`），并从 esm 中剥离
+    `.less` 导入；消费方一次性 `import '@aura/x/style.css'` 即可；
+  - **真实消费方验证**：以本地 tarball（模拟发布产物）接入 Next.js 14 应用
+    （AIChat Pro），新增 `/x` 试点页——XProvider + Bubble.List + Sender +
+    useXChat 复用该应用既有的 streamChat 传输层，流式打字机对话完整可用，
+    零运行时异常（Chrome 152 + 静态导出实测）；
+  - **视觉升级**：全组件玻璃拟态 + 品牌渐变 + 光晕聚焦（详见前述设计说明与
+    令牌扩充），`prefers-reduced-motion` 下关闭动效；
+  - llms.txt 补齐业务组件与 @aura/x 的 AI 摘要（含最小示例与环境要求）。
 - **重构**：Aura 令牌 → antd token 的映射收敛到 `@aura/shared` 的
   `antdTokenOverrides()`（纯数据，零 antd 依赖），`BusinessProvider` 同步改用，
   消除与 `@aura/x` 之间的映射重复。
