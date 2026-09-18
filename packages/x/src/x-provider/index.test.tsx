@@ -38,3 +38,34 @@ describe('XProvider', () => {
     expect(token.colorLink).toBe('#ff6600');
   });
 });
+
+describe('XProvider 主题派生', () => {
+
+  it('M5+: colorPrimary 注入派生品牌变量，dark 作用域化 data-theme', async () => {
+    const { container } = render(
+      <XProvider colorPrimary="#2563eb" dark>
+        <div>child</div>
+      </XProvider>,
+    );
+
+    const scope = container.firstElementChild as HTMLElement;
+    expect(scope.getAttribute('data-theme')).toBe('dark');
+    const style = scope.getAttribute('style') ?? '';
+    expect(style).toContain('--aura-x-accent');
+    expect(style).toContain('#2563eb');
+    expect(screen.getByText('child')).toBeDefined();
+  });
+
+  it('M5+: 未传 colorPrimary 时不注入派生变量（保持主题默认）', () => {
+    const { container } = render(
+      <XProvider>
+        <div>child</div>
+      </XProvider>,
+    );
+
+    const scope = container.firstElementChild as HTMLElement;
+    expect(scope.getAttribute('data-theme')).toBeNull();
+    expect(scope.getAttribute('style') ?? '').not.toContain('--aura-x-accent');
+  });
+
+});
