@@ -1,0 +1,63 @@
+/* Think — 思考过程 */
+
+.aura-x-think {
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-bubble-ai-bg);
+  overflow: hidden;
+}
+
+.aura-x-think-trigger {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: center;
+  width: 100%;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3);
+  border: none;
+  background: transparent;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-fontSize-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.aura-x-think--thinking .aura-x-think-trigger {
+  color: var(--aura-primary-600);
+  cursor: default;
+}
+
+.aura-x-think-trigger:focus-visible {
+  outline: 2px solid var(--aura-primary-500);
+  outline-offset: -2px;
+}
+
+.aura-x-think-caret {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.aura-x-think--thinking .aura-x-think-label {
+  animation: aura-x-think-pulse 1.4s infinite ease-in-out;
+}
+
+@keyframes aura-x-think-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.aura-x-think-content {
+  max-height: 240px;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3) var(--aura-spacing-3);
+  overflow-y: auto;
+  border-top: 1px dashed var(--aura-x-bubble-border);
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-fontSize-sm);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}

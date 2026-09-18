@@ -1,0 +1,75 @@
+/* Prompts — 提示词集 */
+
+.aura-x-prompts-title {
+  margin-bottom: var(--aura-spacing-2);
+  font-size: var(--aura-fontSize-sm);
+  color: var(--aura-text-secondary);
+}
+
+.aura-x-prompts-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--aura-spacing-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aura-x-prompts--horizontal .aura-x-prompts-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.aura-x-prompts-item {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: flex-start;
+  width: 100%;
+  padding: var(--aura-spacing-3) var(--aura-spacing-4);
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-bubble-ai-bg);
+  color: var(--aura-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--aura-duration-normal) var(--aura-easing),
+    background var(--aura-duration-normal) var(--aura-easing);
+}
+
+.aura-x-prompts-item:hover {
+  border-color: var(--aura-primary-500);
+  background: var(--aura-primary-50);
+}
+
+.aura-x-prompts-item:focus-visible {
+  outline: 2px solid var(--aura-primary-500);
+  outline-offset: 2px;
+}
+
+.aura-x-prompts--horizontal .aura-x-prompts-item {
+  width: auto;
+  min-width: 180px;
+  flex: 1 1 220px;
+}
+
+.aura-x-prompts-item-icon {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.aura-x-prompts-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aura-x-prompts-item-label {
+  font-size: var(--aura-fontSize-sm);
+  font-weight: 500;
+}
+
+.aura-x-prompts-item-description {
+  font-size: var(--aura-fontSize-xs);
+  color: var(--aura-text-secondary);
+}

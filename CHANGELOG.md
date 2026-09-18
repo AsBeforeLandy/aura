@@ -30,6 +30,15 @@
     代码块纯展示；支持流式未闭合语法的块级容错渲染；
   - 文档站新增 Bubble / Sender / MarkdownContent 三个组件页（含可交互 demo：
     mock 逐字流式对话闭环）。
+- **M4 外围组件**：
+  - **`Welcome`**：对话欢迎区（icon / title / description 居中，extra 插槽放 Prompts；
+    board / simple 两种变体）；
+  - **`Prompts`**：提示词卡片列表（label + description + icon，纵向 / 横向排列，
+    按钮语义键盘可达）；
+  - **`Suggestion`**：快捷建议列表（open 受控开合，空列表渲染 null）；
+  - **`Think`**：思考过程折叠面板——思考中强制展开并脉冲提示（不可收起），
+    完成后默认折叠可回看，标题展示用时；
+  - 四个组件均带文档页与 demo，axe 无障碍基线全覆盖。
 - **重构**：Aura 令牌 → antd token 的映射收敛到 `@aura/shared` 的
   `antdTokenOverrides()`（纯数据，零 antd 依赖），`BusinessProvider` 同步改用，
   消除与 `@aura/x` 之间的映射重复。
