@@ -47,6 +47,8 @@
   - **`Sender` 增强**：`submitType`（enter / shiftEnter 两种提交键位）、
     `autoSize`（textarea 行数范围透传）、`header` / `footer` 插槽；
   - 文档站新增 Actions / Conversations 两页（含 demo）。
+- **`@aura/icons` 收录新图标**：`ThumbUp` / `ThumbDown`（描边风格，与 action 组一致）；
+  Actions demo 接入 `Copy` / `Refresh` / `ThumbUp` / `Delete` 四枚图标。
 - **M5 打包修复与真机验证**：
   - **样式打包缺口修复**：组件内 `.less` 导入会让无 less 管线的消费方构建失败
     （Next.js 实测）。新增构建后处理 `scripts/build-styles.mjs`——把全部 less

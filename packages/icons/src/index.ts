@@ -38,6 +38,8 @@ export {
   Delete,
   Copy,
   Refresh,
+  ThumbUp,
+  ThumbDown,
   Upload,
   CloudUpload,
   EyeOpen,

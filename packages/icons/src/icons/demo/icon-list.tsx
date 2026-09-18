@@ -27,7 +27,7 @@ const iconCategories: { title: string; icons: string[] }[] = [
     title: '编辑类',
     icons: [
       'Edit', 'Delete', 'Copy', 'Plus', 'Minus', 'Close',
-      'Search', 'Filter', 'Refresh', 'Download',
+      'Search', 'Filter', 'Refresh', 'Download', 'ThumbUp', 'ThumbDown',
       'Upload', 'CloudUpload', 'Uploading',
       'EyeOpen', 'EyeClosed',
     ],
