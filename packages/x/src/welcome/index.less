@@ -14,7 +14,11 @@
   border: 1px solid var(--aura-x-bubble-border);
   border-radius: var(--aura-radius-lg);
   background:
-    radial-gradient(560px 180px at 50% -60px, var(--aura-x-accent-soft), transparent 70%),
+    radial-gradient(
+      560px 180px at 50% -60px,
+      var(--aura-x-accent-soft),
+      transparent 70%
+    ),
     var(--aura-x-bubble-ai-bg);
   backdrop-filter: var(--aura-x-glass-blur);
   -webkit-backdrop-filter: var(--aura-x-glass-blur);
@@ -35,14 +39,14 @@
 }
 
 .aura-x-welcome-title {
-  font-size: var(--aura-fontSize-2xl);
+  font-size: var(--aura-font-size-2xl);
   font-weight: 600;
   color: var(--aura-text);
   letter-spacing: 0.2px;
 }
 
 .aura-x-welcome-description {
-  font-size: var(--aura-fontSize-sm);
+  font-size: var(--aura-font-size-sm);
   color: var(--aura-text-secondary);
   max-width: 480px;
 }
