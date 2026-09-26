@@ -29,15 +29,23 @@
   },
   "peerDependencies": {
     "antd": ">=6.0.0",
+    "mermaid": ">=10.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
+  "peerDependenciesMeta": {
+    "mermaid": {
+      "optional": true
+    }
+  },
   "dependencies": {
-    "@aura/shared": "workspace:*"
+    "@aura/shared": "workspace:*",
+    "prism-react-renderer": "^2.4.1",
+    "react-markdown": "^10.1.0"
   },
   "license": "MIT",
   "devDependencies": {
     "less": "^4.9.1",
-    "react-markdown": "^10.1.0"
+    "mermaid": "^12.0.0"
   }
 }
