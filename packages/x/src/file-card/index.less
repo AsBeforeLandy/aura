@@ -1,0 +1,161 @@
+/* FileCard — 文件卡片（附件 / 引用文件的展示单元） */
+
+.aura-x-file-card {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: flex-start;
+  width: 264px;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3);
+  border: 1px solid var(--aura-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-bubble-ai-bg);
+  transition:
+    border-color var(--aura-duration-fast) var(--aura-easing),
+    box-shadow var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-file-card:hover {
+  border-color: var(--aura-x-bubble-border);
+  box-shadow: var(--aura-shadow-sm);
+}
+
+.aura-x-file-card-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--aura-radius-sm);
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+}
+
+.aura-x-file-card-icon > svg {
+  width: 18px;
+  height: 18px;
+}
+
+.aura-x-file-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.aura-x-file-card-main {
+  display: flex;
+  gap: var(--aura-spacing-1);
+  align-items: center;
+}
+
+.aura-x-file-card-name {
+  overflow: hidden;
+  color: var(--aura-text);
+  font-size: var(--aura-font-size-sm);
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aura-x-file-card-check {
+  flex: none;
+  color: var(--aura-success);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.5;
+}
+
+.aura-x-file-card-remove {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-inline-start: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-text-tertiary);
+  font-size: var(--aura-font-size-md);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    color var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-file-card-remove:hover {
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+}
+
+.aura-x-file-card-remove:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-file-card-meta {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: center;
+  margin-top: 2px;
+  color: var(--aura-text-tertiary);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.5;
+}
+
+.aura-x-file-card-ext {
+  padding: 0 4px;
+  border-radius: var(--aura-radius-full);
+  background: var(--aura-bg-tertiary);
+  text-transform: uppercase;
+}
+
+.aura-x-file-card-progress {
+  height: 4px;
+  margin-top: var(--aura-spacing-1);
+  border-radius: var(--aura-radius-full);
+  background: var(--aura-bg-tertiary);
+  overflow: hidden;
+}
+
+.aura-x-file-card-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--aura-x-accent-gradient);
+  transition: width var(--aura-duration-normal) var(--aura-easing);
+}
+
+.aura-x-file-card-desc {
+  margin-top: var(--aura-spacing-1);
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.5;
+}
+
+/* 失败态 */
+.aura-x-file-card--error {
+  border-color: var(--aura-error);
+}
+
+.aura-x-file-card--error .aura-x-file-card-icon {
+  background: var(--aura-error-light);
+  color: var(--aura-error);
+}
+
+.aura-x-file-card--error .aura-x-file-card-size {
+  color: var(--aura-error);
+}
+
+.aura-x-file-card-error-tip {
+  margin-top: var(--aura-spacing-1);
+  color: var(--aura-error);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.5;
+}
+
+/* 成功态 */
+.aura-x-file-card--done .aura-x-file-card-icon {
+  background: var(--aura-success-light);
+  color: var(--aura-success);
+}

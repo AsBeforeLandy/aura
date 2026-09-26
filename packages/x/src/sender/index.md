@@ -31,26 +31,32 @@ toc: content
 
 <code src="./demo/submit-type.tsx" description="shiftEnter 键位 + header/footer 插槽 + 字数统计。">键位与插槽</code>
 
+### 附件组合
+
+附件条放进 `header` 插槽即可；列表为空时传 `undefined`，避免渲染出空的插槽容器。
+
+<code src="./demo/attachments.tsx" description="Attachments 放在 header，发送后清空输入与附件列表。">附件条</code>
+
 ## API
 
 ### SenderProps
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| value | 受控值 | `string` | - |
-| defaultValue | 非受控初值 | `string` | `''` |
-| onChange | 输入回调 | `(value: string) => void` | - |
-| onSubmit | 提交回调（Enter 或点击发送；空白内容不触发） | `(content: string) => void` | - |
-| onCancel | 取消回调：loading 时点击「停止」触发 | `() => void` | - |
-| loading | 生成中：按钮变为「停止」，Enter 不再提交 | `boolean` | `false` |
-| placeholder | 占位文本 | `string` | 输入消息，Enter 发送… |
-| disabled | 禁用 | `boolean` | `false` |
-| clearOnSubmit | 提交后清空输入（仅非受控模式生效） | `boolean` | `true` |
-| submitType | 提交键位：`enter` = Enter 提交 / Shift+Enter 换行；`shiftEnter` = Shift+Enter 提交 / Enter 换行 | `&'enter' \| 'shiftEnter'` | `'enter'` |
-| autoSize | textarea 行数范围（透传 antd autoSize） | `{ minRows?: number; maxRows?: number }` | `{ minRows: 1, maxRows: 6 }` |
-| header | 顶部插槽（如附件条、提示条） | `ReactNode` | - |
-| footer | 底部插槽（如字数统计、免责声明） | `ReactNode` | - |
-| autoFocus | 自动聚焦 | `boolean` | `false` |
+| 参数          | 说明                                                                                            | 类型                                     | 默认值                       |
+| ------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------- |
+| value         | 受控值                                                                                          | `string`                                 | -                            |
+| defaultValue  | 非受控初值                                                                                      | `string`                                 | `''`                         |
+| onChange      | 输入回调                                                                                        | `(value: string) => void`                | -                            |
+| onSubmit      | 提交回调（Enter 或点击发送；空白内容不触发）                                                    | `(content: string) => void`              | -                            |
+| onCancel      | 取消回调：loading 时点击「停止」触发                                                            | `() => void`                             | -                            |
+| loading       | 生成中：按钮变为「停止」，Enter 不再提交                                                        | `boolean`                                | `false`                      |
+| placeholder   | 占位文本                                                                                        | `string`                                 | 输入消息，Enter 发送…        |
+| disabled      | 禁用                                                                                            | `boolean`                                | `false`                      |
+| clearOnSubmit | 提交后清空输入（仅非受控模式生效）                                                              | `boolean`                                | `true`                       |
+| submitType    | 提交键位：`enter` = Enter 提交 / Shift+Enter 换行；`shiftEnter` = Shift+Enter 提交 / Enter 换行 | `&'enter' \| 'shiftEnter'`               | `'enter'`                    |
+| autoSize      | textarea 行数范围（透传 antd autoSize）                                                         | `{ minRows?: number; maxRows?: number }` | `{ minRows: 1, maxRows: 6 }` |
+| header        | 顶部插槽（如附件条、提示条）                                                                    | `ReactNode`                              | -                            |
+| footer        | 底部插槽（如字数统计、免责声明）                                                                | `ReactNode`                              | -                            |
+| autoFocus     | 自动聚焦                                                                                        | `boolean`                                | `false`                      |
 
 ## 注意事项
 

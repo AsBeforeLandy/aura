@@ -1,0 +1,22 @@
+/* Attachments — 附件列表（输入框上方的附件条） */
+
+.aura-x-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--aura-spacing-2);
+  align-items: stretch;
+}
+
+.aura-x-attachments--scroll-x {
+  flex-wrap: nowrap;
+  padding-bottom: var(--aura-spacing-1);
+  overflow-x: auto;
+  /* 横滑条与卡片间距，避免遮挡最后一张卡片 */
+  scrollbar-width: thin;
+}
+
+.aura-x-attachments--empty {
+  color: var(--aura-text-tertiary);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.5;
+}

@@ -1,0 +1,174 @@
+/* ThoughtChain — 思维链（时间线 + 状态节点） */
+
+.aura-x-thought-chain {
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-bubble-ai-bg);
+}
+
+.aura-x-thought-chain--plain {
+  border: none;
+  background: transparent;
+}
+
+/* ===== 折叠头部 ===== */
+
+.aura-x-thought-chain-header {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: center;
+  width: 100%;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3);
+  border: none;
+  border-radius: var(--aura-radius-md);
+  background: transparent;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-thought-chain-header:hover {
+  background: var(--aura-x-accent-soft);
+}
+
+.aura-x-thought-chain-header:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-thought-chain-header:disabled {
+  cursor: default;
+}
+
+.aura-x-thought-chain-title {
+  flex: none;
+  font-weight: 600;
+  color: var(--aura-text);
+}
+
+.aura-x-thought-chain-summary {
+  flex: 1;
+  color: var(--aura-text-tertiary);
+  font-size: var(--aura-font-size-xs);
+}
+
+/* 进行中：摘要文字走品牌渐变流光 */
+.aura-x-thought-chain--running .aura-x-thought-chain-summary {
+  color: var(--aura-x-accent);
+}
+
+.aura-x-thought-chain-caret {
+  flex: none;
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* ===== 时间线 ===== */
+
+.aura-x-thought-chain-list {
+  margin: 0;
+  padding: var(--aura-spacing-1) var(--aura-spacing-3) var(--aura-spacing-2);
+  list-style: none;
+}
+
+.aura-x-thought-chain-item {
+  position: relative;
+  padding: var(--aura-spacing-1) 0 var(--aura-spacing-2) 24px;
+}
+
+/* 节点间的衔接线（最后一项不画） */
+.aura-x-thought-chain-item::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 22px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--aura-border);
+}
+
+.aura-x-thought-chain-item:last-child::before {
+  display: none;
+}
+
+.aura-x-thought-chain-node {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--aura-text-tertiary);
+  border-radius: var(--aura-radius-full);
+  background: var(--aura-bg);
+  font-size: 8px;
+  line-height: 1;
+}
+
+.aura-x-thought-chain-node--success {
+  border-color: var(--aura-success);
+  background: var(--aura-success-light);
+  color: var(--aura-success);
+}
+
+.aura-x-thought-chain-node--error {
+  border-color: var(--aura-error);
+  background: var(--aura-error-light);
+  color: var(--aura-error);
+}
+
+.aura-x-thought-chain-node--thinking {
+  border-color: var(--aura-x-accent);
+  animation: aura-x-thought-chain-pulse 1.6s infinite var(--aura-easing);
+}
+
+@keyframes aura-x-thought-chain-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    border-color: var(--aura-x-accent);
+  }
+
+  50% {
+    transform: scale(1.25);
+    border-color: var(--aura-primary-400);
+  }
+}
+
+.aura-x-thought-chain-content {
+  min-width: 0;
+}
+
+.aura-x-thought-chain-item-title {
+  color: var(--aura-text);
+  font-size: var(--aura-font-size-sm);
+  line-height: 1.5;
+}
+
+.aura-x-thought-chain-item--pending .aura-x-thought-chain-item-title {
+  color: var(--aura-text-tertiary);
+}
+
+.aura-x-thought-chain-item--error .aura-x-thought-chain-item-title {
+  color: var(--aura-error);
+}
+
+.aura-x-thought-chain-item-desc {
+  margin-top: 2px;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-x-thought-chain-node--thinking {
+    animation: none;
+    border-color: var(--aura-x-accent);
+    border-style: dotted;
+  }
+}

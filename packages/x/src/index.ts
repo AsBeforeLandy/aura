@@ -15,6 +15,10 @@ export { MarkdownContent } from './markdown-content';
 export type { MarkdownContentProps } from './markdown-content';
 export { Sender } from './sender';
 export type { SenderProps } from './sender';
+export { Attachments } from './attachments';
+export type { AttachmentsProps, AttachmentItem } from './attachments';
+export { FileCard, formatFileSize, getFileExt } from './file-card';
+export type { FileCardProps, FileCardStatus } from './file-card';
 export { Welcome } from './welcome';
 export type { WelcomeProps } from './welcome';
 export { Prompts } from './prompts';
@@ -23,6 +27,12 @@ export { Suggestion } from './suggestion';
 export type { SuggestionProps, SuggestionItem } from './suggestion';
 export { Think } from './think';
 export type { ThinkProps } from './think';
+export { ThoughtChain } from './thought-chain';
+export type {
+  ThoughtChainProps,
+  ThoughtChainItem,
+  ThoughtChainStatus,
+} from './thought-chain';
 export { Actions } from './actions';
 export type { ActionsProps, ActionItem } from './actions';
 export { Conversations } from './conversations';
