@@ -66,15 +66,39 @@ npm install @aura/ui
 
 - XProvider: 主题桥接（antd 算法 + `--aura-x-*` 令牌，dark/compact/colorPrimary）
 - Bubble / Bubble.List: 消息气泡（role 分侧、loading 打字动画、contentRender 扩展点、列表自动滚动）
-- Sender: 输入框（Enter 提交、Shift+Enter 换行、IME 组词保护、loading 时按钮变「停止」）
-- MarkdownContent: 安全 Markdown 渲染（react-markdown 为可选 peer 依赖；
-  不渲染原始 HTML、链接协议白名单 http/https/mailto、代码块纯展示）
+- Sender: 输入框（Enter 提交、Shift+Enter 换行、IME 组词保护、loading 时按钮变「停止」；
+  submitType 键位切换、autoSize、header/footer 插槽）
+- Attachments: 附件条（items 列表化排布 FileCard，onRemove 回传项与索引，
+  overflow: wrap/scrollX，空列表可传 empty 占位）
+- FileCard: 文件卡片（name/size/status: init|uploading|done|error、percent 进度、
+  errorTip 失败原因、onRemove 移除；formatFileSize 与 getFileExt 为命名导出）
+- MarkdownContent: 安全 Markdown 渲染（react-markdown 为运行时依赖，随包安装；
+  不渲染原始 HTML、链接协议白名单 http/https/mailto、围栏代码块默认交给
+  CodeHighlighter 高亮且只着色不执行；highlightCode=false 回到朴素 pre，
+  renderCode 可完全自定义代码块）
 - Welcome / Prompts / Suggestion: 欢迎区与引导（extra 插槽、卡片列表、快捷建议）
 - Think: 思考过程折叠面板（thinking 中强制展开，完成后可回看，支持 duration）
+- ThoughtChain: 思维链时间线（items 多步骤，status: pending|thinking|success|error
+  四态节点；collapsible 折叠为一行摘要，存在 thinking 步骤时强制展开且头部禁用）
+- Actions: 消息操作组（role=toolbar，复制/重新生成/点赞/删除，danger/active/disabled 态，可纵向排列）
+- Conversations: 会话管理列表（激活高亮、时间戳、可配置操作菜单，菜单点击自动关闭、点外部收起）
+- Folder: 文件树 + 文件预览（treeData 层级、展开收起、选中、右键菜单、图标定制；
+  内容可内联或经 fileContentService 异步拉取；ref 提供 getNode/updateNode/deleteNode/addNode 不可变换算）
+- Sources: 来源引用（items 来源列表、折叠为「已引用 N 个来源」摘要、
+  expandIconPosition、onClick；inline 模式渲染上标序号 + 悬停浮层）
+- CodeHighlighter: 代码高亮（prism-react-renderer，lang + children + header；
+  头部含语言标识与一键复制；配色写 var(--aura-*) 令牌，亮暗主题自动跟随）
+- Mermaid: 图表渲染（mermaid 源码 → SVG，图片/代码双视图、缩放、重置、下载、复制；
+  mermaid 为可选 peer 依赖，动态 import 按需加载）
+- XNotification / useNotification: 浏览器系统通知封装（window.Notification；
+  permission / requestPermission / open / close，受操作系统通知权限管控，非页面内消息条）
 - useXStream: 流式传输 Hook（SSE 与纯文本增量两种模式，abort 生命周期，
   解析器 parseSSEStream 可独立使用；`data: [DONE]` 哨兵由消费方过滤）
 - useXChat: 消息编排 Hook（user/assistant 成对追加、增量更新 assistant 占位、
-  错误态、stop 保留部分内容、clear；传输经 onRequest 注入，signal 必须透传给 fetch）
+  错误态、stop 保留部分内容、clear、setMessages 直接替换；传输经 onRequest 注入，
+  signal 必须透传给 fetch）。多会话传 conversationKey：变化时按 defaultMessages
+  （数组或 `({conversationKey}) => XMessage[] | Promise<XMessage[]>`）重新初始化，
+  并中止上一个会话在途的请求；isDefaultMessagesRequesting 反映异步历史加载态
 
 ### 最小对话示例
 

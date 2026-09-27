@@ -236,6 +236,7 @@ export default defineConfig({
             { title: '安装', link: '/guide/installation' },
             { title: '主题定制', link: '/guide/theme' },
             { title: '开发规范与性能指标', link: '/guide/standards' },
+            { title: '工程化工具链', link: '/guide/toolchain' },
             { title: 'AI 智能协同', link: '/guide/ai' },
             { title: '常见问题', link: '/guide/faq' },
           ],

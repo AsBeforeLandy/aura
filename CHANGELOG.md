@@ -4,6 +4,299 @@
 
 ## [Unreleased]
 
+### Docs — 新增「工程化工具链」页，并消除「守护机制」的两处真相
+
+梳理仓库工具链时发现：`docs/guide/standards.md` 的「守护机制」表与
+`package.json#verify`、`ci.yml` 的实际行为**不一致**，且它自身的数据已过期。
+本次把工具链收敛成一份可维护的地图，并修掉漂移。
+
+- **新增 `docs/guide/toolchain.md`（「工程化工具链」）**：分层总览（13 层 ×
+  工具 / 版本 / 守护什么）、包形态、**门禁矩阵**（pre-commit × `pnpm verify` × CI
+  三列对照）、**任务编排**、测试与覆盖率口径、**已知缺口（P0×2 / P1×3 / P2×5）**、
+  如何扩展。侧栏 `.dumirc.ts` 同步新增 `/guide/toolchain` 入口。
+- **任务编排一节明确了「没有专用编排器」这件事**：仓库无 Turbo / Nx / Lage / Rush /
+  Wireit / concurrently / npm-run-all 的配置与依赖，编排由 5 个层次各自的原生机制分担
+  —— pnpm `-r` 递归（含**拓扑排序**与默认 4 并发）、npm scripts 的 `&&` 线性链、
+  Vitest 的文件级并行、husky + lint-staged 的暂存文件编排、GitHub Actions 的
+  job/step 与 `concurrency`。附上**实测的拓扑顺序**（叶子包在前，`business`
+  因依赖 `ui` 最后执行）与包依赖图。
+- **补充通用的「什么场景才值得上编排器」判据**：先给三个必要条件（有可缓存的昂贵产物 /
+  存在真实的跨包**产物**依赖 / 触发频次足够高），再列组件库特有的加分场景（一套源码出
+  多份产物与多框架适配、混着重活、包数上双、CI 分钟数受限、发布频繁）与「不值得」的信号；
+  并给出「上编排器之前先做的五件更便宜的事」（量化瓶颈、`--filter '...[origin/master]'`
+  选择性执行、Vitest `--changed`/`--shard`、CI `paths:` 过滤、缓存安装）。
+  另特别指出**别混淆构建编排与发布编排**——后者是 changesets 的领域。
+- **修正一处论断的依据**：核对各包 `tsconfig.json` 后确认
+  `paths` 全部指向 `../<包名>/src/index.ts`（**源码**），father bundless 又把裸包名
+  保持为外部导入，因此构建 `business` **不会读取 `ui/esm`**——
+  这既证明「拓扑顺序不影响正确性（`--no-sort` 也能构建成功）」，也说明缓存命中空间很小。
+  同时把「新增包」的扩展清单补全为三处必改（`size-limit`、根 `tsconfig.json` 的 `paths`、
+  **本包 `tsconfig.json` 的 `paths`**——最后一处最易漏）。
+- **订正 `standards.md`**：
+  - 耗时基线里的「676 个用例」过期为 **870 个用例 / 73 个测试文件**；
+  - 「守护机制」表**收敛为指向工具链页**——此前它把「覆盖率阈值」挂在
+    `pnpm test:coverage` 下，却又写「一键执行 `pnpm verify`、CI 跑同一条链路」，
+    而本地 `verify` 跑的其实是 `pnpm test`（不含覆盖率阈值），
+    会让人误以为本地也会卡覆盖率。同一份事实出现两处必然漂移，现只保留一处。
+- **梳理出的缺口**（详见工具链页「已知缺口」）：
+  - **P0**：`pnpm format:check` 不在任何门禁内，且仓库当前不符合 Prettier 风格
+    （`packages/x/src` 单包就有 62 个 `.ts/.tsx`、23 个 `.less/.md` 未通过）——
+    属于「看起来有检查、实际没有」的假门禁；
+  - **P1**：`lint-staged` 的 `.less` / `.md` / `.yml` 覆盖未开（与格式策略同源，见下）；
+  - **P1**：无 changesets，版本与 CHANGELOG 全靠手写；
+  - **P2**：无构建缓存与「只跑受影响的包」；无 E2E / 视觉回归；
+    无 `eslint-plugin-jsx-a11y` 静态检查；无依赖更新自动化；
+    TypeScript 6 + ESLint 10 与 pnpm 7.33.7 的版本组合同样偏两端。
+
+### Fixed — 本地门禁与 CI 对齐（`verify` 纳入覆盖率阈值）
+
+- **`pnpm verify` 的测试步骤由 `pnpm test` 改为 `pnpm test:coverage`**：
+  此前覆盖率阈值**只在 CI 生效**，本地「一键门禁」实际弱于 CI，
+  是个名副其实的假保障（而文档还写着两者同链路）。现在两端真正跑同一条链路。
+- **新增 `pnpm verify:fast`**：保留原链路（跳过覆盖率插桩）用于紧凑内循环，
+  避免「为了严起来把日常反馈变慢」。推送前仍应跑一次完整的 `pnpm verify`。
+- **`lint-staged` 增加 `*.json` → `prettier --write`**：实测 `.json` 是当前**唯一**
+  全部符合 Prettier 输出的扩展名，纳入后不会引入无关重排。
+- **`.less` / `.md` / `.yml` 刻意暂未纳入**：实测 `.less` 有 39 个、`docs/**/*.md`
+  有 7 个未通过 `prettier --check`，纳入后**下一次提交就会把无关内容一起重排**
+  （`.md` 表现为表格对齐）。这属于格式策略决策，不是能顺手做的杂活——见下条。
+- **订正 P0 的描述**：工具链页新增「格式策略的三种处理方式」。
+  此前把该问题写成「必须二选一」（全量重排 / 删掉脚本）是**不准确**的——
+  Prettier 官方对大型代码库推荐的**增量收敛**（只格式暂存文件、不做全量重排）
+  是同样可行的第三条路，且更适合单人维护的仓库。
+  `standards.md` 中「覆盖率阈值只在 CI 生效」的说明同步订正。
+- **补记根因**：这次的不一致并非笔误，而是**门禁链路被定义在两处**
+  （`package.json#verify` 与 `ci.yml` 的各 step），且没有任何机制保证两者同步。
+  已作为 P2 记入工具链页「已知缺口」，附两种收敛方案（CI 改单步 `pnpm verify` /
+  加自检脚本比对步骤集合），避免下次再各改一边。
+
+### Changed — 格式策略定为「增量收敛」，P0 清零
+
+上一节提到格式策略待定。本节的决策依据是**一次实测的规模统计**：仓库中不符合
+Prettier 输出的文件远超预期——**仅 `packages/ui` 一个包就有 245 个**，
+`packages/x` 单 `src` 目录 85 个、`icons` 15 个、`shared` 5 个……
+全仓保守估计 **360+**（分片扫描被沙箱中断，实际只会更多）。
+
+这个数字直接否掉了「全量重排」：一个改写 360+ 个文件的 `style:` 提交会让
+**整个 `@aura/ui` 的 `git blame` 失去意义**，代价与收益完全不成比例。
+
+- **采纳「增量收敛」**：`lint-staged` 的 prettier 范围由 `*.json` 扩到
+  `*.{json,less,md,yml,yaml}`——只格式化**暂存**文件，不做全量重排。
+  Prettier 官方对大型代码库同样推荐这条迁移路径。
+- **代价已衡量并接受**：启用时待提交的 20 个 `.less` / `.md` 文件约产生
+  **617 行**重排，会混入随后的提交。
+- **补上收敛的完成判据**（这条必须有，否则会永久悬着）：
+  `npx prettier --check "{packages,tests,docs}/**/*.{ts,tsx,js,jsx,json,css,less,md}"`
+  输出 `All matched files use Prettier code style!` 即收敛完成，
+  **届时把 `format:check` 纳入 `verify` 与 CI**。
+- **重新定性 `format:check`**：它此前是「看起来有、实际没有」的假门禁；
+  现在角色明确为**收敛进度探针** + 提交期已强制格式 + 有退出判据，
+  因此**从 P0 降为 P2**（跟踪项，自愈型）。结论：**「已知缺口」里 P0 已清零**。
+
+### Fixed — `@aura/request` 补上体积预算（体积预算覆盖 5/6 → 6/6）
+
+同批缺口里最容易清的一个：`size-limit` 只给 5 个 father 库包设了预算，
+`@aura/request` 一直没被守护。实测产物 **1.06 kB brotlied**，按仓库惯例
+（圆整 + 约 1.9x 余量）定为 **2 kB**，并把 6 条预算按包表顺序重排
+（shared / request / icons / ui / business / x）。
+
+### Added — `useXChat` 支持多会话（`conversationKey`）与完整会话切换闭环
+
+做「`Conversations` + `Bubble.List` 会话切换闭环」时暴露了能力缺口：
+多会话切换需要「按 key 换上下文」和「直接写回消息」两件事，
+而 `useXChat` 两样都没有——只能靠 `key` 强制重挂载组件来绕，属于教坏人的写法。
+本次把缺的补齐：
+
+- **`conversationKey`**：会话唯一标识。变化时按 `defaultMessages` 重新初始化消息，
+  并**中止上一个会话在途的请求**。
+- **`defaultMessages`**：`XMessage[]` 或 `({ conversationKey }) => XMessage[] |
+Promise<XMessage[]>`，可异步拉取历史。只在**挂载**与 **`conversationKey` 变化**时
+  求值（内部经 ref 读取），因此传数组字面量也不会每次渲染都重置消息。
+  `initialMessages` 保留为数组简写（`defaultMessages` 优先），向后兼容。
+- **`setMessages(messages)`**：直接替换消息列表，不触发请求。
+- **`isDefaultMessagesRequesting`**：异步历史加载态。
+- **`clear()` 语义收紧**：复位到「最近一次解析出的默认消息」，而不是固定回到
+  `initialMessages`——异步历史场景下这才符合预期。
+
+### Fixed — 修掉请求收尾的两个竞态（切会话时才会暴露）
+
+实现上面的能力时发现旧实现有两处共享状态导致的竞态，都已修复并补回归用例：
+
+- **旧请求把新会话的 `loading` 按下去**：请求的 `finally` 原先无条件 `setLoading(false)`。
+  切换会话会 abort 旧请求，而它的收尾是异步的——若此时新会话已发起请求，
+  旧收尾会把新会话刚点亮的 loading 态清掉。现在改为**只在自己的 controller
+  仍是当前请求时**才收尾。
+- **旧请求误标新会话的 assistant 占位**：原先用「当前 assistant id」这个共享 ref
+  定位消息，旧请求收尾时会读到新会话的 id。现在把 id **捕获在闭包里**按 id 更新，
+  共享 ref 直接删除。
+
+### Added — 多会话闭环 demo（`Conversations` + `Bubble.List` + `Sender` + `useXChat`）
+
+- `bubble/demo/with-conversations.tsx`：一条完整链路——会话列表切换、每条会话
+  独立的消息与流式回复、**新建 / 重命名 / 删除会话**、空会话用
+  `Welcome` + `Prompts` 引导、删除最后一个会话时自动补一个空会话；
+  会话内容以「异步读 + 写回」的模拟远端存储呈现。
+  其中演示了多会话最容易踩的坑：**写回存储前必须判断这份消息属于哪个会话**
+  （切会话瞬间 `messages` 仍是上一个会话的内容），示例用
+  `defaultMessages` 解析时标记归属来解决。
+- `use-x-chat/demo/conversation-key.tsx`：Hook 层面的最小示例——切 key 加载历史、
+  `setMessages` 直接替换。
+- 文档：`use-x-chat` 页新增 `conversationKey` 小节与 API 表更新，并写明
+  「写回判归属 / 在途请求收尾」两个坑；`Bubble` 页新增「多会话闭环」小节；
+  `Conversations` 页加入口链接；`llms.txt` 同步。
+
+### Changed — `MarkdownContent` 的围栏代码块接入 `CodeHighlighter`（默认高亮）
+
+补齐 antdx 里「XMarkdown + CodeHighlighter」的组合：Markdown 中的围栏代码块
+不再只是纯文本，而是语法着色 + 语言标识 + 一键复制。
+
+- **API 扩展**（`MarkdownContent`）：
+  - `highlightCode?: boolean`（默认 `true`）——`false` 回到朴素的 `pre > code`；
+  - `renderCode?: (info: { lang: string; code: string }) => ReactNode`——
+    完全自定义，优先级高于 `highlightCode`。
+- **实现要点一：覆写的是 `pre` 而不是 `code`。** 围栏代码块在 hast 里是
+  `pre > code`；若在 `code` 渲染器里返回 `CodeHighlighter`（根节点是 `div`），
+  就会形成 `<pre><div>` 这种非法嵌套。因此改为覆写 `pre`、直接从子元素读
+  `language-xxx` 类名，那层 `code` 也就不再渲染——既拿到语言，也绕开了
+  非法嵌套。（行内代码仍走 `code`，样式不受影响。）
+- **实现要点二：去掉一个尾随换行。** react-markdown 传入的代码内容带 `\n`，
+  留着会让代码块末尾多出一条空白行（单行代码渲染成 2 行）。
+- **安全模型不变**：代码始终作为**文本**渲染，高亮只改观感、从不执行；
+  新增用例断言「高亮后代码块内的 `<img onerror>` 仍不产生元素」。
+- 测试从 6 个用例扩到 12 个，新增：默认高亮（含结构断言
+  `.aura-x-markdown > .aura-x-code-highlighter`，即中间那层 `pre` 确已移除）、
+  行内代码不受影响、`highlightCode={false}` 回归朴素形态、无语言标识按 `text`、
+  `renderCode` 优先级、尾随换行不产生空白行。
+- 文档：`markdown-content` 页新增「代码块的三种形态」demo（默认高亮 /
+  关回朴素 / 完全自定义）与两条实现说明；`CodeHighlighter` 页的「何时使用」
+  改为说明它已被 Markdown 默认接入；`llms.txt` 同步。
+
+### Added — `@aura/x` M8：补齐 antdx 剩余 5 个组件（官方组件全量覆盖）
+
+至此 `@ant-design/x` 官方总览页的 17 个组件 / API 在本库**全部实现**，
+「对标 Ant Design X」覆盖表清零：
+
+- **`Sources`**（来源引用）：头部摘要（缺省「已引用 N 个来源」）+ 有序列表，
+  `expandIconPosition`、`defaultExpanded` / `expanded` / `onExpand`、`onClick`；
+  `inline` 模式渲染上标序号，悬停 / 聚焦浮出来源详情。空列表渲染 `null`，
+  无 `url` 且无 `onClick` 时退化为纯文本（不产生无效的可点击元素）。
+  浮层是组件内自绘的绝对定位面板而非 portal，不与页面弹窗抢 `z-index`。
+- **`CodeHighlighter`**（代码高亮）：基于 `prism-react-renderer`，
+  `lang` + `children` + `header`（默认头部含语言标识与一键复制），
+  `ref.nativeElement`。复制优先 Clipboard API，非安全上下文自动回退
+  `textarea` + `execCommand`。**配色写成 `var(--aura-*)` 令牌**而非固定主题对象，
+  于是亮暗主题自动跟随——这是相对 antdx `highlightProps` 的刻意取舍。
+- **`Mermaid`**（图表）：mermaid 源码 → SVG，图片 / 代码双视图、放大 / 缩小 /
+  重置、下载 SVG、复制源码，`actions` 可逐项开关、`customActions` 可扩展。
+  mermaid **动态 `import()` 按需加载**（可选 peer 依赖），未安装时不拖累主包，
+  只在真正渲染时报错并给出安装提示；语法错误时展示错误详情而非白屏。
+- **`Folder`**（文件树）：`treeData` 层级树 + 文件预览，展开 / 收起、选中、
+  右键菜单（antd `Dropdown`，支持全局与节点级配置）、图标定制
+  （`directory` 键 + 扩展名键）、`fileContentService` 异步拉取内容、
+  `emptyRender` / `previewRender` / `previewTitle` / `directoryTitle` 定制。
+  `ref` 暴露 `getNode` / `updateNode` / `deleteNode` / `addNode` 四个
+  **不可变换算**方法（返回新 treeData，不改 props）。键盘支持
+  `Enter` / `Space` 激活与 `←` / `→` 展开收起。
+- **`XNotification` / `useNotification`**（系统通知）：`window.Notification` 的
+  命令式封装——`permission` / `requestPermission` / `open` / `close`，以及
+  返回 `[{ permission }, { open, close, requestPermission }]` 的 Hook。
+  原生构造函数**调用时**才取，模块本身可安全 SSR import；`permission` 首帧固定
+  `'denied'` 以避免水合不一致。`open` 同时接受 antdx 风格的 `{ openConfig, closeConfig }`。
+- **依赖**：新增 `prism-react-renderer`（`dependencies`）与 `mermaid`
+  （可选 `peerDependencies` + `peerDependenciesMeta.optional`，
+  `devDependencies` 里同样声明以供文档站与测试使用）。
+  新增组件会抬高 x 包体积，`size-limit` 的 `x` 预算按实测同步调整。
+- **测试**：5 个组件共 **72 个用例**（Sources 14 / XNotification 16 /
+  CodeHighlighter 11 / Mermaid 13 / Folder 18），均覆盖正常 / 边界 / 异常，
+  视觉组件带 axe 无障碍基线。
+- **文档**：`src/index.md` 组件总览表与「对标 Ant Design X」覆盖表更新，
+  并写明三处刻意取舍（高亮配色走令牌、Mermaid 类型不硬依赖 mermaid、
+  Notification 是系统通知）；`public/llms.txt` 补齐 5 个组件条目。
+
+### Added — `@aura/x` M7：Attachments / FileCard / ThoughtChain 接入包导出
+
+补齐三个已写完源码、却**从未接入包导出**的 AI 组件，并修掉随之暴露的令牌命名问题：
+
+- **`Attachments`**：输入框上方的附件条——`FileCard` 列表化排布，
+  `onRemove(item, index)` 回传被移除项与索引，`overflow: wrap | scrollX` 两种溢出模式，
+  空列表可选 `empty` 占位（缺省渲染 `null`）；语义为 `role="list"` / `listitem`。
+- **`FileCard`**：附件与引用文件的基本展示单元——`status: init | uploading | done | error`
+  四态、`percent` 进度条（越界自动钳制、`role="progressbar"` + aria-valuenow）、
+  `errorTip` 失败原因、扩展名徽标与移除按钮；`formatFileSize` / `getFileExt`
+  作为命名导出可直接复用。
+- **`ThoughtChain`**：时间线形态的多步思维链——四态节点（pending / thinking / success /
+  error）、折叠为一行摘要（文案由状态自动推导：进行中 / 已完成 / 含有失败步骤 / 共 N 步），
+  存在 `thinking` 步骤时强制展开且头部禁用，全部结束后回到用户控制的折叠态。
+  与 `Think` 的分工：Think 是单段思考文本的折叠面板，ThoughtChain 是多步骤时间线。
+- **包导出补齐**：三者及其类型（`AttachmentItem` / `FileCardProps` / `FileCardStatus` /
+  `ThoughtChainProps` / `ThoughtChainItem` / `ThoughtChainStatus`）加入 `src/index.ts`，
+  顺序按「交互 → 推理」与其余组件对齐。此前 docs demo 直接
+  `import { Attachments } from '@aura/x'` 因缺导出导致 `tsc --noEmit` 报
+  5 个 TS2305 / TS7006 —— `pnpm verify` 的类型门禁是红的。
+- **补建 ThoughtChain demo 与测试**：`thought-chain/index.md` 引用了
+  `./demo/basic.tsx` 与 `./demo/collapsible.tsx`，但该组件的 demo 目录与
+  `index.test.tsx` **均不存在**（文档页会渲染失败、测试约定缺位）。本次补齐
+  2 个 demo（静态四态混排 / 推理过程推进与折叠回看）与 10 个用例
+  （正常 3 / 边界 5 / 异常 1 / a11y 1）。
+- **文档同步**：`src/index.md` 组件总览表补入三个组件，并新增「对标 Ant Design X」
+  覆盖情况表（12 个已实现、5 个待补：Notification、Sources、CodeHighlighter、
+  Folder、Mermaid）；`public/llms.txt` 的 AI 组件清单此前停留在 M4，
+  本次一并补上 `Actions` / `Conversations` / `Attachments` / `FileCard` / `ThoughtChain`。
+- **`Sender` × `Attachments` 集成示例**：antdx 中 Attachments 的定位就是 Sender 的
+  `header`，但此前 Sender 的插槽 demo 只用一段纯文本占位（「📎 附件条插槽：…」）。
+  新增 `sender/demo/attachments.tsx`（附件条 + 单行横滑 + 发送后清空 + 字数统计），
+  并在 Attachments 文档补一条组合注意事项：列表为空时应传 `undefined` 而非空数组，
+  否则 Sender 会渲染出一条空的带内边距插槽容器。
+
+### Fixed — `@aura/x` 字号令牌命名不匹配（9 个样式文件的字号静默失效）
+
+- 9 个 `.less`（actions / bubble / conversations / markdown-content / prompts / sender /
+  suggestion / think / welcome）把字号令牌写成 `var(--aura-fontSize-*)`，而
+  `tokens.css` 的真实定义是 kebab-case 的 `--aura-font-size-*`。变量未命中时
+  `font-size` 整条声明被丢弃，这些组件的字号**长期静默回退到继承值**——
+  表现为「标题不够大、辅助文字不够小」，且无任何报错。
+- 修复后做全仓令牌审计（x 包 41 个在用令牌 × `tokens.css` 84 个定义）：
+  「使用但未定义」的令牌为 **0**，无同类残留。
+- 注意 `esm/` 是构建产物（`.gitignore` 已忽略），本次只改了 `src/`，需重新
+  `pnpm --filter @aura/x build` 才刷新 `esm/style.css` 与各 `esm/**/index.less`
+  （改前产物中仍残留 16 处旧令牌名）。
+
+### Fixed — 交付门禁漏掉第 8 个包 `@aura/x`（三处硬编码清单同步）
+
+`@aura/x` 加入 workspace 时，三份**手写的包清单**都没有同步，导致整个 AI 组件包
+在交付链路上是「免检」状态。三处一并改为按 `packages/*/package.json` 的
+`scripts.build` 自动派生（判据：是否用 father 构建），新增包不会再漏：
+
+- **`scripts/postbuild-dts.mjs` 的 `PACKAGES`**：漏掉 `x` 后，它的 12 个 `.d.ts`
+  一直带着 `import './index.less'`。这正是该脚本存在的唯一理由——消费方在
+  `skipLibCheck: false` 下会逐文件报 `TS2882: Cannot find module or type
+declarations for side-effect import of './index.less'`。修复后单次构建的
+  清理量从 46 个声明文件升至 **58 个**。
+- **`scripts/smoke.mjs` 的 `LIB_PACKAGES`**：`@aura/x` 的 9 项产物校验**全部空转**
+  ——包括它的 `./style.css` 子路径是否真的存在、产物中相对引用是否可解析、
+  裸包名依赖是否已声明。扩到 `x` 后立刻抓出下一个问题（见下条）。
+- **`package.json` 的 `size-limit`**：8 个包只给 4 个设了体积预算。补 `x` 的预算
+  （当时实测 15.53 kB，先设 20 kB；M8 新增 5 个组件后实测升至 28.35 kB，
+  预算同步调整为 34 kB）。
+- 两个脚本都加了「推导结果为空则报错退出」的兜底，避免清单推导失败时**静默跳过**
+  全部校验（fail-open）。
+
+### Fixed — `@aura/x` 的 `react-markdown` 依赖声明与事实不符
+
+- 扩大 smoke 覆盖后立刻暴露：`react-markdown` 只写在 `devDependencies`，
+  但它被 `MarkdownContent` **静态**引入、又随包入口 re-export，属于消费方
+  必须能解析的运行时依赖——未声明的后果是消费方 `import { Sender } from '@aura/x'`
+  时打包器直接报模块找不到。
+- **最终处理：放进 `dependencies`**（`^10.1.0`），与 `@aura/business` 处理
+  `pdfjs-dist` 同款。曾短暂改为 `peerDependencies`，但那只是把「必装」的
+  事实换成了一句安装警告，消费方仍要自己装；既然是静态导入、又随入口暴露，
+  声明成运行时依赖才是诚实且零摩擦的做法。
+- 同步订正措辞：`markdown-content` 文档页与 `src` 的 JSDoc、`llms.txt`
+  此前称其为「**可选** peer 依赖」，但静态导入下并非真正可选。
+  现在明确区分两件事：**组件**（`MarkdownContent`）是可选的
+  （不传 `contentRender` 时 `Bubble` 走纯文本），**依赖**是必需的，
+  并写清缘由（入口统一 re-export + 静态 import）。
+
 ### Changed — 文档站界面定稿（侧栏 / 目录 / 源码块 / 死代码清理）
 
 - **侧栏菜单**：项高 48px → **40px**；hover 文本右移（`padding-left` 14→20px）纳入
@@ -18,7 +311,7 @@
 - **修复 demo 源码块圆角断裂**：源码容器 `.dumi-default-source-code` 自带
   `0 0 4px 4px` 圆角，套在 12px 圆角卡片底部形成双层圆角错位缺角；改为
   `.dumi-default-previewer .dumi-default-source-code { border-radius: 0 0 11px 11px;
-  overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代码块上也复用，
+overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代码块上也复用，
   规则以 `.dumi-default-previewer` 前缀限定作用域，独立块保持 dumi 原样。
 - **死代码清理 38 处**：以「全站 6 类页面 × 亮暗双模式 CDP 选择器匹配」找出零命中规则——
   dumi 1 时代 `.dumi-default-doc-content` 全家族 29 处（实际容器是 `.markdown`，
@@ -245,11 +538,11 @@
   此后新增组件只需写好 frontmatter，导航即自动出现。
 - **三个最大业务组件抽出纯函数层 `utils.ts`**，渲染与逻辑解耦、可独立单测：
 
-  | 组件 | index.tsx | utils.ts |
-  | --- | --- | --- |
+  | 组件            | index.tsx    | utils.ts                                       |
+  | --------------- | ------------ | ---------------------------------------------- |
   | `WeekTimeRange` | 475 → 385 行 | 时间解析 / 槽位生成 / 区间合并与裁剪（137 行） |
-  | `YearCalendar` | 435 → 360 行 | 全年周网格构建与日期格式化（92 行） |
-  | `CascaderPanel` | 389 → 273 行 | 级联树的勾选展开、聚合与状态重算（131 行） |
+  | `YearCalendar`  | 435 → 360 行 | 全年周网格构建与日期格式化（92 行）            |
+  | `CascaderPanel` | 389 → 273 行 | 级联树的勾选展开、聚合与状态重算（131 行）     |
 
   对外类型（`TimeRange` / `WeekTimeRangeValue` / `CascaderOption`）移至 utils 后
   仍由组件入口原样再导出，公开 API 不变。
