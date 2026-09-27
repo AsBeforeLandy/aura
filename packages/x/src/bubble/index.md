@@ -31,6 +31,15 @@ toc: content
 
 <code src="./demo/basic.tsx" description="消息气泡 + 打字动画 + 自动滚动到底部的最小对话闭环。">基本对话</code>
 
+### 多会话闭环（配 Conversations + Sender + useXChat）
+
+把四个组件串成一条完整链路：`Conversations` 管会话、`useXChat` 按
+`conversationKey` 切换上下文、`Bubble.List` 渲染消息、`Sender` 负责输入；
+空会话展示 `Welcome` + `Prompts` 引导开口。演示包含**新建 / 重命名 / 删除会话**、
+每条会话独立的消息与流式回复，以及删除最后一个会话时自动补一个空会话。
+
+<code src="./demo/with-conversations.tsx" description="会话列表 ↔ 消息区 ↔ 输入框的完整切换闭环，含新建/重命名/删除。">多会话闭环</code>
+
 ### 变体与方向
 
 三种变体（filled / outlined / shadow）× 两种角色的渲染对比。
@@ -47,24 +56,24 @@ avatar / header / footer 三个插槽，footer 里放 Actions 操作组。
 
 ### BubbleProps
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| role | 消息角色：user 渲染在右侧，assistant / system 在左侧 | `'user' \| 'assistant' \| 'system'` | `'assistant'` |
-| content | 消息内容（纯文本） | `string` | `''` |
-| contentRender | 自定义内容渲染扩展点（如 MarkdownContent） | `(content: string) => ReactNode` | - |
-| avatar | 头像插槽 | `ReactNode` | - |
-| header | 气泡上方说明区 | `ReactNode` | - |
-| footer | 气泡下方操作区 | `ReactNode` | - |
-| loading | 生成中：内容区显示三点动画，`aria-busy` 标记 | `boolean` | `false` |
-| variant | 视觉变体 | `'filled' \| 'outlined' \| 'shadow'` | `'filled'` |
-| className / style | 透传 | - | - |
+| 参数              | 说明                                                 | 类型                                 | 默认值        |
+| ----------------- | ---------------------------------------------------- | ------------------------------------ | ------------- |
+| role              | 消息角色：user 渲染在右侧，assistant / system 在左侧 | `'user' \| 'assistant' \| 'system'`  | `'assistant'` |
+| content           | 消息内容（纯文本）                                   | `string`                             | `''`          |
+| contentRender     | 自定义内容渲染扩展点（如 MarkdownContent）           | `(content: string) => ReactNode`     | -             |
+| avatar            | 头像插槽                                             | `ReactNode`                          | -             |
+| header            | 气泡上方说明区                                       | `ReactNode`                          | -             |
+| footer            | 气泡下方操作区                                       | `ReactNode`                          | -             |
+| loading           | 生成中：内容区显示三点动画，`aria-busy` 标记         | `boolean`                            | `false`       |
+| variant           | 视觉变体                                             | `'filled' \| 'outlined' \| 'shadow'` | `'filled'`    |
+| className / style | 透传                                                 | -                                    | -             |
 
 ### Bubble.List
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| items | 气泡列表（`BubbleProps` + `key`） | `BubbleListItem[]` | - |
-| autoScroll | items 变化时自动滚动到底部 | `boolean` | `true` |
+| 参数       | 说明                              | 类型               | 默认值 |
+| ---------- | --------------------------------- | ------------------ | ------ |
+| items      | 气泡列表（`BubbleProps` + `key`） | `BubbleListItem[]` | -      |
+| autoScroll | items 变化时自动滚动到底部        | `boolean`          | `true` |
 
 ## 注意事项
 

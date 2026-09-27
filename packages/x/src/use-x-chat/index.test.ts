@@ -134,4 +134,146 @@ describe('useXChat', () => {
     expect(result.current.messages).toHaveLength(1);
     expect(result.current.messages[0].content).toBe('你好，我是 Aura');
   });
+
+  it('正常：conversationKey 变化时按 defaultMessages 重新初始化消息', async () => {
+    const store: Record<string, XMessage[]> = {
+      a: [{ id: 'a1', role: 'user', content: '会话 A 的消息' }],
+      b: [{ id: 'b1', role: 'user', content: '会话 B 的消息' }],
+    };
+    const { result, rerender } = renderHook(
+      ({ k }: { k: string }) =>
+        useXChat({
+          conversationKey: k,
+          defaultMessages: ({ conversationKey }) =>
+            store[String(conversationKey)] ?? [],
+          onRequest: async () => {},
+        }),
+      { initialProps: { k: 'a' } },
+    );
+
+    await waitFor(() =>
+      expect(result.current.messages[0]?.content).toBe('会话 A 的消息'),
+    );
+
+    rerender({ k: 'b' });
+    await waitFor(() =>
+      expect(result.current.messages[0]?.content).toBe('会话 B 的消息'),
+    );
+
+    // 切回来同样按 key 取
+    rerender({ k: 'a' });
+    await waitFor(() =>
+      expect(result.current.messages[0]?.content).toBe('会话 A 的消息'),
+    );
+  });
+
+  it('边界：defaultMessages 为异步函数时 isDefaultMessagesRequesting 反映加载态', async () => {
+    const { result } = renderHook(() =>
+      useXChat({
+        conversationKey: 'a',
+        defaultMessages: async ({ conversationKey }) => {
+          await new Promise((resolve) => setTimeout(resolve, 20));
+          return [
+            { id: 'h1', role: 'assistant', content: `历史：${conversationKey}` },
+          ];
+        },
+        onRequest: async () => {},
+      }),
+    );
+
+    expect(result.current.isDefaultMessagesRequesting).toBe(true);
+    await waitFor(() => expect(result.current.messages).toHaveLength(1));
+    expect(result.current.messages[0].content).toBe('历史：a');
+    expect(result.current.isDefaultMessagesRequesting).toBe(false);
+  });
+
+  it('边界：数组字面量不会因引用变化而重置消息', async () => {
+    const { result, rerender } = renderHook(() =>
+      // 每次渲染都会构造新的 []，若 effect 依赖其引用，消息会被反复清空
+      useXChat({ defaultMessages: [], onRequest: async () => {} }),
+    );
+
+    act(() => result.current.send('hi'));
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.messages).toHaveLength(2);
+
+    rerender();
+    expect(result.current.messages).toHaveLength(2);
+    expect(result.current.messages[0].content).toBe('hi');
+  });
+
+  it('正常：setMessages 直接替换消息且不触发请求', () => {
+    const onRequest = vi.fn(async () => {});
+    const { result } = renderHook(() => useXChat({ onRequest }));
+
+    act(() => {
+      result.current.setMessages([
+        { id: 'x1', role: 'user', content: '来自服务端的消息' },
+      ]);
+    });
+
+    expect(result.current.messages).toHaveLength(1);
+    expect(result.current.messages[0].content).toBe('来自服务端的消息');
+    expect(onRequest).not.toHaveBeenCalled();
+  });
+
+  it('异常：切换会话中止旧请求，且旧请求的收尾不污染新会话的 loading 态', async () => {
+    // 两个请求都挂起，直到被 abort 或手动收尾
+    const onRequest = vi.fn(
+      ({ signal }: { signal: AbortSignal }) =>
+        new Promise<void>((_resolve, reject) => {
+          signal.addEventListener('abort', () => reject(signal.reason));
+        }),
+    );
+
+    const { result, rerender } = renderHook(
+      ({ k }: { k: string }) =>
+        useXChat({ conversationKey: k, defaultMessages: [], onRequest }),
+      { initialProps: { k: 'a' } },
+    );
+
+    act(() => result.current.send('在 A 会话提问'));
+    expect(result.current.loading).toBe(true);
+
+    // 切到 B：应中止 A 的请求
+    rerender({ k: 'b' });
+    await waitFor(() => expect(result.current.messages).toHaveLength(0));
+    expect(result.current.loading).toBe(false);
+
+    // 在 B 里发一条并保持挂起
+    act(() => result.current.send('在 B 会话提问'));
+    expect(result.current.loading).toBe(true);
+
+    // 让 A 那条旧请求的 abort 收尾跑完，它不该把 B 的 loading 按下去
+    await waitFor(() => expect(onRequest).toHaveBeenCalledTimes(2));
+    expect(result.current.loading).toBe(true);
+    expect(result.current.messages.at(-1)).toMatchObject({
+      role: 'assistant',
+      status: 'loading',
+    });
+
+    act(() => result.current.stop());
+    await waitFor(() => expect(result.current.loading).toBe(false));
+  });
+
+  it('边界：clear() 回到异步 defaultMessages 解析出的基线', async () => {
+    const { result } = renderHook(() =>
+      useXChat({
+        conversationKey: 'a',
+        defaultMessages: async () => [
+          { id: 'h', role: 'assistant', content: '基线消息' },
+        ],
+        onRequest: async () => {},
+      }),
+    );
+
+    await waitFor(() => expect(result.current.messages).toHaveLength(1));
+
+    act(() => result.current.send('问'));
+    await waitFor(() => expect(result.current.messages).toHaveLength(3));
+
+    act(() => result.current.clear());
+    expect(result.current.messages).toHaveLength(1);
+    expect(result.current.messages[0].content).toBe('基线消息');
+  });
 });
