@@ -1,0 +1,155 @@
+/* Mermaid — 图表（头部操作栏 + 图片 / 代码双视图） */
+
+.aura-x-mermaid {
+  overflow: hidden;
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-bubble-ai-bg);
+}
+
+/* ===== 头部 ===== */
+
+.aura-x-mermaid-header {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--aura-spacing-1) var(--aura-spacing-2) var(--aura-spacing-1)
+    var(--aura-spacing-3);
+  border-bottom: 1px solid var(--aura-border);
+  background: var(--aura-x-stage-bg);
+}
+
+.aura-x-mermaid-views {
+  display: inline-flex;
+  gap: var(--aura-spacing-1);
+}
+
+.aura-x-mermaid-view-btn {
+  padding: var(--aura-spacing-1) var(--aura-spacing-2);
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  cursor: pointer;
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    color var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-mermaid-view-btn--active {
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+  font-weight: 600;
+}
+
+.aura-x-mermaid-view-btn:focus-visible,
+.aura-x-mermaid-action:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-mermaid-actions {
+  display: inline-flex;
+  gap: var(--aura-spacing-1);
+  align-items: center;
+}
+
+.aura-x-mermaid-action {
+  padding: var(--aura-spacing-1) var(--aura-spacing-2);
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    color var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-mermaid-action:hover:not(:disabled) {
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+}
+
+.aura-x-mermaid-action:disabled {
+  color: var(--aura-text-tertiary);
+  cursor: default;
+}
+
+/* ===== 内容区 ===== */
+
+.aura-x-mermaid-body {
+  padding: var(--aura-spacing-3);
+}
+
+/* 代码视图下把内嵌 CodeHighlighter 的外框抹平，避免双层边框 */
+.aura-x-mermaid-body--code {
+  padding: 0;
+}
+
+.aura-x-mermaid-body--code .aura-x-code-highlighter {
+  border: none;
+  border-radius: 0;
+}
+
+.aura-x-mermaid-graph {
+  overflow: auto;
+  max-height: 420px;
+  background: var(--aura-x-stage-bg);
+  border-radius: var(--aura-radius-sm);
+}
+
+.aura-x-mermaid-canvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--aura-spacing-3);
+  transform-origin: center center;
+  transition: transform var(--aura-duration-normal) var(--aura-easing);
+}
+
+.aura-x-mermaid-canvas > svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.aura-x-mermaid-loading {
+  padding: var(--aura-spacing-6) 0;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-sm);
+  text-align: center;
+}
+
+.aura-x-mermaid-error {
+  padding: var(--aura-spacing-3);
+  border: 1px solid var(--aura-error);
+  border-radius: var(--aura-radius-sm);
+  background: var(--aura-error-light);
+}
+
+.aura-x-mermaid-error-title {
+  margin: 0 0 var(--aura-spacing-1);
+  color: var(--aura-error);
+  font-size: var(--aura-font-size-sm);
+  font-weight: 600;
+}
+
+.aura-x-mermaid-error-detail {
+  margin: 0;
+  overflow-x: auto;
+  color: var(--aura-text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-x-mermaid-canvas {
+    transition: none;
+  }
+}

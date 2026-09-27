@@ -20,14 +20,52 @@ toc: content
 
 按 RICH 交互范式分阶段组织：
 
-| 阶段 | 组件 |
-| --- | --- |
-| 交互 | [`Bubble`](/x-components/bubble)（消息气泡）、[`Sender`](/x-components/sender)（输入框） |
-| 引导 | [`Welcome`](/x-components/welcome)、[`Prompts`](/x-components/prompts)、[`Suggestion`](/x-components/suggestion) |
-| 推理 | [`Think`](/x-components/think)（思考过程） |
-| 反馈 | [`Actions`](/x-components/actions)（消息操作组）、[`MarkdownContent`](/x-components/markdown-content)（安全渲染） |
-| 会话 | [`Conversations`](/x-components/conversations)（会话管理） |
-| 数据 | [`useXStream`](/x-components/use-x-stream)、[`useXChat`](/x-components/use-x-chat) |
+| 阶段 | 组件                                                                                                                                                                                                                                                                           |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 交互 | [`Bubble`](/x-components/bubble)（消息气泡）、[`Sender`](/x-components/sender)（输入框）、[`Attachments`](/x-components/attachments)（附件条）、[`FileCard`](/x-components/file-card)（文件卡片）、[`Folder`](/x-components/folder)（文件树）                                  |
+| 引导 | [`Welcome`](/x-components/welcome)、[`Prompts`](/x-components/prompts)、[`Suggestion`](/x-components/suggestion)                                                                                                                                                               |
+| 推理 | [`Think`](/x-components/think)（单段思考）、[`ThoughtChain`](/x-components/thought-chain)（多步思维链）                                                                                                                                                                        |
+| 反馈 | [`Actions`](/x-components/actions)（消息操作组）、[`MarkdownContent`](/x-components/markdown-content)（安全渲染）、[`Sources`](/x-components/sources)（来源引用）、[`CodeHighlighter`](/x-components/code-highlighter)（代码高亮）、[`Mermaid`](/x-components/mermaid)（图表） |
+| 会话 | [`Conversations`](/x-components/conversations)（会话管理）                                                                                                                                                                                                                     |
+| 数据 | [`useXStream`](/x-components/use-x-stream)、[`useXChat`](/x-components/use-x-chat)、[`XNotification`](/x-components/notification)（系统通知）                                                                                                                                  |
+
+## 对标 Ant Design X
+
+`@aura/x` 以 [`@ant-design/x`](https://x.ant.design) 的组件划分为蓝本，
+官方组件已**全部覆盖**：
+
+| antdx 官方组件  | `@aura/x` 对应                      | 状态      |
+| --------------- | ----------------------------------- | --------- |
+| Bubble          | `Bubble` / `Bubble.List`            | ✅ 已实现 |
+| Conversations   | `Conversations`                     | ✅ 已实现 |
+| Welcome         | `Welcome`                           | ✅ 已实现 |
+| Prompts         | `Prompts`                           | ✅ 已实现 |
+| Think           | `Think`                             | ✅ 已实现 |
+| ThoughtChain    | `ThoughtChain`                      | ✅ 已实现 |
+| Attachments     | `Attachments` + `FileCard`          | ✅ 已实现 |
+| Sender          | `Sender`                            | ✅ 已实现 |
+| Suggestion      | `Suggestion`                        | ✅ 已实现 |
+| Actions         | `Actions`                           | ✅ 已实现 |
+| FileCard        | `FileCard`                          | ✅ 已实现 |
+| Notification    | `XNotification` / `useNotification` | ✅ 已实现 |
+| Sources         | `Sources`                           | ✅ 已实现 |
+| CodeHighlighter | `CodeHighlighter`                   | ✅ 已实现 |
+| Folder          | `Folder`                            | ✅ 已实现 |
+| Mermaid         | `Mermaid`                           | ✅ 已实现 |
+| XProvider       | `XProvider`                         | ✅ 已实现 |
+
+实现上有三处**刻意的取舍**，不是遗漏：
+
+1. **代码高亮的配色**用 `var(--aura-*)` 令牌而非固定主题对象（antdx 用
+   `highlightProps` 透传 react-syntax-highlighter），换来亮暗主题自动跟随；
+2. **Mermaid 的类型不硬依赖 mermaid 包**——`MermaidConfig` 是宽松签名，
+   这样未安装 mermaid 的消费方也能正常 `import`。
+3. **Notification 是系统通知**（`window.Notification`），不是页面内消息条；
+   页面内提示请用 `@aura/ui` 的 `Notification` / `Message`。
+
+> 运行时（antdx 的 `XRequest` / `XStream` / `useXAgent`）在本库由
+> [`useXStream`](/x-components/use-x-stream) 与 [`useXChat`](/x-components/use-x-chat) 承担：
+> 传输细节由 `fetch` + 注入式 `onRequest` 掌控，不绑定特定服务商。
 
 ## 何时使用
 
@@ -63,12 +101,12 @@ export default () => (
 
 ### XProviderProps
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| dark | 暗色模式：切换 antd 暗色算法 | `boolean` | `false` |
-| compact | 是否启用紧凑模式 | `boolean` | `false` |
-| colorPrimary | 主题主色，同时用于链接色 | `string` | `#7c3aed` |
-| locale | 语言包 | `Locale` | `zhCN` |
+| 参数         | 说明                         | 类型      | 默认值    |
+| ------------ | ---------------------------- | --------- | --------- |
+| dark         | 暗色模式：切换 antd 暗色算法 | `boolean` | `false`   |
+| compact      | 是否启用紧凑模式             | `boolean` | `false`   |
+| colorPrimary | 主题主色，同时用于链接色     | `string`  | `#7c3aed` |
+| locale       | 语言包                       | `Locale`  | `zhCN`    |
 
 ## 注意事项
 

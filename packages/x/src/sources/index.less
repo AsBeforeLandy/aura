@@ -1,0 +1,219 @@
+/* Sources — 来源引用（头部摘要 + 有序列表 / 行内上标） */
+
+.aura-x-sources {
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-bubble-ai-bg);
+}
+
+/* ===== 头部 ===== */
+
+.aura-x-sources-header {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: center;
+  width: 100%;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3);
+  border: none;
+  border-radius: var(--aura-radius-md);
+  background: transparent;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-sources-header:hover {
+  background: var(--aura-x-accent-soft);
+}
+
+.aura-x-sources-header:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-sources-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 600;
+  color: var(--aura-text);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.aura-x-sources-caret {
+  flex: none;
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* 折叠图标置于标题之后（右侧） */
+.aura-x-sources-header--end .aura-x-sources-caret {
+  order: 1;
+}
+
+/* ===== 有序列表 ===== */
+
+.aura-x-sources-list {
+  margin: 0;
+  padding: 0 var(--aura-spacing-3) var(--aura-spacing-2);
+  list-style: none;
+}
+
+.aura-x-sources-item {
+  padding: var(--aura-spacing-1) 0;
+}
+
+.aura-x-sources-item + .aura-x-sources-item {
+  border-top: 1px dashed var(--aura-border);
+}
+
+.aura-x-sources-item-main {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: center;
+  width: 100%;
+  padding: var(--aura-spacing-1) 0;
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-text);
+  font-size: var(--aura-font-size-sm);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.aura-x-sources-item-main:hover .aura-x-sources-item-title,
+button.aura-x-sources-item-main:hover .aura-x-sources-item-title {
+  color: var(--aura-x-accent);
+  text-decoration: underline;
+}
+
+.aura-x-sources-item-main:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-sources-item-index {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 var(--aura-spacing-1);
+  border-radius: var(--aura-radius-sm);
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1;
+}
+
+.aura-x-sources-item-icon {
+  flex: none;
+  display: inline-flex;
+  color: var(--aura-text-secondary);
+}
+
+.aura-x-sources-item-icon > svg {
+  width: 14px;
+  height: 14px;
+}
+
+.aura-x-sources-item-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.aura-x-sources-item-desc {
+  padding-left: 24px;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.6;
+}
+
+/* ===== 行内模式 ===== */
+
+.aura-x-sources--inline {
+  display: inline-flex;
+  gap: var(--aura-spacing-1);
+  align-items: center;
+  border: none;
+  background: transparent;
+}
+
+.aura-x-sources-inline-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.aura-x-sources-inline-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 var(--aura-spacing-1);
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    color var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-sources-inline-chip--active,
+.aura-x-sources-inline-chip:hover {
+  background: var(--aura-x-accent-gradient);
+  color: var(--aura-text-inverse);
+}
+
+.aura-x-sources-inline-chip:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-sources-popover {
+  position: absolute;
+  bottom: calc(100% + var(--aura-spacing-1));
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--aura-spacing-1);
+  max-width: 320px;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3);
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-bg);
+  box-shadow: var(--aura-x-glow);
+  text-align: left;
+}
+
+.aura-x-sources-popover-title {
+  color: var(--aura-text);
+  font-size: var(--aura-font-size-sm);
+  font-weight: 600;
+}
+
+.aura-x-sources-popover-desc {
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1.6;
+}
+
+.aura-x-sources-popover-url {
+  color: var(--aura-x-accent);
+  font-size: var(--aura-font-size-xs);
+  word-break: break-all;
+}

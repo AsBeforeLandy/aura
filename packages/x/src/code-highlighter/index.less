@@ -1,0 +1,76 @@
+/* CodeHighlighter — 代码高亮（头部 + Prism 着色代码区） */
+
+.aura-x-code-highlighter {
+  overflow: hidden;
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-code-bg);
+}
+
+/* ===== 头部 ===== */
+
+.aura-x-code-highlighter-header {
+  display: flex;
+  gap: var(--aura-spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--aura-spacing-1) var(--aura-spacing-2) var(--aura-spacing-1)
+    var(--aura-spacing-3);
+  border-bottom: 1px solid var(--aura-border);
+  background: var(--aura-x-stage-bg);
+}
+
+.aura-x-code-highlighter-lang {
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  letter-spacing: 0.4px;
+  text-transform: lowercase;
+}
+
+.aura-x-code-highlighter-copy {
+  display: inline-flex;
+  gap: var(--aura-spacing-1);
+  align-items: center;
+  padding: var(--aura-spacing-1) var(--aura-spacing-2);
+  border: none;
+  border-radius: var(--aura-radius-sm);
+  background: transparent;
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  cursor: pointer;
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    color var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-code-highlighter-copy:hover {
+  background: var(--aura-x-accent-soft);
+  color: var(--aura-x-accent);
+}
+
+.aura-x-code-highlighter-copy:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-code-highlighter-copy > svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ===== 代码区 ===== */
+
+.aura-x-code-highlighter-pre {
+  margin: 0;
+  padding: var(--aura-spacing-3);
+  overflow-x: auto;
+  background: transparent;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--aura-font-size-sm);
+  line-height: 1.65;
+}
+
+.aura-x-code-highlighter-line {
+  display: block;
+  min-height: 1.65em;
+}

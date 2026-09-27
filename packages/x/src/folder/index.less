@@ -1,0 +1,158 @@
+/* Folder — 文件树 + 文件预览 */
+
+.aura-x-folder {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid var(--aura-x-bubble-border);
+  border-radius: var(--aura-radius-md);
+  background: var(--aura-x-bubble-ai-bg);
+  min-height: 240px;
+}
+
+/* ===== 左侧目录树 ===== */
+
+.aura-x-folder-directory {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  border-right: 1px solid var(--aura-border);
+  background: var(--aura-x-stage-bg);
+}
+
+.aura-x-folder-directory-title {
+  flex: none;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3);
+  border-bottom: 1px solid var(--aura-border);
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.aura-x-folder-tree {
+  flex: 1;
+  overflow: auto;
+  padding: var(--aura-spacing-2) var(--aura-spacing-1);
+}
+
+.aura-x-folder-node {
+  display: flex;
+  gap: var(--aura-spacing-1);
+  align-items: center;
+  padding: var(--aura-spacing-1) var(--aura-spacing-2);
+  border-radius: var(--aura-radius-sm);
+  color: var(--aura-text);
+  font-size: var(--aura-font-size-sm);
+  cursor: pointer;
+  transition:
+    background var(--aura-duration-fast) var(--aura-easing),
+    color var(--aura-duration-fast) var(--aura-easing);
+}
+
+.aura-x-folder-node:hover {
+  background: var(--aura-x-accent-soft);
+}
+
+.aura-x-folder-node:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-x-focus-ring);
+}
+
+.aura-x-folder-node--selected,
+.aura-x-folder-node--selected:hover {
+  background: var(--aura-x-accent-gradient);
+  color: var(--aura-text-inverse);
+}
+
+.aura-x-folder-node--selected .aura-x-folder-node-icon,
+.aura-x-folder-node--selected .aura-x-folder-caret {
+  color: var(--aura-text-inverse);
+}
+
+.aura-x-folder-caret {
+  flex: none;
+  width: 12px;
+  color: var(--aura-text-tertiary);
+  font-size: 10px;
+  line-height: 1;
+  text-align: center;
+}
+
+.aura-x-folder-node-icon {
+  flex: none;
+  display: inline-flex;
+  color: var(--aura-text-secondary);
+}
+
+.aura-x-folder-node-icon > svg {
+  width: 14px;
+  height: 14px;
+}
+
+.aura-x-folder-node-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ===== 右侧预览 ===== */
+
+.aura-x-folder-preview {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.aura-x-folder-preview-header {
+  flex: none;
+  padding: var(--aura-spacing-2) var(--aura-spacing-3);
+  border-bottom: 1px solid var(--aura-border);
+  color: var(--aura-text);
+  font-size: var(--aura-font-size-sm);
+  font-weight: 600;
+}
+
+.aura-x-folder-preview-title {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.aura-x-folder-preview-body {
+  flex: 1;
+  overflow: auto;
+  padding: var(--aura-spacing-3);
+}
+
+/* 预览内嵌的代码块抹平外框，避免与预览区形成双层边框 */
+.aura-x-folder-preview-body .aura-x-code-highlighter {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.aura-x-folder-preview-body .aura-x-code-highlighter-pre {
+  padding: 0;
+}
+
+.aura-x-folder-empty,
+.aura-x-folder-loading {
+  padding: var(--aura-spacing-6) var(--aura-spacing-3);
+  color: var(--aura-text-secondary);
+  font-size: var(--aura-font-size-sm);
+  text-align: center;
+}
+
+.aura-x-folder-error {
+  padding: var(--aura-spacing-3);
+  border: 1px solid var(--aura-error);
+  border-radius: var(--aura-radius-sm);
+  background: var(--aura-error-light);
+  color: var(--aura-error);
+  font-size: var(--aura-font-size-sm);
+}

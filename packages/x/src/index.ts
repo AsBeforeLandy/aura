@@ -42,3 +42,29 @@ export type {
   ConversationMenuConfig,
   ConversationMenuItem,
 } from './conversations';
+export { Sources } from './sources';
+export type { SourcesProps, SourcesItem } from './sources';
+export { Folder } from './folder';
+export type {
+  FolderProps,
+  FolderRef,
+  FolderTreeData,
+  FolderSelectedFile,
+  FolderPreviewFile,
+  FolderPreviewRenderInfo,
+  FolderDirectoryIcons,
+  FolderContextMenuItem,
+  FileContentService,
+} from './folder';
+export { CodeHighlighter } from './code-highlighter';
+export type { CodeHighlighterProps, CodeHighlighterRef } from './code-highlighter';
+export { Mermaid } from './mermaid';
+export type { MermaidProps, MermaidActions, MermaidConfig } from './mermaid';
+export { XNotification, useNotification } from './notification';
+export type {
+  XNotificationApi,
+  XNotificationConfig,
+  XNotificationOpenArgs,
+  XNotificationPermission,
+  UseNotificationResult,
+} from './notification';
