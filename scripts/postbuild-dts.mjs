@@ -25,7 +25,32 @@ import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const PACKAGES = ['shared', 'request', 'icons', 'ui', 'business'];
+
+/**
+ * 需要清理的包：**自动派生**，不写死清单。
+ *
+ * 判据是「用 father 构建」——即产出 `esm/` 的库包（shared / request / icons /
+ * ui / business / x）。`@aura/cli`（build: tsc）与 `@aura/skill`（纯 Markdown
+ * 资产）不在此列。
+ *
+ * 为什么不再硬编码：`@aura/x` 加入 workspace 时这份清单没同步，导致它的
+ * 12 个 `.d.ts` 长期残留 `import './index.less'`（消费方 `skipLibCheck: false`
+ * 下逐文件报 TS2882）。派生后新增包自动纳入，不会再漏。
+ */
+const PACKAGES = readdirSync(join(ROOT, 'packages'), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .filter((entry) => {
+    const pkgJsonPath = join(ROOT, 'packages', entry.name, 'package.json');
+    if (!existsSync(pkgJsonPath)) return false;
+    const { scripts } = JSON.parse(readFileSync(pkgJsonPath, 'utf-8'));
+    return /(^|\s)father\s+build/.test(scripts?.build ?? '');
+  })
+  .map((entry) => entry.name);
+
+if (PACKAGES.length === 0) {
+  console.error('postbuild:dts — 未推导出任何需要清理的包，请检查 packages/ 目录');
+  process.exitCode = 1;
+}
 
 /** 形如 `import './x.less';` / `import "./x.css"` 的副作用导入 */
 const STYLE_IMPORT = /^\s*import\s+['"][^'"]+\.(?:less|css)['"];?\s*$/;

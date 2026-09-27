@@ -23,7 +23,32 @@ import { join, resolve, relative, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const LIB_PACKAGES = ['shared', 'request', 'icons', 'ui', 'business'];
+
+/**
+ * 需要做交付校验的库包：**自动派生**，不写死清单。
+ *
+ * 判据是「用 father 构建」——即产出 `esm/` 的库包（shared / request / icons /
+ * ui / business / x）。`@aura/cli`（build: tsc）与 `@aura/skill`（纯 Markdown
+ * 资产）不在此列。
+ *
+ * 为什么不再硬编码：`@aura/x` 加入 workspace 时这份清单没同步，导致下面 9 项
+ * 产物校验对整个 AI 组件包**全部空转**（它的 `style.css` 子路径、产物中相对
+ * 引用、裸包名依赖声明都没人查）。派生后新增包自动纳入，不会再漏。
+ */
+const LIB_PACKAGES = readdirSync(join(ROOT, 'packages'), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .filter((entry) => {
+    const pkgJsonPath = join(ROOT, 'packages', entry.name, 'package.json');
+    if (!existsSync(pkgJsonPath)) return false;
+    const { scripts } = JSON.parse(readFileSync(pkgJsonPath, 'utf-8'));
+    return /(^|\s)father\s+build/.test(scripts?.build ?? '');
+  })
+  .map((entry) => entry.name);
+
+if (LIB_PACKAGES.length === 0) {
+  console.error('smoke — 未推导出任何待校验的库包，请检查 packages/ 目录');
+  process.exit(1);
+}
 /** 允许出现在产物中但无需在 dependencies 声明的内置模块前缀 */
 const BUILTIN = /^(node:|react$|react-dom$|react\/jsx-runtime$|antd$|antd\/|@ant-design\/)/;
 

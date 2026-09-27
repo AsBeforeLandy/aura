@@ -22,19 +22,26 @@
     "smoke": "node scripts/smoke.mjs",
     "size": "size-limit",
     "commitlint": "commitlint",
-    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build:lib && pnpm size && pnpm smoke",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build:lib && pnpm size && pnpm smoke",
+    "verify:fast": "pnpm lint && pnpm typecheck && pnpm test && pnpm build:lib && pnpm size && pnpm smoke",
     "prepublishOnly": "pnpm build:lib && pnpm smoke",
     "prepare": "husky && dumi setup",
     "clean": "rm -rf packages/*/lib packages/*/esm packages/*/dist .dumi"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "eslint --fix"
+    "*.{ts,tsx}": "eslint --fix",
+    "*.{json,less,md,yml,yaml}": "prettier --write"
   },
   "size-limit": [
     {
       "name": "shared (全量 esm)",
       "path": "packages/shared/esm/**/*.js",
       "limit": "4 kB"
+    },
+    {
+      "name": "request (全量 esm)",
+      "path": "packages/request/esm/**/*.js",
+      "limit": "2 kB"
     },
     {
       "name": "icons (全量 esm)",
@@ -50,6 +57,11 @@
       "name": "business (全量 esm)",
       "path": "packages/business/esm/**/*.js",
       "limit": "36 kB"
+    },
+    {
+      "name": "x (全量 esm)",
+      "path": "packages/x/esm/**/*.js",
+      "limit": "34 kB"
     }
   ],
   "keywords": [
