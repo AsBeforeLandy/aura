@@ -3,6 +3,15 @@ import { classNames, prefixCls } from '@aura/shared';
 import { EyeOpen, EyeClosed, Search as SearchIcon } from '@aura/icons';
 import './index.less';
 
+export interface InputCountConfig {
+  /** 自定义字数统计文案渲染 */
+  formatter?: (args: {
+    value: string;
+    count: number;
+    maxLength?: number;
+  }) => React.ReactNode;
+}
+
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'> {
   variant?: 'default' | 'filled' | 'bordered';
@@ -12,6 +21,14 @@ export interface InputProps
   suffix?: React.ReactNode;
   allowClear?: boolean;
   status?: 'default' | 'error' | 'warning';
+  /** 输入框前置附加内容（如 `https://`、`¥`），与 prefix 的区别是渲染在边框外 */
+  addonBefore?: React.ReactNode;
+  /** 输入框后置附加内容（如 `.com`、`元`），与 suffix 的区别是渲染在边框外 */
+  addonAfter?: React.ReactNode;
+  /** 是否显示字数统计；传对象可用 `formatter` 自定义渲染 */
+  showCount?: boolean | InputCountConfig;
+  /** 按下回车键的回调 */
+  onPressEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const InputBase = forwardRef<HTMLInputElement, InputProps>(
@@ -24,10 +41,17 @@ const InputBase = forwardRef<HTMLInputElement, InputProps>(
       suffix: suffixNode,
       allowClear = false,
       status = 'default',
+      addonBefore,
+      addonAfter,
+      showCount = false,
+      onPressEnter,
       className,
+      style,
       value,
       defaultValue,
       onChange,
+      onKeyDown,
+      maxLength,
       ...rest
     },
     ref,
@@ -44,6 +68,14 @@ const InputBase = forwardRef<HTMLInputElement, InputProps>(
       [isControlled, onChange],
     );
 
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') onPressEnter?.(e);
+        onKeyDown?.(e);
+      },
+      [onPressEnter, onKeyDown],
+    );
+
     const handleClear = useCallback(() => {
       if (disabled) return;
       if (!isControlled) setInternalValue('');
@@ -56,19 +88,40 @@ const InputBase = forwardRef<HTMLInputElement, InputProps>(
 
     const showClear = allowClear && currentValue.length > 0 && !disabled;
 
-    const cls = classNames(
+    const countConfig = typeof showCount === 'object' ? showCount : undefined;
+    const showCountNode = Boolean(showCount);
+    const countNode = showCountNode ? (
+      <span className={prefixCls('input-count')}>
+        {countConfig?.formatter ? (
+          countConfig.formatter({
+            value: currentValue,
+            count: currentValue.length,
+            maxLength,
+          })
+        ) : (
+          <>
+            {currentValue.length}
+            {maxLength != null && ` / ${maxLength}`}
+          </>
+        )}
+      </span>
+    ) : null;
+
+    const hasAddon = Boolean(addonBefore) || Boolean(addonAfter);
+
+    const innerCls = classNames(
       prefixCls('input'),
       variant !== 'default' && prefixCls(`input-${variant}`),
       prefixCls(`input-${size}`),
       status !== 'default' && prefixCls(`input-${status}`),
       disabled && prefixCls('input-disabled'),
       Boolean(prefixNode) && prefixCls('input-with-prefix'),
-      (Boolean(suffixNode) || allowClear) && prefixCls('input-with-suffix'),
-      className,
+      (Boolean(suffixNode) || allowClear || showCountNode) &&
+        prefixCls('input-with-suffix'),
     );
 
-    return (
-      <div className={cls}>
+    const innerInput = (
+      <>
         {prefixNode && (
           <span className={prefixCls('input-prefix')}>{prefixNode}</span>
         )}
@@ -77,17 +130,52 @@ const InputBase = forwardRef<HTMLInputElement, InputProps>(
           className={prefixCls('input-element')}
           value={isControlled ? value : internalValue}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           disabled={disabled}
+          maxLength={maxLength}
           {...rest}
         />
+        {countNode}
         {showClear && (
-          <span className={prefixCls('input-clear')} onClick={handleClear} role="button" aria-label="清除">
+          <span
+            className={prefixCls('input-clear')}
+            onClick={handleClear}
+            role="button"
+            aria-label="清除"
+          >
             &times;
           </span>
         )}
         {!showClear && suffixNode && (
           <span className={prefixCls('input-suffix')}>{suffixNode}</span>
         )}
+      </>
+    );
+
+    // 有 addon 时：外层包裹 addon，className / style 落在包裹层
+    if (hasAddon) {
+      const wrapperCls = classNames(
+        prefixCls('input-group-wrapper'),
+        prefixCls(`input-group-wrapper-${size}`),
+        disabled && prefixCls('input-group-wrapper-disabled'),
+        className,
+      );
+      return (
+        <div className={wrapperCls} style={style}>
+          {addonBefore && (
+            <span className={prefixCls('input-addon')}>{addonBefore}</span>
+          )}
+          <div className={innerCls}>{innerInput}</div>
+          {addonAfter && (
+            <span className={prefixCls('input-addon')}>{addonAfter}</span>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div className={classNames(innerCls, className)} style={style}>
+        {innerInput}
       </div>
     );
   },

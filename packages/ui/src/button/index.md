@@ -14,9 +14,8 @@ toc: content
 
 按钮用于触发一个即时操作。
 
-
 ```tsx | pure
-import { Button } from "@aura/ui";
+import { Button } from '@aura/ui';
 ```
 
 ## 何时使用
@@ -35,16 +34,25 @@ import { Button } from "@aura/ui";
 
 <code src="./demo/disabled.tsx" description="按钮的禁用状态。">禁用状态</code>
 
+<code src="./demo/icon.tsx" description="`icon` 属性在内容左侧放置图标；loading 时自动替换为旋转图标。">图标按钮</code>
+
+<code src="./demo/block.tsx" description="`block` 使按钮撑满容器；传入 `href` 渲染为链接按钮，禁用时不可点击。">全宽与链接按钮</code>
+
 ## API
 
 ### ButtonProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| variant | 按钮变体样式 | `'default' \| 'primary' \| 'dashed' \| 'text' \| 'link'` | `'default'` |
-| size | 按钮尺寸 | `'sm' \| 'md' \| 'lg'` | `'md'` |
-| disabled | 是否禁用 | `boolean` | `false` |
-| loading | 是否加载中 | `boolean` | `false` |
-| onClick | 点击回调 | `(e: React.MouseEvent) => void` | - |
+| 属性     | 说明                                                 | 类型                                                     | 默认值      |
+| -------- | ---------------------------------------------------- | -------------------------------------------------------- | ----------- |
+| variant  | 按钮变体样式                                         | `'default' \| 'primary' \| 'dashed' \| 'text' \| 'link'` | `'default'` |
+| size     | 按钮尺寸                                             | `'sm' \| 'md' \| 'lg'`                                   | `'md'`      |
+| disabled | 是否禁用                                             | `boolean`                                                | `false`     |
+| loading  | 是否加载中                                           | `boolean`                                                | `false`     |
+| icon     | 按钮图标，置于内容左侧；loading 时自动替换为旋转图标 | `ReactNode`                                              | -           |
+| block    | 是否撑满容器宽度                                     | `boolean`                                                | `false`     |
+| href     | 传入后渲染为 `<a>` 链接按钮                          | `string`                                                 | -           |
+| target   | 链接按钮的打开方式，仅设置 `href` 时生效             | `string`                                                 | -           |
+| type     | 原生按钮类型（显式传 `submit` 才会触发表单提交）     | `'button' \| 'submit' \| 'reset'`                        | `'button'`  |
+| onClick  | 点击回调                                             | `(e: React.MouseEvent) => void`                          | -           |
 
 继承 `ButtonHTMLAttributes<HTMLButtonElement>`。

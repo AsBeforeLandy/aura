@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { Upload } from './index';
+import type { UploadFile, CustomRequestOptions } from './index';
 import { requestUpload } from './request';
 
 // 真实上传走 XHR，单测中 mock 掉网络层，只断言参数与状态流转
@@ -227,5 +228,137 @@ describe('Dragger 自定义内容', () => {
   it('未传 children 时保持默认拖拽区内容', () => {
     render(<UploadComponent.Dragger />);
     expect(screen.getByText('将文件拖拽到此区域上传')).toBeDefined();
+  });
+});
+
+describe('受控 fileList 与上传编排', () => {
+  const existingFile: UploadFile = {
+    uid: 'init-1',
+    name: '已有文件.pdf',
+    status: 'done',
+  };
+
+  it('defaultFileList 应该回显已有文件（编辑页回显）', () => {
+    render(<UploadComponent defaultFileList={[existingFile]} />);
+    expect(screen.getByText('已有文件.pdf')).toBeDefined();
+  });
+
+  it('受控 fileList：选择文件只回调 onChange，渲染以受控值为准', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <UploadComponent fileList={[existingFile]} onChange={onChange} />,
+    );
+    selectFile(container);
+
+    // 回调里给出了合并后的新列表（受控值 + 新文件）
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const nextList = onChange.mock.calls[0][0] as UploadFile[];
+    expect(nextList).toHaveLength(2);
+    expect(nextList[0].uid).toBe('init-1');
+
+    // 组件不自改状态：未更新的受控值仍只渲染原文件
+    expect(screen.getByText('已有文件.pdf')).toBeDefined();
+    expect(screen.queryByText('hello.txt')).toBeNull();
+  });
+
+  it('受控 fileList：调用方同步 onChange 的列表后渲染随之更新', () => {
+    function Controlled() {
+      const [list, setList] = React.useState<UploadFile[]>([existingFile]);
+      return (
+        <UploadComponent fileList={list} onChange={setList} />
+      );
+    }
+    const { container } = render(<Controlled />);
+    selectFile(container);
+
+    return waitFor(() => {
+      expect(screen.getByText('hello.txt')).toBeDefined();
+    });
+  });
+
+  it('maxCount 超出名额的文件被丢弃', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <UploadComponent maxCount={2} defaultFileList={[existingFile]} onChange={onChange} />,
+    );
+    const input = container.querySelector('input[type="file"]')!;
+    Object.defineProperty(input, 'files', {
+      value: [makeFile(), makeFile(), makeFile()],
+    });
+    fireEvent.change(input);
+
+    const nextList = onChange.mock.calls[0][0] as UploadFile[];
+    expect(nextList).toHaveLength(2);
+    expect(nextList[0].uid).toBe('init-1');
+  });
+
+  it('maxCount=1 时新选择的文件直接替换', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <UploadComponent maxCount={1} defaultFileList={[existingFile]} onChange={onChange} />,
+    );
+    selectFile(container);
+
+    const nextList = onChange.mock.calls[0][0] as UploadFile[];
+    expect(nextList).toHaveLength(1);
+    expect(nextList[0].name).toBe('hello.txt');
+  });
+
+  it('customRequest 接管上传并通过 onSuccess / onError 回报状态', async () => {
+    // 模块 mock 的调用历史跨用例残留，先清空再断言「未被调用」
+    mockedRequestUpload.mockClear();
+    const customRequest = vi.fn((opts: CustomRequestOptions) => {
+      opts.onSuccess();
+    });
+    const { container } = render(
+      <UploadComponent action="/should-not-be-used" customRequest={customRequest} />,
+    );
+    selectFile(container);
+
+    await waitFor(() => {
+      const item = container.querySelector('.aura-upload-file-done');
+      expect(item).not.toBeNull();
+    });
+    expect(customRequest).toHaveBeenCalledTimes(1);
+    expect(customRequest.mock.calls[0][0].file).toBeInstanceOf(File);
+    expect(mockedRequestUpload).not.toHaveBeenCalled();
+  });
+
+  it('customRequest 的 onError 置为 error', async () => {
+    const customRequest = vi.fn((opts: CustomRequestOptions) => {
+      opts.onError(new Error('网络错误'));
+    });
+    const { container } = render(
+      <UploadComponent customRequest={customRequest} />,
+    );
+    selectFile(container);
+
+    await waitFor(() => {
+      expect(
+        container.querySelector('.aura-upload-file-error'),
+      ).not.toBeNull();
+    });
+  });
+
+  it('onRemove 返回 false 阻止移除', async () => {
+    const onRemove = vi.fn(() => false);
+    const { container } = render(
+      <UploadComponent defaultFileList={[existingFile]} onRemove={onRemove} />,
+    );
+    fireEvent.click(container.querySelector('.aura-upload-file-remove')!);
+
+    await waitFor(() => {
+      expect(onRemove).toHaveBeenCalledTimes(1);
+    });
+    expect(screen.getByText('已有文件.pdf')).toBeDefined();
+  });
+
+  it('点击文件名触发 onPreview', () => {
+    const onPreview = vi.fn();
+    render(
+      <UploadComponent defaultFileList={[existingFile]} onPreview={onPreview} />,
+    );
+    fireEvent.click(screen.getByText('已有文件.pdf'));
+    expect(onPreview).toHaveBeenCalledWith(existingFile);
   });
 });

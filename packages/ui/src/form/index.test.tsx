@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor, act } from '@testing-library/react';
 import React from 'react';
 import { Form } from './index';
 
@@ -215,5 +215,136 @@ describe('Form', () => {
     await waitFor(() => {
       expect(onFinish).toHaveBeenCalledWith({ choice: 'b' });
     });
+  });
+
+  // ===== Form.useForm / FormInstance =====
+  it('setFieldsValue 应该回填字段值（编辑表单场景）', () => {
+    const [form] = Form.useForm();
+    render(
+      <Form form={form} initialValues={{ username: '' }}>
+        <Form.Item name="username" label="用户名">
+          <input data-testid="username" />
+        </Form.Item>
+      </Form>,
+    );
+    const input = screen.getByTestId('username') as HTMLInputElement;
+
+    act(() => {
+      form.setFieldsValue({ username: 'landy' });
+    });
+    expect(input.value).toBe('landy');
+    expect(form.getFieldValue('username')).toBe('landy');
+    expect(form.getFieldsValue()).toEqual({ username: 'landy' });
+  });
+
+  it('getFieldValue 在 setFieldsValue 后应同步可读最新值', () => {
+    const [form] = Form.useForm();
+    render(
+      <Form form={form}>
+        <Form.Item name="age">
+          <input data-testid="age" />
+        </Form.Item>
+      </Form>,
+    );
+    act(() => {
+      form.setFieldValue('age', 18);
+    });
+    expect(form.getFieldValue('age')).toBe(18);
+  });
+
+  it('validateFields 通过时应 resolve 全部字段值', async () => {
+    const [form] = Form.useForm();
+    render(
+      <Form form={form}>
+        <Form.Item name="username" rules={[{ required: true }]}>
+          <input data-testid="username" />
+        </Form.Item>
+      </Form>,
+    );
+    fireEvent.change(screen.getByTestId('username'), {
+      target: { value: 'landy' },
+    });
+
+    await expect(form.validateFields()).resolves.toEqual({ username: 'landy' });
+  });
+
+  it('validateFields 失败时应 reject FormError[]', async () => {
+    const [form] = Form.useForm();
+    render(
+      <Form form={form}>
+        <Form.Item name="username" rules={[{ required: true, message: '必填' }]}>
+          <input data-testid="username" />
+        </Form.Item>
+      </Form>,
+    );
+
+    await expect(form.validateFields()).rejects.toEqual([
+      { name: 'username', errors: ['必填'] },
+    ]);
+  });
+
+  it('validateFields 支持只校验指定字段', async () => {
+    const [form] = Form.useForm();
+    render(
+      <Form form={form}>
+        <Form.Item name="a" rules={[{ required: true }]}>
+          <input data-testid="field-a" />
+        </Form.Item>
+        <Form.Item name="b" rules={[{ required: true }]}>
+          <input data-testid="field-b" />
+        </Form.Item>
+      </Form>,
+    );
+    fireEvent.change(screen.getByTestId('field-a'), {
+      target: { value: 'ok' },
+    });
+
+    // 只校验 a：b 的必填错误不应出现
+    await expect(form.validateFields(['a'])).resolves.toHaveProperty('a', 'ok');
+  });
+
+  it('resetFields 应该恢复 initialValues 并清空错误', async () => {
+    const [form] = Form.useForm();
+    render(
+      <Form form={form} initialValues={{ username: '初始' }}>
+        <Form.Item name="username" rules={[{ required: true, message: '必填' }]}>
+          <input data-testid="username" />
+        </Form.Item>
+      </Form>,
+    );
+    const input = screen.getByTestId('username') as HTMLInputElement;
+
+    // 先制造错误状态：置空后校验失败
+    act(() => {
+      form.setFieldsValue({ username: '' });
+    });
+    await expect(form.validateFields()).rejects.toBeTruthy();
+
+    act(() => {
+      form.resetFields();
+    });
+    expect(input.value).toBe('初始');
+    expect(form.getFieldsValue()).toEqual({ username: '初始' });
+    // 重置后校验应通过（错误已清空）
+    await expect(form.validateFields()).resolves.toEqual({ username: '初始' });
+  });
+
+  it('外部提交按钮可以通过实例触发完整校验流程', async () => {
+    const [form] = Form.useForm();
+    const onFinish = vi.fn();
+    render(
+      <Form form={form} onFinish={onFinish}>
+        <Form.Item name="username" rules={[{ required: true }]}>
+          <input data-testid="username" />
+        </Form.Item>
+      </Form>,
+    );
+    fireEvent.change(screen.getByTestId('username'), {
+      target: { value: 'landy' },
+    });
+
+    const values = await form.validateFields();
+    expect(values).toEqual({ username: 'landy' });
+    expect(onFinish).not.toHaveBeenCalled(); // validateFields 不触发 onFinish，提交仍由表单触发
   });
 });

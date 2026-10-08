@@ -33,8 +33,10 @@ export interface SliderProps extends React.AriaAttributes {
   marks?: Record<number, React.ReactNode>;
   /** 是否为范围滑块 */
   range?: boolean;
-  /** 值变化回调 */
+  /** 值变化回调（拖拽 / 点击 / 键盘调节过程中持续触发） */
   onChange?: (value: number | [number, number]) => void;
+  /** 一次调节结束后的回调（松开拖拽、轨道点击、单次键盘调节） */
+  onChangeComplete?: (value: number | [number, number]) => void;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -64,6 +66,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       marks,
       range = false,
       onChange,
+      onChangeComplete,
       className,
       style,
       // role="slider" 落在滑块本体上，名称需由调用方通过 aria-* 提供
@@ -121,15 +124,60 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [controlledValue, onChange],
     );
 
-    // 处理鼠标按下
-    const handleMouseDown = useCallback(
-      (e: React.MouseEvent, handle: 'start' | 'end') => {
+    // 处理按下（Pointer Events：鼠标 / 触摸 / 触控笔统一处理）
+    const handlePointerDown = useCallback(
+      (e: React.PointerEvent, handle: 'start' | 'end') => {
         if (disabled) return;
         e.preventDefault();
         setDragging(handle);
       },
       [disabled],
     );
+
+    // 键盘调节（方向键 ±step、PageUp/Down ±10step、Home/End 到两端）
+    const stepValue = useCallback(
+      (handle: 'start' | 'end', delta: number | 'min' | 'max') => {
+        let next: number | [number, number];
+        if (range) {
+          const [start, end] = currentValue as [number, number];
+          if (handle === 'start') {
+            const target = delta === 'min' ? min : delta === 'max' ? end : start + delta;
+            const newStart = clamp(alignToStep(clamp(target, min, end), min, step), min, end);
+            next = [newStart, end];
+          } else {
+            const target = delta === 'min' ? start : delta === 'max' ? max : end + delta;
+            const newEnd = clamp(alignToStep(clamp(target, start, max), min, step), start, max);
+            next = [start, newEnd];
+          }
+        } else {
+          const base = currentValue as number;
+          const target = delta === 'min' ? min : delta === 'max' ? max : base + delta;
+          next = alignToStep(clamp(target, min, max), min, step);
+        }
+        updateValue(next);
+        onChangeComplete?.(next);
+      },
+      [currentValue, range, min, max, step, updateValue, onChangeComplete],
+    );
+
+    const makeHandleKeyDown = (handle: 'start' | 'end') =>
+      (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (disabled) return;
+        const deltas: Record<string, number | 'min' | 'max'> = {
+          ArrowLeft: -step,
+          ArrowDown: -step,
+          ArrowRight: step,
+          ArrowUp: step,
+          PageDown: -step * 10,
+          PageUp: step * 10,
+          Home: 'min',
+          End: 'max',
+        };
+        const delta = deltas[e.key];
+        if (delta === undefined) return;
+        e.preventDefault();
+        stepValue(handle, delta);
+      };
 
     // 处理轨道点击（非拖拽）
     const handleTrackClick = useCallback(
@@ -153,15 +201,16 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         } else {
           updateValue(newValue);
         }
+        onChangeComplete?.(newValue);
       },
-      [disabled, dragging, getValueFromPosition, currentValue, range, updateValue],
+      [disabled, dragging, getValueFromPosition, currentValue, range, updateValue, onChangeComplete],
     );
 
-    // 拖拽移动和松开事件
+    // 拖拽移动和松开事件（Pointer Events 覆盖鼠标与触摸）
     useEffect(() => {
       if (!dragging) return;
 
-      const handleMouseMove = (e: MouseEvent) => {
+      const handlePointerMove = (e: PointerEvent) => {
         const newValue = getValueFromPosition(e.clientX);
         if (range) {
           const [start, end] = currentValue as [number, number];
@@ -177,17 +226,21 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         }
       };
 
-      const handleMouseUp = () => {
+      const handlePointerUp = () => {
         setDragging(null);
+        // 松开时提交最后一次更新（回调闭包随 currentValue 更新，此处值是新鲜的）
+        onChangeComplete?.(currentValue);
       };
 
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('pointermove', handlePointerMove);
+      document.addEventListener('pointerup', handlePointerUp);
+      document.addEventListener('pointercancel', handlePointerUp);
       return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('pointermove', handlePointerMove);
+        document.removeEventListener('pointerup', handlePointerUp);
+        document.removeEventListener('pointercancel', handlePointerUp);
       };
-    }, [dragging, getValueFromPosition, currentValue, range, updateValue]);
+    }, [dragging, getValueFromPosition, currentValue, range, updateValue, onChangeComplete]);
 
     // 获取当前展示值
     const startValue = range
@@ -268,7 +321,8 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 dragging === 'start' && prefixCls('slider-handle-active'),
               )}
               style={{ left: `${startPercent}%` }}
-              onMouseDown={(e) => handleMouseDown(e, 'start')}
+              onPointerDown={(e) => handlePointerDown(e, 'start')}
+              onKeyDown={makeHandleKeyDown('start')}
               role="slider"
               aria-valuemin={min}
               aria-valuemax={max}
@@ -288,7 +342,8 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
               dragging === 'end' && prefixCls('slider-handle-active'),
             )}
             style={{ left: `${endPercent}%` }}
-            onMouseDown={(e) => handleMouseDown(e, range ? 'end' : 'end')}
+            onPointerDown={(e) => handlePointerDown(e, 'end')}
+            onKeyDown={makeHandleKeyDown('end')}
             role="slider"
             aria-valuemin={min}
             aria-valuemax={max}

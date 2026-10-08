@@ -9,6 +9,27 @@ import React, {
 import { classNames, prefixCls } from '@aura/shared';
 import './index.less';
 
+/** 单个选项 */
+export interface SelectOption {
+  label: React.ReactNode;
+  value: string | number;
+  disabled?: boolean;
+}
+
+/** labelInValue 模式下的值形态 */
+export interface LabelInValueObject {
+  value: string | number;
+  label?: React.ReactNode;
+}
+
+/** 对外值形态（受 labelInValue 影响） */
+export type SelectOutValue =
+  | string
+  | number
+  | (string | number)[]
+  | LabelInValueObject
+  | LabelInValueObject[];
+
 export interface SelectProps extends React.AriaAttributes {
   /** 变体样式
    *  @default 'default'
@@ -23,25 +44,35 @@ export interface SelectProps extends React.AriaAttributes {
   /** 是否加载中 */
   loading?: boolean;
   /** 选项列表 */
-  options: Array<{
-    label: React.ReactNode;
-    value: string | number;
-    disabled?: boolean;
-  }>;
-  /** 当前值（受控） */
-  value?: string | number | (string | number)[];
-  /** 默认值（非受控） */
-  defaultValue?: string | number | (string | number)[];
+  options: SelectOption[];
+  /** 当前值（受控）；labelInValue 时为 `{ value, label }` 形态 */
+  value?: SelectOutValue;
+  /** 默认值（非受控）；labelInValue 时为 `{ value, label }` 形态 */
+  defaultValue?: SelectOutValue;
   /** 是否多选 */
   multiple?: boolean;
+  /** 取值是否携带 label（`{ value, label }` 形态），影响 value / defaultValue / onChange
+   *  @default false
+   */
+  labelInValue?: boolean;
   /** 是否可搜索 */
   searchable?: boolean;
   /** 是否可清除 */
   clearable?: boolean;
+  /** 搜索过滤行为：默认按 label 本地包含匹配；传 `false` 关闭本地过滤（配合 onSearch 远程搜索）；传函数自定义
+   *  @default true
+   */
+  filterOption?: boolean | ((inputValue: string, option: SelectOption) => boolean);
+  /** 搜索输入变化回调（配合 filterOption={false} 做远程搜索） */
+  onSearch?: (value: string) => void;
+  /** 多选模式下最多显示的标签数量，超出以 `+N...` 收敛 */
+  maxTagCount?: number;
+  /** 下拉列表为空时展示的内容 */
+  notFoundContent?: React.ReactNode;
   /** 占位文本 */
   placeholder?: string;
   /** 值变化回调 */
-  onChange?: (value: string | number | (string | number)[]) => void;
+  onChange?: (value: SelectOutValue) => void;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -50,11 +81,42 @@ export interface SelectProps extends React.AriaAttributes {
 
 /** 获取选项的显示标签 */
 function getOptionLabel(
-  options: SelectProps['options'],
+  options: SelectOption[],
   val: string | number,
 ): React.ReactNode {
   const opt = options.find((o) => o.value === val);
   return opt ? opt.label : val;
+}
+
+/** 把外部传入的值（可能 labelInValue）归一化为内部原始值 */
+function toRawValue(
+  val: SelectOutValue | undefined,
+  labelInValue: boolean,
+): string | number | (string | number)[] | undefined {
+  if (val === undefined) return undefined;
+  if (labelInValue) {
+    if (Array.isArray(val)) {
+      return (val as LabelInValueObject[]).map((o) => o.value);
+    }
+    return (val as LabelInValueObject).value;
+  }
+  return val as string | number | (string | number)[];
+}
+
+/** 把内部原始值转换为对外值（labelInValue 时包裹 label） */
+function toOutValue(
+  raw: string | number | (string | number)[],
+  labelInValue: boolean,
+  options: SelectOption[],
+): SelectOutValue {
+  if (labelInValue) {
+    const wrap = (val: string | number): LabelInValueObject => ({
+      value: val,
+      label: getOptionLabel(options, val),
+    });
+    return Array.isArray(raw) ? raw.map(wrap) : wrap(raw);
+  }
+  return raw;
 }
 
 /** 判断某个值是否被选中 */
@@ -78,8 +140,13 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       value: controlledValue,
       defaultValue,
       multiple = false,
+      labelInValue = false,
       searchable = false,
       clearable = false,
+      filterOption,
+      onSearch,
+      maxTagCount,
+      notFoundContent,
       placeholder = '请选择',
       onChange,
       className,
@@ -92,17 +159,18 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     },
     ref,
   ) => {
-    // 内部维护的值（非受控模式）
+    // 内部维护的值（非受控模式，一律为原始值）
     const [internalValue, setInternalValue] = useState<
       string | number | (string | number)[]
     >(() => {
-      if (defaultValue !== undefined) return defaultValue;
+      const rawDefault = toRawValue(defaultValue, labelInValue);
+      if (rawDefault !== undefined) return rawDefault;
       return multiple ? [] : '';
     });
 
-    // 当前生效的值
-    const currentValue =
-      controlledValue !== undefined ? controlledValue : internalValue;
+    // 当前生效的值（内部一律使用原始值，labelInValue 的转换发生在边界）
+    const rawControlled = toRawValue(controlledValue, labelInValue);
+    const currentValue = rawControlled !== undefined ? rawControlled : internalValue;
 
     // 下拉面板展开状态
     const [open, setOpen] = useState(false);
@@ -155,9 +223,13 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       }
     }, [open, searchable]);
 
-    // 过滤选项
+    // 过滤选项：filterOption=false 关闭本地过滤（远程搜索场景），函数为自定义过滤
     const filteredOptions = options.filter((opt) => {
       if (!searchText) return true;
+      if (filterOption === false) return true;
+      if (typeof filterOption === 'function') {
+        return filterOption(searchText, opt);
+      }
       const label =
         typeof opt.label === 'string' ? opt.label : String(opt.label);
       return label.toLowerCase().includes(searchText.toLowerCase());
@@ -184,7 +256,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         if (controlledValue === undefined) {
           setInternalValue(nextValue);
         }
-        onChange?.(nextValue);
+        onChange?.(toOutValue(nextValue, labelInValue, options));
 
         // 单选模式下选完关闭面板
         if (!multiple) {
@@ -194,7 +266,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       },
       // currentValue 参与 nextValue 的计算（多选分支读取当前数组），
       // 遗漏它会让连续两次选择都基于同一份过期快照而互相覆盖。
-      [controlledValue, currentValue, multiple, onChange],
+      [controlledValue, currentValue, multiple, labelInValue, options, onChange],
     );
 
     // 清除选择
@@ -205,9 +277,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         if (controlledValue === undefined) {
           setInternalValue(nextValue);
         }
-        onChange?.(nextValue);
+        onChange?.(toOutValue(nextValue, labelInValue, options));
       },
-      [controlledValue, multiple, onChange],
+      [controlledValue, multiple, labelInValue, options, onChange],
     );
 
     // 判断是否有值
@@ -218,9 +290,14 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     // 渲染选中值的显示内容
     const renderDisplay = () => {
       if (multiple && Array.isArray(currentValue) && currentValue.length > 0) {
+        const shownTags =
+          maxTagCount !== undefined
+            ? currentValue.slice(0, maxTagCount)
+            : currentValue;
+        const omittedCount = currentValue.length - shownTags.length;
         return (
           <span className={prefixCls('select-tags')}>
-            {currentValue.map((val) => (
+            {shownTags.map((val) => (
               <span
                 key={val}
                 className={prefixCls('select-tag')}
@@ -237,6 +314,14 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                 </span>
               </span>
             ))}
+            {omittedCount > 0 && (
+              <span
+                className={prefixCls('select-tag')}
+                title={`还有 ${omittedCount} 项未显示`}
+              >
+                +{omittedCount}...
+              </span>
+            )}
           </span>
         );
       }
@@ -356,7 +441,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
               ref={searchInputRef}
               className={prefixCls('select-search-input')}
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+                onSearch?.(e.target.value);
+              }}
               placeholder={
                 multiple && Array.isArray(currentValue) && currentValue.length > 0
                   ? ''
@@ -397,7 +485,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                 加载中...
               </div>
             ) : filteredOptions.length === 0 ? (
-              <div className={prefixCls('select-empty')}>无匹配选项</div>
+              <div className={prefixCls('select-empty')}>
+                {notFoundContent ?? '无匹配选项'}
+              </div>
             ) : (
               filteredOptions.map((opt, index) => {
                 const selected = isSelected(currentValue, opt.value);

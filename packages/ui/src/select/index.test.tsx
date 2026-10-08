@@ -243,4 +243,148 @@ describe('Select', () => {
     expect(onChange).toHaveBeenCalledWith('apple');
     expect(container.querySelector('.aura-select-dropdown')).toBeNull();
   });
+
+  // ===== labelInValue =====
+  it('labelInValue 单选：onChange 收到 { value, label }', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <Select
+        labelInValue
+        options={[
+          { label: '苹果', value: 'apple' },
+          { label: '香蕉', value: 'banana' },
+        ]}
+        onChange={onChange}
+      />,
+    );
+    fireEvent.click(container.querySelector('.aura-select-selector')!);
+    fireEvent.click(screen.getByText('苹果'));
+    expect(onChange).toHaveBeenCalledWith({ value: 'apple', label: '苹果' });
+  });
+
+  it('labelInValue 多选：onChange 收到对象数组，受控对象值可回显', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <Select
+        labelInValue
+        multiple
+        value={[
+          { value: 'apple', label: '苹果' },
+          { value: 'banana', label: '香蕉' },
+        ]}
+        options={[
+          { label: '苹果', value: 'apple' },
+          { label: '香蕉', value: 'banana' },
+          { label: '樱桃', value: 'cherry' },
+        ]}
+        onChange={onChange}
+      />,
+    );
+    // 两个 tag 均按 label 回显
+    expect(screen.getAllByText('苹果').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('香蕉').length).toBeGreaterThan(0);
+
+    // 再选一次 banana 之外的 cherry
+    fireEvent.click(container.querySelector('.aura-select-selector')!);
+    fireEvent.click(screen.getByText('樱桃'));
+    const calls = onChange.mock.calls[0][0] as Array<{ value: string }>;
+    expect(calls.map((o) => o.value)).toEqual(['apple', 'banana', 'cherry']);
+  });
+
+  it('labelInValue 的 defaultValue 支持对象形态', () => {
+    render(
+      <Select
+        labelInValue
+        defaultValue={{ value: 'apple' }}
+        options={[{ label: '苹果', value: 'apple' }]}
+      />,
+    );
+    expect(screen.getByText('苹果')).toBeDefined();
+  });
+
+  // ===== filterOption / onSearch =====
+  it('filterOption=false 时输入不本地过滤（远程搜索场景）', () => {
+    const onSearch = vi.fn();
+    const { container } = render(
+      <Select
+        searchable
+        filterOption={false}
+        onSearch={onSearch}
+        options={[
+          { label: '苹果', value: 'apple' },
+          { label: '香蕉', value: 'banana' },
+        ]}
+      />,
+    );
+    fireEvent.click(container.querySelector('.aura-select-selector')!);
+    const input = container.querySelector(
+      '.aura-select-search-input',
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '苹果' } });
+
+    expect(onSearch).toHaveBeenCalledWith('苹果');
+    // 本地过滤被关闭：选项仍然全部可见
+    expect(screen.getByText('苹果')).toBeDefined();
+    expect(screen.getByText('香蕉')).toBeDefined();
+  });
+
+  it('filterOption 函数可自定义过滤（如按 value 匹配）', () => {
+    const { container } = render(
+      <Select
+        searchable
+        filterOption={(input, option) =>
+          String(option.value).toLowerCase().includes(input.toLowerCase())
+        }
+        options={[
+          { label: '苹果', value: 'apple' },
+          { label: '香蕉', value: 'banana' },
+        ]}
+      />,
+    );
+    fireEvent.click(container.querySelector('.aura-select-selector')!);
+    const input = container.querySelector(
+      '.aura-select-search-input',
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'ANA' } });
+
+    // 按 value 模糊匹配：banana 命中、apple 不命中（label 不参与）
+    expect(screen.getByText('香蕉')).toBeDefined();
+    expect(screen.queryByText('苹果')).toBeNull();
+  });
+
+  // ===== maxTagCount =====
+  it('maxTagCount 超出部分以 +N... 收敛', () => {
+    render(
+      <Select
+        multiple
+        maxTagCount={2}
+        defaultValue={['a', 'b', 'c']}
+        options={[
+          { label: '选项一', value: 'a' },
+          { label: '选项二', value: 'b' },
+          { label: '选项三', value: 'c' },
+        ]}
+      />,
+    );
+    expect(screen.getByText('选项一')).toBeDefined();
+    expect(screen.getByText('选项二')).toBeDefined();
+    expect(screen.queryByText('选项三')).toBeNull();
+    expect(screen.getByText('+1...')).toBeDefined();
+  });
+
+  it('notFoundContent 自定义空态文案', () => {
+    const { container } = render(
+      <Select
+        searchable
+        notFoundContent={<span data-testid="empty">暂无数据</span>}
+        options={[{ label: '苹果', value: 'apple' }]}
+      />,
+    );
+    fireEvent.click(container.querySelector('.aura-select-selector')!);
+    const input = container.querySelector(
+      '.aura-select-search-input',
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '不存在的选项' } });
+    expect(container.querySelector('[data-testid="empty"]')).not.toBeNull();
+  });
 });

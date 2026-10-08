@@ -15,6 +15,8 @@
   transition: all var(--aura-duration-normal) var(--aura-easing);
   user-select: none;
   white-space: nowrap;
+  // 链接按钮（<a>）去除默认下划线
+  text-decoration: none;
 
   &:hover {
     border-color: var(--aura-primary-700);
@@ -38,6 +40,25 @@
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+  }
+
+  // 链接按钮的禁用态（<a> 没有 disabled 属性）
+  &&-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--aura-border);
+      color: var(--aura-text);
+    }
+  }
+
+  // 撑满容器
+  &&-block {
+    display: flex;
+    width: 100%;
   }
 
   // Variants
@@ -127,20 +148,32 @@
 }
 
 @keyframes aura-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes aura-fade-in {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 // Dark mode glow
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-btn {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2), 0 0 20px rgba(124, 58, 237, 0.15);
+      box-shadow:
+        0 0 0 2px rgba(124, 58, 237, 0.2),
+        0 0 20px rgba(124, 58, 237, 0.15);
     }
 
     &:hover {
@@ -149,7 +182,9 @@
 
     &-primary {
       &:hover {
-        box-shadow: 0 0 20px rgba(124, 58, 237, 0.3), 0 4px 12px rgba(124, 58, 237, 0.2);
+        box-shadow:
+          0 0 20px rgba(124, 58, 237, 0.3),
+          0 4px 12px rgba(124, 58, 237, 0.2);
       }
     }
   }

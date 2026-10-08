@@ -286,10 +286,12 @@
 }
 
 // ===== 暗色模式 =====
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-input {
     &:focus-within {
-      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2), 0 0 20px rgba(124, 58, 237, 0.15);
+      box-shadow:
+        0 0 0 2px rgba(124, 58, 237, 0.2),
+        0 0 20px rgba(124, 58, 237, 0.15);
     }
 
     &-filled:focus-within {
@@ -310,4 +312,58 @@
       }
     }
   }
+}
+
+/* ===== 前后置 addon 包裹层 ===== */
+.aura-input-group-wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+
+  .aura-input {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  .aura-input-addon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0 var(--aura-spacing-3);
+    background: var(--aura-bg-secondary);
+    border: 1px solid var(--aura-border);
+    border-radius: var(--aura-radius-md);
+    color: var(--aura-text-secondary);
+    font-size: var(--aura-font-size-md);
+    white-space: nowrap;
+
+    &:first-child {
+      border-right: none;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:last-child {
+      border-left: none;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  &-disabled {
+    .aura-input-addon {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* ===== 字数统计 ===== */
+.aura-input-count {
+  flex-shrink: 0;
+  margin-left: var(--aura-spacing-2);
+  color: var(--aura-text-tertiary);
+  font-size: var(--aura-font-size-xs);
+  line-height: 1;
 }

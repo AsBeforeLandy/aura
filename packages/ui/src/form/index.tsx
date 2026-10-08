@@ -4,6 +4,7 @@ import React, {
   useContext,
   useState,
   useCallback,
+  useMemo,
   useRef,
   useEffect,
 } from 'react';
@@ -34,6 +35,66 @@ export interface FormListFieldData {
 export interface FormListOperation {
   add: (defaultValue?: Record<string, unknown>) => void;
   remove: (index: number) => void;
+}
+
+/* ===== FormInstance（命令式实例） ===== */
+
+/** Form 内部引擎：由 Form 在挂载时注入，FormInstance 的方法委托给它 */
+interface FormEngine {
+  getValues(): Record<string, unknown>;
+  setFieldValue(name: string, value: unknown): void;
+  setFieldsValue(values: Record<string, unknown>): void;
+  validateFields(names?: string[]): Promise<Record<string, unknown>>;
+  reset(): void;
+}
+
+export interface FormInstance {
+  /** 获取全部字段值（浅拷贝） */
+  getFieldsValue(): Record<string, unknown>;
+  /** 获取单个字段值 */
+  getFieldValue(name: string): unknown;
+  /** 设置单个字段值 */
+  setFieldValue(name: string, value: unknown): void;
+  /** 批量合并字段值（编辑表单回填） */
+  setFieldsValue(values: Record<string, unknown>): void;
+  /**
+   * 校验全部或指定字段：通过时 resolve 全部字段值，
+   * 失败时 reject `FormError[]`
+   */
+  validateFields(names?: string | string[]): Promise<Record<string, unknown>>;
+  /** 重置为 initialValues 并清空校验错误 */
+  resetFields(): void;
+}
+
+/** FormInstance → 引用槽注册表：Form 借此把引擎挂到实例上，不污染公开接口 */
+const engineRegistry = new WeakMap<FormInstance, { current: FormEngine | null }>();
+
+/**
+ * 创建 FormInstance。传给 `<Form form={form}>` 后即可在表单外部命令式
+ * 读写与校验（编辑回填、外部提交按钮、跨组件联动等场景）。
+ * 对外通过 `Form.useForm()` 使用（返回数组，与 antd 用法一致）。
+ *
+ * 实现说明：刻意不使用 React hooks——与 antd 一致，允许在组件外
+ * （工具函数、测试、类组件）调用，仅要求把返回值传给 <Form form={...}>。
+ */
+function useForm(): FormInstance {
+  const engineRef: { current: FormEngine | null } = { current: null };
+  const instance: FormInstance = {
+    getFieldsValue: () => engineRef.current?.getValues() ?? {},
+    getFieldValue: (name) => engineRef.current?.getValues()[name],
+    setFieldValue: (name, value) => engineRef.current?.setFieldValue(name, value),
+    setFieldsValue: (values) => engineRef.current?.setFieldsValue(values),
+    validateFields: async (names) => {
+      const engine = engineRef.current;
+      if (!engine) return {};
+      return engine.validateFields(
+        names === undefined ? undefined : Array.isArray(names) ? names : [names],
+      );
+    },
+    resetFields: () => engineRef.current?.reset(),
+  };
+  engineRegistry.set(instance, engineRef);
+  return instance;
 }
 
 interface FormContextValue {
@@ -388,6 +449,8 @@ export interface FormProps {
    *  @default 'md'
    */
   size?: 'sm' | 'md' | 'lg';
+  /** 命令式实例（由 `Form.useForm()` 创建），用于编辑回填、外部提交等场景 */
+  form?: FormInstance;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -407,6 +470,7 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
       colon = false,
       disabled = false,
       size = 'md',
+      form,
       className,
       style,
       children,
@@ -416,51 +480,108 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
     const [values, setValues] = useState<Record<string, unknown>>({ ...initialValues });
     const [errors, setErrors] = useState<Record<string, string[]>>({});
 
+    // valuesRef 是字段值的唯一事实来源：命令式 API 与渲染状态都从它出发，
+    // 保证 setFieldsValue 后同步读取（validateFields / getFieldValue）拿到最新值
+    const valuesRef = useRef<Record<string, unknown>>({ ...initialValues });
+    const initialValuesRef = useRef(initialValues);
     const rulesMapRef = useRef<Record<string, RuleType[]>>({});
 
-    const setFieldValue = useCallback((name: string, value: unknown) => {
-      setValues((prev) => ({ ...prev, [name]: value }));
-    }, []);
+    /** 统一的字段值变更入口：先写 ref（同步可读），再同步渲染状态 */
+    const applyValues = useCallback(
+      (updater: (prev: Record<string, unknown>) => Record<string, unknown>) => {
+        valuesRef.current = updater(valuesRef.current);
+        setValues(valuesRef.current);
+      },
+      [],
+    );
+
+    const setFieldValue = useCallback(
+      (name: string, value: unknown) => {
+        applyValues((prev) => ({ ...prev, [name]: value }));
+      },
+      [applyValues],
+    );
 
     const validateField = useCallback(
       async (name: string): Promise<string[]> => {
         const rules = rulesMapRef.current[name] ?? [];
         if (rules.length === 0) return [];
-        const fieldErrors = await validateRules(rules, values[name]);
+        const fieldErrors = await validateRules(rules, valuesRef.current[name]);
         setErrors((prev) => ({ ...prev, [name]: fieldErrors }));
         return fieldErrors;
       },
-      [values],
+      [],
     );
+
+    const engine = useMemo<FormEngine>(
+      () => ({
+        getValues: () => ({ ...valuesRef.current }),
+        setFieldValue: (name, value) =>
+          applyValues((prev) => ({ ...prev, [name]: value })),
+        setFieldsValue: (vals) =>
+          applyValues((prev) => ({ ...prev, ...vals })),
+        validateFields: async (names) => {
+          const fieldNames = names ?? Object.keys(rulesMapRef.current);
+          const allErrors: FormError[] = [];
+          const newErrors: Record<string, string[]> = {};
+          for (const name of fieldNames) {
+            const rules = rulesMapRef.current[name];
+            if (rules && rules.length > 0) {
+              const fieldErrors = await validateRules(
+                rules,
+                valuesRef.current[name],
+              );
+              if (fieldErrors.length > 0) {
+                newErrors[name] = fieldErrors;
+                allErrors.push({ name, errors: fieldErrors });
+              }
+            }
+          }
+          // 对「本次校验过的字段」做替换式更新：通过的字段清除旧错误（与整表提交语义一致）
+          setErrors((prev) => {
+            const next = { ...prev };
+            for (const name of fieldNames) {
+              if (newErrors[name]) next[name] = newErrors[name];
+              else delete next[name];
+            }
+            return next;
+          });
+          if (allErrors.length > 0) {
+            throw allErrors;
+          }
+          return { ...valuesRef.current };
+        },
+        reset: () => {
+          valuesRef.current = { ...initialValuesRef.current };
+          setValues(valuesRef.current);
+          setErrors({});
+        },
+      }),
+      [applyValues],
+    );
+
+    // 把引擎挂到外部传入的 FormInstance 上（卸载时解绑）
+    useEffect(() => {
+      if (!form) return;
+      const slot = engineRegistry.get(form);
+      if (!slot) return;
+      slot.current = engine;
+      return () => {
+        slot.current = null;
+      };
+    }, [form, engine]);
 
     const handleSubmit = useCallback(
       async (e: React.FormEvent) => {
         e.preventDefault();
-
-        const allErrors: FormError[] = [];
-        const newErrors: Record<string, string[]> = {};
-
-        const fieldNames = Object.keys(rulesMapRef.current);
-        for (const name of fieldNames) {
-          const rules = rulesMapRef.current[name];
-          if (rules && rules.length > 0) {
-            const fieldErrors = await validateRules(rules, values[name]);
-            if (fieldErrors.length > 0) {
-              newErrors[name] = fieldErrors;
-              allErrors.push({ name, errors: fieldErrors });
-            }
-          }
-        }
-
-        setErrors(newErrors);
-
-        if (allErrors.length > 0) {
-          onFinishFailed?.(allErrors);
-        } else {
-          onFinish?.(values);
+        try {
+          const result = await engine.validateFields();
+          onFinish?.(result);
+        } catch (allErrors) {
+          onFinishFailed?.(allErrors as FormError[]);
         }
       },
-      [values, onFinish, onFinishFailed],
+      [engine, onFinish, onFinishFailed],
     );
 
     const registerField = useCallback((name: string, rules?: RuleType[]) => {
@@ -509,11 +630,14 @@ interface FormComponent
   > {
   Item: typeof FormItem;
   List: typeof FormList;
+  /** 创建 FormInstance（与 antd 用法一致：`const [form] = Form.useForm()`） */
+  useForm: () => [FormInstance];
 }
 
 const Form = FormBase as unknown as FormComponent;
 Form.Item = FormItem;
 Form.List = FormList;
+Form.useForm = () => [useForm()];
 
 export { Form, FormItem, FormList };
 export default Form;

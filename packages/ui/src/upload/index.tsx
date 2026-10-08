@@ -19,6 +19,15 @@ export interface UploadFile {
   file?: File;
 }
 
+/** 自定义上传的参数：通过 onSuccess / onError 回报上传结果 */
+export interface CustomRequestOptions {
+  file: File;
+  action?: string;
+  headers?: Record<string, string>;
+  onSuccess: (body?: unknown) => void;
+  onError: (error: Error) => void;
+}
+
 export interface UploadProps {
   /** 接受的文件类型 */
   accept?: string;
@@ -28,10 +37,16 @@ export interface UploadProps {
   disabled?: boolean;
   /** 文件大小上限（bytes） */
   maxSize?: number;
+  /** 最多可上传的文件数量；为 1 时新选择的文件直接替换 */
+  maxCount?: number;
   /** 文件列表展示风格
    *  @default 'text'
    */
   listType?: 'text' | 'picture' | 'picture-card';
+  /** 受控文件列表（编辑页回显）；传入后组件不自改状态，更新请以 onChange 返回的列表为准 */
+  fileList?: UploadFile[];
+  /** 默认文件列表（非受控） */
+  defaultFileList?: UploadFile[];
   /**
    * 上传接口地址。
    * 配置后选择文件即发起真实 POST（multipart/form-data，字段名 `file`），
@@ -44,6 +59,12 @@ export interface UploadProps {
   onChange?: (fileList: UploadFile[]) => void;
   /** 上传前钩子，返回 false 阻止上传 */
   beforeUpload?: (file: File) => boolean | Promise<File>;
+  /** 点击移除前的钩子，返回 false 阻止移除 */
+  onRemove?: (file: UploadFile) => boolean | void | Promise<boolean | void>;
+  /** 点击文件名（预览）回调 */
+  onPreview?: (file: UploadFile) => void;
+  /** 自定义上传实现；配置后忽略 action 的内置请求，通过 onSuccess / onError 回报状态 */
+  customRequest?: (options: CustomRequestOptions) => void;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -68,6 +89,165 @@ const StatusIcon: React.FC<{ status: UploadFile['status'] }> = ({ status }) => {
   return <CloseCircleFilled size={16} className={classNames(prefixCls('upload-status-icon'), prefixCls('upload-status-error'))} />;
 };
 
+/* ===== 内部共享逻辑（Upload 与 Dragger 共用） ===== */
+
+interface UseUploadCoreOptions {
+  fileList?: UploadFile[];
+  defaultFileList?: UploadFile[];
+  maxCount?: number;
+  maxSize?: number;
+  action?: string;
+  headers?: Record<string, string>;
+  onChange?: (fileList: UploadFile[]) => void;
+  onRemove?: (file: UploadFile) => boolean | void | Promise<boolean | void>;
+  beforeUpload?: (file: File) => boolean | Promise<File>;
+  customRequest?: (options: CustomRequestOptions) => void;
+}
+
+/**
+ * 文件上传核心流：列表受控/非受控、maxCount 收敛、上传编排（customRequest / action / 模拟）。
+ * 列表写入统一走 commit：非受控写内部状态，受控只回调 onChange，由调用方决定是否更新。
+ */
+function useUploadCore(options: UseUploadCoreOptions) {
+  const {
+    fileList: controlledList,
+    defaultFileList,
+    maxCount,
+    maxSize,
+    action,
+    headers,
+    onChange,
+    onRemove,
+    beforeUpload,
+    customRequest,
+  } = options;
+
+  const isControlled = controlledList !== undefined;
+  // 状态值本身不直接读取（渲染读 listRef 即时快照），仅用于触发重渲染
+  const [, setInternalList] = useState<UploadFile[]>(defaultFileList ?? []);
+  // 非受控模式的即时快照：异步补丁（patchFile）从这里读最新列表，避免 setState 闭包过期
+  const listRef = useRef<UploadFile[]>(defaultFileList ?? []);
+
+  const currentList = isControlled ? (controlledList as UploadFile[]) : listRef.current;
+
+  /** 唯一的列表写入口 */
+  const commit = useCallback(
+    (next: UploadFile[]) => {
+      listRef.current = next;
+      if (!isControlled) setInternalList(next);
+      onChange?.(next);
+    },
+    [isControlled, onChange],
+  );
+
+  /** 按 uid 局部更新单个文件 */
+  const patchFile = useCallback(
+    (uid: string, patch: Partial<UploadFile>) => {
+      const base = isControlled ? (controlledList as UploadFile[]) : listRef.current;
+      commit(base.map((f) => (f.uid === uid ? { ...f, ...patch } : f)));
+    },
+    [commit, isControlled, controlledList],
+  );
+
+  /** 模拟上传过程（未配置 action / customRequest 时保持原行为，便于演示与测试） */
+  const simulateUpload = useCallback(
+    (uploadFile: UploadFile) => {
+      setTimeout(() => {
+        patchFile(uploadFile.uid, { status: 'done' as const });
+      }, 1500);
+    },
+    [patchFile],
+  );
+
+  /** 发起上传：customRequest 优先，其次 action 真实请求，否则定时模拟 */
+  const startUpload = useCallback(
+    (uploadFile: UploadFile) => {
+      if (customRequest && uploadFile.file) {
+        customRequest({
+          file: uploadFile.file,
+          action,
+          headers,
+          onSuccess: () => patchFile(uploadFile.uid, { status: 'done' as const }),
+          onError: () => patchFile(uploadFile.uid, { status: 'error' as const }),
+        });
+        return;
+      }
+      if (!action || !uploadFile.file) {
+        simulateUpload(uploadFile);
+        return;
+      }
+      requestUpload({ file: uploadFile.file, action, headers })
+        .then(() => patchFile(uploadFile.uid, { status: 'done' as const }))
+        .catch(() => patchFile(uploadFile.uid, { status: 'error' as const }));
+    },
+    [customRequest, action, headers, patchFile, simulateUpload],
+  );
+
+  /** 处理选择的文件： maxSize / beforeUpload 过滤 → maxCount 收敛 → 追加并上传 */
+  const processFiles = useCallback(
+    async (files: FileList | null) => {
+      if (!files || files.length === 0) return;
+
+      const incoming: UploadFile[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        if (maxSize && file.size > maxSize) continue;
+
+        if (beforeUpload) {
+          try {
+            const result = await beforeUpload(file);
+            if (result === false) continue;
+          } catch {
+            continue;
+          }
+        }
+
+        incoming.push({
+          uid: generateUid(),
+          name: file.name,
+          status: 'uploading',
+          file,
+          url: URL.createObjectURL(file),
+        });
+      }
+
+      if (incoming.length === 0) return;
+
+      // maxCount 收敛：为 1 时新选择直接替换；否则只保留剩余名额
+      let accepted = incoming;
+      if (maxCount === 1) {
+        accepted = [incoming[0]];
+      } else if (maxCount !== undefined) {
+        const room = maxCount - currentList.length;
+        if (room <= 0) return;
+        accepted = incoming.slice(0, room);
+      }
+
+      const nextList = maxCount === 1 ? accepted : [...currentList, ...accepted];
+      commit(nextList);
+      accepted.forEach((f) => startUpload(f));
+    },
+    [maxSize, beforeUpload, maxCount, currentList, commit, startUpload],
+  );
+
+  /** 删除文件；onRemove 返回 false 时阻止 */
+  const handleRemove = useCallback(
+    async (uid: string) => {
+      const file = currentList.find((f) => f.uid === uid);
+      if (!file) return;
+      if (onRemove) {
+        const result = await onRemove(file);
+        if (result === false) return;
+      }
+      commit(currentList.filter((f) => f.uid !== uid));
+    },
+    [currentList, onRemove, commit],
+  );
+
+  return { fileList: currentList, processFiles, handleRemove };
+}
+
 /* ===== Upload 主组件 ===== */
 
 const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
@@ -77,127 +257,44 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
       multiple = false,
       disabled = false,
       maxSize,
+      maxCount,
       listType = 'text',
+      fileList,
+      defaultFileList,
       action,
       headers,
       onChange,
       beforeUpload,
+      onRemove,
+      onPreview,
+      customRequest,
       className,
       style,
     },
     ref,
   ) => {
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    /** 更新文件列表并触发回调 */
-    const updateFileList = useCallback(
-      (newList: UploadFile[]) => {
-        setFileList(newList);
-        onChange?.(newList);
-      },
-      [onChange],
-    );
+    const { fileList: currentList, processFiles, handleRemove } = useUploadCore({
+      fileList,
+      defaultFileList,
+      maxCount,
+      maxSize,
+      action,
+      headers,
+      onChange,
+      onRemove,
+      beforeUpload,
+      customRequest,
+    });
 
-    /** 按 uid 局部更新单个文件并同步回调 */
-    const patchFile = useCallback(
-      (uid: string, patch: Partial<UploadFile>) => {
-        setFileList((prev) => {
-          const next = prev.map((f) => (f.uid === uid ? { ...f, ...patch } : f));
-          onChange?.(next);
-          return next;
-        });
-      },
-      [onChange],
-    );
-
-    /** 模拟上传过程（未配置 action 时保持原行为，便于演示与测试） */
-    const simulateUpload = useCallback(
-      (uploadFile: UploadFile) => {
-        // 模拟上传中状态
-        setTimeout(() => {
-          setFileList((prev) => {
-            const newList = prev.map((f) =>
-              f.uid === uploadFile.uid ? { ...f, status: 'done' as const } : f,
-            );
-            onChange?.(newList);
-            return newList;
-          });
-        }, 1500);
-      },
-      [onChange],
-    );
-
-    /**
-     * 发起上传。
-     * 配置了 `action` 走真实请求（成功 → done，失败 → error）；
-     * 未配置时保持原有的定时模拟流程。
-     */
-    const startUpload = useCallback(
-      (uploadFile: UploadFile) => {
-        if (!action || !uploadFile.file) {
-          simulateUpload(uploadFile);
-          return;
-        }
-        requestUpload({ file: uploadFile.file, action, headers })
-          .then(() => patchFile(uploadFile.uid, { status: 'done' as const }))
-          .catch(() => patchFile(uploadFile.uid, { status: 'error' as const }));
-      },
-      [action, headers, simulateUpload, patchFile],
-    );
-
-    /** 处理文件选择 */
     const handleChange = useCallback(
-      async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files;
-        if (!files || files.length === 0) return;
-
-        const newFiles: UploadFile[] = [];
-
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-
-          // 检查文件大小
-          if (maxSize && file.size > maxSize) {
-            continue;
-          }
-
-          // 执行 beforeUpload 钩子
-          if (beforeUpload) {
-            try {
-              const result = await beforeUpload(file);
-              if (result === false) continue;
-            } catch {
-              continue;
-            }
-          }
-
-          const uploadFile: UploadFile = {
-            uid: generateUid(),
-            name: file.name,
-            status: 'uploading',
-            file,
-            url: URL.createObjectURL(file),
-          };
-          newFiles.push(uploadFile);
-        }
-
-        if (newFiles.length === 0) {
-          // 重置 input 以便再次选择相同文件
-          if (inputRef.current) inputRef.current.value = '';
-          return;
-        }
-
-        const updatedList = [...fileList, ...newFiles];
-        updateFileList(updatedList);
-
-        // 配置了 action 走真实请求，否则走定时模拟
-        newFiles.forEach((f) => startUpload(f));
-
-        // 重置 input
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        processFiles(e.target.files);
+        // 重置 input 以便再次选择相同文件
         if (inputRef.current) inputRef.current.value = '';
       },
-      [fileList, maxSize, beforeUpload, updateFileList, startUpload],
+      [processFiles],
     );
 
     /** 点击触发文件选择 */
@@ -205,15 +302,6 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
       if (disabled) return;
       inputRef.current?.click();
     }, [disabled]);
-
-    /** 删除文件 */
-    const handleRemove = useCallback(
-      (uid: string) => {
-        const newList = fileList.filter((f) => f.uid !== uid);
-        updateFileList(newList);
-      },
-      [fileList, updateFileList],
-    );
 
     /* --- className --- */
     const wrapperCls = classNames(
@@ -230,6 +318,31 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
         prefixCls(`upload-file-${file.status}`),
       );
 
+      const nameNode = (
+        <span
+          className={classNames(
+            prefixCls('upload-file-name'),
+            onPreview && prefixCls('upload-file-name-link'),
+          )}
+          title={file.name}
+          onClick={onPreview ? () => onPreview(file) : undefined}
+          role={onPreview ? 'button' : undefined}
+          tabIndex={onPreview ? 0 : undefined}
+          onKeyDown={
+            onPreview
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onPreview(file);
+                  }
+                }
+              : undefined
+          }
+        >
+          {file.name}
+        </span>
+      );
+
       return (
         <div key={file.uid} className={itemCls}>
           {(listType === 'picture' || listType === 'picture-card') && (
@@ -242,9 +355,7 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
             </div>
           )}
           <div className={prefixCls('upload-file-info')}>
-            <span className={prefixCls('upload-file-name')} title={file.name}>
-              {file.name}
-            </span>
+            {nameNode}
             <StatusIcon status={file.status} />
           </div>
           <button
@@ -283,9 +394,9 @@ const UploadBase = forwardRef<HTMLDivElement, UploadProps>(
           <UploadIcon size={16} />
           <span>点击上传</span>
         </button>
-        {fileList.length > 0 && (
+        {currentList.length > 0 && (
           <div className={prefixCls('upload-list')} role="list">
-            {fileList.map(renderFileItem)}
+            {currentList.map(renderFileItem)}
           </div>
         )}
       </div>
@@ -308,111 +419,37 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
       multiple = false,
       disabled = false,
       maxSize,
+      maxCount,
+      fileList,
+      defaultFileList,
       action,
       headers,
       onChange,
       beforeUpload,
+      onRemove,
+      onPreview,
+      customRequest,
       className,
       style,
       children,
     },
     ref,
   ) => {
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [isDragOver, setIsDragOver] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const updateFileList = useCallback(
-      (newList: UploadFile[]) => {
-        setFileList(newList);
-        onChange?.(newList);
-      },
-      [onChange],
-    );
-
-    /** 按 uid 局部更新单个文件并同步回调 */
-    const patchFile = useCallback(
-      (uid: string, patch: Partial<UploadFile>) => {
-        setFileList((prev) => {
-          const next = prev.map((f) => (f.uid === uid ? { ...f, ...patch } : f));
-          onChange?.(next);
-          return next;
-        });
-      },
-      [onChange],
-    );
-
-    const simulateUpload = useCallback(
-      (uploadFile: UploadFile) => {
-        setTimeout(() => {
-          setFileList((prev) => {
-            const newList = prev.map((f) =>
-              f.uid === uploadFile.uid ? { ...f, status: 'done' as const } : f,
-            );
-            onChange?.(newList);
-            return newList;
-          });
-        }, 1500);
-      },
-      [onChange],
-    );
-
-    /**
-     * 发起上传。
-     * 配置了 `action` 走真实请求（成功 → done，失败 → error）；
-     * 未配置时保持原有的定时模拟流程。
-     */
-    const startUpload = useCallback(
-      (uploadFile: UploadFile) => {
-        if (!action || !uploadFile.file) {
-          simulateUpload(uploadFile);
-          return;
-        }
-        requestUpload({ file: uploadFile.file, action, headers })
-          .then(() => patchFile(uploadFile.uid, { status: 'done' as const }))
-          .catch(() => patchFile(uploadFile.uid, { status: 'error' as const }));
-      },
-      [action, headers, simulateUpload, patchFile],
-    );
-
-    const processFiles = useCallback(
-      async (files: FileList | null) => {
-        if (!files || files.length === 0) return;
-
-        const newFiles: UploadFile[] = [];
-
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-
-          if (maxSize && file.size > maxSize) continue;
-
-          if (beforeUpload) {
-            try {
-              const result = await beforeUpload(file);
-              if (result === false) continue;
-            } catch {
-              continue;
-            }
-          }
-
-          const uploadFile: UploadFile = {
-            uid: generateUid(),
-            name: file.name,
-            status: 'uploading',
-            file,
-            url: URL.createObjectURL(file),
-          };
-          newFiles.push(uploadFile);
-        }
-
-        if (newFiles.length === 0) return;
-
-        const updatedList = [...fileList, ...newFiles];
-        updateFileList(updatedList);
-        newFiles.forEach((f) => startUpload(f));
-      },
-      [fileList, maxSize, beforeUpload, updateFileList, startUpload],
-    );
+    const { fileList: currentList, processFiles, handleRemove } = useUploadCore({
+      fileList,
+      defaultFileList,
+      maxCount,
+      maxSize,
+      action,
+      headers,
+      onChange,
+      onRemove,
+      beforeUpload,
+      customRequest,
+    });
 
     const handleDragOver = useCallback(
       (e: React.DragEvent) => {
@@ -448,14 +485,6 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
         if (inputRef.current) inputRef.current.value = '';
       },
       [processFiles],
-    );
-
-    const handleRemove = useCallback(
-      (uid: string) => {
-        const newList = fileList.filter((f) => f.uid !== uid);
-        updateFileList(newList);
-      },
-      [fileList, updateFileList],
     );
 
     const wrapperCls = classNames(
@@ -500,9 +529,9 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
             </>
           )}
         </div>
-        {fileList.length > 0 && (
+        {currentList.length > 0 && (
           <div className={prefixCls('upload-list')} role="list">
-            {fileList.map((file) => {
+            {currentList.map((file) => {
               const itemCls = classNames(
                 prefixCls('upload-file'),
                 prefixCls(`upload-file-${file.status}`),
@@ -510,7 +539,15 @@ const Dragger = forwardRef<HTMLDivElement, DraggerProps>(
               return (
                 <div key={file.uid} className={itemCls}>
                   <div className={prefixCls('upload-file-info')}>
-                    <span className={prefixCls('upload-file-name')} title={file.name}>
+                    <span
+                      className={classNames(
+                        prefixCls('upload-file-name'),
+                        onPreview && prefixCls('upload-file-name-link'),
+                      )}
+                      title={file.name}
+                      onClick={onPreview ? () => onPreview(file) : undefined}
+                      role={onPreview ? 'button' : undefined}
+                    >
                       {file.name}
                     </span>
                     <StatusIcon status={file.status} />

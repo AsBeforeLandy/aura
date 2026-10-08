@@ -58,6 +58,8 @@
   transform: translate(-50%, -50%);
   cursor: grab;
   z-index: 1;
+  // 触屏拖拽时阻止浏览器把手势识别为页面滚动
+  touch-action: none;
   transition:
     box-shadow var(--aura-duration-normal) var(--aura-easing),
     transform var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -79,7 +81,9 @@
     width: 20px;
     height: 20px;
     cursor: grabbing;
-    box-shadow: var(--aura-shadow-md), 0 0 0 4px rgba(124, 58, 237, 0.2);
+    box-shadow:
+      var(--aura-shadow-md),
+      0 0 0 4px rgba(124, 58, 237, 0.2);
     transform: translate(-50%, -50%) scale(1.1);
   }
 
@@ -116,7 +120,7 @@
 }
 
 // ===== 暗色模式 =====
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-slider-track {
     background: var(--aura-gray-700);
   }
@@ -134,7 +138,9 @@
     }
 
     &&-active {
-      box-shadow: var(--aura-shadow-lg), 0 0 0 4px rgba(124, 58, 237, 0.3);
+      box-shadow:
+        var(--aura-shadow-lg),
+        0 0 0 4px rgba(124, 58, 237, 0.3);
     }
   }
 

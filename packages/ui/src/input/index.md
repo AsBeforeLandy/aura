@@ -14,9 +14,8 @@ toc: content
 
 通过键盘输入内容的基础表单组件。
 
-
 ```tsx | pure
-import { Input } from "@aura/ui";
+import { Input } from '@aura/ui';
 ```
 
 ## 何时使用
@@ -25,6 +24,7 @@ import { Input } from "@aura/ui";
 - 提供组合型输入框用于特殊场景，如密码输入、搜索等
 
 ## 代码演示
+
 <code src="./demo/basic.tsx" description="最基本的输入框用法，支持受控和非受控模式。">基本用法</code>
 <code src="./demo/variant.tsx" description="提供 `default`、`filled`、`bordered` 三种变体样式。">输入框变体</code>
 <code src="./demo/prefix-suffix.tsx" description="通过 `prefix` 和 `suffix` 在输入框前后添加内容，`allowClear` 可启用清除按钮。">前缀与后缀</code>
@@ -36,41 +36,49 @@ import { Input } from "@aura/ui";
 <code src="./demo/search-basic.tsx" description="搜索输入框。">搜索输入框</code>
 <code src="./demo/size-2.tsx" description="不同尺寸。">不同尺寸</code>
 <code src="./demo/variant-style-2.tsx" description="不同变体。">不同变体</code>
+<code src="./demo/addon-count.tsx" description="`addonBefore` / `addonAfter` 渲染在边框外；`showCount` 展示字数统计；`onPressEnter` 响应回车。">附加内容与字数统计</code>
+
 ## API
 
 ### InputProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| variant | 输入框变体 | `'default' \| 'filled' \| 'bordered'` | `'default'` |
-| size | 输入框尺寸 | `'sm' \| 'md' \| 'lg'` | `'md'` |
-| disabled | 是否禁用 | `boolean` | `false` |
-| prefix | 前缀图标 | `ReactNode` | - |
-| suffix | 后缀图标 | `ReactNode` | - |
-| allowClear | 是否可清除 | `boolean` | `false` |
-| status | 校验状态 | `'default' \| 'error' \| 'warning'` | `'default'` |
+| 属性         | 说明                                                | 类型                                  | 默认值      |
+| ------------ | --------------------------------------------------- | ------------------------------------- | ----------- |
+| variant      | 输入框变体                                          | `'default' \| 'filled' \| 'bordered'` | `'default'` |
+| size         | 输入框尺寸                                          | `'sm' \| 'md' \| 'lg'`                | `'md'`      |
+| disabled     | 是否禁用                                            | `boolean`                             | `false`     |
+| prefix       | 前缀图标（边框内）                                  | `ReactNode`                           | -           |
+| suffix       | 后缀图标（边框内）                                  | `ReactNode`                           | -           |
+| allowClear   | 是否可清除                                          | `boolean`                             | `false`     |
+| status       | 校验状态                                            | `'default' \| 'error' \| 'warning'`   | `'default'` |
+| addonBefore  | 前置附加内容（边框外，如 `https://`）               | `ReactNode`                           | -           |
+| addonAfter   | 后置附加内容（边框外，如 `.com`）                   | `ReactNode`                           | -           |
+| showCount    | 是否显示字数统计；传对象可用 `formatter` 自定义渲染 | `boolean \| InputCountConfig`         | `false`     |
+| onPressEnter | 按下回车键的回调                                    | `(e: KeyboardEvent) => void`          | -           |
 
 继承 `Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'>`。
+
+有 `addonBefore` / `addonAfter` 时，组件外层渲染为包裹层，`className` / `style` 作用于包裹层，`ref` 仍指向内部 `<input>`。
 
 ### Input.Password
 
 继承 `Omit<InputProps, 'type'>`，额外属性：
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
+| 属性           | 说明             | 类型      | 默认值  |
+| -------------- | ---------------- | --------- | ------- |
 | defaultVisible | 默认是否显示明文 | `boolean` | `false` |
 
 ### Input.Search
 
 继承 `Omit<InputProps, 'suffix'>`，额外属性：
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| searchButtonText | 自定义搜索按钮文案。不传时展示搜索图标；传入时以文案替代图标，并作为按钮的可访问名称 | `string` | - |
-| onSearch | 搜索回调（回车或点击按钮触发） | `(value: string) => void` | - |
+| 属性             | 说明                                                                                 | 类型                      | 默认值 |
+| ---------------- | ------------------------------------------------------------------------------------ | ------------------------- | ------ |
+| searchButtonText | 自定义搜索按钮文案。不传时展示搜索图标；传入时以文案替代图标，并作为按钮的可访问名称 | `string`                  | -      |
+| onSearch         | 搜索回调（回车或点击按钮触发）                                                       | `(value: string) => void` | -      |
 
 ### Input.Group
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
+| 属性    | 说明         | 类型      | 默认值  |
+| ------- | ------------ | --------- | ------- |
 | compact | 是否紧凑模式 | `boolean` | `false` |

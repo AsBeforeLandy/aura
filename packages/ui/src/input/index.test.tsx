@@ -122,6 +122,97 @@ describe('Input', () => {
     expect(ref.current).not.toBeNull();
     expect(ref.current?.tagName).toBe('INPUT');
   });
+
+  // ===== addon 前后置附加内容 =====
+  it('should render addonBefore and addonAfter in a wrapper', () => {
+    const { container } = render(
+      <Input addonBefore="https://" addonAfter=".com" defaultValue="example" />,
+    );
+    const wrapper = container.querySelector('.aura-input-group-wrapper');
+    expect(wrapper).not.toBeNull();
+    const addons = container.querySelectorAll('.aura-input-addon');
+    expect(addons.length).toBe(2);
+    expect(addons[0]?.textContent).toBe('https://');
+    expect(addons[1]?.textContent).toBe('.com');
+  });
+
+  it('should keep ref on inner input with addons', () => {
+    const ref = React.createRef<HTMLInputElement>();
+    const { container } = render(<Input ref={ref} addonBefore="¥" />);
+    expect(ref.current?.tagName).toBe('INPUT');
+    expect(container.querySelector('.aura-input')?.contains(ref.current)).toBe(
+      true,
+    );
+  });
+
+  it('should apply className to addon wrapper', () => {
+    const { container } = render(
+      <Input addonAfter="元" className="custom-input" />,
+    );
+    expect(
+      container
+        .querySelector('.aura-input-group-wrapper')
+        ?.classList.contains('custom-input'),
+    ).toBe(true);
+  });
+
+  // ===== showCount 字数统计 =====
+  it('should render count when showCount is true', () => {
+    const { container } = render(<Input showCount defaultValue="abc" />);
+    const count = container.querySelector('.aura-input-count');
+    expect(count?.textContent).toBe('3');
+  });
+
+  it('should render count with maxLength', () => {
+    const { container } = render(
+      <Input showCount maxLength={10} defaultValue="abc" />,
+    );
+    expect(container.querySelector('.aura-input-count')?.textContent).toBe(
+      '3 / 10',
+    );
+  });
+
+  it('should support count formatter', () => {
+    const { container } = render(
+      <Input
+        showCount={{ formatter: ({ count }) => `${count} 字` }}
+        defaultValue="你好世界"
+      />,
+    );
+    expect(container.querySelector('.aura-input-count')?.textContent).toBe(
+      '4 字',
+    );
+  });
+
+  it('count should update with uncontrolled input', () => {
+    const { container } = render(<Input showCount maxLength={5} />);
+    const input = container.querySelector('input')!;
+    fireEvent.change(input, { target: { value: 'ab' } });
+    expect(container.querySelector('.aura-input-count')?.textContent).toBe(
+      '2 / 5',
+    );
+  });
+
+  // ===== onPressEnter =====
+  it('should fire onPressEnter only on Enter key', () => {
+    const onPressEnter = vi.fn();
+    const { container } = render(<Input onPressEnter={onPressEnter} />);
+    const input = container.querySelector('input')!;
+    fireEvent.keyDown(input, { key: 'Enter' });
+    fireEvent.keyDown(input, { key: 'a' });
+    expect(onPressEnter).toHaveBeenCalledTimes(1);
+  });
+
+  it('should still call user onKeyDown alongside onPressEnter', () => {
+    const onPressEnter = vi.fn();
+    const onKeyDown = vi.fn();
+    const { container } = render(
+      <Input onPressEnter={onPressEnter} onKeyDown={onKeyDown} />,
+    );
+    fireEvent.keyDown(container.querySelector('input')!, { key: 'Enter' });
+    expect(onPressEnter).toHaveBeenCalledTimes(1);
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('Input.Password', () => {
