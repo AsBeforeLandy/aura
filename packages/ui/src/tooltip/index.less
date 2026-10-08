@@ -110,6 +110,50 @@
       transform: scale(1);
     }
   }
+
+  &&-leftTop {
+    right: calc(100% + 8px);
+    top: 0;
+    transform-origin: right top;
+    transform: scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: scale(1);
+    }
+  }
+
+  &&-leftBottom {
+    right: calc(100% + 8px);
+    bottom: 0;
+    transform-origin: right bottom;
+    transform: scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: scale(1);
+    }
+  }
+
+  &&-rightTop {
+    left: calc(100% + 8px);
+    top: 0;
+    transform-origin: left top;
+    transform: scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: scale(1);
+    }
+  }
+
+  &&-rightBottom {
+    left: calc(100% + 8px);
+    bottom: 0;
+    transform-origin: left bottom;
+    transform: scale(0.9);
+
+    &.aura-tooltip-visible {
+      transform: scale(1);
+    }
+  }
 }
 
 // ===== 提示内容 =====
@@ -170,13 +214,17 @@
     right: 16px;
   }
 
-  .aura-tooltip-left & {
+  .aura-tooltip-left &,
+  .aura-tooltip-leftTop &,
+  .aura-tooltip-leftBottom & {
     right: -4px;
     top: 50%;
     margin-top: -4px;
   }
 
-  .aura-tooltip-right & {
+  .aura-tooltip-right &,
+  .aura-tooltip-rightTop &,
+  .aura-tooltip-rightBottom & {
     left: -4px;
     top: 50%;
     margin-top: -4px;
@@ -184,7 +232,7 @@
 }
 
 // ===== 暗色模式 =====
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-tooltip-content {
     background: var(--aura-gray-200);
     color: var(--aura-gray-900);

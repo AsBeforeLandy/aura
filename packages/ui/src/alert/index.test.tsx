@@ -75,4 +75,52 @@ describe('Alert', () => {
     const alert = getByRole('alert') as HTMLDivElement;
     expect(alert.classList.contains('custom-class')).toBe(true);
   });
+
+  it('custom icon should override variant icon', () => {
+    const { container, getByRole } = render(
+      <Alert showIcon icon={<span data-testid="alert-custom-icon">!</span>}>
+        自定义图标
+      </Alert>,
+    );
+    expect(
+      container.querySelector('[data-testid="alert-custom-icon"]'),
+    ).not.toBeNull();
+    // 默认变体图标不再渲染
+    expect(
+      container.querySelector('.aura-alert-icon svg'),
+    ).toBeNull();
+    expect(getByRole('alert')).toBeDefined();
+  });
+
+  it('custom icon should not render without showIcon', () => {
+    const { container } = render(
+      <Alert icon={<span data-testid="alert-custom-icon">!</span>}>
+        未开启 showIcon
+      </Alert>,
+    );
+    expect(
+      container.querySelector('[data-testid="alert-custom-icon"]'),
+    ).toBeNull();
+  });
+
+  it('should render action zone', () => {
+    const onClick = vi.fn();
+    const { getByText } = render(
+      <Alert
+        title="即将过期"
+        action={<button onClick={onClick}>立即续费</button>}
+      >
+        账户将于 7 天后到期
+      </Alert>,
+    );
+    const btn = getByText('立即续费');
+    fireEvent.click(btn);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('banner 应渲染通栏样式类', () => {
+    const { getByRole } = render(<Alert banner>系统维护通知</Alert>);
+    const alert = getByRole('alert') as HTMLDivElement;
+    expect(alert.classList.contains('aura-alert-banner')).toBe(true);
+  });
 });

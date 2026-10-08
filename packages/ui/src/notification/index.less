@@ -46,8 +46,9 @@
   pointer-events: auto;
   opacity: 0;
   transform: translateX(100%);
-  transition: opacity var(--aura-duration-normal) var(--aura-easing),
-              transform var(--aura-duration-slow) var(--aura-easing);
+  transition:
+    opacity var(--aura-duration-normal) var(--aura-easing),
+    transform var(--aura-duration-slow) var(--aura-easing);
 
   /* ===== 图标 ===== */
   &-icon {
@@ -77,6 +78,14 @@
     font-size: var(--aura-font-size-sm);
     color: var(--aura-text-secondary);
     line-height: 1.5;
+  }
+
+  /* ===== 底部操作区 ===== */
+  &-actions {
+    margin-top: var(--aura-spacing-3);
+    display: flex;
+    align-items: center;
+    gap: var(--aura-spacing-2);
   }
 
   /* ===== 关闭按钮 ===== */
@@ -155,7 +164,7 @@
 }
 
 /* ===== 暗色模式 ===== */
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-notification {
     background: var(--aura-bg-secondary);
 

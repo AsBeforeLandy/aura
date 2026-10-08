@@ -22,15 +22,31 @@ export interface TooltipProps {
     | 'topLeft'
     | 'topRight'
     | 'bottomLeft'
-    | 'bottomRight';
+    | 'bottomRight'
+    | 'leftTop'
+    | 'leftBottom'
+    | 'rightTop'
+    | 'rightBottom';
   /** 触发方式
    *  @default 'hover'
    */
   trigger?: 'hover' | 'click' | 'focus';
-  /** 延迟显示（毫秒）
+  /** 显示延迟（毫秒）；`mouseEnterDelay` 的简写形式
    *  @default 0
    */
   delay?: number;
+  /** 鼠标移入后延迟显示（毫秒）
+   *  @default 0
+   */
+  mouseEnterDelay?: number;
+  /** 鼠标移出后延迟隐藏（毫秒）
+   *  @default 0
+   */
+  mouseLeaveDelay?: number;
+  /** 受控显示状态；传入后组件显隐完全由该值驱动 */
+  open?: boolean;
+  /** 显示状态变化回调（受控 / 非受控均会触发） */
+  onOpenChange?: (open: boolean) => void;
   /** 是否禁用 */
   disabled?: boolean;
   /** 自定义类名 */
@@ -41,6 +57,9 @@ export interface TooltipProps {
   children: React.ReactElement;
 }
 
+/** 退场动画时长（与 index.less 的过渡时间保持一致） */
+const LEAVE_DURATION = 200;
+
 export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   (
     {
@@ -48,6 +67,10 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       placement = 'top',
       trigger = 'hover',
       delay = 0,
+      mouseEnterDelay,
+      mouseLeaveDelay = 0,
+      open: controlledOpen,
+      onOpenChange,
       disabled = false,
       className,
       style,
@@ -55,55 +78,94 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     },
     ref,
   ) => {
-    const [visible, setVisible] = useState(false);
-    const [animating, setAnimating] = useState(false);
-    const delayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const isControlled = controlledOpen !== undefined;
+    const enterDelay = mouseEnterDelay ?? delay;
 
-    // 清除延迟定时器
-    const clearDelayTimer = useCallback(() => {
-      if (delayTimerRef.current) {
-        clearTimeout(delayTimerRef.current);
-        delayTimerRef.current = null;
-      }
+    const [internalOpen, setInternalOpen] = useState(false);
+    // mounted：DOM 是否挂载（含退场动画期）；animating：是否处于显示动画态
+    const [mounted, setMounted] = useState(false);
+    const [animating, setAnimating] = useState(false);
+
+    const enterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const unmountTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const clearTimers = useCallback(() => {
+      if (enterTimerRef.current) clearTimeout(enterTimerRef.current);
+      if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
+      enterTimerRef.current = null;
+      leaveTimerRef.current = null;
     }, []);
 
-    // 显示 tooltip
+    const currentOpen = isControlled ? controlledOpen : internalOpen;
+
+    // 受控模式：跟随 open prop 驱动动画与挂载
+    useEffect(() => {
+      if (!isControlled) return;
+      if (controlledOpen) {
+        setMounted(true);
+        setAnimating(true);
+      } else {
+        setAnimating(false);
+        const timer = setTimeout(() => setMounted(false), LEAVE_DURATION);
+        return () => clearTimeout(timer);
+      }
+    }, [isControlled, controlledOpen]);
+
+    // 显示（enterDelay 为 0 时同步执行，与既有行为一致）
     const show = useCallback(() => {
       if (disabled) return;
-      clearDelayTimer();
-      if (delay > 0) {
-        delayTimerRef.current = setTimeout(() => {
+      clearTimers();
+      const triggerShow = () => {
+        if (!isControlled) {
+          setMounted(true);
           setAnimating(true);
-          setVisible(true);
-        }, delay);
+          setInternalOpen(true);
+        }
+        onOpenChange?.(true);
+      };
+      if (enterDelay > 0) {
+        enterTimerRef.current = setTimeout(triggerShow, enterDelay);
       } else {
-        setAnimating(true);
-        setVisible(true);
+        triggerShow();
       }
-    }, [disabled, delay, clearDelayTimer]);
+    }, [disabled, clearTimers, isControlled, onOpenChange, enterDelay]);
 
-    // 隐藏 tooltip
+    // 隐藏（退场动画结束后卸载 DOM；leaveDelay 为 0 时同步执行）
     const hide = useCallback(() => {
-      clearDelayTimer();
-      setAnimating(false);
-      // 等动画结束后再卸载
-      setTimeout(() => setVisible(false), 200);
-    }, [clearDelayTimer]);
+      if (disabled) return;
+      clearTimers();
+      const triggerHide = () => {
+        onOpenChange?.(false);
+        if (isControlled) return;
+        setAnimating(false);
+        setInternalOpen(false);
+        unmountTimerRef.current = setTimeout(
+          () => setMounted(false),
+          LEAVE_DURATION,
+        );
+      };
+      if (mouseLeaveDelay > 0) {
+        leaveTimerRef.current = setTimeout(triggerHide, mouseLeaveDelay);
+      } else {
+        triggerHide();
+      }
+    }, [disabled, clearTimers, isControlled, onOpenChange, mouseLeaveDelay]);
 
-    // 切换 tooltip
+    // 切换（click 触发）
     const toggle = useCallback(() => {
       if (disabled) return;
-      if (visible) {
+      if (currentOpen) {
         hide();
       } else {
         show();
       }
-    }, [disabled, visible, show, hide]);
+    }, [disabled, currentOpen, show, hide]);
 
     // 组件卸载时清理定时器
     useEffect(() => {
-      return () => clearDelayTimer();
-    }, [clearDelayTimer]);
+      return () => clearTimers();
+    }, [clearTimers]);
 
     // 构建子元素的 props
     const childProps: Record<string, unknown> = {};
@@ -148,7 +210,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     return (
       <div ref={ref} className={wrapperCls} style={style}>
         {React.cloneElement(children, childProps)}
-        {visible && content && (
+        {mounted && content && (
           <div className={tooltipCls} role="tooltip">
             <div className={prefixCls('tooltip-content')}>{content}</div>
             <div className={prefixCls('tooltip-arrow')} />

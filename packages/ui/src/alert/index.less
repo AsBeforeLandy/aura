@@ -11,7 +11,10 @@
   border: 1px solid var(--aura-info);
   color: var(--aura-text);
   animation: aura-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transition: opacity 0.3s var(--aura-easing), transform 0.3s var(--aura-easing), max-height 0.3s var(--aura-easing);
+  transition:
+    opacity 0.3s var(--aura-easing),
+    transform 0.3s var(--aura-easing),
+    max-height 0.3s var(--aura-easing);
 
   // 关闭动画
   &&-closing {
@@ -57,6 +60,14 @@
     margin-top: var(--aura-spacing-1);
   }
 
+  // 操作区
+  &-action {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-top: 1px;
+  }
+
   // 关闭按钮
   &-close {
     display: inline-flex;
@@ -87,45 +98,75 @@
   &&-success {
     background: var(--aura-success-light);
     border-color: var(--aura-success);
-    .aura-alert-icon { color: var(--aura-success); }
+    .aura-alert-icon {
+      color: var(--aura-success);
+    }
   }
 
   // 警告
   &&-warning {
     background: var(--aura-warning-light);
     border-color: var(--aura-warning);
-    .aura-alert-icon { color: var(--aura-warning); }
+    .aura-alert-icon {
+      color: var(--aura-warning);
+    }
   }
 
   // 错误
   &&-error {
     background: var(--aura-error-light);
     border-color: var(--aura-error);
-    .aura-alert-icon { color: var(--aura-error); }
+    .aura-alert-icon {
+      color: var(--aura-error);
+    }
   }
 
   // 信息
   &&-info {
     background: var(--aura-info-light);
     border-color: var(--aura-info);
-    .aura-alert-icon { color: var(--aura-info); }
+    .aura-alert-icon {
+      color: var(--aura-info);
+    }
   }
 }
 
 @keyframes aura-slide-down {
-  from { opacity: 0; transform: translateY(-12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes aura-icon-pop {
-  from { opacity: 0; transform: scale(0.5); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 // 暗色模式
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-alert {
     color: var(--aura-text);
-    &-close:hover { background: rgba(255, 255, 255, 0.08); }
+    &-close:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
   }
+}
+
+/* ===== 通栏模式 ===== */
+.aura-alert-banner {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--aura-border);
+  text-align: center;
 }

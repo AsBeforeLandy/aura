@@ -228,4 +228,104 @@ describe('Tooltip', () => {
     expect(ref.current).not.toBeNull();
     expect(ref.current?.classList.contains('aura-tooltip-wrapper')).toBe(true);
   });
+
+  // ===== 受控 open =====
+  it('受控 open=true 直接显示，open=false 经退场动画后卸载', () => {
+    const { container, rerender } = render(
+      <Tooltip content="受控提示" open>
+        <button>按钮</button>
+      </Tooltip>,
+    );
+    expect(container.querySelector('.aura-tooltip')).not.toBeNull();
+
+    rerender(
+      <Tooltip content="受控提示" open={false}>
+        <button>按钮</button>
+      </Tooltip>,
+    );
+    // 退场动画（200ms）结束后卸载
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(container.querySelector('.aura-tooltip')).toBeNull();
+  });
+
+  it('hover 触发时应回调 onOpenChange（受控模式不改内部状态）', () => {
+    const onOpenChange = vi.fn();
+    const { container, rerender } = render(
+      <Tooltip content="受控提示" open={false} onOpenChange={onOpenChange}>
+        <button>按钮</button>
+      </Tooltip>,
+    );
+    fireEvent.mouseEnter(container.querySelector('button')!);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+
+    // 父组件响应回调更新 open 后，tooltip 才出现
+    rerender(
+      <Tooltip content="受控提示" open onOpenChange={onOpenChange}>
+        <button>按钮</button>
+      </Tooltip>,
+    );
+    expect(container.querySelector('.aura-tooltip')).not.toBeNull();
+
+    fireEvent.mouseLeave(container.querySelector('button')!);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+  });
+
+  // ===== 四角 placement =====
+  it('支持 leftTop / leftBottom / rightTop / rightBottom', () => {
+    const placements = ['leftTop', 'leftBottom', 'rightTop', 'rightBottom'] as const;
+    placements.forEach((placement) => {
+      const { container, unmount } = render(
+        <Tooltip content="提示" placement={placement} open>
+          <button>按钮</button>
+        </Tooltip>,
+      );
+      expect(
+        container.querySelector(`.aura-tooltip-${placement}`),
+      ).not.toBeNull();
+      unmount();
+    });
+  });
+
+  // ===== mouseLeaveDelay =====
+  it('mouseLeaveDelay 应延迟隐藏', () => {
+    vi.useFakeTimers();
+    const { container } = render(
+      <Tooltip content="提示" mouseLeaveDelay={300}>
+        <button>按钮</button>
+      </Tooltip>,
+    );
+    const button = container.querySelector('button')!;
+    fireEvent.mouseEnter(button);
+    expect(container.querySelector('.aura-tooltip')).not.toBeNull();
+
+    fireEvent.mouseLeave(button);
+    // 延迟期内仍在显示
+    expect(container.querySelector('.aura-tooltip')).not.toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+    // 进入退场动画
+    expect(container.querySelector('.aura-tooltip')).not.toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(container.querySelector('.aura-tooltip')).toBeNull();
+  });
+
+  it('mouseEnterDelay 覆盖 delay 简写', () => {
+    vi.useFakeTimers();
+    const { container } = render(
+      <Tooltip content="提示" delay={500} mouseEnterDelay={100}>
+        <button>按钮</button>
+      </Tooltip>,
+    );
+    fireEvent.mouseEnter(container.querySelector('button')!);
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+    expect(container.querySelector('.aura-tooltip')).not.toBeNull();
+  });
 });

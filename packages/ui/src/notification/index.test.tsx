@@ -197,4 +197,126 @@ describe('Notification', () => {
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });
+
+  it('title 与 content 应该支持 ReactNode', async () => {
+    act(() => {
+      notification.open({
+        title: <strong data-testid="rich-title">富文本标题</strong>,
+        content: <span data-testid="rich-content">富文本内容</span>,
+      });
+    });
+
+    await waitFor(() => {
+      expect(document.querySelector('[data-testid="rich-title"]')).not.toBeNull();
+      expect(document.querySelector('[data-testid="rich-content"]')).not.toBeNull();
+    });
+  });
+
+  it('同 key 重复调用应该原位更新而不是新增', async () => {
+    act(() => {
+      notification.open({ key: 'deploy', content: '部署中...' });
+    });
+
+    await waitFor(() => {
+      expect(document.querySelectorAll('.aura-notification').length).toBe(1);
+      expect(document.querySelector('.aura-notification')?.textContent).toContain('部署中');
+    });
+
+    act(() => {
+      notification.open({ key: 'deploy', content: '部署完成' });
+    });
+
+    await waitFor(() => {
+      expect(document.querySelectorAll('.aura-notification').length).toBe(1);
+      expect(document.querySelector('.aura-notification')?.textContent).toContain('部署完成');
+    });
+  });
+
+  it('同 key 更新应该重置自动关闭计时', async () => {
+    vi.useFakeTimers();
+
+    act(() => {
+      notification.open({ key: 'task', content: '第一次', duration: 3000 });
+      vi.advanceTimersByTime(100);
+    });
+    act(() => {
+      // 第 2 秒时同 key 再来一条（默认 4.5s），计时器应重新计
+      vi.advanceTimersByTime(2000);
+      notification.open({ key: 'task', content: '第二次' });
+    });
+
+    // 距第一条已过 3s，但距第二条只有 1s，不应关闭
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+    expect(document.querySelector('.aura-notification')).not.toBeNull();
+
+    // 推进到第二条的 4.5s 计时结束（t=6600），再走完退场（300ms）+ 容器清理（400ms）
+    act(() => {
+      vi.advanceTimersByTime(3500);
+    });
+    act(() => {
+      vi.advanceTimersByTime(800);
+    });
+    expect(document.querySelector('.aura-notification')).toBeNull();
+  });
+
+  it('actions 应该渲染在底部操作区', async () => {
+    act(() => {
+      notification.open({
+        content: '需要确认的通知',
+        actions: <button data-testid="notify-action">去处理</button>,
+      });
+    });
+
+    await waitFor(() => {
+      const actions = document.querySelector('.aura-notification-actions');
+      expect(actions).not.toBeNull();
+      expect(actions?.querySelector('[data-testid="notify-action"]')).not.toBeNull();
+    });
+  });
+
+  it('destroy(key) 应该只关闭指定通知并触发 onClose', async () => {
+    const onClose = vi.fn();
+
+    act(() => {
+      notification.open({ key: 'a', content: 'A' });
+      notification.open({ key: 'b', content: 'B', onClose });
+    });
+
+    await waitFor(() => {
+      expect(document.querySelectorAll('.aura-notification').length).toBe(2);
+    });
+
+    act(() => {
+      notification.destroy('b');
+    });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    await waitFor(() => {
+      const messages = document.querySelectorAll('.aura-notification');
+      expect(messages.length).toBe(1);
+      expect(messages[0]?.textContent).toContain('A');
+    });
+  });
+
+  it('destroy() 不传参数应该关闭全部', async () => {
+    act(() => {
+      notification.open({ content: 'A' });
+      notification.open({ content: 'B' });
+    });
+
+    await waitFor(() => {
+      expect(document.querySelectorAll('.aura-notification').length).toBe(2);
+    });
+
+    act(() => {
+      notification.destroy();
+    });
+
+    await waitFor(() => {
+      expect(document.querySelectorAll('.aura-notification').length).toBe(0);
+    });
+  });
 });
