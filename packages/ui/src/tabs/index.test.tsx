@@ -23,8 +23,8 @@ describe('Tabs', () => {
     expect(getByText('内容 A')).toBeDefined();
   });
 
-  it('点击 tab 应该切换内容', () => {
-    const { getByText, queryByText } = render(
+  it('点击 tab 应该切换内容，非激活面板默认保留挂载（hidden）', () => {
+    const { getByText } = render(
       <TabsDemo defaultActiveKey="a">
         <TabsDemo.Tab tabKey="a" title="Tab A">
           内容 A
@@ -38,7 +38,47 @@ describe('Tabs', () => {
     // 点击 Tab B
     fireEvent.click(getByText('Tab B'));
     expect(getByText('内容 B')).toBeDefined();
+    // 内容 A 仍在 DOM（保留状态），但面板已隐藏不可见
+    const paneA = getByText('内容 A').closest('.aura-tabs-panel') as HTMLElement;
+    expect(paneA.hidden).toBe(true);
+  });
+
+  it('destroyInactiveTabPane 切换后销毁非激活面板', () => {
+    const { getByText, queryByText } = render(
+      <TabsDemo defaultActiveKey="a" destroyInactiveTabPane>
+        <TabsDemo.Tab tabKey="a" title="Tab A">
+          内容 A
+        </TabsDemo.Tab>
+        <TabsDemo.Tab tabKey="b" title="Tab B">
+          内容 B
+        </TabsDemo.Tab>
+      </TabsDemo>,
+    );
+    fireEvent.click(getByText('Tab B'));
+    expect(getByText('内容 B')).toBeDefined();
     expect(queryByText('内容 A')).toBeNull();
+  });
+
+  it('保留挂载的面板应保留内部状态（表单输入）', () => {
+    const { getByText, getByRole, container } = render(
+      <TabsDemo defaultActiveKey="a">
+        <TabsDemo.Tab tabKey="a" title="Tab A">
+          <input aria-label="输入框 A" />
+        </TabsDemo.Tab>
+        <TabsDemo.Tab tabKey="b" title="Tab B">
+          内容 B
+        </TabsDemo.Tab>
+      </TabsDemo>,
+    );
+    const input = getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '用户输入' } });
+
+    // 切走再切回
+    fireEvent.click(getByText('Tab B'));
+    fireEvent.click(getByText('Tab A'));
+
+    const inputBack = container.querySelector('input') as HTMLInputElement;
+    expect(inputBack.value).toBe('用户输入');
   });
 
   it('应该触发 onChange 回调', () => {

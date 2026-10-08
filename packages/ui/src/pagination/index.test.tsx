@@ -160,4 +160,72 @@ describe('Pagination', () => {
     const activeBtn = container.querySelector('.aura-pagination-btn-active');
     expect(activeBtn?.getAttribute('aria-current')).toBe('page');
   });
+
+  // ===== showTotal =====
+  it('showTotal 应该收到总条数与当前区间', () => {
+    const { container } = render(
+      <Pagination
+        total={95}
+        defaultCurrent={2}
+        pageSize={10}
+        showTotal={(total, range) => `共 ${total} 条，当前 ${range[0]}-${range[1]}`}
+      />,
+    );
+    const totalEl = container.querySelector('.aura-pagination-total');
+    expect(totalEl?.textContent).toBe('共 95 条，当前 11-20');
+  });
+
+  it('total 为 0 时区间应为 [0, 0]', () => {
+    const { container } = render(
+      <Pagination total={0} showTotal={(total, range) => `${total}:${range[0]},${range[1]}`} />,
+    );
+    expect(container.querySelector('.aura-pagination-total')?.textContent).toBe(
+      '0:0,0',
+    );
+  });
+
+  // ===== pageSizeOptions =====
+  it('pageSizeOptions 应该自定义条数选项', () => {
+    const { container } = render(
+      <Pagination total={100} showSizeChanger pageSizeOptions={[5, 15, 30]} />,
+    );
+    const options = container.querySelectorAll(
+      '.aura-pagination-size-changer option',
+    );
+    expect(Array.from(options).map((o) => o.textContent)).toEqual([
+      '5 条/页',
+      '15 条/页',
+      '30 条/页',
+    ]);
+  });
+
+  it('未传 pageSizeOptions 时使用默认选项', () => {
+    const { container } = render(<Pagination total={100} showSizeChanger />);
+    const options = container.querySelectorAll(
+      '.aura-pagination-size-changer option',
+    );
+    expect(options.length).toBe(4);
+    expect(options[0]?.textContent).toBe('10 条/页');
+  });
+
+  // ===== onShowSizeChange =====
+  it('切换条数时应该触发 onShowSizeChange 与 onChange', () => {
+    const onShowSizeChange = vi.fn();
+    const onChange = vi.fn();
+    const { container } = render(
+      <Pagination
+        total={100}
+        defaultCurrent={3}
+        showSizeChanger
+        onShowSizeChange={onShowSizeChange}
+        onChange={onChange}
+      />,
+    );
+    const select = container.querySelector(
+      '.aura-pagination-size-changer',
+    ) as HTMLSelectElement;
+    fireEvent.change(select, { target: { value: '50' } });
+    expect(onShowSizeChange).toHaveBeenCalledWith(3, 50);
+    expect(onChange).toHaveBeenCalledWith(1, 50);
+  });
 });

@@ -7,6 +7,7 @@ const MenuDemo = Menu as unknown as React.FC<any> & {
   Item: typeof Menu.Item;
   SubMenu: typeof Menu.SubMenu;
   Group: typeof Menu.Group;
+  Divider: typeof Menu.Divider;
 };
 
 describe('Menu', () => {
@@ -269,5 +270,96 @@ describe('Menu', () => {
       </MenuDemo>,
     );
     expect(container.querySelector('.aura-menu-collapse-trigger')).toBeNull();
+  });
+
+  // ===== openKeys / onOpenChange =====
+  it('defaultOpenKeys 应非受控展开子菜单面板', () => {
+    const { container } = render(
+      <MenuDemo defaultOpenKeys={['org']}>
+        <MenuDemo.SubMenu subKey="org" title="组织架构">
+          <MenuDemo.Item itemKey="a">研发部</MenuDemo.Item>
+        </MenuDemo.SubMenu>
+      </MenuDemo>,
+    );
+    expect(container.querySelector('#aura-menu-submenu-panel-org')).not.toBeNull();
+    expect(
+      container.querySelector('.aura-menu-submenu')?.classList.contains(
+        'aura-menu-submenu-open',
+      ),
+    ).toBe(true);
+  });
+
+  it('openKeys 受控时点击标题只回调 onOpenChange，不改内部状态', () => {
+    const onOpenChange = vi.fn();
+    const { container } = render(
+      <MenuDemo openKeys={[]} onOpenChange={onOpenChange}>
+        <MenuDemo.SubMenu subKey="org" title="组织架构">
+          <MenuDemo.Item itemKey="a">研发部</MenuDemo.Item>
+        </MenuDemo.SubMenu>
+      </MenuDemo>,
+    );
+    const title = container.querySelector('.aura-menu-submenu-title')!;
+
+    fireEvent.click(title);
+    expect(onOpenChange).toHaveBeenCalledWith(['org']);
+    // 受控值未更新前不展开：无 aria-controls 关联、无 open 类
+    expect(title.getAttribute('aria-controls')).toBe(null);
+    expect(
+      container.querySelector('.aura-menu-submenu')?.classList.contains(
+        'aura-menu-submenu-open',
+      ),
+    ).toBe(false);
+  });
+
+  // ===== onClick keyPath =====
+  it('onClick 应携带完整路径 keyPath（叶子在前）', () => {
+    const onClick = vi.fn();
+    render(
+      <MenuDemo defaultOpenKeys={['org']} onClick={onClick}>
+        <MenuDemo.Item itemKey="home">首页</MenuDemo.Item>
+        <MenuDemo.SubMenu subKey="org" title="组织架构">
+          <MenuDemo.Item itemKey="dev">研发部</MenuDemo.Item>
+        </MenuDemo.SubMenu>
+      </MenuDemo>,
+    );
+
+    fireEvent.click(screen.getByText('首页'));
+    expect(onClick).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: 'home', keyPath: ['home'] }),
+    );
+
+    fireEvent.click(screen.getByText('研发部'));
+    expect(onClick).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: 'dev', keyPath: ['dev', 'org'] }),
+    );
+  });
+
+  // ===== danger / Divider =====
+  it('danger 项应带危险样式类', () => {
+    const { container } = render(
+      <MenuDemo>
+        <MenuDemo.Item itemKey="del" danger>
+          删除项目
+        </MenuDemo.Item>
+      </MenuDemo>,
+    );
+    expect(
+      container.querySelector('.aura-menu-item')?.classList.contains(
+        'aura-menu-item-danger',
+      ),
+    ).toBe(true);
+  });
+
+  it('Menu.Divider 应渲染分隔线', () => {
+    const { container } = render(
+      <MenuDemo>
+        <MenuDemo.Item itemKey="a">首页</MenuDemo.Item>
+        <MenuDemo.Divider />
+        <MenuDemo.Item itemKey="b">设置</MenuDemo.Item>
+      </MenuDemo>,
+    );
+    const divider = container.querySelector('.aura-menu-divider');
+    expect(divider).not.toBeNull();
+    expect(divider?.getAttribute('role')).toBe('separator');
   });
 });

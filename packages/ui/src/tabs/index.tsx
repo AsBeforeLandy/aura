@@ -65,6 +65,8 @@ export interface TabsProps {
   size?: 'sm' | 'md' | 'lg';
   /** 切换回调 */
   onChange?: (key: string) => void;
+  /** 切换后是否销毁非激活面板；默认保留已访问面板的挂载状态（保留表单等内部状态） */
+  destroyInactiveTabPane?: boolean;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -81,6 +83,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
       variant = 'default',
       size = 'md',
       onChange,
+      destroyInactiveTabPane = false,
       className,
       style,
       children,
@@ -117,6 +120,16 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     // 如果没有 activeKey，取第一个
     const resolvedActiveKey =
       activeKey ?? tabItems[0]?.tabKey ?? '';
+
+    // 已访问过的面板：非 destroy 模式下保持挂载（hidden 隐藏），保留内部状态
+    const [visitedKeys, setVisitedKeys] = useState<Set<string>>(
+      () => new Set(resolvedActiveKey ? [resolvedActiveKey] : []),
+    );
+    useEffect(() => {
+      setVisitedKeys((prev) =>
+        prev.has(resolvedActiveKey) ? prev : new Set(prev).add(resolvedActiveKey),
+      );
+    }, [resolvedActiveKey]);
 
     const handleChange = useCallback(
       (key: string) => {
@@ -156,6 +169,11 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     const activeContent = tabItems.find(
       (item) => item.tabKey === resolvedActiveKey,
     )?.children;
+
+    /* --- 需要渲染的面板 --- */
+    const panelsToRender = destroyInactiveTabPane
+      ? tabItems.filter((item) => item.tabKey === resolvedActiveKey)
+      : tabItems.filter((item) => visitedKeys.has(item.tabKey));
 
     /* --- className --- */
     const wrapperCls = classNames(
@@ -217,14 +235,17 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
               prefixCls('tabs-content'),
               activeContent == null && prefixCls('tabs-content-empty'),
             )}
-            role="tabpanel"
           >
-            <div
-              key={resolvedActiveKey}
-              className={prefixCls('tabs-panel')}
-            >
-              {activeContent}
-            </div>
+            {panelsToRender.map((item) => (
+              <div
+                key={item.tabKey}
+                className={prefixCls('tabs-panel')}
+                role="tabpanel"
+                hidden={item.tabKey !== resolvedActiveKey}
+              >
+                {item.children}
+              </div>
+            ))}
           </div>
         </div>
       </TabsContext.Provider>

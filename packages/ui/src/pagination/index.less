@@ -7,6 +7,14 @@
   user-select: none;
   font-size: var(--aura-font-size-md);
 
+  // 总条数展示
+  &-total {
+    margin-right: var(--aura-spacing-2);
+    color: var(--aura-text-secondary);
+    font-size: var(--aura-font-size-sm);
+    white-space: nowrap;
+  }
+
   /* ===== 页码容器 ===== */
   &-pages {
     display: flex;
@@ -31,8 +39,7 @@
   border: 1px solid var(--aura-border);
   border-radius: var(--aura-radius-sm);
   cursor: pointer;
-  transition:
-    all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover:not(:disabled) {
     color: var(--aura-primary-700);
@@ -107,8 +114,8 @@
   border: 1px solid var(--aura-border);
   border-radius: var(--aura-radius-sm);
   cursor: pointer;
-  transition:
-    border-color var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color var(--aura-duration-normal)
+    cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     border-color: var(--aura-primary-300);
@@ -144,8 +151,8 @@
   border: 1px solid var(--aura-border);
   border-radius: var(--aura-radius-sm);
   text-align: center;
-  transition:
-    border-color var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color var(--aura-duration-normal)
+    cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     border-color: var(--aura-primary-300);
@@ -186,7 +193,7 @@
 }
 
 /* ===== 暗色模式 ===== */
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-pagination-btn {
     color: var(--aura-text);
     background: var(--aura-bg-secondary);

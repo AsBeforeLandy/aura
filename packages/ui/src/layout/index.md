@@ -15,7 +15,7 @@ toc: content
 协助进行页面级整体布局的组件。
 
 ```tsx | pure
-import { Layout } from "@aura/ui";
+import { Layout } from '@aura/ui';
 ```
 
 ## 何时使用
@@ -24,26 +24,37 @@ import { Layout } from "@aura/ui";
 - 需要顶部导航、侧边栏、内容区、底部的经典布局
 
 ## 代码演示
+
 <code src="./demo/basic-layout.tsx" description="基础布局。">基础布局</code>
 <code src="./demo/with-sider.tsx" description="含侧边栏布局。">含侧边栏布局</code>
 <code src="./demo/custom-sider.tsx" description="自定义宽度侧边栏。">自定义宽度侧边栏</code>
+
 ## API
 
 ### LayoutProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
+| 属性     | 说明           | 类型      | 默认值  |
+| -------- | -------------- | --------- | ------- |
 | hasSider | 是否包含侧边栏 | `boolean` | `false` |
 
 继承 `HTMLAttributes<HTMLElement>`。
 
 ### Layout 子组件
 
-| 子组件 | 说明 |
-| --- | --- |
+| 子组件          | 说明     |
+| --------------- | -------- |
 | `Layout.Header` | 顶部区域 |
-| `Layout.Sider` | 侧边栏 |
-| `Layout.Body` | 内容主体 |
+| `Layout.Sider`  | 侧边栏   |
+| `Layout.Body`   | 内容主体 |
 | `Layout.Footer` | 底部区域 |
 
-所有子组件继承 `HTMLAttributes<HTMLDivElement>`。
+`Header` / `Body` / `Footer` 继承 `HTMLAttributes<HTMLDivElement>`。
+
+### Layout.Sider
+
+| 属性        | 说明             | 类型            | 默认值  |
+| ----------- | ---------------- | --------------- | ------- |
+| width       | 侧边栏宽度       | `number`        | `200`   |
+| collapsible | 是否显示折叠按钮 | `boolean`       | `false` |
+| className   | 自定义类名       | `string`        | -       |
+| style       | 自定义样式       | `CSSProperties` | -       |

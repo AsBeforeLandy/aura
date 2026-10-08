@@ -3,6 +3,7 @@ import React, {
   createContext,
   useContext,
   useCallback,
+  useState,
 } from 'react';
 import { classNames, prefixCls } from '@aura/shared';
 import { CheckOutline } from '@aura/icons';
@@ -30,6 +31,10 @@ function useStepsContext() {
 export interface StepProps {
   /** 步骤标题 */
   title: React.ReactNode;
+  /** 步骤副标题（显示在标题旁） */
+  subTitle?: React.ReactNode;
+  /** 覆盖步骤状态；目前支持 `error`（出错态，图标与标题转红） */
+  status?: 'error';
   /** 步骤描述 */
   description?: React.ReactNode;
   /** 自定义图标 */
@@ -43,11 +48,24 @@ export interface StepProps {
 }
 
 const Step = forwardRef<HTMLDivElement, StepProps>(
-  ({ title, description, icon, disabled = false, className, style }, ref) => {
+  (
+    {
+      title,
+      subTitle,
+      status,
+      description,
+      icon,
+      disabled = false,
+      className,
+      style,
+    },
+    ref,
+  ) => {
     const { current, variant, onChange } = useStepsContext();
     const index = useContext(StepIndexContext);
     const isCompleted = index < current;
     const isCurrent = index === current;
+    const isError = status === 'error';
 
     const handleClick = () => {
       if (disabled) return;
@@ -65,6 +83,7 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
       prefixCls('steps-step'),
       isCompleted && prefixCls('steps-step-completed'),
       isCurrent && prefixCls('steps-step-active'),
+      isError && prefixCls('steps-step-error'),
       disabled && prefixCls('steps-step-disabled'),
       className,
     );
@@ -114,7 +133,14 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
             {renderIcon()}
           </div>
           <div className={prefixCls('steps-step-content')}>
-            <div className={prefixCls('steps-step-title')}>{title}</div>
+            <div className={prefixCls('steps-step-title')}>
+              {title}
+              {subTitle && (
+                <span className={prefixCls('steps-step-subtitle')}>
+                  {subTitle}
+                </span>
+              )}
+            </div>
             {description && (
               <div className={prefixCls('steps-step-description')}>
                 {description}
@@ -134,10 +160,14 @@ const StepIndexContext = React.createContext<number>(0);
 
 /* ===== Steps（主组件） ===== */
 export interface StepsProps {
-  /** 当前步骤索引（从 0 开始）
+  /** 当前步骤索引（受控，从 0 开始；传入后点击步骤只触发 onChange，不自更新）
    *  @default 0
    */
   current?: number;
+  /** 默认当前步骤索引（非受控）
+   *  @default 0
+   */
+  defaultCurrent?: number;
   /** 变体
    *  @default 'default'
    */
@@ -163,7 +193,8 @@ export interface StepsProps {
 const StepsBase = forwardRef<HTMLDivElement, StepsProps>(
   (
     {
-      current = 0,
+      current: controlledCurrent,
+      defaultCurrent = 0,
       variant = 'default',
       size = 'md',
       direction = 'horizontal',
@@ -174,11 +205,16 @@ const StepsBase = forwardRef<HTMLDivElement, StepsProps>(
     },
     ref,
   ) => {
+    const [internalCurrent, setInternalCurrent] = useState(defaultCurrent);
+    const isControlled = controlledCurrent !== undefined;
+    const current = isControlled ? controlledCurrent : internalCurrent;
+
     const handleChange = useCallback(
       (next: number) => {
+        if (!isControlled) setInternalCurrent(next);
         onChange?.(next);
       },
-      [onChange],
+      [isControlled, onChange],
     );
 
     const childArray = React.Children.toArray(children);

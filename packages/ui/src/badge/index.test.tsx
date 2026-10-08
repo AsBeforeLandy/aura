@@ -92,4 +92,42 @@ describe('Badge', () => {
     const dot = container.querySelector('.aura-badge-dot-small');
     expect(dot).not.toBeNull();
   });
+
+  // ===== 状态点模式 =====
+  it('status 模式应渲染状态圆点与文本，不渲染计数', () => {
+    const { container, getByText, queryByText } = render(
+      <Badge status="success" text="运行正常" />,
+    );
+    expect(container.querySelector('.aura-badge-status')).not.toBeNull();
+    expect(
+      container.querySelector('.aura-badge-status-success'),
+    ).not.toBeNull();
+    expect(getByText('运行正常')).toBeDefined();
+    // 计数相关结构不渲染
+    expect(container.querySelector('.aura-badge-dot')).toBeNull();
+    expect(queryByText('0')).toBeNull();
+  });
+
+  it('status 五种状态应映射对应类名', () => {
+    const statuses = ['success', 'processing', 'error', 'warning', 'default'] as const;
+    statuses.forEach((status) => {
+      const { container, unmount } = render(<Badge status={status} />);
+      expect(
+        container.querySelector(`.aura-badge-status-${status}`),
+      ).not.toBeNull();
+      unmount();
+    });
+  });
+
+  it('processing 状态点之外不渲染光环元素（光环由伪元素实现）', () => {
+    const { container } = render(<Badge status="processing" />);
+    expect(
+      container.querySelector('.aura-badge-status-processing'),
+    ).not.toBeNull();
+  });
+
+  it('status 模式无 text 时只渲染圆点', () => {
+    const { container } = render(<Badge status="error" />);
+    expect(container.querySelector('.aura-badge-status-text')).toBeNull();
+  });
 });

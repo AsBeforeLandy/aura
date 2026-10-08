@@ -113,7 +113,7 @@
 }
 
 // ===== 暗色模式 =====
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-collapse {
     border-color: var(--aura-border);
   }
@@ -128,5 +128,17 @@
 
   .aura-collapse-header:hover {
     background: var(--aura-bg-tertiary);
+  }
+}
+
+/* ===== 极简样式（ghost） ===== */
+.aura-collapse-ghost {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+
+  .aura-collapse-item {
+    border-bottom: 1px solid var(--aura-border);
   }
 }

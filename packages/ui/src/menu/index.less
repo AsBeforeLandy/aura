@@ -104,7 +104,8 @@
         border: 1px solid transparent;
         box-shadow: none;
         transition:
-          grid-template-rows var(--aura-duration-slow) cubic-bezier(0.4, 0, 0.2, 1),
+          grid-template-rows var(--aura-duration-slow)
+            cubic-bezier(0.4, 0, 0.2, 1),
           border-color 0.15s ease 0.05s,
           box-shadow 0.15s ease 0.05s;
 
@@ -228,7 +229,8 @@
 .aura-menu-submenu-content {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--aura-duration-slow) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: grid-template-rows var(--aura-duration-slow)
+    cubic-bezier(0.4, 0, 0.2, 1);
 
   &-open {
     grid-template-rows: 1fr;
@@ -267,7 +269,7 @@
 }
 
 /* ===== 暗色模式 ===== */
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-menu {
     background: var(--aura-bg);
   }
@@ -318,4 +320,21 @@
   .aura-menu-group-title {
     color: var(--aura-text-tertiary);
   }
+}
+
+/* ===== 危险操作项 ===== */
+.aura-menu-item-danger {
+  color: var(--aura-error);
+
+  &:hover {
+    background: var(--aura-error-light);
+  }
+}
+
+/* ===== 分隔线 ===== */
+.aura-menu-divider {
+  height: 1px;
+  margin: var(--aura-spacing-1) 0;
+  background: var(--aura-border);
+  overflow: hidden;
 }

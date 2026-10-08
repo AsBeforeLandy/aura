@@ -46,6 +46,14 @@ export interface PaginationProps {
   total: number;
   /** 是否显示每页条数选择器 */
   showSizeChanger?: boolean;
+  /** 每页条数选择器的可选项
+   *  @default [10, 20, 50, 100]
+   */
+  pageSizeOptions?: number[];
+  /** 自定义总条数展示，参数为总条数与当前区间 [起始, 结束] */
+  showTotal?: (total: number, range: [number, number]) => React.ReactNode;
+  /** 每页条数变化回调（独立于 onChange，参数为变化前的页码与新的条数） */
+  onShowSizeChange?: (current: number, size: number) => void;
   /** 是否显示快速跳转输入框 */
   showQuickJumper?: boolean;
   /** 尺寸
@@ -68,6 +76,9 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
       pageSize: controlledPageSize,
       total,
       showSizeChanger = false,
+      pageSizeOptions = [10, 20, 50, 100],
+      showTotal,
+      onShowSizeChange,
       showQuickJumper = false,
       size = 'md',
       onChange,
@@ -100,6 +111,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
 
     const handlePageSizeChange = useCallback(
       (newPageSize: number) => {
+        const prevPage = currentPage;
         if (controlledPageSize === undefined) {
           setInternalPageSize(newPageSize);
         }
@@ -108,11 +120,28 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
         if (!isControlled) {
           setInternalCurrent(1);
         }
+        onShowSizeChange?.(prevPage, newPageSize);
         onChange?.(1, newPageSize);
         void newTotalPages;
       },
-      [controlledPageSize, isControlled, onChange, total],
+      [
+        controlledPageSize,
+        isControlled,
+        onChange,
+        onShowSizeChange,
+        total,
+        currentPage,
+      ],
     );
+
+    /* --- 总条数展示 --- */
+    const range: [number, number] =
+      total === 0
+        ? [0, 0]
+        : [
+            (currentPage - 1) * pageSize + 1,
+            Math.min(currentPage * pageSize, total),
+          ];
 
     /* --- 页码数组 --- */
     const pages = generatePages(currentPage, totalPages);
@@ -140,6 +169,13 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
 
     return (
       <div ref={ref} className={wrapperCls} style={style} role="navigation" aria-label="分页">
+        {/* 总条数展示 */}
+        {showTotal && (
+          <span className={prefixCls('pagination-total')}>
+            {showTotal(total, range)}
+          </span>
+        )}
+
         {/* 上一页 */}
         <button
           type="button"
@@ -211,7 +247,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             onChange={(e) => handlePageSizeChange(Number(e.target.value))}
             aria-label="每页条数"
           >
-            {[10, 20, 50, 100].map((size) => (
+            {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
                 {size} 条/页
               </option>

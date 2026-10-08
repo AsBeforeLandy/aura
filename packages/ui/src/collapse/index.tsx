@@ -18,6 +18,8 @@ interface CollapseContextValue {
   activeKeys: string[];
   /** 切换面板 */
   toggle: (key: string) => void;
+  /** 展开图标位置 */
+  expandIconPosition: 'start' | 'end';
 }
 
 const CollapseContext = createContext<CollapseContextValue | null>(null);
@@ -46,7 +48,7 @@ const CollapseItem = forwardRef<HTMLDivElement, CollapseItemProps>(
       throw new Error('Collapse.Item must be used within a Collapse component');
     }
 
-    const { activeKeys, toggle } = ctx;
+    const { activeKeys, toggle, expandIconPosition } = ctx;
     const isActive = activeKeys.includes(itemKey);
     const contentRef = useRef<HTMLDivElement>(null);
     const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
@@ -94,15 +96,27 @@ const CollapseItem = forwardRef<HTMLDivElement, CollapseItemProps>(
           aria-expanded={isActive}
           aria-disabled={disabled}
         >
+          {expandIconPosition === 'start' && (
+            <span
+              className={classNames(
+                prefixCls('collapse-arrow'),
+                isActive && prefixCls('collapse-arrow-active'),
+              )}
+            >
+              <ChevronDown size={14} />
+            </span>
+          )}
           <span className={prefixCls('collapse-header-text')}>{title}</span>
-          <span
-            className={classNames(
-              prefixCls('collapse-arrow'),
-              isActive && prefixCls('collapse-arrow-active'),
-            )}
-          >
-            <ChevronDown size={14} />
-          </span>
+          {expandIconPosition === 'end' && (
+            <span
+              className={classNames(
+                prefixCls('collapse-arrow'),
+                isActive && prefixCls('collapse-arrow-active'),
+              )}
+            >
+              <ChevronDown size={14} />
+            </span>
+          )}
         </div>
         <div
           className={classNames(
@@ -133,6 +147,14 @@ export interface CollapseProps {
   activeKey?: string | string[];
   /** 展开变化回调 */
   onChange?: (keys: string[]) => void;
+  /** 展开图标位置
+   *  @default 'end'
+   */
+  expandIconPosition?: 'start' | 'end';
+  /** 是否为极简样式（去边框与背景，适合嵌在卡片 / 弹窗内）
+   *  @default false
+   */
+  ghost?: boolean;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -148,6 +170,8 @@ const CollapseBase = forwardRef<HTMLDivElement, CollapseProps>(
       defaultActiveKey = [],
       activeKey: controlledActiveKey,
       onChange,
+      expandIconPosition = 'end',
+      ghost = false,
       className,
       style,
       children,
@@ -194,9 +218,14 @@ const CollapseBase = forwardRef<HTMLDivElement, CollapseProps>(
     const ctx: CollapseContextValue = {
       activeKeys,
       toggle,
+      expandIconPosition,
     };
 
-    const cls = classNames(prefixCls('collapse'), className);
+    const cls = classNames(
+      prefixCls('collapse'),
+      ghost && prefixCls('collapse-ghost'),
+      className,
+    );
 
     return (
       <CollapseContext.Provider value={ctx}>

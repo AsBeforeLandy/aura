@@ -15,7 +15,7 @@ toc: content
 导航菜单，支持垂直、水平和内嵌模式。
 
 ```tsx | pure
-import { Menu } from "@aura/ui";
+import { Menu } from '@aura/ui';
 ```
 
 ## 何时使用
@@ -24,6 +24,7 @@ import { Menu } from "@aura/ui";
 - 侧边栏或顶部导航栏
 
 ## 代码演示
+
 <code src="./demo/vertical.tsx" description="基础用法 — 垂直菜单。">基础用法 — 垂直菜单</code>
 <code src="./demo/with-icon.tsx" description="带图标菜单。">带图标菜单</code>
 <code src="./demo/submenu.tsx" description="子菜单。">子菜单</code>
@@ -31,38 +32,49 @@ import { Menu } from "@aura/ui";
 <code src="./demo/horizontal-2.tsx" description="水平菜单。">水平菜单</code>
 <code src="./demo/controlled.tsx" description="受控模式。">受控模式</code>
 <code src="./demo/horizontal.tsx" description="设置 `mode='horizontal'`">水平模式</code>
+<code src="./demo/open-controlled.tsx" description="`openKeys` 受控管理子菜单展开；`onClick` 携带完整路径；`danger` 与 `Menu.Divider`。">展开受控与 keyPath</code>
+
 ## API
 
 ### MenuProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| mode | 模式 | `'vertical' \| 'horizontal' \| 'inline'` | `'vertical'` |
-| selectedKey | 受控选中项 | `string` | - |
-| defaultSelectedKey | 默认选中项 | `string` | - |
-| onSelect | 选中回调 | `(key: string) => void` | - |
-| collapsible | 是否可折叠。开启后在菜单顶部渲染折叠开关，折叠态仅展示图标（横向模式下无宽度收益，不生效） | `boolean` | `false` |
+| 属性               | 说明                                                                                       | 类型                                                           | 默认值       |
+| ------------------ | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------- | ------------ |
+| mode               | 模式                                                                                       | `'vertical' \| 'horizontal' \| 'inline'`                       | `'vertical'` |
+| selectedKey        | 受控选中项                                                                                 | `string`                                                       | -            |
+| defaultSelectedKey | 默认选中项                                                                                 | `string`                                                       | -            |
+| openKeys           | 受控展开的子菜单 key 列表                                                                  | `string[]`                                                     | -            |
+| defaultOpenKeys    | 默认展开的子菜单 key 列表                                                                  | `string[]`                                                     | `[]`         |
+| onOpenChange       | 子菜单展开变化回调（参数为展开后的完整 key 列表，点击外部收起也会触发）                    | `(openKeys: string[]) => void`                                 | -            |
+| onSelect           | 选中回调                                                                                   | `(key: string) => void`                                        | -            |
+| onClick            | 菜单项点击回调（含完整路径 `keyPath`，叶子在前）                                           | `(info: { key: string; keyPath: string[]; domEvent }) => void` | -            |
+| collapsible        | 是否可折叠。开启后在菜单顶部渲染折叠开关，折叠态仅展示图标（横向模式下无宽度收益，不生效） | `boolean`                                                      | `false`      |
 
 继承 `HTMLAttributes<HTMLDivElement>`。
 
 ### MenuItemProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| itemKey | 唯一标识 | `string` | - |
-| disabled | 是否禁用 | `boolean` | `false` |
-| icon | 图标 | `ReactNode` | - |
+| 属性     | 说明                     | 类型        | 默认值  |
+| -------- | ------------------------ | ----------- | ------- |
+| itemKey  | 唯一标识                 | `string`    | -       |
+| disabled | 是否禁用                 | `boolean`   | `false` |
+| danger   | 是否危险操作（红色强调） | `boolean`   | `false` |
+| icon     | 图标                     | `ReactNode` | -       |
 
 ### SubMenuProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| subKey | 唯一标识，用于生成确定性的子菜单面板 id（`aura-menu-submenu-panel-<subKey>`），并在展开时通过 `aria-controls` 关联 | `string` | - |
-| title | 标题 | `ReactNode` | - |
-| icon | 图标 | `ReactNode` | - |
+| 属性   | 说明                                                                                                               | 类型        | 默认值 |
+| ------ | ------------------------------------------------------------------------------------------------------------------ | ----------- | ------ |
+| subKey | 唯一标识，用于生成确定性的子菜单面板 id（`aura-menu-submenu-panel-<subKey>`），并在展开时通过 `aria-controls` 关联 | `string`    | -      |
+| title  | 标题                                                                                                               | `ReactNode` | -      |
+| icon   | 图标                                                                                                               | `ReactNode` | -      |
 
 ### MenuGroupProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| title | 分组标题 | `ReactNode` | - |
+| 属性  | 说明     | 类型        | 默认值 |
+| ----- | -------- | ----------- | ------ |
+| title | 分组标题 | `ReactNode` | -      |
+
+### Menu.Divider
+
+菜单分隔线，无属性（仅 `className` / `style`），渲染为 `role="separator"`。

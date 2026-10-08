@@ -296,4 +296,50 @@ describe('Collapse', () => {
     expect(header.getAttribute('aria-disabled')).toBe('true');
     expect(header.getAttribute('tabindex')).toBe('-1');
   });
+
+  // ===== expandIconPosition =====
+  it('expandIconPosition="start" 应把箭头渲染在标题之前', () => {
+    const { container } = render(
+      <Collapse expandIconPosition="start">
+        <Collapse.Item itemKey="a" title="面板 A">
+          内容
+        </Collapse.Item>
+      </Collapse>,
+    );
+    const header = container.querySelector('.aura-collapse-header')!;
+    expect(header.firstElementChild?.classList.contains('aura-collapse-arrow')).toBe(
+      true,
+    );
+  });
+
+  it('默认箭头渲染在标题之后', () => {
+    const { container } = render(
+      <Collapse>
+        <Collapse.Item itemKey="a" title="面板 A">
+          内容
+        </Collapse.Item>
+      </Collapse>,
+    );
+    const header = container.querySelector('.aura-collapse-header')!;
+    const children = Array.from(header.children);
+    expect(
+      children[children.length - 1]?.classList.contains('aura-collapse-arrow'),
+    ).toBe(true);
+  });
+
+  // ===== ghost =====
+  it('ghost 应渲染极简样式类', () => {
+    const { container } = render(
+      <Collapse ghost>
+        <Collapse.Item itemKey="a" title="面板 A">
+          内容
+        </Collapse.Item>
+      </Collapse>,
+    );
+    expect(
+      container.querySelector('.aura-collapse')?.classList.contains(
+        'aura-collapse-ghost',
+      ),
+    ).toBe(true);
+  });
 });

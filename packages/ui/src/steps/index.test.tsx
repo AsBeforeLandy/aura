@@ -212,4 +212,56 @@ describe('Steps', () => {
     const header = stepElements[1].querySelector('.aura-steps-step-header');
     expect(header?.getAttribute('aria-disabled')).toBe('true');
   });
+
+  // ===== status="error" =====
+  it('status="error" 应渲染出错态样式', () => {
+    const { container } = render(
+      <StepsDemo current={1}>
+        <StepsDemo.Step title="填写信息" />
+        <StepsDemo.Step title="支付订单" status="error" />
+        <StepsDemo.Step title="完成" />
+      </StepsDemo>,
+    );
+    const errorStep = container.querySelectorAll('.aura-steps-step')[1];
+    expect(errorStep.classList.contains('aura-steps-step-error')).toBe(true);
+  });
+
+  // ===== subTitle =====
+  it('subTitle 应渲染在标题旁', () => {
+    const { container, getByText } = render(
+      <StepsDemo current={0}>
+        <StepsDemo.Step title="支付订单" subTitle="副标题信息" />
+      </StepsDemo>,
+    );
+    expect(getByText('副标题信息')).toBeDefined();
+    expect(container.querySelector('.aura-steps-step-subtitle')).not.toBeNull();
+  });
+
+  // ===== defaultCurrent =====
+  it('defaultCurrent 应支持非受控当前步', () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <StepsDemo defaultCurrent={0} onChange={onChange}>
+        <StepsDemo.Step title="一" />
+        <StepsDemo.Step title="二" />
+      </StepsDemo>,
+    );
+    const steps = container.querySelectorAll('.aura-steps-step');
+
+    fireEvent.click(steps[1].querySelector('.aura-steps-step-header')!);
+    expect(onChange).toHaveBeenCalledWith(1);
+    // 非受控：组件自行前进
+    expect(steps[1].classList.contains('aura-steps-step-active')).toBe(true);
+
+    // 受控属性传入后接管
+    const { container: container2 } = render(
+      <StepsDemo current={0} onChange={onChange}>
+        <StepsDemo.Step title="一" />
+        <StepsDemo.Step title="二" />
+      </StepsDemo>,
+    );
+    const steps2 = container2.querySelectorAll('.aura-steps-step');
+    fireEvent.click(steps2[1].querySelector('.aura-steps-step-header')!);
+    expect(steps2[1].classList.contains('aura-steps-step-active')).toBe(false);
+  });
 });

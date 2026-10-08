@@ -3,6 +3,11 @@ import { classNames, prefixCls } from '@aura/shared';
 import './index.less';
 
 export interface BadgeProps {
+  /** 状态点模式（不计数）：success / processing（带光环）/ error / warning / default，
+   *  配合 `text` 展示状态说明；设置后 count / dot 等属性不生效 */
+  status?: 'success' | 'processing' | 'error' | 'warning' | 'default';
+  /** 状态点模式的说明文本 */
+  text?: React.ReactNode;
   /** 徽标数字，0 时默认隐藏 */
   count?: number;
   /** 是否只显示小圆点 */
@@ -28,6 +33,8 @@ export interface BadgeProps {
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   (
     {
+      status,
+      text,
       count = 0,
       dot = false,
       variant = 'error',
@@ -39,7 +46,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
     },
     ref,
   ) => {
-    // 用于数字变化时的缩放动画
+    // 用于数字变化时的缩放动画（status 模式不使用，但 hooks 不能条件调用）
     const [animating, setAnimating] = useState(false);
     const prevCountRef = useRef(count);
 
@@ -51,6 +58,27 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
         return () => clearTimeout(timer);
       }
     }, [count]);
+
+    // 状态点模式：不计数，仅状态圆点 + 文本
+    if (status) {
+      return (
+        <span
+          ref={ref}
+          className={classNames(prefixCls('badge-status'), className)}
+          style={style}
+        >
+          <span
+            className={classNames(
+              prefixCls('badge-status-dot'),
+              prefixCls(`badge-status-${status}`),
+            )}
+          />
+          {text != null && (
+            <span className={prefixCls('badge-status-text')}>{text}</span>
+          )}
+        </span>
+      );
+    }
 
     const displayCount =
       count > overflowCount ? `${overflowCount}+` : String(count);
