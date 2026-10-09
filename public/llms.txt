@@ -3,7 +3,7 @@
 > 基于 React 18 + TypeScript + CSS Variables，支持亮/暗双模式主题
 
 ## 快速开始
-npm install @aura/ui
+npm install @aura-react-comp/ui
 
 ## 组件列表
 - Button: 按钮 (variant: default/primary/dashed/text/link, size: sm/md/lg)
@@ -43,9 +43,9 @@ npm install @aura/ui
 - Flex: 弹性布局
 - Scrollbar: 滚动条
 
-## 业务组件（@aura/business）
+## 业务组件（@aura-react-comp/business）
 
-基于 antd v6 二次封装的 B 端业务组件（依赖 @aura/ui 与 @aura/shared）。
+基于 antd v6 二次封装的 B 端业务组件（依赖 @aura-react-comp/ui 与 @aura-react-comp/shared）。
 使用前以 `BusinessProvider` 包裹（暗色 / 主色 / 紧凑桥接），文档路由前缀 `/businesses`。
 
 - ProTable: 高级表格
@@ -58,10 +58,10 @@ npm install @aura/ui
 - PdfViewer: PDF 预览（pdfjs-dist 6.3.289，弹窗式，缩放/旋转/平移/错误重试）
 - BusinessProvider: 主题桥接（antd 算法 + Aura 令牌）
 
-## AI 组件（@aura/x）
+## AI 组件（@aura-react-comp/x）
 
 对话式 AI 界面组件库（对标 Ant Design X 的 Aura 实现）。
-样式需一次性引入：`import '@aura/x/style.css'`。
+样式需一次性引入：`import '@aura-react-comp/x/style.css'`。
 文档路由前缀 `/x-components`。
 
 - XProvider: 主题桥接（antd 算法 + `--aura-x-*` 令牌，dark/compact/colorPrimary）
@@ -103,8 +103,8 @@ npm install @aura/ui
 ### 最小对话示例
 
 ```tsx
-import "@aura/x/style.css";
-import { Bubble, Sender, useXChat, useXStream, XProvider } from "@aura/x";
+import "@aura-react-comp/x/style.css";
+import { Bubble, Sender, useXChat, useXStream, XProvider } from "@aura-react-comp/x";
 
 function Chat() {
   const { fetchData } = useXStream();

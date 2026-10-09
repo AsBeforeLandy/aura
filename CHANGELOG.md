@@ -10,7 +10,7 @@
 而 `aura` 这个组织名已被占用。为此把 8 个包的标识符统一迁移到实际持有的组织
 `@aura-react-comp` 下，并把从零到一的发布链路补齐。
 
-- **包名迁移**：全仓 447 个文件、748 处 `@aura/` → `@aura-react-comp/`。
+- **包名迁移**：全仓 447 个文件、748 处 `@aura-react-comp/` → `@aura-react-comp/`。
   替换只针对这一条前缀模式，因此 `--aura-*` 主题令牌、dumi 的
   `base: '/aura/'`、CLI 的 bin 名 `aura`、品牌名 `Aura` 均未被波及。
   alias（`.dumirc.ts` / `vitest.config.ts`）与 `tsconfig.json#paths` 同步更新，

@@ -10,7 +10,7 @@ ui / business 默认走 forwardRef + displayName；x 包以 `React.FC` 为主（
 
 ```tsx
 import React, { forwardRef } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 
 export interface XxxProps {
@@ -218,7 +218,7 @@ it('Xxx', async () => {
 
 ```tsx
 import React from 'react';
-import { Xxx } from '@aura/ui'; // business 包写 '@aura/business'，x 包写 '@aura/x'
+import { Xxx } from '@aura-react-comp/ui'; // business 包写 '@aura-react-comp/business'，x 包写 '@aura-react-comp/x'
 
 /** 基础用法。 */
 export default () => <Xxx title="标题" />;
@@ -247,7 +247,7 @@ toc: content
 一句话描述。
 
 ```tsx | pure
-import { Xxx } from '@aura/ui';
+import { Xxx } from '@aura-react-comp/ui';
 ```
 ````
 
@@ -279,9 +279,9 @@ import { Xxx } from '@aura/ui';
 
 | 包 | 写法 | 可用值 |
 | --- | --- | --- |
-| `@aura/ui` | 平铺 `group: 数据展示` | `通用` / `布局` / `导航` / `表单` / `表单高级` / `数据展示` / `反馈` |
-| `@aura/business` | 平铺 `group: 业务` | `业务` |
-| `@aura/x` | 嵌套 `group: { title: 交互, order: 402 }` | `主题桥接` / `数据流` / `交互` / `会话` / `引导` / `推理` |
+| `@aura-react-comp/ui` | 平铺 `group: 数据展示` | `通用` / `布局` / `导航` / `表单` / `表单高级` / `数据展示` / `反馈` |
+| `@aura-react-comp/business` | 平铺 `group: 业务` | `业务` |
+| `@aura-react-comp/x` | 嵌套 `group: { title: 交互, order: 402 }` | `主题桥接` / `数据流` / `交互` / `会话` / `引导` / `推理` |
 
 API 表格注意：类型一律反引号包裹；联合类型中的 `\|` 要转义；表格后注明继承的基础 HTML 属性。
 

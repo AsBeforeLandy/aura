@@ -14,8 +14,8 @@
   升级方式：替换依赖名与 `import` 路径即可。
 
   ```diff
-  - import { Button } from '@aura/ui';
-  - import '@aura/ui/style.css';
+  - import { Button } from '@aura-react-comp/ui';
+  - import '@aura-react-comp/ui/style.css';
   + import { Button } from '@aura-react-comp/ui';
   + import '@aura-react-comp/ui/style.css';
   ```

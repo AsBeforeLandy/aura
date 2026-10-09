@@ -11,7 +11,7 @@ Props:
 - children: ReactNode
 继承 ButtonHTMLAttributes<HTMLButtonElement>
 Usage:
-import { Button } from '@aura/ui';
+import { Button } from '@aura-react-comp/ui';
 <Button variant="primary" size="md">按钮</Button>
 <Button loading>加载中</Button>
 <Button variant="dashed" disabled>禁用</Button>
@@ -22,7 +22,7 @@ Props:
 - level: 1 | 2 | 3 | 4 | 5 （默认 1）
 继承 HTMLAttributes<HTMLHeadingElement>
 Usage:
-import { Typography } from '@aura/ui';
+import { Typography } from '@aura-react-comp/ui';
 <Typography.Title level={2}>标题</Typography.Title>
 ### Text
 Props:
@@ -51,7 +51,7 @@ Props:
 - align: 'start' | 'center' | 'end' | 'baseline'
 继承 HTMLAttributes<HTMLDivElement>
 Usage:
-import { Space } from '@aura/ui';
+import { Space } from '@aura-react-comp/ui';
 <Space direction="horizontal" size="md">
   <Button>按钮1</Button>
   <Button>按钮2</Button>
@@ -64,7 +64,7 @@ Props:
 - orientation: 'left' | 'center' | 'right' （默认 'center'）
 继承 HTMLAttributes<HTMLDivElement>
 Usage:
-import { Divider } from '@aura/ui';
+import { Divider } from '@aura-react-comp/ui';
 <Divider />
 <Divider variant="dashed" orientation="left">标题</Divider>
 
@@ -94,7 +94,7 @@ Props:
 - compact: boolean
 继承 HTMLAttributes<HTMLDivElement>
 Usage:
-import { Input } from '@aura/ui';
+import { Input } from '@aura-react-comp/ui';
 <Input placeholder="请输入" />
 <Input.Password placeholder="密码" />
 <Input.Search placeholder="搜索" onSearch={handleSearch} />
@@ -109,7 +109,7 @@ Props:
 - status: 'default' | 'error' | 'warning'
 继承 TextareaHTMLAttributes
 Usage:
-import { Textarea } from '@aura/ui';
+import { Textarea } from '@aura-react-comp/ui';
 <Textarea placeholder="请输入" />
 <Textarea autoSize={{ minRows: 2, maxRows: 6 }} showCount maxLength={200} />
 
@@ -130,7 +130,7 @@ Props:
 - className: string
 - style: CSSProperties
 Usage:
-import { Select } from '@aura/ui';
+import { Select } from '@aura-react-comp/ui';
 <Select options={[{ value: 'a', label: '选项A' }]} onChange={handleChange} />
 <Select multiple searchable clearable options={options} />
 
@@ -149,7 +149,7 @@ Props:
 - disabled: boolean
 - size: 'sm' | 'md' | 'lg'
 Usage:
-import { Checkbox } from '@aura/ui';
+import { Checkbox } from '@aura-react-comp/ui';
 <Checkbox>选项</Checkbox>
 <Checkbox.Group options={options} onChange={handleChange} />
 
@@ -167,7 +167,7 @@ Props:
 - disabled: boolean
 - size: 'sm' | 'md' | 'lg'
 Usage:
-import { Radio } from '@aura/ui';
+import { Radio } from '@aura-react-comp/ui';
 <Radio>选项</Radio>
 <Radio.Group options={options} onChange={handleChange} />
 
@@ -184,7 +184,7 @@ Props:
 - className: string
 - style: CSSProperties
 Usage:
-import { Switch } from '@aura/ui';
+import { Switch } from '@aura-react-comp/ui';
 <Switch onChange={handleChange} />
 <Switch checkedChildren="开" unCheckedChildren="关" />
 
@@ -199,7 +199,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode（描述内容）
 Usage:
-import { Alert } from '@aura/ui';
+import { Alert } from '@aura-react-comp/ui';
 <Alert variant="success" title="成功">操作已完成</Alert>
 <Alert variant="error" showIcon closable>出错了</Alert>
 
@@ -213,7 +213,7 @@ Props:
 - className: string
 - style: CSSProperties
 Usage:
-import { Spin } from '@aura/ui';
+import { Spin } from '@aura-react-comp/ui';
 <Spin spinning={loading}>
   <Content />
 </Spin>
@@ -245,7 +245,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Tag } from '@aura/ui';
+import { Tag } from '@aura-react-comp/ui';
 <Tag variant="primary">标签</Tag>
 <Tag.Checkable checked onChange={handleChange}>可选</Tag.Checkable>
 
@@ -260,7 +260,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Badge } from '@aura/ui';
+import { Badge } from '@aura-react-comp/ui';
 <Badge count={5}><Avatar>U</Avatar></Badge>
 <Badge dot variant="success"><span>新消息</span></Badge>
 
@@ -283,7 +283,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Avatar } from '@aura/ui';
+import { Avatar } from '@aura-react-comp/ui';
 <Avatar src="/photo.jpg" alt="用户" />
 <Avatar size="lg" variant="primary">A</Avatar>
 <Avatar.Group maxCount={3}>
@@ -301,7 +301,7 @@ Props:
 - style: CSSProperties
 - children: ReactElement（仅接受单个 ReactElement）
 Usage:
-import { Tooltip } from '@aura/ui';
+import { Tooltip } from '@aura-react-comp/ui';
 <Tooltip content="提示文字"><Button>悬浮</Button></Tooltip>
 
 ## Card
@@ -316,7 +316,7 @@ Props:
 子组件: Card.Header, Card.Title, Card.Body, Card.Actions, Card.Footer, Card.Cover
 子组件 Props: className, style, children
 Usage:
-import { Card } from '@aura/ui';
+import { Card } from '@aura-react-comp/ui';
 <Card variant="elevated" hoverable>
   <Card.Header><Card.Title>标题</Card.Title></Card.Header>
   <Card.Body>内容</Card.Body>
@@ -342,7 +342,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Collapse } from '@aura/ui';
+import { Collapse } from '@aura-react-comp/ui';
 <Collapse accordion>
   <Collapse.Item itemKey="1" title="面板一">内容一</Collapse.Item>
   <Collapse.Item itemKey="2" title="面板二">内容二</Collapse.Item>
@@ -365,7 +365,7 @@ Props:
 - disabled: boolean
 - children: ReactNode
 Usage:
-import { Tabs } from '@aura/ui';
+import { Tabs } from '@aura-react-comp/ui';
 <Tabs defaultActiveKey="a" variant="card">
   <Tabs.Tab tabKey="a" title="标签A">内容A</Tabs.Tab>
   <Tabs.Tab tabKey="b" title="标签B">内容B</Tabs.Tab>
@@ -386,7 +386,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Empty } from '@aura/ui';
+import { Empty } from '@aura-react-comp/ui';
 <Empty description="暂无数据" />
 <Empty.Preset type="404" />
 
@@ -398,7 +398,7 @@ import { Empty } from '@aura/ui';
 - message.info(content: string, duration?: number)
 - message.loading(content: string, duration?: number)
 Usage:
-import { message } from '@aura/ui';
+import { message } from '@aura-react-comp/ui';
 message.success('操作成功');
 message.loading('加载中', 0);
 
@@ -417,7 +417,7 @@ NotificationOptions:
 - placement: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'（默认 'topRight'）
 - onClose: () => void
 Usage:
-import { notification } from '@aura/ui';
+import { notification } from '@aura-react-comp/ui';
 notification.success({ title: '成功', content: '操作完成' });
 notification.error({ title: '错误', content: '出错了', placement: 'bottomRight' });
 
@@ -454,7 +454,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Menu } from '@aura/ui';
+import { Menu } from '@aura-react-comp/ui';
 <Menu mode="vertical" defaultSelectedKey="home">
   <Menu.Item itemKey="home" icon={<HomeIcon />}>首页</Menu.Item>
   <Menu.SubMenu subKey="settings" title="设置">
@@ -476,7 +476,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Breadcrumb } from '@aura/ui';
+import { Breadcrumb } from '@aura-react-comp/ui';
 <Breadcrumb>
   <Breadcrumb.Item href="/">首页</Breadcrumb.Item>
   <Breadcrumb.Item>当前页</Breadcrumb.Item>
@@ -495,7 +495,7 @@ Props:
 - className: string
 - style: CSSProperties
 Usage:
-import { Pagination } from '@aura/ui';
+import { Pagination } from '@aura-react-comp/ui';
 <Pagination total={100} pageSize={10} onChange={handlePageChange} />
 <Pagination total={500} showSizeChanger showQuickJumper />
 
@@ -518,7 +518,7 @@ Props:
 - className: string
 - style: CSSProperties
 Usage:
-import { Steps } from '@aura/ui';
+import { Steps } from '@aura-react-comp/ui';
 <Steps current={1}>
   <Steps.Step title="步骤一" description="描述" />
   <Steps.Step title="步骤二" description="描述" />
@@ -541,7 +541,7 @@ DropdownMenuItem:
 - disabled: boolean
 - danger: boolean
 Usage:
-import { Dropdown } from '@aura/ui';
+import { Dropdown } from '@aura-react-comp/ui';
 <Dropdown
   menu={[
     { key: 'edit', label: '编辑' },
@@ -566,7 +566,7 @@ Props:
 - className: string
 - style: CSSProperties
 Usage:
-import { Slider } from '@aura/ui';
+import { Slider } from '@aura-react-comp/ui';
 <Slider defaultValue={30} onChange={handleChange} />
 <Slider range defaultValue={[20, 80]} />
 <Slider marks={{ 0: '0', 50: '50', 100: '100' }} />
@@ -584,7 +584,7 @@ Props:
 - className: string
 - style: CSSProperties
 Usage:
-import { Rate } from '@aura/ui';
+import { Rate } from '@aura-react-comp/ui';
 <Rate onChange={handleChange} />
 <Rate allowHalf allowClear defaultValue={3.5} />
 
@@ -611,7 +611,7 @@ UploadFile:
 继承 UploadProps，额外：
 - children: ReactNode
 Usage:
-import { Upload } from '@aura/ui';
+import { Upload } from '@aura-react-comp/ui';
 <Upload action="/api/upload" onChange={handleChange}>
   <Button>点击上传</Button>
 </Upload>
@@ -639,7 +639,7 @@ Props:
 - children: ReactNode
 FormError: { name: string; errors: string[] }
 Usage:
-import { Form, Input, Button } from '@aura/ui';
+import { Form, Input, Button } from '@aura-react-comp/ui';
 <Form layout="vertical" initialValues={{ name: '' }} onFinish={handleSubmit}>
   <Form.Item name="name" label="姓名" rules={[{ required: true, message: '请输入姓名' }]}>
     <Input placeholder="请输入" />
@@ -657,7 +657,7 @@ Props:
 - className: string
 - style: CSSProperties
 Usage:
-import { Result, Button } from '@aura/ui';
+import { Result, Button } from '@aura-react-comp/ui';
 <Result variant="success" title="提交成功" subtitle="感谢您的反馈" extra={<Button>返回首页</Button>} />
 
 ## Popconfirm
@@ -675,7 +675,7 @@ Props:
 - style: CSSProperties
 - children: ReactElement
 Usage:
-import { Popconfirm } from '@aura/ui';
+import { Popconfirm } from '@aura-react-comp/ui';
 <Popconfirm title="确定删除？" onConfirm={handleDelete} variant="error">
   <Button variant="primary">删除</Button>
 </Popconfirm>
@@ -695,7 +695,7 @@ Props:
 - collapsible: boolean
 - className, style, children
 Usage:
-import { Layout } from '@aura/ui';
+import { Layout } from '@aura-react-comp/ui';
 <Layout hasSider>
   <Layout.Sider collapsible width={200}>
     <Menu>...</Menu>
@@ -718,7 +718,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Flex } from '@aura/ui';
+import { Flex } from '@aura-react-comp/ui';
 <Flex justify="center" align="center" gap="md">
   <div>A</div>
   <div>B</div>
@@ -733,7 +733,7 @@ Props:
 - style: CSSProperties
 - children: ReactNode
 Usage:
-import { Scrollbar } from '@aura/ui';
+import { Scrollbar } from '@aura-react-comp/ui';
 <Scrollbar maxHeight={300}>
   <div>长内容...</div>
 </Scrollbar>

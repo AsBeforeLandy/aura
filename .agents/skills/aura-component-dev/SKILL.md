@@ -25,11 +25,11 @@ description: Aura 组件库本仓库的组件开发规范流程。在 aura 仓�
 
 ## Step 1 定位：选包与选参照
 
-| 包               | 定位                         | 依赖约束                                                                                                                                                             | 参照组件                                                                |
-| ---------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `@aura/ui`       | 通用 UI 原子组件             | 只依赖 `@aura/shared`、`@aura/icons`；**不得引入 antd**                                                                                                              | 表单类看 `input`/`select`，反馈类看 `alert`，数据展示类看 `badge`/`tag` |
-| `@aura/business` | 基于 antd 二次封装的业务组件 | 可用 antd（peer）+ `@aura/ui` + `@aura/shared`                                                                                                                       | `modal-form`、`search-form`、`pro-table`                                |
-| `@aura/x`        | AI 对话场景组件              | 运行时依赖 `@aura/shared`（内容渲染类组件另有 `react-markdown` / `prism-react-renderer`）；antd / mermaid 为 peer，按需引入（参照 `sender` 用 antd 的 Button/Input） | `bubble`、`sender`、`markdown-content`                                  |
+| 包                          | 定位                         | 依赖约束                                                                                                                                                                        | 参照组件                                                                |
+| --------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `@aura-react-comp/ui`       | 通用 UI 原子组件             | 只依赖 `@aura-react-comp/shared`、`@aura-react-comp/icons`；**不得引入 antd**                                                                                                   | 表单类看 `input`/`select`，反馈类看 `alert`，数据展示类看 `badge`/`tag` |
+| `@aura-react-comp/business` | 基于 antd 二次封装的业务组件 | 可用 antd（peer）+ `@aura-react-comp/ui` + `@aura-react-comp/shared`                                                                                                            | `modal-form`、`search-form`、`pro-table`                                |
+| `@aura-react-comp/x`        | AI 对话场景组件              | 运行时依赖 `@aura-react-comp/shared`（内容渲染类组件另有 `react-markdown` / `prism-react-renderer`）；antd / mermaid 为 peer，按需引入（参照 `sender` 用 antd 的 Button/Input） | `bubble`、`sender`、`markdown-content`                                  |
 
 规则：
 
@@ -57,7 +57,7 @@ packages/<pkg>/src/<kebab-case-name>/
 必须遵守（模板见 references/templates.md）：
 
 - **Props 接口**：`export interface XxxProps`，从组件入口显式导出；每个 prop 写 JSDoc 注释，有默认值的标 `@default 'xxx'`；内部类型不进公开 API。
-- **className / style 必须支持**：接收 `className` 与 `style` 并透传到根元素；类名用 `classNames(prefixCls('xxx'), className)` 合并（`prefixCls` / `classNames` 来自 `@aura/shared`）。
+- **className / style 必须支持**：接收 `className` 与 `style` 并透传到根元素；类名用 `classNames(prefixCls('xxx'), className)` 合并（`prefixCls` / `classNames` 来自 `@aura-react-comp/shared`）。
 - **ref**：ui / business 组件默认 `forwardRef<HTMLElement类型, XxxProps>` 并在定义后设置 `Xxx.displayName = 'Xxx'`（`message`/`notification` 这类静态方法组件除外）；x 包以 `React.FC` 为主，需要 ref 的组件用 forwardRef 并导出 `XxxRef` 类型（参照 `code-highlighter`）。
 - **受控 / 非受控双模式**（表单与交互组件）：`value` + `onChange` 受控，`defaultValue` 非受控；内部 `const isControlled = value !== undefined`。受控模式下交互只回调 `onChange`，不自改状态。
 - **TypeScript**：禁 `any`——需要宽类型用 `unknown` 并在使用处收窄；`useRef` 写 `useRef<T | null>(null)`（否则 current 只读）；事件处理用具体事件类型，禁止 `any` 一路透传。
@@ -74,7 +74,7 @@ packages/<pkg>/src/<kebab-case-name>/
   - ui / business：根类 `.aura-<组件名>`（`prefixCls('<组件名>')`），修饰类单横线连写（`aura-badge-dot-small`、`aura-xxx-disabled`）；
   - x：根类 `.aura-x-<组件名>`（`prefixCls('x-<组件名>')`），修饰符用标准 BEM 双横线（`x-sender--disabled`、`x-bubble--filled`），元素连写（`x-sender-header`）。
 - 动画 keyframes 命名 `aura-<组件名>-<语义>`；**duration 令牌（150/200/300ms）只用于 transition**，循环动画（`infinite`）的时长用字面值是既有惯例（badge `0.3s`/`0.4s`）；keyframes 只动 `opacity` / `transform` / `background-position` 这类可合成属性。
-- 暗色模式差异写在 `[data-theme="dark"] { ... }` 块内（全部走令牌、暗色无差异时可以不写该块）；`.less` 不写 fallback，令牌由 `@aura/ui/style.css` 提供。
+- 暗色模式差异写在 `[data-theme="dark"] { ... }` 块内（全部走令牌、暗色无差异时可以不写该块）；`.less` 不写 fallback，令牌由 `@aura-react-comp/ui/style.css` 提供。
 - x 包注意：构建后脚本会把全部 less 合并成 `esm/style.css`，源码中照常 `import './index.less'` 即可，不要引入其他样式引入方式。
 
 ## Step 5 测试 index.test.tsx

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 // @ts-ignore — dumi 运行时导出了这些 hooks，但 .d.ts 类型声明不完整
 import { useOutlet, usePrefersColor } from 'dumi';
-import { BusinessProvider } from '@aura/business';
+import { BusinessProvider } from '@aura-react-comp/business';
 
 // ===== 蒲公英粒子物理背景（柔美写意版）=====
 interface Seed {
@@ -312,7 +312,7 @@ const GlobalLayout: React.FC = () => {
     <>
       {isHome && <DandelionCanvas />}
       {/*
-        业务组件文档统一主题：把 Aura 设计令牌桥接到 antd，使 @aura/business 的
+        业务组件文档统一主题：把 Aura 设计令牌桥接到 antd，使 @aura-react-comp/business 的
         示例（ProTable / ModalForm / PdfViewer 等）与 Aura 自研组件呈现同一套视觉语言。
         在此统一包裹而非逐个 demo 包裹，可覆盖当前与将来所有业务组件示例，
         且 dark 跟随文档站的明暗模式实时切换。

@@ -11,7 +11,7 @@ import {
   Flex,
   Typography,
   Input
-} from '@aura/ui';
+} from '@aura-react-comp/ui';
 
 export default function DashboardMockup() {
   const [dbSource, setDbSource] = useState('production');
