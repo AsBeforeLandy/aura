@@ -20,6 +20,14 @@
       "@aura-react-comp/x": ["./packages/x/src/index.ts"]
     }
   },
-  "include": ["packages/*/src", "tests"],
-  "exclude": ["node_modules", "**/node_modules", "dist", "esm", "lib"]
+  "include": ["packages/*/src", "tests", ".dumi"],
+  "exclude": [
+    "node_modules",
+    "**/node_modules",
+    "dist",
+    "esm",
+    "lib",
+    ".dumi/tmp",
+    ".dumi/tmp-production"
+  ]
 }

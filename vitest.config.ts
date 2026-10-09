@@ -44,6 +44,7 @@ export default defineConfig({
       '@aura-react-comp/shared': path.resolve(__dirname, 'packages/shared/src'),
       '@aura-react-comp/ui': path.resolve(__dirname, 'packages/ui/src'),
       '@aura-react-comp/business': path.resolve(__dirname, 'packages/business/src'),
+      '@aura-react-comp/x': path.resolve(__dirname, 'packages/x/src'),
       '@aura-react-comp/request': path.resolve(__dirname, 'packages/request/src'),
       '@aura-react-comp/icons': path.resolve(__dirname, 'packages/icons/src'),
     },
