@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, Space } from "@aura/ui";
+import { Form, Input, Button, Space } from "@aura-react-comp/ui";
 
 const Demo: React.FC = () => (
     <Form

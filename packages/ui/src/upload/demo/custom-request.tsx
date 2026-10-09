@@ -1,6 +1,6 @@
 import React from 'react';
-import { Upload } from '@aura/ui';
-import type { CustomRequestOptions } from '@aura/ui';
+import { Upload } from '@aura-react-comp/ui';
+import type { CustomRequestOptions } from '@aura-react-comp/ui';
 
 /** customRequest 接入自有请求层：通过 onSuccess / onError 回报状态，组件据此更新列表。 */
 export default () => {

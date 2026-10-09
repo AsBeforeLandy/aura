@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@aura/ui';
+import { Typography } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Typography.Text strong variant="danger">

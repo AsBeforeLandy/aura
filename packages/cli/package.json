@@ -1,10 +1,30 @@
 {
-  "name": "@aura/cli",
+  "name": "@aura-react-comp/cli",
   "version": "0.0.1",
   "private": true,
   "description": "Aura UI CLI - MCP Server, Skill installation, and documentation tools",
+  "keywords": [
+    "aura",
+    "cli",
+    "mcp",
+    "ai",
+    "documentation"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/cli"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "bin": {
     "aura": "./dist/index.js"
   },
@@ -20,5 +40,9 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "typescript": "^6.0.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

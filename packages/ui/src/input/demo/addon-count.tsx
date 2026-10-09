@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Space } from '@aura/ui';
+import { Input, Space } from '@aura-react-comp/ui';
 
 /** addonBefore / addonAfter 渲染在边框外；showCount 展示字数；onPressEnter 响应回车。 */
 export default () => {

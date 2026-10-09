@@ -1,5 +1,5 @@
 import React from 'react';
-import { Scrollbar } from '@aura/ui';
+import { Scrollbar } from '@aura-react-comp/ui';
 
 const lines = Array.from({ length: 15 }, (_, i) => `第 ${i + 1} 行内容，始终可见的滚动条演示。`);
 

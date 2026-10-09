@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu } from '@aura/ui';
+import { Menu } from '@aura-react-comp/ui';
 
 /** openKeys 受控：子菜单展开状态由外部管理（典型场景：与路由/布局联动、持久化展开状态）。 */
 export default () => {

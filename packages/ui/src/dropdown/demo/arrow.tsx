@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, Button, Space } from '@aura/ui';
+import { Dropdown, Button, Space } from '@aura-react-comp/ui';
 
 const menu = [
   { key: '1', label: '编辑' },

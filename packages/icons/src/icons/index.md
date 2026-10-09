@@ -10,26 +10,26 @@ toc: content
 
 # Icon 图标
 
-语义化的矢量图形。使用图标组件，你需要安装 `@aura/icons` 图标组件包：
+语义化的矢量图形。使用图标组件，你需要安装 `@aura-react-comp/icons` 图标组件包：
 
 :::code-group
 
 ```bash [pnpm]
-pnpm add @aura/icons
+pnpm add @aura-react-comp/icons
 ```
 
 ```bash [npm]
-npm install @aura/icons
+npm install @aura-react-comp/icons
 ```
 
 ```bash [yarn]
-yarn add @aura/icons
+yarn add @aura-react-comp/icons
 ```
 
 :::
 
 ```tsx | pure
-import { Search, CheckCircleFilled, StarFilled } from "@aura/icons";
+import { Search, CheckCircleFilled, StarFilled } from '@aura-react-comp/icons';
 ```
 
 ## 何时使用
@@ -42,11 +42,10 @@ import { Search, CheckCircleFilled, StarFilled } from "@aura/icons";
 
 <code src="./demo/icon-list.tsx" inline></code>
 
-
 ## 代码演示
 
 ```tsx
-import { CheckCircleFilled, Search, StarFilled } from '@aura/icons';
+import { CheckCircleFilled, Search, StarFilled } from '@aura-react-comp/icons';
 
 export default () => (
   <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
@@ -61,17 +60,17 @@ export default () => (
 
 ### 通用属性
 
-| 属性 | 说明 | 类型 | 默认值 | 版本 |
-| --- | --- | --- | --- | --- |
-| size | 图标大小 | `number` | `24` | - |
-| color | 图标颜色 | `string` | `currentColor` | - |
-| className | 类名 | `string` | - | - |
-| style | 样式 | `React.CSSProperties` | - | - |
+| 属性      | 说明     | 类型                  | 默认值         | 版本 |
+| --------- | -------- | --------------------- | -------------- | ---- |
+| size      | 图标大小 | `number`              | `24`           | -    |
+| color     | 图标颜色 | `string`              | `currentColor` | -    |
+| className | 类名     | `string`              | -              | -    |
+| style     | 样式     | `React.CSSProperties` | -              | -    |
 
 ### 双色图标属性
 
 后缀 `TwoTone` 的图标额外支持：
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
+| 属性         | 说明             | 类型     | 默认值   |
+| ------------ | ---------------- | -------- | -------- |
 | twoToneColor | 辅助颜色（底色） | `string` | 自动推算 |

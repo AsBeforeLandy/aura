@@ -1,0 +1,131 @@
+name: Release
+
+# 发布工作流 —— 链路与 aura-vue 保持一致（那套已在 2026-10-08 实战验证过：
+# @aura-vue/components 与 @aura-vue/business 均成功发布）。
+#
+# 三条关键设计：
+#   1. **main 直发，不走 Version PR**。changesets/action 的建 PR 路径依赖仓库的
+#      「允许 Actions 创建 PR」开关，单人维护场景下只有摩擦、没有评审价值——
+#      门禁已由下面的 Verify 全量把守，版本变更内容可在 CHANGELOG 里审计。
+#   2. **认证用 NPM_TOKEN**（Granular Access Token + Bypass 2FA）。首次发布时包在
+#      npm 上尚不存在，无法绑定 Trusted Publisher，所以这条路必须留着。
+#      将来若在 npm 上为 6 个包绑好 Trusted Publisher，删掉下面的 NODE_AUTH_TOKEN
+#      即可自动切到 OIDC（id-token: write 已经就位，无需改权限）。
+#   3. **未配置 NPM_TOKEN 时整体跳过发布**，链路依旧可跑通、CI 不会红。
+#
+# 流程：有 changeset → version 消费它并提交回 master → publish 发布 → 推 tag；
+#       无 changeset → version 是 no-op，publish 无可发布版本自然退出。
+
+on:
+  push:
+    branches: [master]
+  # 允许从 Actions 标签页手动触发（首次发布或补发时用得上）
+  workflow_dispatch:
+
+concurrency: release-${{ github.ref }}
+
+permissions:
+  # 需要写权限：把 version commit 推回主分支、打 tag。
+  # 不显式声明会落到仓库默认权限（新仓库默认为只读 contents），
+  # 表现为发布步骤静默失败——这正是「配了 NPM_TOKEN 却发不出去」的常见原因。
+  contents: write
+  pull-requests: write
+  # provenance 通过 OIDC 签发，需要 id-token 写权限（与用 token 发布并不冲突）
+  id-token: write
+
+env:
+  # 仓库 Secrets 里未配置时为空字符串，各发布步骤据此跳过。
+  # 注意 env 上下文只能用于**步骤级** if，不能用于 job 级 if。
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # changesets 需要完整历史来判断哪些 changeset 尚未被消费
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          # 与本地开发版本一致（lockfile 为 pnpm 7 的 lockfileVersion 5.4，pnpm 9+ 无法读取）
+          version: 7.33.7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # Node 24 自带 npm 11（Node 22 只有 npm 10）。npm ≥ 11.5.1 是 OIDC 与
+          # provenance 的前提；即使当前走 token，也不该在这里留短板。
+          node-version: 24
+          cache: 'pnpm'
+          # registry-url 缺失会导致不生成 .npmrc，认证被静默忽略，
+          # 表现为 401 ENEEDAUTH（很容易误诊为权限问题）
+          registry-url: 'https://registry.npmjs.org'
+
+      # --ignore-scripts 跳过 root 的 `prepare: dumi setup`（与 ci.yml 同因：
+      # 该步骤会拖慢乃至卡住安装，且与发布无关）。
+      # 这里刻意不用 --frozen-lockfile，与 ci.yml 保持一致，
+      # 避免出现「同一 commit，CI 绿但 Release 红」这类难定位的分叉。
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts
+
+      # 发布前的校验与 CI 保持同一份门禁：不通过就不该发出去。
+      # 失败自动重试一次（共享 runner 偶发失败已多次观测），两轮日志都落盘，
+      # 重试也失败时才有根因定位的材料。
+      - name: Verify
+        run: |
+          pnpm verify 2>&1 | tee verify.log; code=${PIPESTATUS[0]}
+          if [ $code -ne 0 ]; then
+            echo "::warning::verify 第一次失败（可能是 runner 偶发），自动重试一次"
+            pnpm verify 2>&1 | tee verify-retry.log; code=${PIPESTATUS[0]}
+          fi
+          exit $code
+
+      - name: Upload verify log
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-verify-log
+          path: |
+            verify.log
+            verify-retry.log
+          retention-days: 7
+
+      - name: Version packages
+        if: ${{ env.NPM_TOKEN != '' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          pnpm changeset version
+          if git diff --quiet; then
+            echo "没有待消费的 changeset，跳过 version"
+          else
+            git add -A
+            git commit -m "chore(release): version packages [skip ci]"
+            git push
+          fi
+
+      - name: Publish to npm
+        if: ${{ env.NPM_TOKEN != '' }}
+        run: pnpm changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # 生成 provenance 声明（供应链可追溯）。放在这里而不是各包的
+          # publishConfig，是为了不影响维护者本地手动发布——provenance 依赖
+          # CI 的 OIDC，本地跑会直接失败。
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Push release tags
+        if: ${{ env.NPM_TOKEN != '' }}
+        run: git push --follow-tags
+
+# 发布失败时的排查顺序：
+#   1. 403 且提到 `bypass 2fa enabled` → token 未勾选 Bypass 2FA，需重建
+#   2. 402 Payment Required → 包缺 publishConfig.access: public
+#   3. 401 ENEEDAUTH → workflow 缺 registry-url
+#   4. 404 Not Found (PUT) → 包名 scope 与 npm 组织名不一致，或账号无该组织权限
+#   5. E422 → package.json#repository.url 与 GitHub 仓库不匹配
+#   6. 版本号已存在 → changesets 不会重复发布已存在的版本，需先加 changeset 提升版本

@@ -15,7 +15,7 @@ toc: content
 滑动型输入器，支持单值和范围选择。
 
 ```tsx | pure
-import { Slider } from '@aura/ui';
+import { Slider } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

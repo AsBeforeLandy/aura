@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, Space } from 'antd';
-import { WeekTimeRange, BusinessProvider } from '@aura/business';
-import type { WeekTimeRangeValue } from '@aura/business';
+import { WeekTimeRange, BusinessProvider } from '@aura-react-comp/business';
+import type { WeekTimeRangeValue } from '@aura-react-comp/business';
 
 const Demo: React.FC = () => {
   const [value, setValue] = useState<WeekTimeRangeValue>([

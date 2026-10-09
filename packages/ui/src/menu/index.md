@@ -15,7 +15,7 @@ toc: content
 导航菜单，支持垂直、水平和内嵌模式。
 
 ```tsx | pure
-import { Menu } from '@aura/ui';
+import { Menu } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

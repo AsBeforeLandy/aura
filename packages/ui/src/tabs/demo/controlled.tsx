@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs, TabItem, Text, Space } from '@aura/ui';
+import { Tabs, TabItem, Text, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [activeKey, setActiveKey] = useState('home');

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Space } from '@aura/ui';
+import { Typography, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space wrap size="md">

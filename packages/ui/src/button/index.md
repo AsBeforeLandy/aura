@@ -15,7 +15,7 @@ toc: content
 按钮用于触发一个即时操作。
 
 ```tsx | pure
-import { Button } from '@aura/ui';
+import { Button } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Suggestion } from '@aura/x';
+import { Suggestion } from '@aura-react-comp/x';
 
 const SUGGESTIONS = [
   { key: 's1', label: '帮我总结上面的结论' },

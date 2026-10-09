@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Prompts } from '@aura/x';
+import { Prompts } from '@aura-react-comp/x';
 
 const ITEMS = [
   { key: 'a', label: '周报助手', description: '按本周提交生成工作周报', icon: '📝' },

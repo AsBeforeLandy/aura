@@ -15,7 +15,7 @@ toc: content
 下拉选择器，支持搜索、多选等。
 
 ```tsx | pure
-import { Select } from '@aura/ui';
+import { Select } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

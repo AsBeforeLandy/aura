@@ -1,8 +1,26 @@
 {
-  "name": "@aura/x",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@aura-react-comp/x",
+  "version": "0.1.0",
   "description": "Aura AI 组件库 — 对话式 AI 界面的原子组件与数据流 Hooks（对标 Ant Design X 的 Aura 实现）",
+  "keywords": [
+    "aura",
+    "react",
+    "ai",
+    "chat",
+    "llm",
+    "antd"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/x"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
   "type": "module",
   "main": "esm/index.js",
   "module": "esm/index.js",
@@ -39,11 +57,14 @@
     }
   },
   "dependencies": {
-    "@aura/shared": "workspace:*",
+    "@aura-react-comp/shared": "workspace:*",
     "prism-react-renderer": "^2.4.1",
     "react-markdown": "^10.1.0"
   },
-  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "devDependencies": {
     "less": "^4.9.1",
     "mermaid": "^12.0.0"

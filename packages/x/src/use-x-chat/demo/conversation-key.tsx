@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useXChat } from '@aura/x';
-import type { XMessage } from '@aura/x';
+import { useXChat } from '@aura-react-comp/x';
+import type { XMessage } from '@aura-react-comp/x';
 
 /** 模拟远端：按会话返回历史（异步），体现 conversationKey 的初始化语义 */
 const remote: Record<string, XMessage[]> = {

@@ -9,6 +9,11 @@
  */
 export default {
   extends: ['@commitlint/config-conventional'],
+  // changesets 的版本提交是固定文案（"Version Packages"），无 conventional 前缀，
+  // 不豁免的话 runner 上的 commit-msg 钩子会拒绝它、git commit 以退出码 1 失败。
+  // 本仓当前走 main 直发（提交文案已带 `chore(release):` 前缀），这条豁免是为
+  // 将来切回 Version PR 模式留的保险，与 aura-vue 的配置保持一致。
+  ignores: [(commit) => commit.startsWith('Version Packages')],
   rules: {
     // 允许的提交类型（在 config-conventional 默认值基础上显式声明）
     'type-enum': [

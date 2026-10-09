@@ -1,5 +1,5 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 
 export interface DividerProps extends HTMLAttributes<HTMLDivElement> {

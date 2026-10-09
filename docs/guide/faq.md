@@ -26,11 +26,11 @@ Aura 基于 React 18 构建，需要项目中安装 `react` 和 `react-dom` 的 
 
 ### 如何在 Vite 项目中使用？
 
-Vite 开箱即用，只需安装 `@aura/ui` 并引入 CSS 即可：
+Vite 开箱即用，只需安装 `@aura-react-comp/ui` 并引入 CSS 即可：
 
 ```tsx | pure
-import { Button } from '@aura/ui';
-import '@aura/ui/style.css';
+import { Button } from '@aura-react-comp/ui';
+import '@aura-react-comp/ui/style.css';
 ```
 
 ### 如何在 Next.js 项目中使用？
@@ -40,8 +40,8 @@ import '@aura/ui/style.css';
 ```tsx | pure
 'use client';
 
-import { Button } from '@aura/ui';
-import '@aura/ui/style.css';
+import { Button } from '@aura-react-comp/ui';
+import '@aura-react-comp/ui/style.css';
 ```
 
 ### 如何在 Webpack 项目中配置？
@@ -56,7 +56,7 @@ Webpack 4 / 5 同样开箱即用，无需额外配置。如果遇到 `ModulePars
 
 请检查以下几点：
 
-1. 是否正确引入了 CSS 文件：`import '@aura/ui/style.css';`
+1. 是否正确引入了 CSS 文件：`import '@aura-react-comp/ui/style.css';`
 2. 浏览器是否支持 CSS Variables（Chrome 80+、Firefox 80+、Safari 14+、Edge 80+）
 3. 是否有其他全局样式覆盖了 Aura 的 CSS Variables
 4. 如果使用了 CSS Modules 或 scoped 样式，确保没有影响 Aura 的类名选择器
@@ -68,7 +68,7 @@ Webpack 4 / 5 同样开箱即用，无需额外配置。如果遇到 `ModulePars
 使用 `ThemeProvider` 包裹应用根组件即可：
 
 ```tsx | pure
-import { ThemeProvider } from '@aura/ui';
+import { ThemeProvider } from '@aura-react-comp/ui';
 
 const App = () => (
   <ThemeProvider defaultTheme="dark">
@@ -86,7 +86,7 @@ const App = () => (
 ```css
 :root {
   --aura-primary-700: #2563eb; /* 主色改为蓝色 */
-  --aura-radius-md: 8px;       /* 调整圆角 */
+  --aura-radius-md: 8px; /* 调整圆角 */
 }
 ```
 

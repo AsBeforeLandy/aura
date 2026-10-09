@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Collapse, Text, Space } from '@aura/ui';
+import { Collapse, Text, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [keys, setKeys] = useState(['1']);

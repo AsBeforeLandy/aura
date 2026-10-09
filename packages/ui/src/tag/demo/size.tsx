@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag, TagCheckable, TagGroup, Space } from '@aura/ui';
+import { Tag, TagCheckable, TagGroup, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space align="center" size="sm">

@@ -15,7 +15,7 @@ toc: content
 高性能表单控件，支持垂直、水平、行内三种布局，内置字段验证与错误提示。
 
 ```tsx | pure
-import { Form } from '@aura/ui';
+import { Form } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

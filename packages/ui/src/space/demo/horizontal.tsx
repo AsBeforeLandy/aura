@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space } from '@aura/ui';
+import { Space } from '@aura-react-comp/ui';
 import { Button } from '../../button/index';
 
 const Demo: React.FC = () => (

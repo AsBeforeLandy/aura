@@ -1,5 +1,5 @@
 import React from 'react';
-import { CodeHighlighter } from '@aura/x';
+import { CodeHighlighter } from '@aura-react-comp/x';
 
 const SNIPPET = `const tokens = ['--aura-text', '--aura-x-code-bg'];`;
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Folder } from '@aura/x';
-import type { FolderTreeData } from '@aura/x';
+import { Folder } from '@aura-react-comp/x';
+import type { FolderTreeData } from '@aura-react-comp/x';
 
 const TREE: FolderTreeData[] = [
   {

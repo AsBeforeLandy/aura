@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Steps } from '@aura/ui';
+import { Steps } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [current, setCurrent] = useState(1);

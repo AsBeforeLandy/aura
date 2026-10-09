@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Select } from '@aura/ui';
+import { Select } from '@aura-react-comp/ui';
 
 interface UserOption {
   label: string;

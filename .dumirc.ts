@@ -78,7 +78,7 @@ const GROUP_ORDER = [
   '反馈',
   '业务',
   'AI 组件',
-  // 以下为 @aura/x（AI 组件）的侧栏子分组
+  // 以下为 @aura-react-comp/x（AI 组件）的侧栏子分组
   '主题桥接',
   '数据流',
   '交互',
@@ -191,19 +191,19 @@ export default defineConfig({
     });
   },
   alias: {
-    // 必须排在 `@aura/ui` 之前：webpack 的 alias 为前缀匹配、按声明顺序命中，
-    // 若被 `@aura/ui` 先命中会解析成 packages/ui/src/style.css（不存在）。
-    // 该子路径同时由 @aura/ui 的 package.json#exports 对外暴露。
-    '@aura/ui/style.css': path.resolve(
+    // 必须排在 `@aura-react-comp/ui` 之前：webpack 的 alias 为前缀匹配、按声明顺序命中，
+    // 若被 `@aura-react-comp/ui` 先命中会解析成 packages/ui/src/style.css（不存在）。
+    // 该子路径同时由 @aura-react-comp/ui 的 package.json#exports 对外暴露。
+    '@aura-react-comp/ui/style.css': path.resolve(
       __dirname,
       'packages/ui/src/theme/tokens.css',
     ),
-    '@aura/icons': path.resolve(__dirname, 'packages/icons/src'),
-    '@aura/ui': path.resolve(__dirname, 'packages/ui/src'),
-    '@aura/business': path.resolve(__dirname, 'packages/business/src'),
-    '@aura/x': path.resolve(__dirname, 'packages/x/src'),
-    '@aura/shared': path.resolve(__dirname, 'packages/shared/src'),
-    '@aura/request': path.resolve(__dirname, 'packages/request/src'),
+    '@aura-react-comp/icons': path.resolve(__dirname, 'packages/icons/src'),
+    '@aura-react-comp/ui': path.resolve(__dirname, 'packages/ui/src'),
+    '@aura-react-comp/business': path.resolve(__dirname, 'packages/business/src'),
+    '@aura-react-comp/x': path.resolve(__dirname, 'packages/x/src'),
+    '@aura-react-comp/shared': path.resolve(__dirname, 'packages/shared/src'),
+    '@aura-react-comp/request': path.resolve(__dirname, 'packages/request/src'),
   },
   favicons: [
     // 本地图片路径，对应 public 目录下的文件
@@ -237,6 +237,7 @@ export default defineConfig({
             { title: '主题定制', link: '/guide/theme' },
             { title: '开发规范与性能指标', link: '/guide/standards' },
             { title: '工程化工具链', link: '/guide/toolchain' },
+            { title: '发布流程', link: '/guide/releasing' },
             { title: 'AI 智能协同', link: '/guide/ai' },
             { title: '常见问题', link: '/guide/faq' },
           ],

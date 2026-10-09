@@ -15,7 +15,7 @@ export async function installSkill() {
   // 确保源目录存在
   if (!fs.existsSync(SKILLS_DIR)) {
     console.error(`Skill 目录不存在: ${SKILLS_DIR}`);
-    console.error('请确认 @aura/skill 包已正确安装。');
+    console.error('请确认 @aura-react-comp/skill 包已正确安装。');
     process.exit(1);
   }
 

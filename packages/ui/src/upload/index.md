@@ -15,7 +15,7 @@ toc: content
 文件选择上传和拖拽上传控件。
 
 ```tsx | pure
-import { Upload } from '@aura/ui';
+import { Upload } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ThoughtChain } from '@aura/x';
-import type { ThoughtChainItem, ThoughtChainStatus } from '@aura/x';
+import { ThoughtChain } from '@aura-react-comp/x';
+import type { ThoughtChainItem, ThoughtChainStatus } from '@aura-react-comp/x';
 
 const STEPS = [
   { key: 'retrieve', title: '检索知识库', description: '匹配到 3 篇相关文档' },

@@ -49,13 +49,13 @@ toc: content
 
 ## 注意事项
 
-- `react-markdown` 是 `@aura/x` 的**运行时依赖**（`dependencies`，随包自动安装），
+- `react-markdown` 是 `@aura-react-comp/x` 的**运行时依赖**（`dependencies`，随包自动安装），
   应用侧无需额外声明。
 - 组件本身是**可选**的：不传 `contentRender` 时 [`Bubble`](/x-components/bubble) 按纯文本渲染。
   但依赖本身是必需的——包入口统一 re-export 了 `MarkdownContent`，而它内部是
-  **静态** `import ReactMarkdown from 'react-markdown'`，因此从 `@aura/x` 顶层引入
+  **静态** `import ReactMarkdown from 'react-markdown'`，因此从 `@aura-react-comp/x` 顶层引入
   任意组件时，打包器都需要能解析到 `react-markdown`。这正是它放在 `dependencies`
-  而不是 `peerDependencies` 的原因（与 `@aura/business` 处理 `pdfjs-dist` 同款）。
+  而不是 `peerDependencies` 的原因（与 `@aura-react-comp/business` 处理 `pdfjs-dist` 同款）。
 - 流式场景直接把累积文本传给 `children`；未闭合的代码块 / 表格由 remark
   按块级容错渲染，收到新内容后重新渲染即可。
 - **代码块替换的是 `<pre>` 而不是 `<code>`**：围栏代码块在 hast 里是 `pre > code`，

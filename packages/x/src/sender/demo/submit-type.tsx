@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sender } from '@aura/x';
+import { Sender } from '@aura-react-comp/x';
 
 export default () => {
   const [value, setValue] = useState('Shift + Enter 才会提交这条内容');

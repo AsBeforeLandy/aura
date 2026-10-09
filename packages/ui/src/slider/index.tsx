@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 
 export interface SliderProps extends React.AriaAttributes {

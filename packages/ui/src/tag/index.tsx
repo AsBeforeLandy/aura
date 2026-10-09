@@ -5,8 +5,8 @@ import React, {
   createContext,
   useContext,
 } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { Close } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { Close } from '@aura-react-comp/icons';
 import './index.less';
 
 /* ===== Tag Context（用于 Tag.Group） ===== */

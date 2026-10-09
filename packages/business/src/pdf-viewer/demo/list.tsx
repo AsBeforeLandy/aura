@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Space, Typography } from 'antd';
-import { PdfViewer } from '@aura/business';
+import { PdfViewer } from '@aura-react-comp/business';
 
 interface FileItem {
   name: string;

@@ -1,13 +1,32 @@
 {
-  "name": "@aura/request",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@aura-react-comp/request",
+  "version": "0.1.0",
   "description": "基于原生 Fetch 的 HTTP 请求封装",
+  "keywords": [
+    "aura",
+    "http",
+    "fetch",
+    "request",
+    "interceptor"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/request"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
   "type": "module",
   "main": "esm/index.js",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
-  "files": ["esm"],
+  "files": [
+    "esm"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
@@ -22,7 +41,10 @@
     "dev": "father dev"
   },
   "dependencies": {
-    "@aura/shared": "workspace:*"
+    "@aura-react-comp/shared": "workspace:*"
   },
-  "license": "MIT"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

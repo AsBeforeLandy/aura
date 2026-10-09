@@ -1,4 +1,4 @@
-# @aura/business
+# @aura-react-comp/business
 
 Aura 业务组件库：基于 antd v6 二次封装的 B 端中后台业务组件。
 
@@ -7,7 +7,7 @@ Aura 业务组件库：基于 antd v6 二次封装的 B 端中后台业务组件
 ## 安装
 
 ```bash
-pnpm add @aura/business antd react react-dom
+pnpm add @aura-react-comp/business antd react react-dom
 ```
 
 `antd`（>=6）、`react` / `react-dom`（>=18）为 peerDependencies，需由使用方提供。
@@ -16,17 +16,21 @@ pnpm add @aura/business antd react react-dom
 
 本包所有 `.less` 直接使用 `var(--aura-*)` 且**不设 fallback**，主题令牌未加载时颜色、圆角、字号、间距会整体失效。
 
-主题令牌由 `@aura/ui` 提供，已作为本包依赖声明。请确保引入一次：
+主题令牌由 `@aura-react-comp/ui` 提供，已作为本包依赖声明。请确保引入一次：
 
 ```tsx
-import '@aura/ui/style.css';
+import '@aura-react-comp/ui/style.css';
 ```
 
 ## 使用
 
 ```tsx
-import { BusinessProvider, PageContainer, ProTable } from '@aura/business';
-import '@aura/ui/style.css';
+import {
+  BusinessProvider,
+  PageContainer,
+  ProTable,
+} from '@aura-react-comp/business';
+import '@aura-react-comp/ui/style.css';
 
 const App = () => (
   <BusinessProvider>
@@ -41,17 +45,17 @@ const App = () => (
 
 ## 组件总览（9 个）
 
-| 组件 | 说明 |
-| --- | --- |
-| `BusinessProvider` | 将 Aura 设计令牌映射到 antd 主题系统 |
-| `PageContainer` | 统一的页面骨架：面包屑 + 标题区 + 操作区 + 内容区 |
-| `SearchForm` | 配置化查询表单，支持栅格布局与折叠展开 |
-| `ProTable` | 查询区 + 卡片 + 表格的组合，内置分页与请求状态管理 |
-| `ModalForm` | 弹窗表单，内置「校验 → 提交 → 关闭」流程 |
-| `CascaderPanel` | 级联多选面板，适用于组织架构 / 类目树 |
-| `WeekTimeRange` | 周时间段选择器，支持单击与拖拽框选 |
-| `YearCalendar` | 年历选择器，一年一张连续网格，支持拖拽框选 |
-| `PdfViewer` | 基于 pdf.js 的弹窗式 PDF 预览，支持翻页 / 缩放 / 旋转 / 拖拽平移 |
+| 组件               | 说明                                                             |
+| ------------------ | ---------------------------------------------------------------- |
+| `BusinessProvider` | 将 Aura 设计令牌映射到 antd 主题系统                             |
+| `PageContainer`    | 统一的页面骨架：面包屑 + 标题区 + 操作区 + 内容区                |
+| `SearchForm`       | 配置化查询表单，支持栅格布局与折叠展开                           |
+| `ProTable`         | 查询区 + 卡片 + 表格的组合，内置分页与请求状态管理               |
+| `ModalForm`        | 弹窗表单，内置「校验 → 提交 → 关闭」流程                         |
+| `CascaderPanel`    | 级联多选面板，适用于组织架构 / 类目树                            |
+| `WeekTimeRange`    | 周时间段选择器，支持单击与拖拽框选                               |
+| `YearCalendar`     | 年历选择器，一年一张连续网格，支持拖拽框选                       |
+| `PdfViewer`        | 基于 pdf.js 的弹窗式 PDF 预览，支持翻页 / 缩放 / 旋转 / 拖拽平移 |
 
 > `PdfViewer` 由 `pdfjs-dist` 提供渲染能力，该依赖已随包声明（常规依赖，安装即得）。
 > worker 默认使用与依赖同版本的资源文件，由打包器解析；webpack 4 等场景

@@ -1,7 +1,7 @@
 import React from 'react';
-import { CodeHighlighter } from '@aura/x';
+import { CodeHighlighter } from '@aura-react-comp/x';
 
-const TSX = `import { Bubble, Sender } from '@aura/x';
+const TSX = `import { Bubble, Sender } from '@aura-react-comp/x';
 
 export function Chat() {
   const [value, setValue] = React.useState('');
@@ -19,7 +19,7 @@ const CSS = `.wrapper {
   padding: 16px;
 }`;
 
-const BASH = `pnpm --filter @aura/x build
+const BASH = `pnpm --filter @aura-react-comp/x build
 pnpm verify`;
 
 export default () => (

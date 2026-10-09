@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import { useDragSelect } from '../_internal/useDragSelect';
 import type { DragRect, DragSelectMeta } from '../_internal/useDragSelect';
 import {

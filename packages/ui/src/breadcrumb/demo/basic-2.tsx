@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb } from '@aura/ui';
+import { Breadcrumb } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Breadcrumb>

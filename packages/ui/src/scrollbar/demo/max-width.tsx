@@ -1,5 +1,5 @@
 import React from 'react';
-import { Scrollbar } from '@aura/ui';
+import { Scrollbar } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Scrollbar maxWidth={300} style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16 }}>

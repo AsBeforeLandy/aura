@@ -1,7 +1,31 @@
 {
-  "name": "@aura/skill",
+  "name": "@aura-react-comp/skill",
   "version": "0.0.1",
   "private": true,
   "description": "Aura UI skill files for AI IDEs（非代码包：仅包含 Markdown 提示词资产）",
-  "files": ["skills"]
+  "keywords": [
+    "aura",
+    "ai",
+    "skill",
+    "prompt",
+    "markdown"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/skill"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
+  "files": [
+    "skills"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

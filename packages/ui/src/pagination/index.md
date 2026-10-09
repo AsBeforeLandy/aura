@@ -15,7 +15,7 @@ toc: content
 数据量过多时，采用分页形式将数据拆分。
 
 ```tsx | pure
-import { Pagination } from '@aura/ui';
+import { Pagination } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

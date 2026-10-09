@@ -1,5 +1,5 @@
 import React from 'react';
-import { Empty, Button } from '@aura/ui';
+import { Empty, Button } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Empty description="暂无数据">

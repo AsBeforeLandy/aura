@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button } from '@aura/ui';
+import { Card, Button } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Card hoverable variant="elevated">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pagination, Text, Space } from '@aura/ui';
+import { Pagination, Text, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [current, setCurrent] = useState(1);

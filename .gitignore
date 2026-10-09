@@ -5,6 +5,8 @@ node_modules
 dist
 lib
 esm
+# 由 scripts/sync-license.mjs 从仓库根 LICENSE 派生到各包
+packages/*/LICENSE
 
 # ===== dumi / umi 临时文件 =====
 .dumi/tmp

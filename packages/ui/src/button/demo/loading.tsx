@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Space } from '@aura/ui';
+import { Button, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [loading, setLoading] = useState(false);

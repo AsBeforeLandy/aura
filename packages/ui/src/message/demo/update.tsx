@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, message, Space } from '@aura/ui';
+import { Button, Card, message, Space } from '@aura-react-comp/ui';
 
 /** 用 key 原位更新：loading 结束后换成 success，不重新弹出新消息。 */
 export default () => {

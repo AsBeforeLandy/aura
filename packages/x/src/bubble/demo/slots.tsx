@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Avatar } from '@aura/ui';
-import { Actions, Bubble } from '@aura/x';
+import { Avatar } from '@aura-react-comp/ui';
+import { Actions, Bubble } from '@aura-react-comp/x';
 
 export default () => {
   const [copied, setCopied] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Select, message } from 'antd';
-import { ModalForm, BusinessProvider } from '@aura/business';
+import { ModalForm, BusinessProvider } from '@aura-react-comp/business';
 
 const Demo: React.FC = () => {
   const [open, setOpen] = useState(false);

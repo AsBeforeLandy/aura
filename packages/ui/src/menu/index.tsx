@@ -7,8 +7,8 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { ChevronDown, DoubleLeft, DoubleRight } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { ChevronDown, DoubleLeft, DoubleRight } from '@aura-react-comp/icons';
 import './index.less';
 
 /* ===== Context ===== */

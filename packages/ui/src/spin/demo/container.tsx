@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Text, Button, Card, Space } from '@aura/ui';
+import { Spin, Text, Button, Card, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [spinning, setSpinning] = useState(false);

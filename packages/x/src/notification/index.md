@@ -22,7 +22,7 @@ toc: content
 `XNotification` 走 `window.Notification`，弹出的是**操作系统 / 浏览器级别的系统通知**，
 受通知权限管控，且样式由浏览器与操作系统决定，组件无法干预。
 
-需要页面内的消息条 / 通知卡片，请用 `@aura/ui` 的 `Notification` 与 `Message`。
+需要页面内的消息条 / 通知卡片，请用 `@aura-react-comp/ui` 的 `Notification` 与 `Message`。
 
 ## 代码演示
 

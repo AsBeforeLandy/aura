@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, Button } from '@aura/ui';
+import { Dropdown, Button } from '@aura-react-comp/ui';
 
 const menuItems = [
   { key: 'undo', label: '撤销' },

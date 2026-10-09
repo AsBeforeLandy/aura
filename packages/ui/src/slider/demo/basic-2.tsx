@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Slider, Text, Space } from '@aura/ui';
+import { Slider, Text, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [value, setValue] = useState(30);

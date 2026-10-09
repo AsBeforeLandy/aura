@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tag, TagCheckable, TagGroup, Text, Space } from '@aura/ui';
+import { Tag, TagCheckable, TagGroup, Text, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [selected, setSelected] = useState<(string | number)[]>([]);

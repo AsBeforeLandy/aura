@@ -21,17 +21,17 @@ toc: content
 
 ```bash [pnpm]
 # pnpm（推荐）
-pnpm add @aura/ui
+pnpm add @aura-react-comp/ui
 ```
 
 ```bash [yarn]
 # yarn
-yarn add @aura/ui
+yarn add @aura-react-comp/ui
 ```
 
 ```bash [npm]
 # npm
-npm install @aura/ui
+npm install @aura-react-comp/ui
 ```
 
 :::
@@ -42,61 +42,62 @@ npm install @aura/ui
 
 ```bash [pnpm]
 # 工具函数库
-pnpm add @aura/shared
+pnpm add @aura-react-comp/shared
 
 # HTTP 请求封装
-pnpm add @aura/request
+pnpm add @aura-react-comp/request
 ```
+
 ```bash [yarn]
 # 工具函数库
-yarn add @aura/shared
+yarn add @aura-react-comp/shared
 
 # HTTP 请求封装
-yarn add @aura/request
+yarn add @aura-react-comp/request
 ```
 
 ```bash [npm]
 # 工具函数库
-npm install @aura/shared
+npm install @aura-react-comp/shared
 
 # HTTP 请求封装
-npm install @aura/request
+npm install @aura-react-comp/request
 ```
 
 :::
 
-| 包名 | 描述 | 依赖 |
-| --- | --- | --- |
-| `@aura/ui` | UI 组件库，包含 34+ 组件 | - |
-| `@aura/shared` | 工具函数集（classNames、prefixCls 等） | - |
-| `@aura/request` | 基于原生 Fetch 的 HTTP 请求封装 | `@aura/shared` |
+| 包名                       | 描述                                   | 依赖                      |
+| -------------------------- | -------------------------------------- | ------------------------- |
+| `@aura-react-comp/ui`      | UI 组件库，包含 34+ 组件               | -                         |
+| `@aura-react-comp/shared`  | 工具函数集（classNames、prefixCls 等） | -                         |
+| `@aura-react-comp/request` | 基于原生 Fetch 的 HTTP 请求封装        | `@aura-react-comp/shared` |
 
 ## 引入样式
 
 使用组件时，需要引入全局样式文件：
 
 ```tsx | pure
-import '@aura/ui/style.css';
+import '@aura-react-comp/ui/style.css';
 ```
 
 > 如果框架支持按需加载（如 Vite、Next.js），CSS 文件会被自动 tree-shaking，无需担心打包体积。
 
 ## 浏览器兼容性
 
-| 浏览器 | 最低版本 |
-| --- | --- |
-| Chrome / Edge | 84+ |
-| Firefox | 63+ |
-| Safari | 14.1+ |
+| 浏览器        | 最低版本 |
+| ------------- | -------- |
+| Chrome / Edge | 84+      |
+| Firefox       | 63+      |
+| Safari        | 14.1+    |
 
 产物以 `chrome 80` 为 **JS 编译目标**（原生 `async/await`，不做语法降级，
 详见「开发规范与性能指标」的构建规范）。实际下限由所用 **CSS 特性** 决定：
 
-| 依赖的特性 | 最低版本 | 用在哪 |
-| --- | --- | --- |
-| Flexbox `gap` | Chrome 84 / Safari 14.1 / Firefox 63 | 组件内的弹性间距（24 个样式文件） |
-| CSS 自定义属性（变量） | Chrome 49 / Safari 9.1 | 全部主题令牌 `--aura-*` |
-| Pointer Events | Chrome 55 / Safari 13 | 拖拽交互（WeekTimeRange、YearCalendar、PdfViewer） |
+| 依赖的特性             | 最低版本                             | 用在哪                                             |
+| ---------------------- | ------------------------------------ | -------------------------------------------------- |
+| Flexbox `gap`          | Chrome 84 / Safari 14.1 / Firefox 63 | 组件内的弹性间距（24 个样式文件）                  |
+| CSS 自定义属性（变量） | Chrome 49 / Safari 9.1               | 全部主题令牌 `--aura-*`                            |
+| Pointer Events         | Chrome 55 / Safari 13                | 拖拽交互（WeekTimeRange、YearCalendar、PdfViewer） |
 
 > 本库**不依赖** `color-mix` 等较新的 CSS 特性：需要「主色 + 透明度」的派生色
 > 统一收敛在令牌层（如 `--aura-selection-bg` 同时提供亮 / 暗两套值），

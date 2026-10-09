@@ -23,10 +23,10 @@ Aura 采用 pnpm workspaces 管理 Monorepo，将不同职责拆分为独立包�
 ```
 aura/
 ├── packages/
-│   ├── ui/        # @aura/ui — UI 组件库
-│   ├── shared/    # @aura/shared — 工具函数（classNames、prefixCls 等）
-│   ├── request/   # @aura/request — HTTP 请求封装
-│   ├── cli/       # @aura/cli — MCP Server 与 CLI 工具
+│   ├── ui/        # @aura-react-comp/ui — UI 组件库
+│   ├── shared/    # @aura-react-comp/shared — 工具函数（classNames、prefixCls 等）
+│   ├── request/   # @aura-react-comp/request — HTTP 请求封装
+│   ├── cli/       # @aura-react-comp/cli — MCP Server 与 CLI 工具
 │   └── skill/     # AI 技能定义
 ├── docs/          # 文档站内容
 └── public/        # 静态资源
@@ -34,12 +34,12 @@ aura/
 
 ## 浏览器兼容性
 
-| 浏览器 | 版本 |
-| --- | --- |
-| Chrome | 80+ |
-| Firefox | 80+ |
-| Safari | 14+ |
-| Edge | 80+ |
+| 浏览器  | 版本 |
+| ------- | ---- |
+| Chrome  | 80+  |
+| Firefox | 80+  |
+| Safari  | 14+  |
+| Edge    | 80+  |
 
 ## 版本
 

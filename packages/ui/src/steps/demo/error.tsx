@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Steps } from '@aura/ui';
+import { Button, Steps } from '@aura-react-comp/ui';
 
 /** Step 的 `status="error"` 出错态：支付步骤失败，可回退重试。 */
 export default () => (

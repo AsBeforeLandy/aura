@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space } from '@aura/ui';
+import { Button, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space wrap align="center" size="md">

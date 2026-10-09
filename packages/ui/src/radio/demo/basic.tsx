@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radio, Space } from '@aura/ui';
+import { Radio, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space direction="vertical" size="md">

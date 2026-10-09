@@ -1,5 +1,5 @@
 import React from 'react';
-import { Collapse } from '@aura/ui';
+import { Collapse } from '@aura-react-comp/ui';
 
 /** `expandIconPosition="start"` 箭头在前；`ghost` 极简样式，适合嵌在卡片 / 弹窗内。 */
 export default () => (

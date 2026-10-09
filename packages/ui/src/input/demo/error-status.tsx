@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from '@aura/ui';
+import { Input } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Input.Password status="error" placeholder="密码错误" />

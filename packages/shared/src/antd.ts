@@ -1,6 +1,6 @@
 // Aura 令牌 → antd token 的映射（纯数据，本文件不 import antd）
 //
-// BusinessProvider（@aura/business）与 XProvider（@aura/x）都需要把 Aura 的
+// BusinessProvider（@aura-react-comp/business）与 XProvider（@aura-react-comp/x）都需要把 Aura 的
 // 设计令牌映射成 antd 的 token 覆盖集。把这张映射表收敛在这里作为单一数据源，
 // 各 Provider 只需自行组装 algorithm（1 行），不再各自维护一份映射。
 

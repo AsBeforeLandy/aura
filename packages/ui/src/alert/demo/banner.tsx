@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Space } from '@aura/ui';
+import { Alert, Space } from '@aura-react-comp/ui';
 
 /** `banner` 通栏模式：去圆角、居中展示，适合页面顶部公告。 */
 export default () => (

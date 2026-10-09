@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Badge, Button, Space, Card } from '@aura/ui';
+import { Badge, Button, Space, Card } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [count, setCount] = useState(5);

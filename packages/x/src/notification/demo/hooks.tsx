@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNotification } from '@aura/x';
+import { useNotification } from '@aura-react-comp/x';
 
 export default () => {
   const [{ permission }, { open, close, requestPermission }] = useNotification();

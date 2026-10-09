@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Tag, Typography, Space } from 'antd';
-import { YearCalendar, BusinessProvider } from '@aura/business';
+import { YearCalendar, BusinessProvider } from '@aura-react-comp/business';
 
 const Demo: React.FC = () => {
   const [dates, setDates] = useState<string[]>([

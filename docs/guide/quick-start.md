@@ -10,7 +10,7 @@ toc: content
 
 ```bash [pnpm]
 # 安装组件库
-pnpm add @aura/ui
+pnpm add @aura-react-comp/ui
 
 # 安装 peer dependencies（如果尚未安装）
 pnpm add react@^18 react-dom@^18
@@ -18,7 +18,7 @@ pnpm add react@^18 react-dom@^18
 
 ```bash [yarn]
 # 安装组件库
-yarn add @aura/ui
+yarn add @aura-react-comp/ui
 
 # 安装 peer dependencies（如果尚未安装）
 yarn add react@^18 react-dom@^18
@@ -26,7 +26,7 @@ yarn add react@^18 react-dom@^18
 
 ```bash [npm]
 # 安装组件库
-npm install @aura/ui
+npm install @aura-react-comp/ui
 
 # 安装 peer dependencies（如果尚未安装）
 npm install react@^18 react-dom@^18
@@ -40,26 +40,26 @@ npm install react@^18 react-dom@^18
 
 ```bash [pnpm]
 # 共享工具函数
-pnpm add @aura/shared
+pnpm add @aura-react-comp/shared
 
 # HTTP 请求封装
-pnpm add @aura/request
+pnpm add @aura-react-comp/request
 ```
 
 ```bash [yarn]
 # 共享工具函数
-yarn add @aura/shared
+yarn add @aura-react-comp/shared
 
 # HTTP 请求封装
-yarn add @aura/request
+yarn add @aura-react-comp/request
 ```
 
 ```bash [npm]
 # 共享工具函数
-npm install @aura/shared
+npm install @aura-react-comp/shared
 
 # HTTP 请求封装
-npm install @aura/request
+npm install @aura-react-comp/request
 ```
 
 :::
@@ -69,8 +69,8 @@ npm install @aura/request
 引入组件和样式即可开始使用：
 
 ```tsx | pure
-import { Button, Space } from '@aura/ui';
-import '@aura/ui/style.css';
+import { Button, Space } from '@aura-react-comp/ui';
+import '@aura-react-comp/ui/style.css';
 
 const App = () => (
   <Space>
@@ -82,11 +82,11 @@ const App = () => (
 );
 ```
 
-> **关于主题令牌**：`@aura/ui/style.css` 子路径导出的是 Aura 的主题令牌（`--aura-*` CSS 变量），
+> **关于主题令牌**：`@aura-react-comp/ui/style.css` 子路径导出的是 Aura 的主题令牌（`--aura-*` CSS 变量），
 > 所有 Aura 组件的颜色、圆角、字号、间距都依赖它。
-> 引入 `@aura/ui` 时其入口已自动引入该文件；仅在**单独使用** `@aura/business`
+> 引入 `@aura-react-comp/ui` 时其入口已自动引入该文件；仅在**单独使用** `@aura-react-comp/business`
 > 或需要手动控制样式加载顺序时，才需要显式写这一行。
-> 注意不要使用 `@aura/ui/src/...` 之类的源码路径 —— 发布包中只包含 `esm/` 产物。
+> 注意不要使用 `@aura-react-comp/ui/src/...` 之类的源码路径 —— 发布包中只包含 `esm/` 产物。
 
 ## 主题
 
@@ -103,7 +103,7 @@ document.documentElement.setAttribute('data-theme', 'light');
 也可以使用 ThemeProvider 进行组件级控制：
 
 ```tsx | pure
-import { ThemeProvider, useTheme } from '@aura/ui';
+import { ThemeProvider, useTheme } from '@aura-react-comp/ui';
 
 const App = () => (
   <ThemeProvider theme="dark">
@@ -119,7 +119,7 @@ const App = () => (
 Aura 使用 TypeScript 编写，提供完整的类型导出：
 
 ```tsx | pure
-import type { ButtonProps, ThemeConfig } from '@aura/ui';
+import type { ButtonProps, ThemeConfig } from '@aura-react-comp/ui';
 ```
 
 ## 下一步

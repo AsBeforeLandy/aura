@@ -15,7 +15,7 @@ toc: content
 简单的文字提示气泡框，支持多方向和多种触发方式。
 
 ```tsx | pure
-import { Tooltip } from '@aura/ui';
+import { Tooltip } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

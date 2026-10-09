@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { flushSync } from 'react-dom';
-import { classNames, prefixCls } from '@aura/shared';
-import { CheckCircleFilled, CloseCircleFilled, WarningTriangleFilled, InfoCircleFilled, Loading } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { CheckCircleFilled, CloseCircleFilled, WarningTriangleFilled, InfoCircleFilled, Loading } from '@aura-react-comp/icons';
 import './index.less';
 
 /* ===== 类型定义 ===== */

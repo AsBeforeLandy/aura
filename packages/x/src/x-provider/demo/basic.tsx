@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bubble, MarkdownContent, Sender, useXChat, XProvider } from '@aura/x';
+import { Bubble, MarkdownContent, Sender, useXChat, XProvider } from '@aura-react-comp/x';
 
 const COLORS = [
   { label: '紫罗兰', value: '#7c3aed' },

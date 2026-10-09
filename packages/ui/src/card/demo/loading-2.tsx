@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@aura/ui';
+import { Card } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Card loading style={{ maxWidth: 300 }}>

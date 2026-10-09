@@ -1,4 +1,4 @@
-# @aura/icons
+# @aura-react-comp/icons
 
 Aura 图标库：一组无外部依赖的矢量图标 React 组件。
 
@@ -7,13 +7,13 @@ Aura 图标库：一组无外部依赖的矢量图标 React 组件。
 ## 安装
 
 ```bash
-pnpm add @aura/icons
+pnpm add @aura-react-comp/icons
 ```
 
 ## 使用
 
 ```tsx
-import { CheckCircleFilled, Search, StarFilled } from '@aura/icons';
+import { CheckCircleFilled, Search, StarFilled } from '@aura-react-comp/icons';
 
 // size 默认 24（px），按需显式传入
 <Search size={16} />
@@ -23,12 +23,12 @@ import { CheckCircleFilled, Search, StarFilled } from '@aura/icons';
 
 ## API
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| `size` | 图标尺寸（px，同时作用于宽高） | `number` | `24` |
-| `color` | 图标颜色 | `string` | `'currentColor'` |
-| `className` | 附加 CSS 类名 | `string` | - |
-| `style` | 行内样式 | `CSSProperties` | - |
+| 属性        | 说明                           | 类型            | 默认值           |
+| ----------- | ------------------------------ | --------------- | ---------------- |
+| `size`      | 图标尺寸（px，同时作用于宽高） | `number`        | `24`             |
+| `color`     | 图标颜色                       | `string`        | `'currentColor'` |
+| `className` | 附加 CSS 类名                  | `string`        | -                |
+| `style`     | 行内样式                       | `CSSProperties` | -                |
 
 TwoTone 形态的图标额外支持 `twoToneColor` 指定辅色。
 

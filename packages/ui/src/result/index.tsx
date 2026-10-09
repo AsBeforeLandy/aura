@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { ResultSuccess, ResultError, ResultWarning, ResultInfo, NotFound, Forbidden, ServerError } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { ResultSuccess, ResultError, ResultWarning, ResultInfo, NotFound, Forbidden, ServerError } from '@aura-react-comp/icons';
 import './index.less';
 
 /* ===== 类型定义 ===== */

@@ -15,7 +15,7 @@ toc: content
 警告提示，展示需要关注的信息。
 
 ```tsx | pure
-import { Alert } from '@aura/ui';
+import { Alert } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

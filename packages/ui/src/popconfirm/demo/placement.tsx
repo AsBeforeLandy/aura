@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popconfirm, Space, Button } from '@aura/ui';
+import { Popconfirm, Space, Button } from '@aura-react-comp/ui';
 
 const btnStyle: React.CSSProperties = {
   padding: '4px 12px',

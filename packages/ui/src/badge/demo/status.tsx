@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, Space } from '@aura/ui';
+import { Badge, Space } from '@aura-react-comp/ui';
 
 /** 状态点模式（不计数）：success / processing / error / warning / default 配合文本。 */
 export default () => (

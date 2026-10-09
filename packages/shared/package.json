@@ -1,13 +1,32 @@
 {
-  "name": "@aura/shared",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@aura-react-comp/shared",
+  "version": "0.1.0",
   "description": "Aura 共享工具函数",
+  "keywords": [
+    "aura",
+    "react",
+    "utils",
+    "shared",
+    "design-tokens"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/shared"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
   "type": "module",
   "main": "esm/index.js",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
-  "files": ["esm"],
+  "files": [
+    "esm"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
@@ -21,5 +40,8 @@
     "build": "father build",
     "dev": "father dev"
   },
-  "license": "MIT"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

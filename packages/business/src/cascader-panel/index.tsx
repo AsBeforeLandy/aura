@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Checkbox, Tooltip } from 'antd';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import {
   collectSubtree,
   expandWithDescendants,

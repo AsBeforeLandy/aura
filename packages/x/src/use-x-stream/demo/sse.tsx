@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useXStream } from '@aura/x';
+import { useXStream } from '@aura-react-comp/x';
 
 /**
  * 模拟一条 SSE 响应（真实场景这段由服务端返回）。

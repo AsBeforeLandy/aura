@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, notification, Space } from '@aura/ui';
+import { Button, notification, Space } from '@aura-react-comp/ui';
 
 /** 底部操作区 + 用 key 原位更新通知状态。 */
 export default () => {

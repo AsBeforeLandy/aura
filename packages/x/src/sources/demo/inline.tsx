@@ -1,6 +1,6 @@
 import React from 'react';
-import { Sources } from '@aura/x';
-import type { SourcesItem } from '@aura/x';
+import { Sources } from '@aura-react-comp/x';
+import type { SourcesItem } from '@aura-react-comp/x';
 
 const ITEMS: SourcesItem[] = [
   {

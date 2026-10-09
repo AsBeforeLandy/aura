@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Rate } from '@aura/ui';
+import { Rate } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [value, setValue] = useState(3);

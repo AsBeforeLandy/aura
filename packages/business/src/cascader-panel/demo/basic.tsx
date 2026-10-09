@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, Space } from 'antd';
-import { CascaderPanel, BusinessProvider } from '@aura/business';
-import type { CascaderOption } from '@aura/business';
+import { CascaderPanel, BusinessProvider } from '@aura-react-comp/business';
+import type { CascaderOption } from '@aura-react-comp/business';
 
 const OPTIONS: CascaderOption[] = [
   {

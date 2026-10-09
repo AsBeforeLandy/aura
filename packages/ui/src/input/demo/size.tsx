@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Space } from '@aura/ui';
+import { Input, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space direction="vertical" size="sm">

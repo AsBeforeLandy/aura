@@ -5,8 +5,8 @@ import React, {
   useCallback,
   useState,
 } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { CheckOutline } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { CheckOutline } from '@aura-react-comp/icons';
 import './index.less';
 
 /* ===== Context ===== */

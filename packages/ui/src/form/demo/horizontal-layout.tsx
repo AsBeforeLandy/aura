@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Textarea, Space } from '@aura/ui';
+import { Form, Input, Button, Textarea, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const handleFinish = (values: Record<string, unknown>) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckboxGroup } from '@aura/ui';
+import { CheckboxGroup } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [value, setValue] = useState(['apple']);

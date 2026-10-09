@@ -10,10 +10,10 @@
     "declaration": true,
     "outDir": "./lib",
     "paths": {
-      "@aura/business": ["./src/index.ts"],
-      "@aura/shared": ["../shared/src/index.ts"],
-      "@aura/ui": ["../ui/src/index.ts"],
-      "@aura/icons": ["../icons/src/index.ts"]
+      "@aura-react-comp/business": ["./src/index.ts"],
+      "@aura-react-comp/shared": ["../shared/src/index.ts"],
+      "@aura-react-comp/ui": ["../ui/src/index.ts"],
+      "@aura-react-comp/icons": ["../icons/src/index.ts"]
     }
   },
   "include": ["src"]

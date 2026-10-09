@@ -1,4 +1,4 @@
-# @aura/skill
+# @aura-react-comp/skill
 
 Aura UI 的 AI Skill 提示词资产。
 
@@ -16,7 +16,7 @@ skills/
 
 ## 使用
 
-将 `skills/` 下的 Markdown 文件作为上下文提供给 AI 编码助手（或由 `@aura/cli` 的 `skill` 命令安装），即可让助手按 Aura 的组件规范与设计约定生成代码。
+将 `skills/` 下的 Markdown 文件作为上下文提供给 AI 编码助手（或由 `@aura-react-comp/cli` 的 `skill` 命令安装），即可让助手按 Aura 的组件规范与设计约定生成代码。
 
 ## 维护约定
 

@@ -15,7 +15,7 @@ toc: content
 把一整年铺成一张**连续的「周 × 星期」网格**，高信息密度、无空白位，适用于投票日、活动排期、值班表等需要「一眼看全年」的勾选场景。
 
 ```tsx | pure
-import { YearCalendar } from "@aura/business";
+import { YearCalendar } from '@aura-react-comp/business';
 ```
 
 ## 何时使用
@@ -35,10 +35,10 @@ import { YearCalendar } from "@aura/business";
 
 ## 交互说明
 
-| 操作 | 行为 |
-| --- | --- |
-| 单击日期格 | 切换该日期的选中状态 |
-| 按住拖拽 | 框选一片区域，整体选中或取消 |
+| 操作            | 行为                                          |
+| --------------- | --------------------------------------------- |
+| 单击日期格      | 切换该日期的选中状态                          |
+| 按住拖拽        | 框选一片区域，整体选中或取消                  |
 | `children` 函数 | 接收当前已选日期数组，可自行渲染统计 / 操作区 |
 
 选中结果以 `YYYY-MM-DD` 升序数组输出，保证结果稳定可预期。
@@ -53,22 +53,22 @@ import { YearCalendar } from "@aura/business";
 
 ### YearCalendarProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| year | 年份 | `number` | 当前年份 |
-| value | 受控值（`YYYY-MM-DD` 数组） | `string[]` | - |
-| defaultValue | 非受控默认值 | `string[]` | - |
-| onChange | 值变化回调 | `(dates: string[]) => void` | - |
-| weekStartsOn | 一周起始日，`1` 为周一 | `0 \| 1` | `1` |
-| monthLabels | 月份标签 | `string[]` | 1月~12月 |
-| hideYearTitle | 是否隐藏年份标题 | `boolean` | `false` |
-| color | 未选中单元格颜色 | `string` | `var(--aura-border)` |
-| selectedColor | 选中单元格颜色 | `string` | `var(--aura-primary-700)` |
-| outsideColor | 非本年日期（首尾凑整周）颜色 | `string` | `var(--aura-bg-tertiary)` |
-| cellSize | 自定义单元格尺寸（数字按 px，也可传任意 CSS 长度） | `number \| string` | `13` |
-| weekLabels | 星期标签（7 个） | `string[]` | 一~日 / 日~六 |
-| selectionStyle | 拖拽选区遮罩样式 | `CSSProperties` | - |
-| children | 底部内容，函数形式接收已选日期 | `ReactNode \| ((dates: string[]) => ReactNode)` | - |
+| 属性           | 说明                                               | 类型                                            | 默认值                    |
+| -------------- | -------------------------------------------------- | ----------------------------------------------- | ------------------------- |
+| year           | 年份                                               | `number`                                        | 当前年份                  |
+| value          | 受控值（`YYYY-MM-DD` 数组）                        | `string[]`                                      | -                         |
+| defaultValue   | 非受控默认值                                       | `string[]`                                      | -                         |
+| onChange       | 值变化回调                                         | `(dates: string[]) => void`                     | -                         |
+| weekStartsOn   | 一周起始日，`1` 为周一                             | `0 \| 1`                                        | `1`                       |
+| monthLabels    | 月份标签                                           | `string[]`                                      | 1月~12月                  |
+| hideYearTitle  | 是否隐藏年份标题                                   | `boolean`                                       | `false`                   |
+| color          | 未选中单元格颜色                                   | `string`                                        | `var(--aura-border)`      |
+| selectedColor  | 选中单元格颜色                                     | `string`                                        | `var(--aura-primary-700)` |
+| outsideColor   | 非本年日期（首尾凑整周）颜色                       | `string`                                        | `var(--aura-bg-tertiary)` |
+| cellSize       | 自定义单元格尺寸（数字按 px，也可传任意 CSS 长度） | `number \| string`                              | `13`                      |
+| weekLabels     | 星期标签（7 个）                                   | `string[]`                                      | 一~~日 / 日~~六           |
+| selectionStyle | 拖拽选区遮罩样式                                   | `CSSProperties`                                 | -                         |
+| children       | 底部内容，函数形式接收已选日期                     | `ReactNode \| ((dates: string[]) => ReactNode)` | -                         |
 
 ### 密度调节
 
@@ -76,9 +76,9 @@ import { YearCalendar } from "@aura/business";
 
 ```less
 .my-calendar {
-  --aura-yc-cell: 14px;      /* 单元格边长 */
-  --aura-yc-gap: 2px;        /* 格间距 */
-  --aura-yc-month-gap: 8px;  /* 月份块间距 */
+  --aura-yc-cell: 14px; /* 单元格边长 */
+  --aura-yc-gap: 2px; /* 格间距 */
+  --aura-yc-month-gap: 8px; /* 月份块间距 */
 }
 ```
 

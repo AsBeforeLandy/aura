@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip, Button, Space } from '@aura/ui';
+import { Tooltip, Button, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space size="md">

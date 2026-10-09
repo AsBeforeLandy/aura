@@ -15,7 +15,7 @@ toc: content
 通过键盘输入内容的基础表单组件。
 
 ```tsx | pure
-import { Input } from '@aura/ui';
+import { Input } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

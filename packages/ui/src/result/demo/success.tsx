@@ -1,5 +1,5 @@
 import React from 'react';
-import { Result, Button } from '@aura/ui';
+import { Result, Button } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Result

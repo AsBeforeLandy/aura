@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Space } from 'antd';
-import { PageContainer, BusinessProvider } from '@aura/business';
+import { PageContainer, BusinessProvider } from '@aura-react-comp/business';
 
 const Demo: React.FC = () => (
   <BusinessProvider>

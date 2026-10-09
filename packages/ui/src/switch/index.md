@@ -15,7 +15,7 @@ toc: content
 开关选择器，切换两种状态。
 
 ```tsx | pure
-import { Switch } from '@aura/ui';
+import { Switch } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

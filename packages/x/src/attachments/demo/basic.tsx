@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Attachments } from '@aura/x';
-import type { AttachmentItem } from '@aura/x';
+import { Attachments } from '@aura-react-comp/x';
+import type { AttachmentItem } from '@aura-react-comp/x';
 
 const INITIAL_ITEMS: AttachmentItem[] = [
   { id: 1, name: '需求文档.pdf', size: 1024 * 1024 * 2.4, status: 'done', description: 'PRD v2.3' },

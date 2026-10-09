@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "dumi dev",
     "build": "dumi build",
-    "build:lib": "pnpm -r build && node scripts/postbuild-dts.mjs",
+    "build:lib": "pnpm -r build && node scripts/postbuild-dts.mjs && node scripts/sync-license.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -22,9 +22,11 @@
     "smoke": "node scripts/smoke.mjs",
     "size": "size-limit",
     "commitlint": "commitlint",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build:lib && changeset publish",
     "verify": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build:lib && pnpm size && pnpm smoke",
     "verify:fast": "pnpm lint && pnpm typecheck && pnpm test && pnpm build:lib && pnpm size && pnpm smoke",
-    "prepublishOnly": "pnpm build:lib && pnpm smoke",
     "prepare": "husky && dumi setup",
     "clean": "rm -rf packages/*/lib packages/*/esm packages/*/dist .dumi"
   },
@@ -73,6 +75,7 @@
   "license": "MIT",
   "devDependencies": {
     "@ant-design/icons": "^6",
+    "@changesets/cli": "^2.27.9",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@size-limit/file": "^13.0.3",

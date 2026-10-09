@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, Space } from '@aura/ui';
+import { Badge, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space align="center" size="md">

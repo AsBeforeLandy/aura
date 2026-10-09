@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, AvatarGroup, Space } from '@aura/ui';
+import { Avatar, AvatarGroup, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space direction="vertical" size="md">

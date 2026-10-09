@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Space, Button, Text } from '@aura/ui';
+import { Divider, Space, Button, Text } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space direction="vertical" size="md">

@@ -15,7 +15,7 @@ toc: content
 评分组件，支持半星和自定义星星数量。
 
 ```tsx | pure
-import { Rate } from '@aura/ui';
+import { Rate } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

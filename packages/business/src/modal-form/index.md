@@ -15,7 +15,7 @@ toc: content
 将 antd 的 `Modal` 与 `Form` 组合，内置「校验 → 提交 → 关闭」的完整流程。
 
 ```tsx | pure
-import { ModalForm } from "@aura/business";
+import { ModalForm } from '@aura-react-comp/business';
 ```
 
 ## 何时使用
@@ -38,17 +38,17 @@ import { ModalForm } from "@aura/business";
 
 ### ModalFormProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| open | 是否打开弹窗 | `boolean` | - |
-| title | 弹窗标题 | `ReactNode` | - |
-| onOpenChange | 打开状态变化回调 | `(open: boolean) => void` | - |
-| onFinish | 提交回调（经校验后触发） | `(values) => void \| Promise<void>` | - |
-| initialValues | 表单初始值 | `Record<string, unknown>` | - |
-| okText | 确定按钮文案 | `ReactNode` | `'确定'` |
-| cancelText | 取消按钮文案 | `ReactNode` | `'取消'` |
-| width | 弹窗宽度 | `number \| string` | `520` |
-| resetOnClose | 关闭后是否重置表单 | `boolean` | `true` |
-| maskClosable | 点击蒙层是否可关闭 | `boolean` | `false` |
-| form | 外部受控的表单实例 | `FormInstance` | - |
-| destroyOnHidden | 关闭后是否销毁内容 | `boolean` | `true` |
+| 属性            | 说明                     | 类型                                | 默认值   |
+| --------------- | ------------------------ | ----------------------------------- | -------- |
+| open            | 是否打开弹窗             | `boolean`                           | -        |
+| title           | 弹窗标题                 | `ReactNode`                         | -        |
+| onOpenChange    | 打开状态变化回调         | `(open: boolean) => void`           | -        |
+| onFinish        | 提交回调（经校验后触发） | `(values) => void \| Promise<void>` | -        |
+| initialValues   | 表单初始值               | `Record<string, unknown>`           | -        |
+| okText          | 确定按钮文案             | `ReactNode`                         | `'确定'` |
+| cancelText      | 取消按钮文案             | `ReactNode`                         | `'取消'` |
+| width           | 弹窗宽度                 | `number \| string`                  | `520`    |
+| resetOnClose    | 关闭后是否重置表单       | `boolean`                           | `true`   |
+| maskClosable    | 点击蒙层是否可关闭       | `boolean`                           | `false`  |
+| form            | 外部受控的表单实例       | `FormInstance`                      | -        |
+| destroyOnHidden | 关闭后是否销毁内容       | `boolean`                           | `true`   |

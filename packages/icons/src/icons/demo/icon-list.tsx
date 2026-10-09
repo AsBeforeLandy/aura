@@ -1,7 +1,7 @@
 // @ts-nocheck - demo 文件由 dumi 编译，跨包引用不受 father rootDir 限制
 import React, { useState, useMemo } from 'react';
-import * as Icons from '@aura/icons';
-import { Tabs, TabItem, Input, Flex } from '@aura/ui';
+import * as Icons from '@aura-react-comp/icons';
+import { Tabs, TabItem, Input, Flex } from '@aura-react-comp/ui';
 import './icon-list.less';
 
 const iconCategories: { title: string; icons: string[] }[] = [
@@ -94,7 +94,7 @@ export default function IconList() {
   }, [search, style]);
 
   const handleCopy = (name: string) => {
-    const code = `import { ${name} } from '@aura/icons';`;
+    const code = `import { ${name} } from '@aura-react-comp/icons';`;
     navigator.clipboard.writeText(code).then(() => {
       setCopied(name);
       setTimeout(() => setCopied(null), 2000);
@@ -137,7 +137,7 @@ export default function IconList() {
                 key={name}
                 className="aura-icon-card"
                 onClick={() => handleCopy(name)}
-                title={`点击复制: import { ${name} } from '@aura/icons';`}
+                title={`点击复制: import { ${name} } from '@aura-react-comp/icons';`}
               >
                 <span className={`copied-tip${copied === name ? ' show' : ''}`}>
                   已复制

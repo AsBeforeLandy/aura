@@ -1,9 +1,9 @@
-// @aura/x 样式后处理：
-//   1. 把 src/**/*.less 编译并合并为 esm/style.css（消费方 `import '@aura/x/style.css'` 一次引入）
+// @aura-react-comp/x 样式后处理：
+//   1. 把 src/**/*.less 编译并合并为 esm/style.css（消费方 `import '@aura-react-comp/x/style.css'` 一次引入）
 //   2. 从 esm/**/*.js 中剥离 `.less` 副作用导入——消费方构建器（如 Next.js）没有
 //      less 管线，这些导入会让安装即构建失败
 //
-// 背景：M5 在真实 Next.js 应用中消费 @aura/x 时暴露的打包缺口。
+// 背景：M5 在真实 Next.js 应用中消费 @aura-react-comp/x 时暴露的打包缺口。
 // 运行时机：father build 产出 esm 之后（package.json#build 已串联）。
 
 import fs from 'node:fs';
@@ -28,7 +28,7 @@ async function main() {
   const lessFiles = walk(srcDir, (f) => f.endsWith('.less')).sort();
 
   const parts = [
-    '/* ===== @aura/x styles — 由 scripts/build-styles.mjs 自动生成，请勿手改 ===== */',
+    '/* ===== @aura-react-comp/x styles — 由 scripts/build-styles.mjs 自动生成，请勿手改 ===== */',
   ];
   for (const file of lessFiles) {
     const rel = path.relative(srcDir, file);

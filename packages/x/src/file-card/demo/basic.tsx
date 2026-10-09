@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { FileCard } from '@aura/x';
-import type { FileCardStatus } from '@aura/x';
+import { FileCard } from '@aura-react-comp/x';
+import type { FileCardStatus } from '@aura-react-comp/x';
 
 interface DemoFile {
   id: number;

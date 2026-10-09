@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag, Space } from '@aura/ui';
+import { Tag, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space wrap size="sm">

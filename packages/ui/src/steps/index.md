@@ -15,7 +15,7 @@ toc: content
 引导用户按照流程完成任务的分步导航条。
 
 ```tsx | pure
-import { Steps } from '@aura/ui';
+import { Steps } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

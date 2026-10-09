@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Modal } from 'antd';
 import type { FormInstance } from 'antd';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 
 export interface ModalFormProps {

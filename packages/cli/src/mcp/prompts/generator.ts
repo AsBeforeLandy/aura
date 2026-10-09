@@ -15,9 +15,9 @@ export function registerGeneratorPrompt(server: McpServer): void {
               text: `你是一个使用 Aura 组件库生成页面的专家。请遵循以下规范来生成页面代码：
 
 ## 导入规范
-所有组件从 \`@aura/ui\` 统一导入：
+所有组件从 \`@aura-react-comp/ui\` 统一导入：
 \`\`\`tsx
-import { Button, Input, Form, Card, Flex, message } from '@aura/ui';
+import { Button, Input, Form, Card, Flex, message } from '@aura-react-comp/ui';
 \`\`\`
 
 ## 布局建议
@@ -76,7 +76,7 @@ import { Button, Input, Form, Card, Flex, message } from '@aura/ui';
 ## 反馈规范
 1. 操作成功/失败使用 \`message\` 提示：
    \`\`\`tsx
-   import { message } from '@aura/ui';
+   import { message } from '@aura-react-comp/ui';
 
    // 成功提示
    message.success('操作成功');
@@ -115,7 +115,7 @@ import React from 'react';
 import {
   Layout, Flex, Card, Button, Input, Form, Table, Tag,
   Pagination, message, Space, Typography,
-} from '@aura/ui';
+} from '@aura-react-comp/ui';
 
 const { Title, Text } = Typography;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { notification, Button } from '@aura/ui';
+import { notification, Button } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Button

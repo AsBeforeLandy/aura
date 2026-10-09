@@ -1,5 +1,5 @@
 import React from 'react';
-import { message, Button } from '@aura/ui';
+import { message, Button } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Button onClick={() => message.success('10 秒后消失', 10000)}>

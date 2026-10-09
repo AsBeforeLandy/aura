@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import { Breadcrumb, Skeleton } from 'antd';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 
 export interface PageContainerBreadcrumbItem {

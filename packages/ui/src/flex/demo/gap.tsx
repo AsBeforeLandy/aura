@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Text, Space, Card } from '@aura/ui';
+import { Flex, Text, Space, Card } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space direction="vertical" size="md">

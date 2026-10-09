@@ -35,7 +35,7 @@ abort 生命周期。**不做消息状态管理**——那是 [`useXChat`](/x-co
 
 ```tsx | pure
 import React from 'react';
-import { useXStream } from '@aura/x';
+import { useXStream } from '@aura-react-comp/x';
 
 export default () => {
   const { fetchData, abort, streaming } = useXStream();
@@ -69,31 +69,31 @@ export default () => {
 
 返回值 `UseXStreamResult`：
 
-| 参数 | 说明 | 类型 |
-| --- | --- | --- |
-| streaming | 是否有进行中的流式请求 | `boolean` |
+| 参数      | 说明                                                                                    | 类型                                                 |
+| --------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| streaming | 是否有进行中的流式请求                                                                  | `boolean`                                            |
 | fetchData | 发起一次流式请求并逐条消费。同一时刻只保留一条流：再次调用会先 abort 上一次（静默结束） | `(options: FetchDataStreamOptions) => Promise<void>` |
-| abort | 中止当前流（静默结束：不触发 `onError` / `onDone`） | `() => void` |
+| abort     | 中止当前流（静默结束：不触发 `onError` / `onDone`）                                     | `() => void`                                         |
 
 ### FetchDataStreamOptions
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| url | 流式接口地址 | `string` | - |
-| method | 请求方法；缺省时 body 存在为 POST，否则 GET | `string` | 自动推断 |
-| headers | 请求头 | `Record<string, string>` | `Accept: text/event-stream` |
-| body | 请求体；普通对象自动 `JSON.stringify` 并设置 `Content-Type` | `unknown` | - |
-| onMessage | 每解析出一条消息回调一次 | `(chunk: XStreamChunk) => void` | - |
-| onDone | 流正常结束后回调 | `() => void` | - |
-| onError | 请求或读流出错后回调（abort 不触发） | `(error: Error) => void` | - |
+| 参数      | 说明                                                        | 类型                            | 默认值                      |
+| --------- | ----------------------------------------------------------- | ------------------------------- | --------------------------- |
+| url       | 流式接口地址                                                | `string`                        | -                           |
+| method    | 请求方法；缺省时 body 存在为 POST，否则 GET                 | `string`                        | 自动推断                    |
+| headers   | 请求头                                                      | `Record<string, string>`        | `Accept: text/event-stream` |
+| body      | 请求体；普通对象自动 `JSON.stringify` 并设置 `Content-Type` | `unknown`                       | -                           |
+| onMessage | 每解析出一条消息回调一次                                    | `(chunk: XStreamChunk) => void` | -                           |
+| onDone    | 流正常结束后回调                                            | `() => void`                    | -                           |
+| onError   | 请求或读流出错后回调（abort 不触发）                        | `(error: Error) => void`        | -                           |
 
 ### XStreamChunk
 
-| 参数 | 说明 | 类型 |
-| --- | --- | --- |
-| data | `data` 字段内容；多行 data 以 `\n` 拼接 | `string` |
-| event | `event` 字段，缺省为 `"message"` | `string` |
-| id | `id` 字段（可选） | `string` |
+| 参数  | 说明                                    | 类型     |
+| ----- | --------------------------------------- | -------- |
+| data  | `data` 字段内容；多行 data 以 `\n` 拼接 | `string` |
+| event | `event` 字段，缺省为 `"message"`        | `string` |
+| id    | `id` 字段（可选）                       | `string` |
 
 ## 注意事项
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Textarea, Button, Text } from '@aura/ui';
+import { Form, Input, Textarea, Button, Text } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Form layout="horizontal" colon disabled>

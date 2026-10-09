@@ -1,6 +1,6 @@
 import React from 'react';
-import { ThoughtChain } from '@aura/x';
-import type { ThoughtChainItem } from '@aura/x';
+import { ThoughtChain } from '@aura-react-comp/x';
+import type { ThoughtChainItem } from '@aura-react-comp/x';
 
 /** 检索 → 分析 → 生成：全部成功的完整链路 */
 const DONE_CHAIN: ThoughtChainItem[] = [

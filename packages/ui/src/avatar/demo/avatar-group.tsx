@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, AvatarGroup } from '@aura/ui';
+import { Avatar, AvatarGroup } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <AvatarGroup>

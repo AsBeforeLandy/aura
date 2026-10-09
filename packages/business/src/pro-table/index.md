@@ -15,7 +15,7 @@ toc: content
 把「查询、翻页、展示」三个动作收敛到一个组件内，是标准列表页的开箱方案。
 
 ```tsx | pure
-import { ProTable } from "@aura/business";
+import { ProTable } from '@aura-react-comp/business';
 ```
 
 ## 何时使用
@@ -35,30 +35,30 @@ import { ProTable } from "@aura/business";
 
 ### ProTableProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| columns | 表格列定义 | `TableProps<T>['columns']` | - |
-| request | 数据请求函数 | `(params: ProTableParams) => Promise<ProTableResult<T>>` | - |
-| search | 查询表单配置，传 `false` 关闭 | `SearchFormProps \| false` | - |
-| title | 卡片标题 | `ReactNode` | - |
-| toolbar | 工具栏右侧内容 | `ReactNode` | - |
-| defaultPageSize | 每页条数 | `number` | `10` |
-| rowKey | 行标识 | `string \| (record) => string` | `'id'` |
+| 属性            | 说明                          | 类型                                                     | 默认值 |
+| --------------- | ----------------------------- | -------------------------------------------------------- | ------ |
+| columns         | 表格列定义                    | `TableProps<T>['columns']`                               | -      |
+| request         | 数据请求函数                  | `(params: ProTableParams) => Promise<ProTableResult<T>>` | -      |
+| search          | 查询表单配置，传 `false` 关闭 | `SearchFormProps \| false`                               | -      |
+| title           | 卡片标题                      | `ReactNode`                                              | -      |
+| toolbar         | 工具栏右侧内容                | `ReactNode`                                              | -      |
+| defaultPageSize | 每页条数                      | `number`                                                 | `10`   |
+| rowKey          | 行标识                        | `string \| (record) => string`                           | `'id'` |
 
 其余属性透传给 antd `Table`。
 
 ### ProTableParams
 
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| current | 当前页 | `number` |
-| pageSize | 每页条数 | `number` |
-| ... | 查询表单收集的条件 | `unknown` |
+| 属性     | 说明               | 类型      |
+| -------- | ------------------ | --------- |
+| current  | 当前页             | `number`  |
+| pageSize | 每页条数           | `number`  |
+| ...      | 查询表单收集的条件 | `unknown` |
 
 ### ProTableResult
 
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
-| data | 当前页数据 | `T[]` |
-| total | 数据总数 | `number` |
+| 属性    | 说明                             | 类型      |
+| ------- | -------------------------------- | --------- |
+| data    | 当前页数据                       | `T[]`     |
+| total   | 数据总数                         | `number`  |
 | success | 是否成功（`false` 时保留旧数据） | `boolean` |

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Think } from '@aura/x';
+import { Think } from '@aura-react-comp/x';
 
 export default () => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 560 }}>

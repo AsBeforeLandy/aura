@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mermaid } from '@aura/x';
+import { Mermaid } from '@aura-react-comp/x';
 
 const FLOW = `graph TD
   A[用户提问] --> B{命中知识库?}

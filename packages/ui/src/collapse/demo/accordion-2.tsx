@@ -1,5 +1,5 @@
 import React from 'react';
-import { Collapse } from '@aura/ui';
+import { Collapse } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Collapse accordion>

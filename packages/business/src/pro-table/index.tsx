@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { Card, Table } from 'antd';
 import type { TableProps } from 'antd';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import { SearchForm } from '../search-form';
 import type { SearchFormProps } from '../search-form';
 import './index.less';

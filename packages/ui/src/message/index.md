@@ -15,7 +15,7 @@ toc: content
 全局展示操作反馈信息，轻量级提示。
 
 ```tsx | pure
-import { message } from '@aura/ui';
+import { message } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

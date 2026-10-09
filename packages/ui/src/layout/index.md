@@ -15,7 +15,7 @@ toc: content
 协助进行页面级整体布局的组件。
 
 ```tsx | pure
-import { Layout } from '@aura/ui';
+import { Layout } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

@@ -7,14 +7,14 @@ import {
   Sender,
   Welcome,
   useXChat,
-} from '@aura/x';
+} from '@aura-react-comp/x';
 import type {
   BubbleListItem,
   ConversationItem,
   ConversationMenuConfig,
   PromptItem,
   XMessage,
-} from '@aura/x';
+} from '@aura-react-comp/x';
 
 /* ============ 模拟远端会话存储 ============ */
 

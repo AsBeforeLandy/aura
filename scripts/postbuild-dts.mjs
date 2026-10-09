@@ -30,10 +30,10 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
  * 需要清理的包：**自动派生**，不写死清单。
  *
  * 判据是「用 father 构建」——即产出 `esm/` 的库包（shared / request / icons /
- * ui / business / x）。`@aura/cli`（build: tsc）与 `@aura/skill`（纯 Markdown
+ * ui / business / x）。`@aura-react-comp/cli`（build: tsc）与 `@aura-react-comp/skill`（纯 Markdown
  * 资产）不在此列。
  *
- * 为什么不再硬编码：`@aura/x` 加入 workspace 时这份清单没同步，导致它的
+ * 为什么不再硬编码：`@aura-react-comp/x` 加入 workspace 时这份清单没同步，导致它的
  * 12 个 `.d.ts` 长期残留 `import './index.less'`（消费方 `skipLibCheck: false`
  * 下逐文件报 TS2882）。派生后新增包自动纳入，不会再漏。
  */

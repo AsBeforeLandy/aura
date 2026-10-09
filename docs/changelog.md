@@ -2,6 +2,47 @@
 
 > 与仓库根目录的 `CHANGELOG.md` 保持同步；以下为面向使用者的摘要，按时间倒序。
 
+## 未发布 · 2026-10-08（包名迁移与发布链路落成）
+
+### 破坏性变更
+
+- **npm 包名全部更换**：`@aura/*` → `@aura-react-comp/*`
+  （例：`@aura/ui` → `@aura-react-comp/ui`，`@aura/x` → `@aura-react-comp/x`）。
+  原因是 npm 要求 scope 必须与组织名完全一致，而 `aura` 组织名已被占用。
+  迁移**只针对包标识符**——样式类名、CSS 变量（`--aura-*`）、CLI 的 bin 名与品牌名
+  Aura 均未变动，组件 API 与样式接口完全兼容。
+  升级方式：替换依赖名与 `import` 路径即可。
+
+  ```diff
+  - import { Button } from '@aura/ui';
+  - import '@aura/ui/style.css';
+  + import { Button } from '@aura-react-comp/ui';
+  + import '@aura-react-comp/ui/style.css';
+  ```
+
+### 新增
+
+- 6 个包**首次发布到 npm**，版本 `0.1.0`：`shared` / `request` / `icons` /
+  `ui` / `business` / `x`
+- 引入 **changesets** 管理各包版本与 CHANGELOG，不再手改版本号
+- 新增 `.github/workflows/release.yml`：CI 自动发布（main 直发 + changesets，带
+  provenance 供应链声明），并提供 `pnpm release` 供本地直接发布
+- 新增「[发布流程](/guide/releasing)」指南页：含首次发布的特殊性、Trusted Publisher
+  绑定清单与失败排查表
+
+### 修复
+
+- 补齐 8 个包缺失的 npm 元数据（`repository` / `homepage` / `bugs` /
+  `publishConfig` / `keywords` / `author`）——其中 `repository.url` 缺失会导致
+  OIDC provenance 校验失败
+- `packages/x` 此前没有 README，npm 页面会是空白，已补齐
+- 各包目录补上 LICENSE：npm 只打包包目录内的文件，仓库根的 LICENSE 不会自动继承
+
+### 内部
+
+- 删除根 `prepublishOnly`：`pnpm -r publish` 会对**每个包各触发一次**，等于把全量
+  构建重复跑 6 遍；门禁改为发布流程中显式执行一次 `pnpm verify`
+
 ## 未发布 · 2026-09-17（PdfViewer 与文档站修复）
 
 ### 新增
@@ -19,14 +60,14 @@
 - 文档与 demo 补全：新增 7 个可交互 demo（XProvider 主色切换、SSE 实况解析、
   消息状态机、变体矩阵、插槽组合、Sender 键位、Prompts 方向），XProvider 页新增组件总览表
 - `Actions`（消息操作组）与 `Conversations`（会话管理列表）两个新组件；
-  `Sender` 新增 `submitType` / `autoSize` / `header` / `footer`，文档页同步更新；侧栏按 RICH 阶段分为七组（主题桥接 / 数据流 / 交互 / 反馈 / 会话 / 引导 / 推理）；Actions 与图标包接入——@aura/icons 收录 ThumbUp / ThumbDown，Actions demo 改用 Copy / Refresh / ThumbUp / Delete 图标
+  `Sender` 新增 `submitType` / `autoSize` / `header` / `footer`，文档页同步更新；侧栏按 RICH 阶段分为七组（主题桥接 / 数据流 / 交互 / 反馈 / 会话 / 引导 / 推理）；Actions 与图标包接入——@aura-react-comp/icons 收录 ThumbUp / ThumbDown，Actions demo 改用 Copy / Refresh / ThumbUp / Delete 图标
 - **M5 收尾**：全组件视觉升级（玻璃拟态 + 品牌渐变 + 光晕，`prefers-reduced-motion`
-  下关闭动效）；修复样式打包缺口（新增 `@aura/x/style.css`，esm 剥离 less 导入）；
+  下关闭动效）；修复样式打包缺口（新增 `@aura-react-comp/x/style.css`，esm 剥离 less 导入）；
   在 Next.js 14 应用（AIChat Pro）中完成真实消费方验证；
   llms.txt 补齐业务组件与 AI 组件摘要
 - 46 个组件文档全量体检补全（孤儿示例、frontmatter、导入片段等六类缺口）
-- 新增第 8 个包 `@aura/x`（AI 对话组件库，对标 Ant Design X）：M1 交付 `XProvider`
-  主题桥接、`--aura-x-*` 令牌组与「AI 组件」导航；令牌映射收敛到 `@aura/shared` 共享
+- 新增第 8 个包 `@aura-react-comp/x`（AI 对话组件库，对标 Ant Design X）：M1 交付 `XProvider`
+  主题桥接、`--aura-x-*` 令牌组与「AI 组件」导航；令牌映射收敛到 `@aura-react-comp/shared` 共享
 - 文档站更新日志与根 CHANGELOG 同步（本条）
 
 ### 修复
@@ -69,7 +110,7 @@
 
 ### 修复
 
-- 交付链路：`@aura/business` 声明文件产出恢复；从 `.d.ts` 剥离样式副作用导入，
+- 交付链路：`@aura-react-comp/business` 声明文件产出恢复；从 `.d.ts` 剥离样式副作用导入，
   下游 `skipLibCheck: false` 不再报错
 - `Checkbox` 非受控用法完全失效等 a11y 缺陷；ESLint 告警 172 条清零
 
@@ -81,7 +122,7 @@
 
 ### 新增
 
-- `@aura/business` 业务组件包（链接共享 `@aura/ui`，防止 CSS 变量缺失）
+- `@aura-react-comp/business` 业务组件包（链接共享 `@aura-react-comp/ui`，防止 CSS 变量缺失）
 - **ProTable** / **SearchForm** 业务组件与文档、测试
 - CI：GitHub Pages 部署迁移至 GitHub Actions
 
@@ -89,14 +130,13 @@
 
 ### 新增
 
-- `@aura/icons` 图标包（替换内联 SVG）；文档站主题改版（glassmorphism 风格）
+- `@aura-react-comp/icons` 图标包（替换内联 SVG）；文档站主题改版（glassmorphism 风格）
 - AI 指南与导航；FAQ / 安装 / 语义结构文档；GitHub Pages 部署配置
 - `Form.Item` 自定义 `valuePropName`；`Spin` 无障碍与测试增强
 
 ### 变更
 
 - `@aura` 全局改名、路径解析标准化；包治理与代码质量清理
-
 
 ## 0.0.1
 
@@ -115,9 +155,9 @@
   - 表单高级：Slider、Rate、Upload、Form
   - 布局：Layout、Flex、Scrollbar
 - ThemeProvider 和 useTheme 钩子
-- HTTP 请求封装（`@aura/request`）
-- 共享工具函数（`@aura/shared`）
-- MCP Server（`@aura/cli`）— AI 助手可查询组件 API
+- HTTP 请求封装（`@aura-react-comp/request`）
+- 共享工具函数（`@aura-react-comp/shared`）
+- MCP Server（`@aura-react-comp/cli`）— AI 助手可查询组件 API
 - LLM 文档生成（llms.txt、llms-full.txt、llms-semantic.md）
 - Vitest 测试框架
 - dumi 2 文档站

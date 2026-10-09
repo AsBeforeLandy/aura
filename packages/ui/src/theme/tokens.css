@@ -98,7 +98,7 @@
   --aura-duration-slow: 300ms;
   --aura-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* ===== AI 组件（@aura/x） ===== */
+  /* ===== AI 组件（@aura-react-comp/x） ===== */
   --aura-x-bubble-ai-bg: rgba(255, 255, 255, 0.72);
   --aura-x-bubble-user-bg: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
   --aura-x-bubble-user-text: #ffffff;
@@ -167,7 +167,7 @@
   --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
   --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.4);
 
-  /* ===== AI 组件（@aura/x） ===== */
+  /* ===== AI 组件（@aura-react-comp/x） ===== */
   --aura-x-bubble-ai-bg: rgba(26, 26, 62, 0.55);
   --aura-x-bubble-user-bg: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
   --aura-x-bubble-user-text: #f3f4f6;

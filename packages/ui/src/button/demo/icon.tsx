@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Space } from '@aura/ui';
-import { Plus, Search } from '@aura/icons';
+import { Button, Space } from '@aura-react-comp/ui';
+import { Plus, Search } from '@aura-react-comp/icons';
 
 /** icon 属性：图标置于内容左侧；loading 时自动替换为旋转图标。 */
 export default () => (

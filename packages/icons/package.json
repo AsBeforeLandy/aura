@@ -1,13 +1,32 @@
 {
-  "name": "@aura/icons",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@aura-react-comp/icons",
+  "version": "0.1.0",
   "description": "Aura 图标库",
+  "keywords": [
+    "aura",
+    "react",
+    "icons",
+    "svg",
+    "icon-set"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/icons"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
   "type": "module",
   "main": "esm/index.js",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
-  "files": ["esm"],
+  "files": [
+    "esm"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
@@ -25,5 +44,8 @@
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
-  "license": "MIT"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

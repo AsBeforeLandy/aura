@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import { CodeHighlighter } from '../code-highlighter';
 import {
   addNodeAt,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Textarea } from '@aura/ui';
+import { Textarea } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Textarea autoSize placeholder="高度随内容自动调整" />

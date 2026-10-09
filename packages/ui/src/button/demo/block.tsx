@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space } from '@aura/ui';
+import { Button, Space } from '@aura-react-comp/ui';
 
 /** block 撑满容器；href 渲染为链接按钮，禁用时不可点击。 */
 export default () => (

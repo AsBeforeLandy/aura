@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useXChat, type XMessage } from '@aura/x';
+import { useXChat, type XMessage } from '@aura-react-comp/x';
 
 /** mock 传输：逐字吐出，模拟流式响应（真实场景替换为 fetch / useXStream） */
 async function mockRequest(

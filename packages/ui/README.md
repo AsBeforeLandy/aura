@@ -1,11 +1,11 @@
-# @aura/ui
+# @aura-react-comp/ui
 
 Aura 自研组件库：基于 React 18 的现代化、AI 友好组件库，采用 CSS Variables 主题体系。
 
 ## 安装
 
 ```bash
-pnpm add @aura/ui
+pnpm add @aura-react-comp/ui
 ```
 
 `react` / `react-dom` 为 peerDependencies，需由使用方提供（>=18）。
@@ -13,8 +13,8 @@ pnpm add @aura/ui
 ## 使用
 
 ```tsx
-import { Button, Space } from '@aura/ui';
-import '@aura/ui/style.css';
+import { Button, Space } from '@aura-react-comp/ui';
+import '@aura-react-comp/ui/style.css';
 
 const App = () => (
   <Space>
@@ -24,15 +24,15 @@ const App = () => (
 );
 ```
 
-> 引入 `@aura/ui` 时其入口已自动引入主题令牌，`import '@aura/ui/style.css'` 仅在你需要手动控制样式加载顺序时才需显式书写。
-> 请勿使用 `@aura/ui/src/...` 这类源码路径 —— 发布包只包含 `esm/` 产物。
+> 引入 `@aura-react-comp/ui` 时其入口已自动引入主题令牌，`import '@aura-react-comp/ui/style.css'` 仅在你需要手动控制样式加载顺序时才需显式书写。
+> 请勿使用 `@aura-react-comp/ui/src/...` 这类源码路径 —— 发布包只包含 `esm/` 产物。
 
 ## 主题
 
-通过 CSS Variables 控制，支持亮色 / 暗色。令牌定义在 `@aura/ui/style.css`，可用 `ThemeProvider` 与 `useTheme` 切换：
+通过 CSS Variables 控制，支持亮色 / 暗色。令牌定义在 `@aura-react-comp/ui/style.css`，可用 `ThemeProvider` 与 `useTheme` 切换：
 
 ```tsx
-import { ThemeProvider, useTheme } from '@aura/ui';
+import { ThemeProvider, useTheme } from '@aura-react-comp/ui';
 ```
 
 覆盖单个别名即可定制主题：
@@ -46,15 +46,15 @@ import { ThemeProvider, useTheme } from '@aura/ui';
 
 ## 组件总览（36 个）
 
-| 分类 | 组件 |
-| --- | --- |
-| 通用 | Button、Icon、Typography、Space、Divider |
-| 布局 | Layout、Flex、Scrollbar |
-| 导航 | Menu、Breadcrumb、Pagination、Steps、Dropdown |
-| 表单 | Input、Textarea、Select、Checkbox、Radio、Switch |
-| 表单高级 | Slider、Rate、Upload、Form |
+| 分类     | 组件                                                     |
+| -------- | -------------------------------------------------------- |
+| 通用     | Button、Icon、Typography、Space、Divider                 |
+| 布局     | Layout、Flex、Scrollbar                                  |
+| 导航     | Menu、Breadcrumb、Pagination、Steps、Dropdown            |
+| 表单     | Input、Textarea、Select、Checkbox、Radio、Switch         |
+| 表单高级 | Slider、Rate、Upload、Form                               |
 | 数据展示 | Tag、Badge、Avatar、Tooltip、Card、Collapse、Tabs、Empty |
-| 反馈 | Alert、Spin、Message、Notification、Result、Popconfirm |
+| 反馈     | Alert、Spin、Message、Notification、Result、Popconfirm   |
 
 完整 API 与在线示例见文档站。
 

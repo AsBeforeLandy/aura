@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Space } from '@aura/ui';
+import { Alert, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space direction="vertical" size="md">

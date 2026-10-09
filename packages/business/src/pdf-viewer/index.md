@@ -15,7 +15,7 @@ toc: content
 基于 pdf.js 的弹窗式 PDF 预览。支持翻页、缩放、旋转与拖拽平移；打开时按需加载，关闭即销毁文档与渲染资源。触发方式（按钮、链接、表格行点击）由调用方组合，组件只负责预览本身。
 
 ```tsx | pure
-import { PdfViewer } from "@aura/business";
+import { PdfViewer } from '@aura-react-comp/business';
 ```
 
 ## 何时使用
@@ -26,22 +26,22 @@ import { PdfViewer } from "@aura/business";
 
 ## 与 iframe 方案的对比
 
-| | PdfViewer（pdf.js canvas 渲染） | iframe（浏览器内置阅读器） |
-| --- | --- | --- |
-| 观感一致性 | 各浏览器一致 | 随浏览器不同（移动端常直接触发下载） |
-| 交互能力 | 翻页 / 缩放 / 旋转 / 平移可控 | 依赖浏览器实现 |
-| 资源释放 | 关闭即 `destroy()` | 由浏览器接管，不可控 |
-| 依赖体积 | pdfjs-dist（外部依赖，宿主打包） | 无 |
+|            | PdfViewer（pdf.js canvas 渲染）  | iframe（浏览器内置阅读器）           |
+| ---------- | -------------------------------- | ------------------------------------ |
+| 观感一致性 | 各浏览器一致                     | 随浏览器不同（移动端常直接触发下载） |
+| 交互能力   | 翻页 / 缩放 / 旋转 / 平移可控    | 依赖浏览器实现                       |
+| 资源释放   | 关闭即 `destroy()`               | 由浏览器接管，不可控                 |
+| 依赖体积   | pdfjs-dist（外部依赖，宿主打包） | 无                                   |
 
 ## 交互说明
 
-| 操作 | 行为 |
-| --- | --- |
-| 拖拽画布 | 平移（鼠标与触摸统一，Pointer 事件实现，按帧合并更新） |
-| 缩小 / 放大 | 以 20% 步进缩放，到达边界自动禁用 |
-| 旋转 | 每次 +90°，归一化到 0 / 90 / 180 / 270 |
-| 上一页 / 下一页 | 页码钳制在 `[1, 总页数]`，翻页后平移复位 |
-| 关闭 | 触发 `onOpenChange(false)` 并销毁文档资源 |
+| 操作            | 行为                                                   |
+| --------------- | ------------------------------------------------------ |
+| 拖拽画布        | 平移（鼠标与触摸统一，Pointer 事件实现，按帧合并更新） |
+| 缩小 / 放大     | 以 20% 步进缩放，到达边界自动禁用                      |
+| 旋转            | 每次 +90°，归一化到 0 / 90 / 180 / 270                 |
+| 上一页 / 下一页 | 页码钳制在 `[1, 总页数]`，翻页后平移复位               |
+| 关闭            | 触发 `onOpenChange(false)` 并销毁文档资源              |
 
 ## 代码演示
 
@@ -53,28 +53,28 @@ import { PdfViewer } from "@aura/business";
 
 ### PdfViewerProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| url | PDF 文件地址（需同源，或服务端允许跨域） | `string` | - |
-| open | 是否显示预览弹窗（受控） | `boolean` | - |
-| defaultOpen | 默认是否显示（非受控） | `boolean` | `false` |
-| onOpenChange | 弹窗显隐变化回调 | `(open: boolean) => void` | - |
-| title | 弹窗标题 | `ReactNode` | `'文档预览'` |
-| initialScale | 初始缩放比例（1 = 100%） | `number` | `1` |
-| scaleRange | 缩放范围 `[最小, 最大]` | `[number, number]` | `[0.5, 3]` |
-| width | 弹窗宽度。默认取 **A4 纸宽度**（`210mm` ≈ 794px），使 A4 文档恰好按 100% 呈现；数字按 px，也可传任意 CSS 长度（如 `'96%'`），窄屏下由 antd 按视口自动收敛 | `number \| string` | `'210mm'` |
-| autoFitWidth | 文档加载完成后按容器宽度自动适配缩放（「适合宽度」）。pdf.js 的 `scale = 1` 是「1pt = 1px」，A4 只渲染 595px 宽，放进 A4 弹窗会留白；开启后按可用宽度反推缩放并钳制在 `scaleRange` 内，用户手动缩放后不再干预 | `boolean` | `true` |
-| workerSrc | pdf.js worker 脚本地址；传入后用独立线程渲染 | `string` | -（主线程渲染） |
-| assetBaseUrl | pdf.js 资源基地址（cmaps / wasm / iccs / standard_fonts） | `string` | 按运行时版本推导的 CDN |
-| pdfjsSrc | 运行时加载 pdf.js 主模块的地址（绕开打包器），见「已知问题」 | `string` | -（用打包进产物的实例） |
-| onPageChange | 页码变化回调 | `(page: number) => void` | - |
-| className | 自定义类名 | `string` | - |
-| style | 自定义样式 | `CSSProperties` | - |
+| 属性         | 说明                                                                                                                                                                                                          | 类型                      | 默认值                  |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
+| url          | PDF 文件地址（需同源，或服务端允许跨域）                                                                                                                                                                      | `string`                  | -                       |
+| open         | 是否显示预览弹窗（受控）                                                                                                                                                                                      | `boolean`                 | -                       |
+| defaultOpen  | 默认是否显示（非受控）                                                                                                                                                                                        | `boolean`                 | `false`                 |
+| onOpenChange | 弹窗显隐变化回调                                                                                                                                                                                              | `(open: boolean) => void` | -                       |
+| title        | 弹窗标题                                                                                                                                                                                                      | `ReactNode`               | `'文档预览'`            |
+| initialScale | 初始缩放比例（1 = 100%）                                                                                                                                                                                      | `number`                  | `1`                     |
+| scaleRange   | 缩放范围 `[最小, 最大]`                                                                                                                                                                                       | `[number, number]`        | `[0.5, 3]`              |
+| width        | 弹窗宽度。默认取 **A4 纸宽度**（`210mm` ≈ 794px），使 A4 文档恰好按 100% 呈现；数字按 px，也可传任意 CSS 长度（如 `'96%'`），窄屏下由 antd 按视口自动收敛                                                     | `number \| string`        | `'210mm'`               |
+| autoFitWidth | 文档加载完成后按容器宽度自动适配缩放（「适合宽度」）。pdf.js 的 `scale = 1` 是「1pt = 1px」，A4 只渲染 595px 宽，放进 A4 弹窗会留白；开启后按可用宽度反推缩放并钳制在 `scaleRange` 内，用户手动缩放后不再干预 | `boolean`                 | `true`                  |
+| workerSrc    | pdf.js worker 脚本地址；传入后用独立线程渲染                                                                                                                                                                  | `string`                  | -（主线程渲染）         |
+| assetBaseUrl | pdf.js 资源基地址（cmaps / wasm / iccs / standard_fonts）                                                                                                                                                     | `string`                  | 按运行时版本推导的 CDN  |
+| pdfjsSrc     | 运行时加载 pdf.js 主模块的地址（绕开打包器），见「已知问题」                                                                                                                                                  | `string`                  | -（用打包进产物的实例） |
+| onPageChange | 页码变化回调                                                                                                                                                                                                  | `(page: number) => void`  | -                       |
+| className    | 自定义类名                                                                                                                                                                                                    | `string`                  | -                       |
+| style        | 自定义样式                                                                                                                                                                                                    | `CSSProperties`           | -                       |
 
 ### CSS 变量
 
-| 变量 | 说明 | 默认值 |
-| --- | --- | --- |
+| 变量                          | 说明       | 默认值 |
+| ----------------------------- | ---------- | ------ |
 | --aura-pdf-viewer-body-height | 预览区高度 | `70vh` |
 
 ## worker 与渲染模式

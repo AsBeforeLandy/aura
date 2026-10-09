@@ -1,7 +1,7 @@
 import React from 'react';
 import type { TableProps } from 'antd';
 import { Button, Tag } from 'antd';
-import { ProTable, BusinessProvider } from '@aura/business';
+import { ProTable, BusinessProvider } from '@aura-react-comp/business';
 
 interface UserRecord extends Record<string, unknown> {
   id: number;

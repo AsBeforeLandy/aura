@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pagination } from '@aura/ui';
+import { Pagination } from '@aura-react-comp/ui';
 
 /** `showTotal` 展示总条数与当前区间；`pageSizeOptions` 自定义条数选项；`onShowSizeChange` 独立回调。 */
 export default () => {

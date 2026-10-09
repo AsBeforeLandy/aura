@@ -158,7 +158,7 @@ function open(args: XNotificationOpenArgs): void {
  * XNotification — 浏览器**系统通知**的命令式 API（对标 antdx 的 `notification`）。
  *
  * 注意这是「页面外的系统级通知」，走 `window.Notification`，受操作系统与浏览器
- * 通知权限管控——**不是**页面内的消息条。页面内的提示请用 `@aura/ui` 的
+ * 通知权限管控——**不是**页面内的消息条。页面内的提示请用 `@aura-react-comp/ui` 的
  * `Notification` / `Message`。
  */
 export const XNotification: XNotificationApi = {

@@ -15,7 +15,7 @@ toc: content
 图标右上角的徽标数字，支持多种颜色和独立使用。
 
 ```tsx | pure
-import { Badge } from '@aura/ui';
+import { Badge } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

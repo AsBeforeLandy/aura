@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Actions } from '@aura/x';
-import { Copy, Delete, Refresh, ThumbUp } from '@aura/icons';
+import { Actions } from '@aura-react-comp/x';
+import { Copy, Delete, Refresh, ThumbUp } from '@aura-react-comp/icons';
 
 export default () => {
   const [liked, setLiked] = useState(false);

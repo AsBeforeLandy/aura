@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RadioGroup } from '@aura/ui';
+import { RadioGroup } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [value, setValue] = useState('a');

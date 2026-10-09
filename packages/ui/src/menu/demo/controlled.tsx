@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Text, Space } from '@aura/ui';
+import { Menu, Text, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [selected, setSelected] = useState('home');

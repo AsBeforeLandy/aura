@@ -39,7 +39,7 @@ toc: content
 
 ```tsx | pure
 import React from 'react';
-import { useXChat, useXStream } from '@aura/x';
+import { useXChat, useXStream } from '@aura-react-comp/x';
 
 export default () => {
   const { fetchData } = useXStream();

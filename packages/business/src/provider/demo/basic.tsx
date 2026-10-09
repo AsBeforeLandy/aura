@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Card, Input, Space, Switch, Tag } from 'antd';
-import { BusinessProvider } from '@aura/business';
+import { BusinessProvider } from '@aura-react-comp/business';
 
 const Demo = () => {
   const [dark, setDark] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { Folder } from '@aura/x';
-import type { FileContentService, FolderTreeData } from '@aura/x';
+import { Folder } from '@aura-react-comp/x';
+import type { FileContentService, FolderTreeData } from '@aura-react-comp/x';
 
 const TREE: FolderTreeData[] = [
   {

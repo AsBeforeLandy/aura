@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip, Button, Space, Flex } from '@aura/ui';
+import { Tooltip, Button, Space, Flex } from '@aura-react-comp/ui';
 
 
 const Demo: React.FC = () => (

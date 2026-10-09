@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Checkbox, Space } from '@aura/ui';
+import { Checkbox, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [checked, setChecked] = useState(false);

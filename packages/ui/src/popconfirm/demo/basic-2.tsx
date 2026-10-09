@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popconfirm, Button, Space } from '@aura/ui';
+import { Popconfirm, Button, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space size="md">

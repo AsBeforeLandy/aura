@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Space } from '@aura/ui';
+import { Button, Form, Input, Space } from '@aura-react-comp/ui';
 
 /** `Form.useForm()` 创建实例：编辑回填（setFieldsValue）与外部提交（validateFields）。 */
 export default () => {

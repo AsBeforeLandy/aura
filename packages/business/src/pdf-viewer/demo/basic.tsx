@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Space, Tag } from 'antd';
-import { PdfViewer } from '@aura/business';
+import { PdfViewer } from '@aura-react-comp/business';
 
 const Demo = () => {
   const [open, setOpen] = useState(false);

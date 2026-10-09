@@ -4,6 +4,53 @@
 
 ## [Unreleased]
 
+### Changed — 包名 scope 迁移至 `@aura-react-comp/*`，发布链路落成
+
+仓库此前所有包都在 `@aura/*` 下，但 npm 要求 **scope 必须与组织名完全一致**，
+而 `aura` 这个组织名已被占用。为此把 8 个包的标识符统一迁移到实际持有的组织
+`@aura-react-comp` 下，并把从零到一的发布链路补齐。
+
+- **包名迁移**：全仓 447 个文件、748 处 `@aura/` → `@aura-react-comp/`。
+  替换只针对这一条前缀模式，因此 `--aura-*` 主题令牌、dumi 的
+  `base: '/aura/'`、CLI 的 bin 名 `aura`、品牌名 `Aura` 均未被波及。
+  alias（`.dumirc.ts` / `vitest.config.ts`）与 `tsconfig.json#paths` 同步更新，
+  并保持了「`.../ui/style.css` 必须排在 `.../ui` 之前」的声明顺序。
+- **npm 元数据补齐**：8 个包此前**全部缺失** `repository` / `homepage` / `bugs` /
+  `publishConfig` / `keywords` / `author`。`repository.url` 是 OIDC provenance 与
+  `npm trust` 的强校验项，缺失或不匹配会直接报 E422。
+- **6 个库包转为可发布**：`shared` / `request` / `icons` / `ui` / `business` / `x`
+  移除 `private`，版本由占位的 `0.0.1` 提为 **`0.1.0`**，并写入
+  `publishConfig.access: public`（scoped 包首发缺它会撞 402 付费墙）。
+  `cli` / `skill` 维持 `private`，留待二期。
+- **`packages/x` 补齐 `README.md`**：此前它是唯一没有 README 的包，npm 页面会是空白。
+  新 README 同时说明了它对基础设计令牌的依赖关系。
+- **新增 `scripts/sync-license.mjs`**：npm 只会打包**包目录内**的文件，仓库根的
+  LICENSE 不会自动继承。该脚本按 `private !== true` 自动派生待发布包清单，
+  把根 LICENSE 同步到各包目录，并接入 `build:lib`。
+- **删除根 `prepublishOnly`**：`pnpm -r publish` 会对**每个包各触发一次**该钩子，
+  等于把全量构建重复跑 6 遍。门禁改为在发布流程中显式执行一次 `pnpm verify`。
+- **引入 changesets**：新增 `.changeset/config.json`（`access: public`、
+  `baseBranch: master`、`updateInternalDependencies: patch`，不设 `fixed` 组）
+  与日常使用说明；各包版本与 CHANGELOG 后续由 `changeset version` 统一产出，
+  不再手改。
+- **新增 `.github/workflows/release.yml`**：发布工作流，链路与 aura-vue 对齐
+  （**main 直发，不走版本 PR**）：门禁 → changesets 消费版本并提交回 master →
+  发布到 npm（带 provenance 供应链声明）→ 推 tag。认证走 `NPM_TOKEN`
+  ——首次发布时包在 npm 上尚不存在、无法绑定 Trusted Publisher，这条路必须留着。
+  `id-token: write` 已就位，将来为 6 个包绑好 Trusted Publisher 后删掉
+  `NODE_AUTH_TOKEN` 即可自动切到 OIDC。未配置 `NPM_TOKEN` 时整体跳过发布，
+  链路仍然跑得通、CI 不会红。
+- **发布脚本对齐 aura-vue**：新增 `pnpm release`（构建 + 发布）与 `pnpm version`。
+  changesets 的 changelog 改用**默认实现**——`@changesets/changelog-github` 要访问
+  GitHub API，会让「本地直接发布」拿不到 PR 信息。
+- **文档**：新增「发布流程」指南页（本地直接发布 / CI 自动发布 / dist-tag 与
+  beta 周期 / 失败排查表）。
+
+> 与 npm 认证现状相关的背景：classic / automation token 已下线，只剩
+> Granular Access Token（须勾选 Bypass 2FA）；Trusted Publisher 只能绑定
+> **已存在**的包，因此全新包名的**首次发布必须先用 token 发一次**，
+> 之后才能切到 OIDC。这两个约束决定了发布流程分两段。
+
 ### Docs — 新增「工程化工具链」页，并消除「守护机制」的两处真相
 
 梳理仓库工具链时发现：`docs/guide/standards.md` 的「守护机制」表与
@@ -78,7 +125,7 @@ Prettier 输出的文件远超预期——**仅 `packages/ui` 一个包就有 24
 全仓保守估计 **360+**（分片扫描被沙箱中断，实际只会更多）。
 
 这个数字直接否掉了「全量重排」：一个改写 360+ 个文件的 `style:` 提交会让
-**整个 `@aura/ui` 的 `git blame` 失去意义**，代价与收益完全不成比例。
+**整个 `@aura-react-comp/ui` 的 `git blame` 失去意义**，代价与收益完全不成比例。
 
 - **采纳「增量收敛」**：`lint-staged` 的 prettier 范围由 `*.json` 扩到
   `*.{json,less,md,yml,yaml}`——只格式化**暂存**文件，不做全量重排。
@@ -93,10 +140,10 @@ Prettier 输出的文件远超预期——**仅 `packages/ui` 一个包就有 24
   现在角色明确为**收敛进度探针** + 提交期已强制格式 + 有退出判据，
   因此**从 P0 降为 P2**（跟踪项，自愈型）。结论：**「已知缺口」里 P0 已清零**。
 
-### Fixed — `@aura/request` 补上体积预算（体积预算覆盖 5/6 → 6/6）
+### Fixed — `@aura-react-comp/request` 补上体积预算（体积预算覆盖 5/6 → 6/6）
 
 同批缺口里最容易清的一个：`size-limit` 只给 5 个 father 库包设了预算，
-`@aura/request` 一直没被守护。实测产物 **1.06 kB brotlied**，按仓库惯例
+`@aura-react-comp/request` 一直没被守护。实测产物 **1.06 kB brotlied**，按仓库惯例
 （圆整 + 约 1.9x 余量）定为 **2 kB**，并把 6 条预算按包表顺序重排
 （shared / request / icons / ui / business / x）。
 
@@ -171,7 +218,7 @@ Promise<XMessage[]>`，可异步拉取历史。只在**挂载**与 **`conversati
   关回朴素 / 完全自定义）与两条实现说明；`CodeHighlighter` 页的「何时使用」
   改为说明它已被 Markdown 默认接入；`llms.txt` 同步。
 
-### Added — `@aura/x` M8：补齐 antdx 剩余 5 个组件（官方组件全量覆盖）
+### Added — `@aura-react-comp/x` M8：补齐 antdx 剩余 5 个组件（官方组件全量覆盖）
 
 至此 `@ant-design/x` 官方总览页的 17 个组件 / API 在本库**全部实现**，
 「对标 Ant Design X」覆盖表清零：
@@ -213,7 +260,7 @@ Promise<XMessage[]>`，可异步拉取历史。只在**挂载**与 **`conversati
   并写明三处刻意取舍（高亮配色走令牌、Mermaid 类型不硬依赖 mermaid、
   Notification 是系统通知）；`public/llms.txt` 补齐 5 个组件条目。
 
-### Added — `@aura/x` M7：Attachments / FileCard / ThoughtChain 接入包导出
+### Added — `@aura-react-comp/x` M7：Attachments / FileCard / ThoughtChain 接入包导出
 
 补齐三个已写完源码、却**从未接入包导出**的 AI 组件，并修掉随之暴露的令牌命名问题：
 
@@ -231,7 +278,7 @@ Promise<XMessage[]>`，可异步拉取历史。只在**挂载**与 **`conversati
 - **包导出补齐**：三者及其类型（`AttachmentItem` / `FileCardProps` / `FileCardStatus` /
   `ThoughtChainProps` / `ThoughtChainItem` / `ThoughtChainStatus`）加入 `src/index.ts`，
   顺序按「交互 → 推理」与其余组件对齐。此前 docs demo 直接
-  `import { Attachments } from '@aura/x'` 因缺导出导致 `tsc --noEmit` 报
+  `import { Attachments } from '@aura-react-comp/x'` 因缺导出导致 `tsc --noEmit` 报
   5 个 TS2305 / TS7006 —— `pnpm verify` 的类型门禁是红的。
 - **补建 ThoughtChain demo 与测试**：`thought-chain/index.md` 引用了
   `./demo/basic.tsx` 与 `./demo/collapsible.tsx`，但该组件的 demo 目录与
@@ -248,7 +295,7 @@ Promise<XMessage[]>`，可异步拉取历史。只在**挂载**与 **`conversati
   并在 Attachments 文档补一条组合注意事项：列表为空时应传 `undefined` 而非空数组，
   否则 Sender 会渲染出一条空的带内边距插槽容器。
 
-### Fixed — `@aura/x` 字号令牌命名不匹配（9 个样式文件的字号静默失效）
+### Fixed — `@aura-react-comp/x` 字号令牌命名不匹配（9 个样式文件的字号静默失效）
 
 - 9 个 `.less`（actions / bubble / conversations / markdown-content / prompts / sender /
   suggestion / think / welcome）把字号令牌写成 `var(--aura-fontSize-*)`，而
@@ -258,12 +305,12 @@ Promise<XMessage[]>`，可异步拉取历史。只在**挂载**与 **`conversati
 - 修复后做全仓令牌审计（x 包 41 个在用令牌 × `tokens.css` 84 个定义）：
   「使用但未定义」的令牌为 **0**，无同类残留。
 - 注意 `esm/` 是构建产物（`.gitignore` 已忽略），本次只改了 `src/`，需重新
-  `pnpm --filter @aura/x build` 才刷新 `esm/style.css` 与各 `esm/**/index.less`
+  `pnpm --filter @aura-react-comp/x build` 才刷新 `esm/style.css` 与各 `esm/**/index.less`
   （改前产物中仍残留 16 处旧令牌名）。
 
-### Fixed — 交付门禁漏掉第 8 个包 `@aura/x`（三处硬编码清单同步）
+### Fixed — 交付门禁漏掉第 8 个包 `@aura-react-comp/x`（三处硬编码清单同步）
 
-`@aura/x` 加入 workspace 时，三份**手写的包清单**都没有同步，导致整个 AI 组件包
+`@aura-react-comp/x` 加入 workspace 时，三份**手写的包清单**都没有同步，导致整个 AI 组件包
 在交付链路上是「免检」状态。三处一并改为按 `packages/*/package.json` 的
 `scripts.build` 自动派生（判据：是否用 father 构建），新增包不会再漏：
 
@@ -272,7 +319,7 @@ Promise<XMessage[]>`，可异步拉取历史。只在**挂载**与 **`conversati
   `skipLibCheck: false` 下会逐文件报 `TS2882: Cannot find module or type
 declarations for side-effect import of './index.less'`。修复后单次构建的
   清理量从 46 个声明文件升至 **58 个**。
-- **`scripts/smoke.mjs` 的 `LIB_PACKAGES`**：`@aura/x` 的 9 项产物校验**全部空转**
+- **`scripts/smoke.mjs` 的 `LIB_PACKAGES`**：`@aura-react-comp/x` 的 9 项产物校验**全部空转**
   ——包括它的 `./style.css` 子路径是否真的存在、产物中相对引用是否可解析、
   裸包名依赖是否已声明。扩到 `x` 后立刻抓出下一个问题（见下条）。
 - **`package.json` 的 `size-limit`**：8 个包只给 4 个设了体积预算。补 `x` 的预算
@@ -281,13 +328,13 @@ declarations for side-effect import of './index.less'`。修复后单次构建�
 - 两个脚本都加了「推导结果为空则报错退出」的兜底，避免清单推导失败时**静默跳过**
   全部校验（fail-open）。
 
-### Fixed — `@aura/x` 的 `react-markdown` 依赖声明与事实不符
+### Fixed — `@aura-react-comp/x` 的 `react-markdown` 依赖声明与事实不符
 
 - 扩大 smoke 覆盖后立刻暴露：`react-markdown` 只写在 `devDependencies`，
   但它被 `MarkdownContent` **静态**引入、又随包入口 re-export，属于消费方
-  必须能解析的运行时依赖——未声明的后果是消费方 `import { Sender } from '@aura/x'`
+  必须能解析的运行时依赖——未声明的后果是消费方 `import { Sender } from '@aura-react-comp/x'`
   时打包器直接报模块找不到。
-- **最终处理：放进 `dependencies`**（`^10.1.0`），与 `@aura/business` 处理
+- **最终处理：放进 `dependencies`**（`^10.1.0`），与 `@aura-react-comp/business` 处理
   `pdfjs-dist` 同款。曾短暂改为 `peerDependencies`，但那只是把「必装」的
   事实换成了一句安装警告，消费方仍要自己装；既然是静态导入、又随入口暴露，
   声明成运行时依赖才是诚实且零摩擦的做法。
@@ -320,9 +367,9 @@ overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代
   `.dumi/global.css` 1400+ 行 → 1325 行，花括号平衡、回归计算样式全部通过，
   页面渲染零变化。previewer / tabs / search 等仅在交互态渲染的主题组件样式刻意保留。
 
-### Added — 新包 `@aura/x`（AI 组件库，M1 脚手架）
+### Added — 新包 `@aura-react-comp/x`（AI 组件库，M1 脚手架）
 
-- 第 8 个包 `@aura/x`：Aura 生态的 AI 对话组件库，对标 `@ant-design/x`。
+- 第 8 个包 `@aura-react-comp/x`：Aura 生态的 AI 对话组件库，对标 `@ant-design/x`。
   M1 交付包骨架与主题桥接层：
   - **`XProvider`**：antd 主题桥接（暗色 / 紧凑 / 主色），令牌映射与
     `BusinessProvider` 共用单一数据源；
@@ -367,27 +414,27 @@ overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代
   右侧目录收窄至 148px、标题中文化为「目录」、激活竖线改用主题色。
 - **文档站侧栏分组**：AI 组件按 RICH 阶段分为「主题桥接 / 数据流 / 交互 / 反馈 /
   会话 / 引导 / 推理」七组（嵌套 `group.order` frontmatter 驱动，dumi 自动生成）。
-- **`@aura/icons` 收录新图标**：`ThumbUp` / `ThumbDown`（描边风格，与 action 组一致）；
+- **`@aura-react-comp/icons` 收录新图标**：`ThumbUp` / `ThumbDown`（描边风格，与 action 组一致）；
   Actions demo 接入 `Copy` / `Refresh` / `ThumbUp` / `Delete` 四枚图标。
 - **M5 打包修复与真机验证**：
   - **样式打包缺口修复**：组件内 `.less` 导入会让无 less 管线的消费方构建失败
     （Next.js 实测）。新增构建后处理 `scripts/build-styles.mjs`——把全部 less
     编译合并为 `esm/style.css`（新增 exports `./style.css`），并从 esm 中剥离
-    `.less` 导入；消费方一次性 `import '@aura/x/style.css'` 即可；
+    `.less` 导入；消费方一次性 `import '@aura-react-comp/x/style.css'` 即可；
   - **真实消费方验证**：以本地 tarball（模拟发布产物）接入 Next.js 14 应用
     （AIChat Pro），新增 `/x` 试点页——XProvider + Bubble.List + Sender +
     useXChat 复用该应用既有的 streamChat 传输层，流式打字机对话完整可用，
     零运行时异常（Chrome 152 + 静态导出实测）；
   - **视觉升级**：全组件玻璃拟态 + 品牌渐变 + 光晕聚焦（详见前述设计说明与
     令牌扩充），`prefers-reduced-motion` 下关闭动效；
-  - llms.txt 补齐业务组件与 @aura/x 的 AI 摘要（含最小示例与环境要求）。
+  - llms.txt 补齐业务组件与 @aura-react-comp/x 的 AI 摘要（含最小示例与环境要求）。
 - **文档与 demo 补全**：新增 7 个可交互 demo——XProvider 主色即时切换、
   useXStream 的 SSE 实况解析（Blob URL 模拟服务端）、useXChat 消息状态机可视化、
   Bubble 变体矩阵 / 插槽组合、Sender 键位与插槽、Prompts 排列方向；
   XProvider 页新增 RICH 交互范式的组件总览表。
-- **重构**：Aura 令牌 → antd token 的映射收敛到 `@aura/shared` 的
+- **重构**：Aura 令牌 → antd token 的映射收敛到 `@aura-react-comp/shared` 的
   `antdTokenOverrides()`（纯数据，零 antd 依赖），`BusinessProvider` 同步改用，
-  消除与 `@aura/x` 之间的映射重复。
+  消除与 `@aura-react-comp/x` 之间的映射重复。
 
 ### Fixed — PdfViewer 的 pdf.js 加载方式与版本升级
 
@@ -464,7 +511,7 @@ overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代
 - **`BusinessProvider` 无可运行示例**（46 个文档中唯一 demo 数为 0）：新增
   `demo/basic.tsx`，演示暗色 / 紧凑切换如何驱动 antd 主题，并说明 `dark`
   只切 antd 算法、Aura 令牌需 `data-theme` 作用域——这是接入时最易踩的点。
-- **`@aura/business` README 漏列 `PdfViewer`**：组件总览仍写「8 个」，
+- **`@aura-react-comp/business` README 漏列 `PdfViewer`**：组件总览仍写「8 个」，
   npm 页面会少列一个新组件；补齐组件表并说明 `pdfjs-dist` 依赖与 worker 配置。
 - **`standards.md` 统计过期**：「业务包当前 8 个组件」→ 9 个。
 
@@ -524,7 +571,7 @@ overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代
   `rgba(124, 58, 237, 0.22)`（主色 22% 透明），主题被定制或切到暗色时不会跟随。
   改为 `color-mix(in srgb, var(--aura-primary-700) 22%, transparent)`，由主题令牌派生。
   说明：`color-mix` 需 Chrome 111+ / Safari 16.2+ / Firefox 113+，已在样式中注释。
-  复测 `@aura/business` 硬编码色值 **0** 处、`!important` **0** 处。
+  复测 `@aura-react-comp/business` 硬编码色值 **0** 处、`!important` **0** 处。
 - **测试辅助函数使用 `any[]`**：`cascader-panel` 测试中读取 mock 调用参数的辅助函数
   改为 `unknown[][]` 并在使用处收窄。
 
@@ -648,24 +695,24 @@ overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代
 
 ### Fixed — 交付链路（产物此前无法被下游消费）
 
-- **恢复 `@aura/business` 的声明文件产出**。`cascader-panel` 中两处把 `string[]` 传入
+- **恢复 `@aura-react-comp/business` 的声明文件产出**。`cascader-panel` 中两处把 `string[]` 传入
   期望 `ReadonlySet<string>` 的形参，导致 `father build` 在声明生成阶段抛出 `TS2345`，
   `esm/` 下 `.d.ts` 数量为 0。现已先行 `new Set(...)` 归一化。
-- **移除 `@aura/ui` 与 `@aura/business` 的 `esm.alias` 配置**。father 的 bundless 模式会把被
-  alias 命中的裸包名改写成仓库内相对路径（`@aura/shared` → `../../../shared/src`），
+- **移除 `@aura-react-comp/ui` 与 `@aura-react-comp/business` 的 `esm.alias` 配置**。father 的 bundless 模式会把被
+  alias 命中的裸包名改写成仓库内相对路径（`@aura-react-comp/shared` → `../../../shared/src`），
   该路径在发布后的 `node_modules` 中并不存在，等于产物对下游完全不可用。
   移除后跨包导入保持裸包名，由使用方的包管理器解析。
-- **打通 `@aura/business` 的主题令牌链路**。该包全部 `.less` 使用 `var(--aura-*)` 且不设
-  fallback，但未声明令牌提供方依赖；现声明 `@aura/ui` 为依赖，并在入口引入
-  `@aura/ui/style.css`，使单独安装 `@aura/business` 也能正确渲染。
+- **打通 `@aura-react-comp/business` 的主题令牌链路**。该包全部 `.less` 使用 `var(--aura-*)` 且不设
+  fallback，但未声明令牌提供方依赖；现声明 `@aura-react-comp/ui` 为依赖，并在入口引入
+  `@aura-react-comp/ui/style.css`，使单独安装 `@aura-react-comp/business` 也能正确渲染。
 - **修正包导出协议**（`shared` / `request` / `icons` / `ui` / `business`）：
   `exports` 条件改为 `types` 优先（原顺序不符合 TypeScript 规范，`node16` / `nodenext`
   解析下会失败）；补齐 `main` 字段（此前缺失，CJS 与旧版打包器无法解析）；
   补齐 `"type": "module"` 与 ESM 产物保持一致。
 - **补全 `sideEffects`**：`ui` / `business` 增加 `**/*.css`，避免主题令牌被 tree-shaking 误摇除。
-- **修正文档中的错误引入路径**。`quick-start` 原先教用户 `import '@aura/ui/src/theme/tokens.css'`，
-  但发布包只含 `esm/`，该路径必然报 `Module not found`；现改为 `@aura/ui/style.css`。
-- **`@aura/cli` 补齐 `files` 字段**，避免发布时夹带源码与配置。
+- **修正文档中的错误引入路径**。`quick-start` 原先教用户 `import '@aura-react-comp/ui/src/theme/tokens.css'`，
+  但发布包只含 `esm/`，该路径必然报 `Module not found`；现改为 `@aura-react-comp/ui/style.css`。
+- **`@aura-react-comp/cli` 补齐 `files` 字段**，避免发布时夹带源码与配置。
 
 ### Fixed — 类型与代码规范
 
@@ -721,8 +768,8 @@ overflow: hidden; }`（11 = 卡片 12 − 边框 1）。该类在页顶独立代
 
 - **7 个包全部标记 `private: true`**。此前均无该标记且版本统一为 `0.0.1`，
   一次 `pnpm publish -r` 即可将半成品推送到 npm，且 npm 不允许复用已发布版本号。
-- `@aura/ui` 的 `files` 移除不存在的 `dist`。
-- `@aura/skill` 明确标注为「非代码包」，补充说明其提示词资产性质。
+- `@aura-react-comp/ui` 的 `files` 移除不存在的 `dist`。
+- `@aura-react-comp/skill` 明确标注为「非代码包」，补充说明其提示词资产性质。
 
 ---
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MarkdownContent } from '@aura/x';
+import { MarkdownContent } from '@aura-react-comp/x';
 
 const FENCE = '```js\nconsole.log(1);\n```';
 

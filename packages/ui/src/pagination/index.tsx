@@ -1,6 +1,6 @@
 import React, { forwardRef, useState, useCallback } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { ChevronLeft, ChevronRight } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { ChevronLeft, ChevronRight } from '@aura-react-comp/icons';
 import './index.less';
 
 /* ===== 页码范围计算 ===== */

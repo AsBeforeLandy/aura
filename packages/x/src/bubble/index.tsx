@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 
 export interface BubbleProps {
@@ -9,7 +9,7 @@ export interface BubbleProps {
   content?: string;
   /** 自定义内容渲染扩展点（如传 MarkdownContent） */
   contentRender?: (content: string) => React.ReactNode;
-  /** 头像（放任意节点，如 @aura/ui 的 Avatar） */
+  /** 头像（放任意节点，如 @aura-react-comp/ui 的 Avatar） */
   avatar?: React.ReactNode;
   /** 气泡上方的说明区（如消息来源、时间） */
   header?: React.ReactNode;

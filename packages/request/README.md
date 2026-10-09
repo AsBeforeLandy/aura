@@ -1,17 +1,17 @@
-# @aura/request
+# @aura-react-comp/request
 
 基于原生 `fetch` 的轻量 HTTP 请求封装，提供拦截器、超时与统一错误处理。
 
 ## 安装
 
 ```bash
-pnpm add @aura/request
+pnpm add @aura-react-comp/request
 ```
 
 ## 使用
 
 ```ts
-import { createRequest } from '@aura/request';
+import { createRequest } from '@aura-react-comp/request';
 
 const request = createRequest({
   baseURL: '/api',

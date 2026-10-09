@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, TabItem } from '@aura/ui';
+import { Tabs, TabItem } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Tabs variant="pill" defaultActiveKey="1">

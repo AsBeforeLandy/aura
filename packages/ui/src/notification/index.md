@@ -15,7 +15,7 @@ toc: content
 通知提醒框，在页面角落展示重要信息。
 
 ```tsx | pure
-import { notification } from '@aura/ui';
+import { notification } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

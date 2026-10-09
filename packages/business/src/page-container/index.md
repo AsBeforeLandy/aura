@@ -15,7 +15,7 @@ toc: content
 统一中后台页面的骨架结构，消除每个页面重复的布局代码。
 
 ```tsx | pure
-import { PageContainer } from "@aura/business";
+import { PageContainer } from '@aura-react-comp/business';
 ```
 
 ## 何时使用
@@ -36,19 +36,19 @@ import { PageContainer } from "@aura/business";
 
 ### PageContainerProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| title | 页面标题 | `ReactNode` | - |
-| description | 标题下的描述文字 | `ReactNode` | - |
-| breadcrumb | 面包屑导航 | `PageContainerBreadcrumbItem[]` | - |
-| extra | 头部右侧操作区 | `ReactNode` | - |
-| contentPadding | 内容区是否加内边距 | `boolean` | `true` |
-| loading | 加载状态，以骨架屏占位 | `boolean` | `false` |
-| footer | 底部固定工具栏 | `ReactNode` | - |
+| 属性           | 说明                   | 类型                            | 默认值  |
+| -------------- | ---------------------- | ------------------------------- | ------- |
+| title          | 页面标题               | `ReactNode`                     | -       |
+| description    | 标题下的描述文字       | `ReactNode`                     | -       |
+| breadcrumb     | 面包屑导航             | `PageContainerBreadcrumbItem[]` | -       |
+| extra          | 头部右侧操作区         | `ReactNode`                     | -       |
+| contentPadding | 内容区是否加内边距     | `boolean`                       | `true`  |
+| loading        | 加载状态，以骨架屏占位 | `boolean`                       | `false` |
+| footer         | 底部固定工具栏         | `ReactNode`                     | -       |
 
 ### PageContainerBreadcrumbItem
 
-| 属性 | 说明 | 类型 |
-| --- | --- | --- |
+| 属性  | 说明       | 类型        |
+| ----- | ---------- | ----------- |
 | title | 面包屑文案 | `ReactNode` |
-| href | 跳转链接 | `string` |
+| href  | 跳转链接   | `string`    |

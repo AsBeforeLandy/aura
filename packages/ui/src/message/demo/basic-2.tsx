@@ -1,5 +1,5 @@
 import React from 'react';
-import { message, Space, Button } from '@aura/ui';
+import { message, Space, Button } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space wrap size="md">

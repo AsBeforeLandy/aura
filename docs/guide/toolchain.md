@@ -14,23 +14,23 @@ toc: content
 
 ## 一、分层总览
 
-| 层           | 工具                             | 版本                                                          | 守护什么                                                                       |
-| ------------ | -------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| 工作区       | pnpm workspace                   | **7.33.7**（`packageManager` 锁定，CI 同版本）                | 8 个包的单仓管理与跨包解析（`workspace:*`）                                    |
-| 运行时       | Node.js                          | `.nvmrc` = **24**；`engines` = `^20.19 \|\| ^22.13 \|\| >=24` | 构建与 CI 的运行时基线                                                         |
-| 类型         | TypeScript                       | **^6.0.3**，`strict: true`                                    | 类型正确性、跨包 `paths` 解析、导出协议                                        |
-| 检查         | ESLint                           | **^10**（flat config）                                        | 未使用变量、Hooks 规则、禁止 `any`                                             |
-| 格式         | Prettier                         | **^3.9.6**（printWidth 80）                                   | 代码风格（**当前未入门禁**，见「五」）                                         |
-| 测试         | Vitest + jsdom + Testing Library | **^1.6** / `@testing-library/react` ^16                       | 行为正确性、覆盖率阈值                                                         |
-| 无障碍       | jest-axe                         | **^11**                                                       | 语义层 a11y（role / aria / label / 标题层级）                                  |
-| 构建         | father（bundless）               | **^4.6.19**                                                   | 产出 `esm/` 与 `.d.ts`；目标 `chrome 80`                                       |
-| 产物体积     | size-limit                       | **^13**（brotli）                                             | 防止产物膨胀（见 `package.json#size-limit`，**6 个 father 库包已全部设预算**） |
-| 产物交付校验 | 自研 `scripts/smoke.mjs`         | -                                                             | 入口字段 / exports / 相对路径 / 裸包名依赖声明 / 令牌随包发布                  |
-| 声明后处理   | 自研 `scripts/postbuild-dts.mjs` | -                                                             | 剥离 `.d.ts` 中的样式副作用导入（否则消费方报 TS2882）                         |
-| 提交规范     | husky + lint-staged + commitlint | **^9 / ^17 / ^21**                                            | 暂存代码自动修复、提交信息符合 Conventional Commits                            |
-| CI/CD        | GitHub Actions                   | -                                                             | 门禁复跑 + 文档站部署                                                          |
-| 文档         | dumi                             | **^2.4.26**                                                   | 文档站与组件示例；侧栏由 frontmatter 自动生成                                  |
-| AI 资产      | `public/llms*.txt` + `@aura/cli` | -                                                             | 面向 AI 编码助手的文档索引、MCP 服务与 Skill                                   |
+| 层           | 工具                                        | 版本                                                          | 守护什么                                                                       |
+| ------------ | ------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 工作区       | pnpm workspace                              | **7.33.7**（`packageManager` 锁定，CI 同版本）                | 8 个包的单仓管理与跨包解析（`workspace:*`）                                    |
+| 运行时       | Node.js                                     | `.nvmrc` = **24**；`engines` = `^20.19 \|\| ^22.13 \|\| >=24` | 构建与 CI 的运行时基线                                                         |
+| 类型         | TypeScript                                  | **^6.0.3**，`strict: true`                                    | 类型正确性、跨包 `paths` 解析、导出协议                                        |
+| 检查         | ESLint                                      | **^10**（flat config）                                        | 未使用变量、Hooks 规则、禁止 `any`                                             |
+| 格式         | Prettier                                    | **^3.9.6**（printWidth 80）                                   | 代码风格（**当前未入门禁**，见「五」）                                         |
+| 测试         | Vitest + jsdom + Testing Library            | **^1.6** / `@testing-library/react` ^16                       | 行为正确性、覆盖率阈值                                                         |
+| 无障碍       | jest-axe                                    | **^11**                                                       | 语义层 a11y（role / aria / label / 标题层级）                                  |
+| 构建         | father（bundless）                          | **^4.6.19**                                                   | 产出 `esm/` 与 `.d.ts`；目标 `chrome 80`                                       |
+| 产物体积     | size-limit                                  | **^13**（brotli）                                             | 防止产物膨胀（见 `package.json#size-limit`，**6 个 father 库包已全部设预算**） |
+| 产物交付校验 | 自研 `scripts/smoke.mjs`                    | -                                                             | 入口字段 / exports / 相对路径 / 裸包名依赖声明 / 令牌随包发布                  |
+| 声明后处理   | 自研 `scripts/postbuild-dts.mjs`            | -                                                             | 剥离 `.d.ts` 中的样式副作用导入（否则消费方报 TS2882）                         |
+| 提交规范     | husky + lint-staged + commitlint            | **^9 / ^17 / ^21**                                            | 暂存代码自动修复、提交信息符合 Conventional Commits                            |
+| CI/CD        | GitHub Actions                              | -                                                             | 门禁复跑 + 文档站部署                                                          |
+| 文档         | dumi                                        | **^2.4.26**                                                   | 文档站与组件示例；侧栏由 frontmatter 自动生成                                  |
+| AI 资产      | `public/llms*.txt` + `@aura-react-comp/cli` | -                                                             | 面向 AI 编码助手的文档索引、MCP 服务与 Skill                                   |
 
 ### 包形态（8 个）
 
@@ -40,7 +40,7 @@ toc: content
 | 工具包    | `cli`                                                    | `tsc`（MCP Server，bin: `aura`）  |
 | 资产包    | `skill`                                                  | 无构建，纯 Markdown 提示词资产    |
 
-`@aura/x` 在 `father build` 之后额外跑 `scripts/build-styles.mjs`：把 `src/**/*.less`
+`@aura-react-comp/x` 在 `father build` 之后额外跑 `scripts/build-styles.mjs`：把 `src/**/*.less`
 合并为 `esm/style.css`，并从 `esm/**/*.js` 剥离 `.less` 副作用导入——
 消费方构建器（如 Next.js）没有 less 管线，留着会导致安装即构建失败。
 
@@ -49,7 +49,7 @@ toc: content
 `postbuild-dts.mjs` 与 `smoke.mjs` 的**包清单是按 `packages/*/package.json` 的
 `scripts.build` 是否含 `father build` 自动派生**的，并带「推导结果为空则报错退出」的兜底。
 
-这条约定来自一次真实事故：`@aura/x` 加入 workspace 时，三处手写清单（含根
+这条约定来自一次真实事故：`@aura-react-comp/x` 加入 workspace 时，三处手写清单（含根
 `package.json` 的 `size-limit`）都没同步，导致它的声明文件长期残留样式导入、
 9 项产物校验全部空转。**新增包后请确认这三处都已自动覆盖。**
 
@@ -125,7 +125,7 @@ x                             ← 依赖 shared
 business                      ← 依赖 shared + ui，最深，最后执行
 ```
 
-> 注意：`@aura/skill` 没有 `build` 脚本，`pnpm -r build` 会自动跳过它——
+> 注意：`@aura-react-comp/skill` 没有 `build` 脚本，`pnpm -r build` 会自动跳过它——
 > 这也是为什么它作为「纯 Markdown 资产包」不需要排除配置。
 
 ### 什么场景才值得上编排器
@@ -171,7 +171,7 @@ business                      ← 依赖 shared + ui，最深，最后执行
 
 **别混淆两类编排**：Turbo / Nx 解决的是**构建编排**（任务图 + 缓存）；而组件库更常缺的
 是**发布编排**——版本提升、CHANGELOG、tag、多包联动发版，那是 **changesets** 的领域
-（本仓缺的正是这个，见「五、已知缺口」）。把两件事分开看，可避免
+（本仓已引入，见[发布流程](/guide/releasing)）。把两件事分开看，可避免
 「上了 Turbo 就能自动发版」这类误判。
 
 ### 为什么这个规模不加编排器
@@ -198,7 +198,7 @@ business                      ← 依赖 shared + ui，最深，最后执行
 
 1. **`build:lib` 里的串行栅栏**：`pnpm -r build && node scripts/postbuild-dts.mjs`——
    声明清理必须在**全部构建完成之后**统一执行，不能按包并行，否则会与 father 的
-   产物流水线竞争。同理 `@aura/x` 的 `build-styles.mjs` 必须跟在它自己的 `father build` 之后。
+   产物流水线竞争。同理 `@aura-react-comp/x` 的 `build-styles.mjs` 必须跟在它自己的 `father build` 之后。
 2. **包清单的自动派生**：`postbuild-dts.mjs` / `smoke.mjs` 按 `scripts.build` 是否含
    `father build` 推导要处理的包，而不是写字面量数组。换成 Turbo 的 `pipeline`
    （按任务名声明、天然覆盖所有包）时，这份派生思路仍然值得保留。
@@ -221,12 +221,16 @@ business                      ← 依赖 shared + ui，最深，最后执行
 
 按优先级排列。**P0（「看起来有、实际没有」的假门禁）目前为空**——
 两处已处理：`format:check` 的角色与退出判据已明确 + 提交期强制格式；
-本地 `verify` 已与 CI 对齐（含覆盖率阈值）。以下为 P1 / P2。
+本地 `verify` 已与 CI 对齐（含覆盖率阈值）。
+
+**P1 已清空**：版本与发布自动化已落地——引入 changesets 管理各包版本与 CHANGELOG，
+6 个库包转为可发布（`0.1.0` + `publishConfig.access: public` + 完整 npm 元数据），
+新增 `.github/workflows/release.yml` 走 npm Trusted Publishing（OIDC）发布。
+完整流程见[发布流程](/guide/releasing)。以下为 P2。
 
 | 优先级 | 缺口                                          | 证据                                                                                                                                                                                                                       | 建议                                                                                                                  |
 | ------ | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| P1     | 无版本与发布自动化                            | 无 `.changeset/`；8 个包版本统一停在 `0.0.1` 且全部 `private: true`                                                                                                                                                        | 引入 changesets 管理版本与 CHANGELOG（正式发布前必须）                                                                |
-| P2     | 无构建缓存、无「只跑受影响的包」              | `pnpm -r build` 每次都全量重建 7 个包；只改了单包时也只能手动 `--filter @aura/x build`（见「三、任务编排」）                                                                                                               | 当前 40s 的全量链路不值得上编排器；规模变大后再评估 Turbo                                                             |
+| P2     | 无构建缓存、无「只跑受影响的包」              | `pnpm -r build` 每次都全量重建 7 个包；只改了单包时也只能手动 `--filter @aura-react-comp/x build`（见「三、任务编排」）                                                                                                    | 当前 40s 的全量链路不值得上编排器；规模变大后再评估 Turbo                                                             |
 | P2     | 无 E2E / 视觉回归                             | 无 Playwright / Cypress 配置                                                                                                                                                                                               | 文档站关键路径可考虑 Playwright 冒烟                                                                                  |
 | P2     | 无 a11y 静态检查                              | 未安装 `eslint-plugin-jsx-a11y`（直接与传递依赖均无）                                                                                                                                                                      | 目前只有 jest-axe 的运行时语义检查，可补静态规则                                                                      |
 | P2     | **格式尚未收敛，`format:check` 因此挂在门外** | 全仓保守估计 **360+** 个文件不符合 Prettier（`packages/ui` 245、`packages/x` 单 `src` 85、`icons` 15…）。此前的「假门禁」问题已解决——它的角色已明确为**收敛进度探针**并给了退出判据，同时 `lint-staged` 已在提交期强制格式 | 走增量收敛：只格式暂存文件，随开发逐步归零；**归零后**把 `format:check` 纳入 `verify` 与 CI（判据见「格式策略」一节） |
@@ -246,7 +250,7 @@ business                      ← 依赖 shared + ui，最深，最后执行
 （分片扫描被沙箱中断，实际只会更多）。
 
 这个数字直接否掉了「全量重排」：一个改写 360+ 个文件的 `style:` 提交会让
-**整个 `@aura/ui` 的 `git blame` 失去意义**，代价与收益完全不成比例。
+**整个 `@aura-react-comp/ui` 的 `git blame` 失去意义**，代价与收益完全不成比例。
 
 | 方式           | 结论                                                                                                                                                                      |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

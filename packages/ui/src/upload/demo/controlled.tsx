@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Upload } from '@aura/ui';
-import type { UploadFile } from '@aura/ui';
+import { Upload } from '@aura-react-comp/ui';
+import type { UploadFile } from '@aura-react-comp/ui';
 
 /** 受控 fileList 回显已有文件（编辑页场景）；maxCount 限制数量；onRemove 可拦截删除。 */
 export default () => {

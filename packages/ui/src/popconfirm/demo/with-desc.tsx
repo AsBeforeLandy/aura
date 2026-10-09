@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popconfirm, Button } from '@aura/ui';
+import { Popconfirm, Button } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Popconfirm

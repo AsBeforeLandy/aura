@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Card } from '@aura/ui';
+import { Flex, Card } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Flex wrap="wrap" gap="sm" style={{ maxWidth: 200 }}>

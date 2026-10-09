@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Tooltip } from '@aura/ui';
+import { Button, Tooltip } from '@aura-react-comp/ui';
 
 /** 受控模式：open + onOpenChange，配合外部逻辑决定何时显示（如校验失败时强制提示）。 */
 export default () => {

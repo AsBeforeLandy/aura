@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, Space } from 'antd';
-import { WeekTimeRange, BusinessProvider } from '@aura/business';
-import type { WeekTimeRangeValue } from '@aura/business';
+import { WeekTimeRange, BusinessProvider } from '@aura-react-comp/business';
+import type { WeekTimeRangeValue } from '@aura-react-comp/business';
 
 const INITIAL_VALUE: WeekTimeRangeValue = [
   [{ start: '09:00', end: '12:00' }, { start: '14:00', end: '18:00' }],

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Space } from '@aura/ui';
+import { Card, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space wrap size="md">

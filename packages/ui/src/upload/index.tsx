@@ -4,8 +4,8 @@ import React, {
   useRef,
   useCallback,
 } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { Uploading, CheckCircleFilled, CloseCircleFilled, Close, Upload as UploadIcon, CloudUpload, PicturePlaceholder } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { Uploading, CheckCircleFilled, CloseCircleFilled, Close, Upload as UploadIcon, CloudUpload, PicturePlaceholder } from '@aura-react-comp/icons';
 import { requestUpload } from './request';
 import './index.less';
 

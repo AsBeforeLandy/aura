@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Bubble, MarkdownContent, Sender, useXChat } from '@aura/x';
+import { Bubble, MarkdownContent, Sender, useXChat } from '@aura-react-comp/x';
 
 /** 预置回复：演示流式逐字输出 */
 const REPLIES = [

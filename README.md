@@ -1,15 +1,15 @@
 <div align="center">
   <img src="public/logo.svg" alt="Aura" width="120" />
 
-  # Aura
+# Aura
 
-  基于 React 18 的现代化组件库，为构建优雅的用户界面而生。
+基于 React 18 的现代化组件库，为构建优雅的用户界面而生。
 
-  [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AsBeforeLandy/aura/blob/master/LICENSE)
-  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/AsBeforeLandy/aura/pulls)
-  [![GitHub stars](https://img.shields.io/github/stars/AsBeforeLandy/aura.svg)](https://github.com/AsBeforeLandy/aura/stargazers)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AsBeforeLandy/aura/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/AsBeforeLandy/aura/pulls)
+[![GitHub stars](https://img.shields.io/github/stars/AsBeforeLandy/aura.svg)](https://github.com/AsBeforeLandy/aura/stargazers)
 
-  [快速开始](#安装) · [在线文档](https://asbeforelandy.github.io/aura) · [更新日志](docs/changelog.md) · [GitHub](https://github.com/AsBeforeLandy/aura) · [English](#english)
+[快速开始](#安装) · [在线文档](https://asbeforelandy.github.io/aura) · [更新日志](docs/changelog.md) · [GitHub](https://github.com/AsBeforeLandy/aura) · [English](#english)
 
   <img src="https://img.shields.io/badge/react-18+-61dafb.svg" alt="React 18+" />
   <img src="https://img.shields.io/badge/typescript-6+-3178c6.svg" alt="TypeScript 6+" />
@@ -26,35 +26,35 @@
 - **⚡ React 18** — `forwardRef`、Compound Component 等 React 最新特性
 - **♿ 无障碍** — 支持 `aria-*` 属性、键盘导航
 - **🤖 AI 友好** — 内置 MCP Server，AI 助手可直接查询组件 API
-- **🧱 业务组件** — `@aura/business` 基于 antd 二次封装，覆盖中后台列表页、查询区、弹窗表单等高频场景
+- **🧱 业务组件** — `@aura-react-comp/business` 基于 antd 二次封装，覆盖中后台列表页、查询区、弹窗表单等高频场景
 
 ## 兼容环境
 
-| 浏览器 | 版本 |
-| --- | --- |
-| Chrome | 80+ |
-| Firefox | 80+ |
-| Safari | 14+ |
-| Edge | 80+ |
+| 浏览器  | 版本 |
+| ------- | ---- |
+| Chrome  | 80+  |
+| Firefox | 80+  |
+| Safari  | 14+  |
+| Edge    | 80+  |
 
 ## 安装
 
 ```bash
 # pnpm（推荐）
-pnpm add @aura/ui
+pnpm add @aura-react-comp/ui
 
 # yarn
-yarn add @aura/ui
+yarn add @aura-react-comp/ui
 
 # npm
-npm install @aura/ui
+npm install @aura-react-comp/ui
 ```
 
 ## 使用
 
 ```tsx
-import { Button, Space } from '@aura/ui';
-import '@aura/ui/style.css';
+import { Button, Space } from '@aura-react-comp/ui';
+import '@aura-react-comp/ui/style.css';
 
 const App = () => (
   <Space>
@@ -64,14 +64,14 @@ const App = () => (
 );
 ```
 
-> `@aura/ui/style.css` 导出的是主题令牌（`--aura-*` CSS 变量）。引入 `@aura/ui` 时其入口已自动引入该文件，
-> 这一行仅在你需要手动控制样式加载顺序时才需显式书写。请勿使用 `@aura/ui/src/...` 或
-> `@aura/ui/dist/...` 之类的路径——发布包只包含 `esm/` 产物。
+> `@aura-react-comp/ui/style.css` 导出的是主题令牌（`--aura-*` CSS 变量）。引入 `@aura-react-comp/ui` 时其入口已自动引入该文件，
+> 这一行仅在你需要手动控制样式加载顺序时才需显式书写。请勿使用 `@aura-react-comp/ui/src/...` 或
+> `@aura-react-comp/ui/dist/...` 之类的路径——发布包只包含 `esm/` 产物。
 
 ### 主题切换
 
 ```tsx
-import { ThemeProvider, useTheme } from '@aura/ui';
+import { ThemeProvider, useTheme } from '@aura-react-comp/ui';
 
 const App = () => (
   <ThemeProvider defaultTheme="light">
@@ -82,27 +82,27 @@ const App = () => (
 
 ## 组件一览
 
-| 分类 | 组件 |
-| --- | --- |
-| **通用** | Button、Typography、Space、Divider |
-| **表单** | Input、Textarea、Select、Checkbox、Radio、Switch |
-| **数据展示** | Tag、Badge、Avatar、Tooltip、Card、Collapse、Tabs、Empty |
-| **反馈** | Alert、Spin、Message、Notification、Result、Popconfirm |
-| **导航** | Menu、Breadcrumb、Pagination、Steps、Dropdown |
-| **表单高级** | Slider、Rate、Upload、Form |
-| **布局** | Layout、Flex、Scrollbar |
-| **业务** | PageContainer、SearchForm、ProTable、ModalForm（基于 antd） |
+| 分类         | 组件                                                        |
+| ------------ | ----------------------------------------------------------- |
+| **通用**     | Button、Typography、Space、Divider                          |
+| **表单**     | Input、Textarea、Select、Checkbox、Radio、Switch            |
+| **数据展示** | Tag、Badge、Avatar、Tooltip、Card、Collapse、Tabs、Empty    |
+| **反馈**     | Alert、Spin、Message、Notification、Result、Popconfirm      |
+| **导航**     | Menu、Breadcrumb、Pagination、Steps、Dropdown               |
+| **表单高级** | Slider、Rate、Upload、Form                                  |
+| **布局**     | Layout、Flex、Scrollbar                                     |
+| **业务**     | PageContainer、SearchForm、ProTable、ModalForm（基于 antd） |
 
 ## 包结构
 
 ```
 aura/
 ├── packages/
-│   ├── ui/        # @aura/ui — UI 组件库
-│   ├── business/  # @aura/business — 业务组件库（基于 antd 封装）
-│   ├── shared/    # @aura/shared — 工具函数（classNames、prefixCls 等）
-│   ├── request/   # @aura/request — HTTP 请求封装
-│   ├── cli/       # @aura/cli — MCP Server 与 CLI 工具
+│   ├── ui/        # @aura-react-comp/ui — UI 组件库
+│   ├── business/  # @aura-react-comp/business — 业务组件库（基于 antd 封装）
+│   ├── shared/    # @aura-react-comp/shared — 工具函数（classNames、prefixCls 等）
+│   ├── request/   # @aura-react-comp/request — HTTP 请求封装
+│   ├── cli/       # @aura-react-comp/cli — MCP Server 与 CLI 工具
 │   └── skill/     # AI 技能定义
 ├── docs/          # 文档站内容
 └── public/        # 静态资源

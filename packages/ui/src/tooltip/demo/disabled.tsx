@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip, Button } from '@aura/ui';
+import { Tooltip, Button } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Tooltip content="不会显示" disabled>

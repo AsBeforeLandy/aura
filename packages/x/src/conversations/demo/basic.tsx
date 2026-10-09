@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Conversations } from '@aura/x';
+import { Conversations } from '@aura-react-comp/x';
 
 const SESSIONS = [
   { key: 's1', label: '周报助手', timestamp: '09-17' },

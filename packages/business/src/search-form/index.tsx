@@ -17,7 +17,7 @@ import {
   SearchOutlined,
   UpOutlined,
 } from '@ant-design/icons';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 
 const { RangePicker } = DatePicker;

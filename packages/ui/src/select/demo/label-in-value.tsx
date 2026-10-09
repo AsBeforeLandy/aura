@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Space } from '@aura/ui';
+import { Select, Space } from '@aura-react-comp/ui';
 
 /** labelInValue：取值携带 label（提交表单常需要）；maxTagCount：多选超出收敛为 +N...。 */
 export default () => (

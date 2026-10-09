@@ -1,5 +1,5 @@
 import React from 'react';
-import { Prompts, Welcome } from '@aura/x';
+import { Prompts, Welcome } from '@aura-react-comp/x';
 
 export default () => {
   const [picked, setPicked] = React.useState<React.ReactNode>('');

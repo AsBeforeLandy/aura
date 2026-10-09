@@ -1,8 +1,26 @@
 {
-  "name": "@aura/business",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@aura-react-comp/business",
+  "version": "0.1.0",
   "description": "Aura 业务组件库 — 基于 antd 二次封装的 B 端中后台业务组件",
+  "keywords": [
+    "aura",
+    "react",
+    "antd",
+    "business",
+    "pro-table",
+    "admin"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/business"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
   "type": "module",
   "main": "esm/index.js",
   "module": "esm/index.js",
@@ -32,9 +50,12 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@aura/shared": "workspace:*",
-    "@aura/ui": "workspace:*",
+    "@aura-react-comp/shared": "workspace:*",
+    "@aura-react-comp/ui": "workspace:*",
     "pdfjs-dist": "6.3.289"
   },
-  "license": "MIT"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

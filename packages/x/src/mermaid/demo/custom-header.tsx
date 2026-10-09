@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mermaid } from '@aura/x';
+import { Mermaid } from '@aura-react-comp/x';
 
 const GRAPH = `graph LR
   A[源码] --> B[Mermaid] --> C[SVG]`;

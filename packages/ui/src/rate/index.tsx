@@ -4,8 +4,8 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { StarFilled, StarEmpty, StarHalf } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { StarFilled, StarEmpty, StarHalf } from '@aura-react-comp/icons';
 import './index.less';
 
 export interface RateProps {

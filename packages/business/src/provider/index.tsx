@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ConfigProvider, theme as antdTheme } from 'antd';
 import type { Locale } from 'antd/es/locale';
 import zhCN from 'antd/locale/zh_CN';
-import { antdTokenOverrides } from '@aura/shared';
+import { antdTokenOverrides } from '@aura-react-comp/shared';
 
 export interface BusinessProviderProps {
   children: React.ReactNode;
@@ -49,7 +49,7 @@ export const BusinessProvider: React.FC<BusinessProviderProps> = ({
 
     return {
       algorithm: algorithms,
-      // Aura 令牌 → antd token 的映射收敛在 @aura/shared（与 @aura/x 共用单一数据源）
+      // Aura 令牌 → antd token 的映射收敛在 @aura-react-comp/shared（与 @aura-react-comp/x 共用单一数据源）
       token: {
         ...antdTokenOverrides(colorPrimary),
         borderRadius,

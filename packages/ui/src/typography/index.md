@@ -14,9 +14,8 @@ toc: content
 
 文本的基本格式化展示。
 
-
 ```tsx | pure
-import { Typography, Title, Text, Paragraph } from "@aura/ui";
+import { Typography, Title, Text, Paragraph } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用
@@ -45,37 +44,37 @@ import { Typography, Title, Text, Paragraph } from "@aura/ui";
 
 复合组件，包含以下静态属性：
 
-| 属性 | 说明 |
-| --- | --- |
-| Typography.Title | 标题组件 |
-| Typography.Text | 文本组件 |
+| 属性                 | 说明     |
+| -------------------- | -------- |
+| Typography.Title     | 标题组件 |
+| Typography.Text      | 文本组件 |
 | Typography.Paragraph | 段落组件 |
 
 ### TitleProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| level | 标题级别 | `1 \| 2 \| 3 \| 4 \| 5` | `1` |
+| 属性  | 说明     | 类型                    | 默认值 |
+| ----- | -------- | ----------------------- | ------ |
+| level | 标题级别 | `1 \| 2 \| 3 \| 4 \| 5` | `1`    |
 
 继承 `HTMLAttributes<HTMLHeadingElement>`。
 
 ### TextProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| variant | 文本色彩变体 | `'default' \| 'secondary' \| 'success' \| 'warning' \| 'danger'` | `'default'` |
-| strong | 是否加粗 | `boolean` | `false` |
-| underline | 是否下划线 | `boolean` | `false` |
-| delete | 是否删除线 | `boolean` | `false` |
-| code | 是否代码样式 | `boolean` | `false` |
-| mark | 是否高亮标记 | `boolean` | `false` |
+| 属性      | 说明         | 类型                                                             | 默认值      |
+| --------- | ------------ | ---------------------------------------------------------------- | ----------- |
+| variant   | 文本色彩变体 | `'default' \| 'secondary' \| 'success' \| 'warning' \| 'danger'` | `'default'` |
+| strong    | 是否加粗     | `boolean`                                                        | `false`     |
+| underline | 是否下划线   | `boolean`                                                        | `false`     |
+| delete    | 是否删除线   | `boolean`                                                        | `false`     |
+| code      | 是否代码样式 | `boolean`                                                        | `false`     |
+| mark      | 是否高亮标记 | `boolean`                                                        | `false`     |
 
 继承 `HTMLAttributes<HTMLSpanElement>`。
 
 ### ParagraphProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
+| 属性     | 说明             | 类型      | 默认值  |
+| -------- | ---------------- | --------- | ------- |
 | ellipsis | 是否启用单行省略 | `boolean` | `false` |
 
 继承 `HTMLAttributes<HTMLParagraphElement>`。

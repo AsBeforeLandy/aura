@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { Highlight } from 'prism-react-renderer';
 import type { Language } from 'prism-react-renderer';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import { auraCodeTheme } from './prism-theme';
 import './index.less';
 

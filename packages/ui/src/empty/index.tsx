@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { EmptyDefault, Empty404 } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { EmptyDefault, Empty404 } from '@aura-react-comp/icons';
 import './index.less';
 
 export interface EmptyProps {

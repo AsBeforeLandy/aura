@@ -12,7 +12,7 @@ import type {
   PDFDocumentProxy,
   RenderTask,
 } from 'pdfjs-dist';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import {
   clamp,
   clampPage,

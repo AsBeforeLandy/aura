@@ -1,6 +1,6 @@
 import React from 'react';
 import { message } from 'antd';
-import { SearchForm, BusinessProvider } from '@aura/business';
+import { SearchForm, BusinessProvider } from '@aura-react-comp/business';
 
 const Demo: React.FC = () => (
   <BusinessProvider>

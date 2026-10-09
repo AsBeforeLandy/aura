@@ -1,6 +1,6 @@
 import React from 'react';
-import { Alert, Button, Space } from '@aura/ui';
-import { WarningTriangleFilled } from '@aura/icons';
+import { Alert, Button, Space } from '@aura-react-comp/ui';
+import { WarningTriangleFilled } from '@aura-react-comp/icons';
 
 /** `icon` 自定义图标；`action` 渲染右侧操作区。 */
 export default () => (

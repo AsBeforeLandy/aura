@@ -15,7 +15,7 @@ toc: content
 可以折叠/展开的内容区域，支持手风琴模式。
 
 ```tsx | pure
-import { Collapse } from '@aura/ui';
+import { Collapse } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

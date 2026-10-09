@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Text, Space } from '@aura/ui';
+import { Input, Text, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [value, setValue] = useState('');

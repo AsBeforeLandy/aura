@@ -29,7 +29,7 @@ import {
   Tag,
   Textarea,
   Tooltip,
-} from '@aura/ui';
+} from '@aura-react-comp/ui';
 
 /**
  * 无障碍（a11y）测试

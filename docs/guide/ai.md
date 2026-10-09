@@ -27,7 +27,7 @@ Aura 内置了 **Model Context Protocol (MCP)** 服务，可以将 Aura 的组�
 你可以直接通过 `npx` 启动 MCP 服务（使用 Stdio 标准输入输出传输协议）：
 
 ```bash
-npx @aura/cli mcp
+npx @aura-react-comp/cli mcp
 ```
 
 ### 2. 在 IDE 中配置
@@ -37,7 +37,7 @@ npx @aura/cli mcp
 在终端运行以下命令，将 Aura MCP 服务添加到全局配置中：
 
 ```bash
-claude mcp add aura-ui npx -- @aura/cli mcp
+claude mcp add aura-ui npx -- @aura-react-comp/cli mcp
 ```
 
 #### Cursor
@@ -47,7 +47,7 @@ claude mcp add aura-ui npx -- @aura/cli mcp
 3. 填入配置：
    - **Name**: `aura-ui`
    - **Type**: `command`
-   - **Command**: `npx -y @aura/cli mcp`
+   - **Command**: `npx -y @aura-react-comp/cli mcp`
 
 #### Windsurf
 
@@ -58,7 +58,7 @@ claude mcp add aura-ui npx -- @aura/cli mcp
   "mcpServers": {
     "aura-ui": {
       "command": "npx",
-      "args": ["-y", "@aura/cli", "mcp"]
+      "args": ["-y", "@aura-react-comp/cli", "mcp"]
     }
   }
 }
@@ -98,7 +98,7 @@ claude mcp add aura-ui npx -- @aura/cli mcp
 node packages/cli/dist/index.js skill
 
 # 外部项目使用时
-npx @aura/cli skill
+npx @aura-react-comp/cli skill
 ```
 
 这会自动将技能文件复制到你的系统目录 `~/.claude/skills/` 下。

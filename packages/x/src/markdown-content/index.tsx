@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
-import { classNames, prefixCls } from '@aura/shared';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
 import { CodeHighlighter } from '../code-highlighter';
 import './index.less';
 
@@ -54,7 +54,7 @@ export interface MarkdownContentProps {
 /**
  * MarkdownContent — Bubble 的可选内容渲染器。
  *
- * 基于 react-markdown（`@aura/x` 的运行时依赖，随包自动安装）。
+ * 基于 react-markdown（`@aura-react-comp/x` 的运行时依赖，随包自动安装）。
  * 安全默认值：
  * 1. **不渲染原始 HTML**（未接入 rehype-raw，HTML 标签按纯文本展示）；
  * 2. 链接协议白名单：仅放行 `http` / `https` / `mailto`，其余清洗为空；

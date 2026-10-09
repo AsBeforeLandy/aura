@@ -15,7 +15,7 @@ toc: content
 加载中状态指示器，支持独立使用或包裹内容区域。
 
 ```tsx | pure
-import { Spin } from "@aura/ui";
+import { Spin } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用
@@ -40,14 +40,14 @@ import { Spin } from "@aura/ui";
 
 ### SpinProps
 
-| 属性 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| size | 加载指示器尺寸 | `'sm' \| 'md' \| 'lg'` | `'md'` |
-| spinning | 是否加载中 | `boolean` | `true` |
-| delay | 延迟显示加载指示器（ms），避免快速加载时闪烁 | `number` | `0` |
-| variant | 加载动画样式：`default` 旋转弧线，`dot` 弹跳圆点 | `'default' \| 'dot'` | `'default'` |
-| tip | 加载提示文字 | `ReactNode` | - |
-| indicator | 自定义加载图标 | `ReactNode` | - |
-| children | 包裹的内容（加载时半透明 + 模糊） | `ReactNode` | - |
+| 属性      | 说明                                             | 类型                   | 默认值      |
+| --------- | ------------------------------------------------ | ---------------------- | ----------- |
+| size      | 加载指示器尺寸                                   | `'sm' \| 'md' \| 'lg'` | `'md'`      |
+| spinning  | 是否加载中                                       | `boolean`              | `true`      |
+| delay     | 延迟显示加载指示器（ms），避免快速加载时闪烁     | `number`               | `0`         |
+| variant   | 加载动画样式：`default` 旋转弧线，`dot` 弹跳圆点 | `'default' \| 'dot'`   | `'default'` |
+| tip       | 加载提示文字                                     | `ReactNode`            | -           |
+| indicator | 自定义加载图标                                   | `ReactNode`            | -           |
+| children  | 包裹的内容（加载时半透明 + 模糊）                | `ReactNode`            | -           |
 
 继承 `HTMLAttributes<HTMLDivElement>`。

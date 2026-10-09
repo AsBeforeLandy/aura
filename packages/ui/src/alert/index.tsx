@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from 'react';
-import { classNames, prefixCls } from '@aura/shared';
-import { CheckCircleFilled, WarningTriangleFilled, CloseCircleFilled, InfoCircleFilled, Close } from '@aura/icons';
+import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { CheckCircleFilled, WarningTriangleFilled, CloseCircleFilled, InfoCircleFilled, Close } from '@aura-react-comp/icons';
 import './index.less';
 
 export interface AlertProps {

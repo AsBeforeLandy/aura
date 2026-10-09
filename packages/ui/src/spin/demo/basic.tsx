@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Space } from '@aura/ui';
+import { Spin, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
   <Space direction="vertical" size="lg">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Tabs } from '@aura/ui';
+import { Button, Tabs } from '@aura-react-comp/ui';
 
 /** 默认保留已访问面板的挂载状态：切走再切回，表单输入不丢失；`destroyInactiveTabPane` 可关闭。 */
 export default () => {

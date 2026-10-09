@@ -1,5 +1,5 @@
 import React from 'react';
-import { Prompts } from '@aura/x';
+import { Prompts } from '@aura-react-comp/x';
 
 export default () => (
   <div style={{ maxWidth: 720 }}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bubble, Sender, XProvider } from '@aura/x';
+import { Bubble, Sender, XProvider } from '@aura-react-comp/x';
 
 const COLORS = [
   { label: '紫罗兰（默认）', value: '#7c3aed' },

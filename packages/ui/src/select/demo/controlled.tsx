@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Select, Space } from '@aura/ui';
+import { Select, Space } from '@aura-react-comp/ui';
 
 const options = [
   { label: '苹果', value: 'apple' },

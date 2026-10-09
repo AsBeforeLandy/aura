@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload } from '@aura/ui';
+import { Upload } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [fileList, setFileList] = useState<any[]>([]);

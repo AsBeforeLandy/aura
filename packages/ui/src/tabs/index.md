@@ -15,7 +15,7 @@ toc: content
 选项卡切换组件，支持多种变体和受控模式。
 
 ```tsx | pure
-import { Tabs } from '@aura/ui';
+import { Tabs } from '@aura-react-comp/ui';
 ```
 
 ## 何时使用

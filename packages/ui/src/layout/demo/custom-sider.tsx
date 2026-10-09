@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Menu } from '@aura/ui';
+import { Layout, Menu } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const [selected, setSelected] = useState('overview');

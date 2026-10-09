@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bubble } from '@aura/x';
+import { Bubble } from '@aura-react-comp/x';
 
 const CELLS = [
   { role: 'assistant' as const, variant: 'filled' as const, label: 'AI · filled' },
