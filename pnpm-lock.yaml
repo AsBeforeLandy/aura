@@ -135,6 +135,7 @@ importers:
   packages/x:
     specifiers:
       '@aura-react-comp/shared': workspace:*
+      '@aura-react-comp/ui': workspace:*
       antd: '>=6.0.0'
       less: ^4.9.1
       mermaid: ^12.0.0
@@ -144,6 +145,7 @@ importers:
       react-markdown: ^10.1.0
     dependencies:
       '@aura-react-comp/shared': link:../shared
+      '@aura-react-comp/ui': link:../ui
       antd: 6.6.3_nnrd3gsncyragczmpvfhocinkq
       prism-react-renderer: 2.4.1_react@18.3.1
       react: 18.3.1
