@@ -71,6 +71,7 @@ importers:
       '@aura-react-comp/shared': workspace:*
       '@aura-react-comp/ui': workspace:*
       antd: '>=6.0.0'
+      less: ^4.9.1
       pdfjs-dist: 6.3.289
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
@@ -81,6 +82,8 @@ importers:
       pdfjs-dist: 6.3.289
       react: 18.3.1
       react-dom: 18.3.1_react@18.3.1
+    devDependencies:
+      less: 4.9.1
 
   packages/cli:
     specifiers:

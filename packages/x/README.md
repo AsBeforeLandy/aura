@@ -22,8 +22,8 @@ import '@aura-react-comp/x/style.css'; // AI 组件样式
 ```
 
 本包的 `.less` 直接使用 `var(--aura-*)` 且**不设 fallback**，基础令牌未加载时
-颜色、圆角、字号、间距会整体失效。基础令牌由 `@aura-react-comp/ui` 提供，
-因此无论是否使用 `@aura-react-comp/ui` 的组件，都需引入它的 `style.css` 一次。
+颜色、圆角、字号、间距会整体失效。基础令牌由 `@aura-react-comp/ui` 提供
+（已随本包依赖自动安装），因此需引入它的 `style.css` 一次。
 
 品牌相关变量（渐变 / 光晕 / 软底色，`--aura-x-*`）由 `XProvider` 在运行期
 从 `colorPrimary` 实时派生并注入子树作用域——**换主色即时全量生效**，无需重新构建样式。

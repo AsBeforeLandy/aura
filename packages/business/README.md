@@ -14,13 +14,14 @@ pnpm add @aura-react-comp/business antd react react-dom
 
 ## 样式引入（重要）
 
-本包所有 `.less` 直接使用 `var(--aura-*)` 且**不设 fallback**，主题令牌未加载时颜色、圆角、字号、间距会整体失效。
-
-主题令牌由 `@aura-react-comp/ui` 提供，已作为本包依赖声明。请确保引入一次：
+本包的组件样式已编译为单文件随包发布（`esm/style.css`），**无需消费方配置 less 管线**。请确保引入一次：
 
 ```tsx
-import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/ui/style.css'; // Aura 主题令牌（--aura-*）
+import '@aura-react-comp/business/style.css'; // 业务组件样式
 ```
+
+组件样式类直接使用 `var(--aura-*)` 且**不设 fallback**，主题令牌未加载时颜色、圆角、字号、间距会整体失效——令牌由 `@aura-react-comp/ui` 提供（已作为本包依赖声明）。
 
 ## 使用
 
@@ -31,6 +32,7 @@ import {
   ProTable,
 } from '@aura-react-comp/business';
 import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/business/style.css';
 
 const App = () => (
   <BusinessProvider>

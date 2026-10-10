@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@aura-react-comp/shared": "workspace:*",
+    "@aura-react-comp/ui": "workspace:*",
     "prism-react-renderer": "^2.4.1",
     "react-markdown": "^10.1.0"
   },
