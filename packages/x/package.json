@@ -1,6 +1,6 @@
 {
   "name": "@aura-react-comp/x",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Aura AI 组件库 — 对话式 AI 界面的原子组件与数据流 Hooks（对标 Ant Design X 的 Aura 实现）",
   "keywords": [
     "aura",

@@ -1,6 +1,6 @@
 {
   "name": "@aura-react-comp/business",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Aura 业务组件库 — 基于 antd 二次封装的 B 端中后台业务组件",
   "keywords": [
     "aura",
