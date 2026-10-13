@@ -3,6 +3,10 @@ title: 动效组件
 group:
   title: 动效
   order: 9
+category: Components
+demo:
+  cols: 1
+toc: content
 ---
 
 # 动效组件
