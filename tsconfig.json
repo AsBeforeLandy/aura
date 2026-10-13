@@ -17,7 +17,8 @@
       "@aura-react-comp/shared": ["./packages/shared/src/index.ts"],
       "@aura-react-comp/request": ["./packages/request/src/index.ts"],
       "@aura-react-comp/business": ["./packages/business/src/index.ts"],
-      "@aura-react-comp/x": ["./packages/x/src/index.ts"]
+      "@aura-react-comp/x": ["./packages/x/src/index.ts"],
+      "@aura-react-comp/motion": ["./packages/motion/src/index.ts"]
     }
   },
   "include": ["packages/*/src", "tests", ".dumi"],

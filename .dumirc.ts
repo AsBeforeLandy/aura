@@ -85,6 +85,7 @@ const GROUP_ORDER = [
   '会话',
   '引导',
   '推理',
+  '动效',
 ];
 
 /** frontmatter 分组名 → 侧边栏展示名 */
@@ -160,6 +161,8 @@ export default defineConfig({
       { type: 'business', dir: 'packages/business/src' },
       // dumi 会对 type 做英文复数化：'x-component' → 路由前缀 /x-components
       { type: 'x-component', dir: 'packages/x/src' },
+      // 'motion-component' → 路由前缀 /motion-components
+      { type: 'motion-component', dir: 'packages/motion/src' },
     ],
     entryFile: './packages/ui/src/index.ts',
     codeBlockMode: 'active',
@@ -202,6 +205,12 @@ export default defineConfig({
     '@aura-react-comp/ui': path.resolve(__dirname, 'packages/ui/src'),
     '@aura-react-comp/business': path.resolve(__dirname, 'packages/business/src'),
     '@aura-react-comp/x': path.resolve(__dirname, 'packages/x/src'),
+    // 必须排在 `@aura-react-comp/motion` 之前（前缀匹配，同 ui/style.css 的原因）
+    '@aura-react-comp/motion/tokens.css': path.resolve(
+      __dirname,
+      'packages/motion/src/tokens.css',
+    ),
+    '@aura-react-comp/motion': path.resolve(__dirname, 'packages/motion/src'),
     '@aura-react-comp/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura-react-comp/request': path.resolve(__dirname, 'packages/request/src'),
   },
@@ -223,6 +232,7 @@ export default defineConfig({
       // type: 'business' 实际生成的路由前缀是 /businesses，而非 /business。
       { title: '业务组件', link: '/businesses' },
       { title: 'AI 组件', link: '/x-components' },
+      { title: '动效组件', link: '/motion-components' },
       { title: '更新日志', link: '/changelog' },
     ],
     sidebar: {

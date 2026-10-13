@@ -1,0 +1,32 @@
+/**
+ * 动效令牌（CSS 端）—— 与 src/tokens.ts 保持一致（tokens.test.ts 守护漂移）。
+ * 消费方：引入本包的 `tokens.css` 子路径，或依赖 ui/x/business
+ * 等联动包的级联引入。
+ */
+:root {
+  --aura-motion-duration-instant: 80ms;
+  --aura-motion-duration-fast: 160ms;
+  --aura-motion-duration-normal: 280ms;
+  --aura-motion-duration-slow: 480ms;
+  --aura-motion-duration-deliberate: 720ms;
+
+  --aura-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --aura-motion-ease-decelerate: cubic-bezier(0, 0, 0, 1);
+  --aura-motion-ease-accelerate: cubic-bezier(0.3, 0, 1, 1);
+
+  --aura-motion-distance-sm: 8px;
+  --aura-motion-distance-md: 16px;
+  --aura-motion-distance-lg: 32px;
+}
+
+/* 可访问性第一层降级：令牌驱动的样式（工具类 / 业务自研 less）在此整体归零。
+   引擎层与组件层的降级分别由 <MotionConfig reducedMotion> 与 useReducedMotion 承担。 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --aura-motion-duration-instant: 0ms;
+    --aura-motion-duration-fast: 0ms;
+    --aura-motion-duration-normal: 0ms;
+    --aura-motion-duration-slow: 0ms;
+    --aura-motion-duration-deliberate: 0ms;
+  }
+}

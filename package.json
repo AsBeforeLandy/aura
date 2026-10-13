@@ -64,6 +64,11 @@
       "name": "x (全量 esm)",
       "path": "packages/x/esm/**/*.js",
       "limit": "34 kB"
+    },
+    {
+      "name": "motion (全量 esm)",
+      "path": "packages/motion/esm/**/*.js",
+      "limit": "45 kB"
     }
   ],
   "keywords": [

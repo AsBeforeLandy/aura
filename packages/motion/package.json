@@ -1,0 +1,67 @@
+{
+  "name": "@aura-react-comp/motion",
+  "version": "0.1.0",
+  "description": "Aura 动效组件库 — 令牌驱动的场景化动画组件（进出场、数字与文字特效、滚动驱动、编排、手势）",
+  "keywords": [
+    "aura",
+    "react",
+    "motion",
+    "animation",
+    "transition",
+    "spring"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/motion"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
+  "type": "module",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "files": [
+    "esm"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./esm/index.d.ts",
+      "import": "./esm/index.js",
+      "default": "./esm/index.js"
+    },
+    "./tokens.css": "./esm/tokens.css",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "father build",
+    "dev": "father dev"
+  },
+  "peerDependencies": {
+    "lottie-web": ">=4.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "lottie-web": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "motion": "^12.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "lottie-web": "^5.13.0"
+  }
+}
