@@ -53,7 +53,7 @@ export interface TimelineStepProps
   duration?: DurationToken;
 }
 
-function TimelineStepBase({ at, duration = 'normal', ...rest }: TimelineStepProps) {
+export function TimelineStepBase({ at, duration = 'normal', ...rest }: TimelineStepProps) {
   const { playing } = useContext(TimelineContext);
   return (
     <motion.div
