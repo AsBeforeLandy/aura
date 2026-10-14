@@ -17,14 +17,17 @@ toc: content
 
 ## API
 
-转发引擎原样 API，常用形态：
+推荐以扁平命名的 `ReorderGroup` / `ReorderItem` 使用（`Reorder.Group` / `Reorder.Item`
+等价，两种写法均可）：
 
 ```tsx
-<Reorder.Group axis="y" values={items} onReorder={setItems}>
+import { ReorderGroup, ReorderItem } from '@aura-react-comp/motion';
+
+<ReorderGroup axis="y" values={items} onReorder={setItems}>
   {items.map((item) => (
-    <Reorder.Item key={item} value={item}>
+    <ReorderItem key={item} value={item}>
       {item}
-    </Reorder.Item>
+    </ReorderItem>
   ))}
-</Reorder.Group>
+</ReorderGroup>;
 ```

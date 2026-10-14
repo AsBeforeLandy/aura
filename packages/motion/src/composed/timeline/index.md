@@ -18,11 +18,13 @@ toc: content
 
 ## Timeline API
 
-| 属性                   | 说明                         | 类型            | 默认值     |
-| ---------------------- | ---------------------------- | --------------- | ---------- |
-| autoplay               | 进入视口自动播放             | `boolean`       | `true`     |
-| Timeline.Step.at       | 相对序列起点的触发时刻（秒） | `number`        | -          |
-| Timeline.Step.duration | 时长令牌档位                 | `DurationToken` | `'normal'` |
+| 属性                  | 说明                         | 类型            | 默认值     |
+| --------------------- | ---------------------------- | --------------- | ---------- |
+| autoplay              | 进入视口自动播放             | `boolean`       | `true`     |
+| TimelineStep.at       | 相对序列起点的触发时刻（秒） | `number`        | -          |
+| TimelineStep.duration | 时长令牌档位                 | `DurationToken` | `'normal'` |
+
+`TimelineStep` 也可通过 `Timeline.Step` 访问，两种写法等价。
 
 ## useSequence
 

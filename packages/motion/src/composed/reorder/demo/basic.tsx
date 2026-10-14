@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { Reorder } from '@aura-react-comp/motion';
+import { ReorderGroup, ReorderItem } from '@aura-react-comp/motion';
 
 /** 按住任意条目上下拖动，其余条目实时让位 */
 export default () => {
   const [items, setItems] = useState(['整理发布清单', '补充组件 demo', '验证 OIDC 发布', '写周报']);
 
   return (
-    <Reorder.Group
+    <ReorderGroup
       axis="y"
       values={items}
       onReorder={setItems}
       style={{ listStyle: 'none', margin: 0, padding: 0, maxWidth: 360, display: 'grid', gap: 8 }}
     >
       {items.map((item) => (
-        <Reorder.Item
+        <ReorderItem
           key={item}
           value={item}
           style={{
@@ -28,8 +28,8 @@ export default () => {
           whileDrag={{ background: '#eae8f9', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}
         >
           {item}
-        </Reorder.Item>
+        </ReorderItem>
       ))}
-    </Reorder.Group>
+    </ReorderGroup>
   );
 };

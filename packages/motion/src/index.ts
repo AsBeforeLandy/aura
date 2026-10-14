@@ -46,7 +46,11 @@ export type { KeyframesProps } from './primitive/keyframes';
 export { FlipList } from './composed/flip-list';
 export type { FlipListProps, FlipListItem } from './composed/flip-list';
 export { LayoutGroup } from './composed/layout-group';
-export { Reorder } from './composed/reorder';
+export {
+  Reorder,
+  ReorderGroup,
+  ReorderItem,
+} from './composed/reorder';
 export { PageTransition } from './composed/page-transition';
 export type { PageTransitionProps } from './composed/page-transition';
 export { ViewTransition, useViewTransition } from './composed/view-transition';
@@ -57,7 +61,11 @@ export { Parallax } from './composed/parallax';
 export type { ParallaxProps } from './composed/parallax';
 export { PathDraw } from './composed/path-draw';
 export type { PathDrawProps } from './composed/path-draw';
-export { TimelineWithStep as Timeline, useSequence } from './composed/timeline';
+export {
+  TimelineWithStep as Timeline,
+  TimelineStepBase as TimelineStep,
+  useSequence,
+} from './composed/timeline';
 export type {
   TimelineProps,
   TimelineStepProps,
