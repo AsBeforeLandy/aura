@@ -180,7 +180,12 @@ export default defineConfig({
       // dumi 会对 type 做英文复数化：'x-component' → 路由前缀 /x-components
       { type: 'x-component', dir: 'packages/x/src' },
       // 'motion-component' → 路由前缀 /motion-components
+      // 注意：dumi 的 atomDir 扫描深度只有两级（dir/<name>/index.md），
+      // motion 的组件文档在 src/primitive/<name>/ 与 src/composed/<name>/
+      // （三级），必须显式列出这两个子目录才能被扫描注册路由。
       { type: 'motion-component', dir: 'packages/motion/src' },
+      { type: 'motion-component', dir: 'packages/motion/src/primitive' },
+      { type: 'motion-component', dir: 'packages/motion/src/composed' },
     ],
     entryFile: './packages/ui/src/index.ts',
     codeBlockMode: 'active',
