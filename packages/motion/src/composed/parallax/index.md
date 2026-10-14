@@ -3,6 +3,7 @@ title: Parallax 视差
 group:
   title: 动效
   order: 13
+order: 13
 category: Components
 demo:
   cols: 1

@@ -3,6 +3,7 @@ title: Slide 位移
 group:
   title: 动效
   order: 1
+order: 1
 category: Components
 demo:
   cols: 1

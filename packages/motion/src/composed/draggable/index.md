@@ -3,6 +3,7 @@ title: Draggable 自由拖拽
 group:
   title: 动效
   order: 17
+order: 17
 category: Components
 demo:
   cols: 1

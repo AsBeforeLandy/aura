@@ -3,6 +3,7 @@ title: Confetti 庆祝粒子
 group:
   title: 动效
   order: 21
+order: 21
 category: Components
 demo:
   cols: 1

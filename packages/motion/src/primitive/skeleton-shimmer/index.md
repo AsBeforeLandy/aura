@@ -3,6 +3,7 @@ title: SkeletonShimmer 骨架屏
 group:
   title: 动效
   order: 8
+order: 8
 category: Components
 demo:
   cols: 1

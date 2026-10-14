@@ -3,6 +3,7 @@ title: Keyframes 关键帧
 group:
   title: 动效
   order: 10
+order: 10
 category: Components
 demo:
   cols: 1

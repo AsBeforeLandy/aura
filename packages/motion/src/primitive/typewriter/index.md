@@ -3,6 +3,7 @@ title: Typewriter 打字机
 group:
   title: 动效
   order: 5
+order: 5
 category: Components
 demo:
   cols: 1

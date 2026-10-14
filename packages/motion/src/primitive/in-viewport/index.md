@@ -3,6 +3,7 @@ title: InViewport 视口触发
 group:
   title: 动效
   order: 6
+order: 6
 category: Components
 demo:
   cols: 1

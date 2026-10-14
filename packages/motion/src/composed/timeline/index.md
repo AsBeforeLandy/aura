@@ -3,6 +3,7 @@ title: Timeline 时间线编排
 group:
   title: 动效
   order: 15
+order: 15
 category: Components
 demo:
   cols: 1

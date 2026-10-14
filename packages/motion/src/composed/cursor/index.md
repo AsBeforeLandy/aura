@@ -3,6 +3,7 @@ title: Cursor 自定义光标
 group:
   title: 动效
   order: 20
+order: 20
 category: Components
 demo:
   cols: 1

@@ -3,6 +3,7 @@ title: FlipList 列表重排
 group:
   title: 动效
   order: 16
+order: 16
 category: Components
 demo:
   cols: 1

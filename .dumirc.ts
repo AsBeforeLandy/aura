@@ -100,14 +100,12 @@ const GROUP_TITLE_OVERRIDES: Record<string, string> = {
 function collectSidebarGroups(atoms: { dir: string; prefix: string }[]) {
   const grouped = new Map<string, { order: number; item: SidebarItem }[]>();
 
-  for (const { dir, prefix } of atoms) {
-    const srcDir = path.resolve(__dirname, dir);
-
+  const scanDir = (srcDir: string, prefix: string) => {
     let entries: string[];
     try {
       entries = fs.readdirSync(srcDir);
     } catch {
-      continue; // 目录不存在时跳过，不让文档构建被工具链问题打断
+      return; // 目录不存在时跳过，不让文档构建被工具链问题打断
     }
 
     for (const name of entries) {
@@ -120,6 +118,22 @@ function collectSidebarGroups(atoms: { dir: string; prefix: string }[]) {
         item: { title: meta.title, link: `${prefix}/${name}` },
       });
       grouped.set(meta.group, list);
+    }
+  };
+
+  for (const { dir, prefix } of atoms) {
+    const srcDir = path.resolve(__dirname, dir);
+    scanDir(srcDir, prefix); // 一级扁平结构（ui / icons）
+    // 二级结构（motion 的 primitive/<name>/、composed/<name>/）
+    let entries: string[];
+    try {
+      entries = fs.readdirSync(srcDir);
+    } catch {
+      continue;
+    }
+    for (const name of entries) {
+      const sub = path.join(srcDir, name);
+      if (fs.statSync(sub).isDirectory()) scanDir(sub, prefix);
     }
   }
 

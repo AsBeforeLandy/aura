@@ -3,6 +3,7 @@ title: ScrollDriven 滚动驱动
 group:
   title: 动效
   order: 12
+order: 12
 category: Components
 demo:
   cols: 1

@@ -3,6 +3,7 @@ title: LottiePlayer Lottie 动画
 group:
   title: 动效
   order: 23
+order: 23
 category: Components
 demo:
   cols: 1

@@ -3,6 +3,7 @@ title: PageTransition 路由转场
 group:
   title: 动效
   order: 11
+order: 11
 category: Components
 demo:
   cols: 1

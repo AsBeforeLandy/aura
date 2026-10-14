@@ -3,6 +3,7 @@ title: Magnetic 磁吸
 group:
   title: 动效
   order: 7
+order: 7
 category: Components
 demo:
   cols: 1

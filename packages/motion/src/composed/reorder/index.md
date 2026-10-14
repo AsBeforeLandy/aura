@@ -3,6 +3,7 @@ title: Reorder 拖拽排序
 group:
   title: 动效
   order: 18
+order: 18
 category: Components
 demo:
   cols: 1

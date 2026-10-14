@@ -3,6 +3,7 @@ title: Aurora 氛围背景
 group:
   title: 动效
   order: 22
+order: 22
 category: Components
 demo:
   cols: 1

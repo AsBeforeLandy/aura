@@ -3,6 +3,7 @@ title: Reveal 视口揭示
 group:
   title: 动效
   order: 2
+order: 2
 category: Components
 demo:
   cols: 1

@@ -3,6 +3,7 @@ title: PathDraw 路径描边
 group:
   title: 动效
   order: 14
+order: 14
 category: Components
 demo:
   cols: 1

@@ -3,6 +3,7 @@ title: SplitText 文字拆分
 group:
   title: 动效
   order: 4
+order: 4
 category: Components
 demo:
   cols: 1
