@@ -1,5 +1,6 @@
 ---
-title: ViewTransition 视图转场
+title: ViewTransition
+subtitle: 视图转场
 group:
   title: 动效
   order: 12

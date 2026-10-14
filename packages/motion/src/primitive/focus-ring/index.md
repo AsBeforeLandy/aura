@@ -1,5 +1,6 @@
 ---
-title: FocusRing 焦点环
+title: FocusRing
+subtitle: 焦点环
 group:
   title: 动效
   order: 9

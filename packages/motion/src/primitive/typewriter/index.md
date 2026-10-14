@@ -1,5 +1,6 @@
 ---
-title: Typewriter 打字机
+title: Typewriter
+subtitle: 打字机
 group:
   title: 动效
   order: 5

@@ -1,5 +1,6 @@
 ---
-title: Slide 位移
+title: Transition
+subtitle: 进出场过渡四件套（Slide / Fade / Zoom / Collapse）
 group:
   title: 动效
   order: 1

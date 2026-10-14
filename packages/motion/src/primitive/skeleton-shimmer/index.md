@@ -1,5 +1,6 @@
 ---
-title: SkeletonShimmer 骨架屏
+title: SkeletonShimmer
+subtitle: 骨架屏
 group:
   title: 动效
   order: 8

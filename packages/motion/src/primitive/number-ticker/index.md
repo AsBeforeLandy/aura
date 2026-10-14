@@ -1,5 +1,6 @@
 ---
-title: NumberTicker 数字滚动
+title: NumberTicker
+subtitle: 数字滚动
 group:
   title: 动效
   order: 3

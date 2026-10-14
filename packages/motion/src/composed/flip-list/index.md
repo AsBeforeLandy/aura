@@ -1,5 +1,6 @@
 ---
-title: FlipList 列表重排
+title: FlipList
+subtitle: 列表重排
 group:
   title: 动效
   order: 16

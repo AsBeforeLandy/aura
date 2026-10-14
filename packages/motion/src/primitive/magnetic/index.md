@@ -1,5 +1,6 @@
 ---
-title: Magnetic 磁吸
+title: Magnetic
+subtitle: 磁吸
 group:
   title: 动效
   order: 7

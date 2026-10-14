@@ -1,5 +1,6 @@
 ---
-title: LottiePlayer Lottie 动画
+title: LottiePlayer
+subtitle: Lottie 动画
 group:
   title: 动效
   order: 23

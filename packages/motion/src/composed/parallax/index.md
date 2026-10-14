@@ -1,5 +1,6 @@
 ---
-title: Parallax 视差
+title: Parallax
+subtitle: 视差
 group:
   title: 动效
   order: 13

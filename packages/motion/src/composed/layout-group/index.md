@@ -1,5 +1,6 @@
 ---
-title: LayoutGroup 共享元素
+title: LayoutGroup
+subtitle: 共享元素
 group:
   title: 动效
   order: 19

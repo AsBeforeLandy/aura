@@ -1,5 +1,6 @@
 ---
-title: Reveal 视口揭示
+title: Reveal
+subtitle: 视口揭示
 group:
   title: 动效
   order: 2

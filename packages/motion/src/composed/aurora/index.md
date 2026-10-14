@@ -1,5 +1,6 @@
 ---
-title: Aurora 氛围背景
+title: Aurora
+subtitle: 氛围背景
 group:
   title: 动效
   order: 22

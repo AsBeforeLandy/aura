@@ -1,5 +1,6 @@
 ---
-title: PageTransition 路由转场
+title: PageTransition
+subtitle: 路由转场
 group:
   title: 动效
   order: 11

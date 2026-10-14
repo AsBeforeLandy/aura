@@ -1,5 +1,6 @@
 ---
-title: PathDraw 路径描边
+title: PathDraw
+subtitle: 路径描边
 group:
   title: 动效
   order: 14

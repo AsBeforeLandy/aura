@@ -1,5 +1,6 @@
 ---
-title: Cursor 自定义光标
+title: Cursor
+subtitle: 自定义光标
 group:
   title: 动效
   order: 20

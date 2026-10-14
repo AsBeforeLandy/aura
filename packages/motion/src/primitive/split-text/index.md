@@ -1,5 +1,6 @@
 ---
-title: SplitText 文字拆分
+title: SplitText
+subtitle: 文字拆分
 group:
   title: 动效
   order: 4
