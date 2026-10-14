@@ -9,5 +9,5 @@
 import { Reorder } from 'motion/react';
 
 export { Reorder };
-export const ReorderGroup = Reorder.Group;
-export const ReorderItem = Reorder.Item;
+export const ReorderGroup: typeof Reorder.Group = Reorder.Group;
+export const ReorderItem: typeof Reorder.Item = Reorder.Item;
