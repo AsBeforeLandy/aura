@@ -60,9 +60,9 @@ export function Reveal({
 
   if (reduced) {
     return (
-      <div style={style} {...rest}>
+      <motion.div style={style} {...rest}>
         {children}
-      </div>
+      </motion.div>
     );
   }
 
