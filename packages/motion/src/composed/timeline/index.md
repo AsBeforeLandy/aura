@@ -28,7 +28,7 @@ toc: content
 
 ## useSequence
 
-```ts
+```ts | pure
 const play = useSequence();
 play([
   { at: 0, target: cardRef, to: { scale: 1.06 } },

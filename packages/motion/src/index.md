@@ -56,6 +56,6 @@ toc: content
 
 ## 引入令牌
 
-```ts
+```ts | pure
 import '@aura-react-comp/motion/tokens.css';
 ```

@@ -23,7 +23,7 @@ toc: content
 
 ### useViewTransition
 
-```ts
+```ts | pure
 const withTransition = useViewTransition();
 withTransition(() => setState(next)); // 包裹任意一次状态更新
 ```
