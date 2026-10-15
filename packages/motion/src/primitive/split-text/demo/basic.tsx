@@ -2,37 +2,40 @@ import React from 'react';
 import { Space } from 'antd';
 import { SplitText } from '@aura-react-comp/motion';
 
-/** 三种粒度：char / word / line */
+/** 三种入场形态对比（char 粒度） */
 export default () => (
   <Space direction="vertical" size={28} style={{ width: '100%' }}>
     <div>
-      <div style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 8 }}>granularity="char"</div>
+      <div style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 8 }}>variant="fade"</div>
       <SplitText
         text="令牌驱动的动效组件库"
         granularity="char"
-        stagger={0.05}
-        style={{ fontSize: 26, fontWeight: 600 }}
-      />
-    </div>
-    <div>
-      <div style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 8 }}>granularity="word"</div>
-      <SplitText
-        text="Motion tokens for every interface"
-        granularity="word"
-        stagger={0.08}
-        style={{ fontSize: 20, fontWeight: 500 }}
+        variant="fade"
+        style={{ fontSize: 24, fontWeight: 600 }}
       />
     </div>
     <div>
       <div style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 8 }}>
-        granularity="line" + mode="inView"（向下滚动触发）
+        variant="rise" —— 每字从遮罩下方升起
       </div>
       <SplitText
-        text={'第一行：进入视口时揭示\n第二行：支持换行拆分\n第三行：once 播放一次'}
-        granularity="line"
-        stagger={0.18}
-        mode="inView"
-        style={{ fontSize: 16 }}
+        text="文字从遮罩里升起"
+        granularity="char"
+        variant="rise"
+        stagger={0.045}
+        style={{ fontSize: 24, fontWeight: 600 }}
+      />
+    </div>
+    <div>
+      <div style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 8 }}>
+        variant="flip" —— rotateX 翻牌入场
+      </div>
+      <SplitText
+        text="MOTION IN 2026"
+        granularity="char"
+        variant="flip"
+        stagger={0.05}
+        style={{ fontSize: 24, fontWeight: 600, letterSpacing: 2 }}
       />
     </div>
   </Space>

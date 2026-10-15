@@ -89,14 +89,16 @@ describe('SplitText', () => {
 });
 
 describe('NumberTicker / Typewriter', () => {
-  it('NumberTicker 渲染格式化后的值', () => {
-    render(<NumberTicker value={128940} />);
-    expect(screen.getByText('128,940')).toBeTruthy();
+  it('NumberTicker 渲染格式化后的值（逐位渲染）', () => {
+    const { container } = render(<NumberTicker value={128940} fromZero={false} />);
+    expect(container.textContent).toBe('128,940');
   });
 
   it('NumberTicker 尊重自定义 format', () => {
-    render(<NumberTicker value={0.85} format={(n) => `${Math.round(n * 100)}%`} />);
-    expect(screen.getByText('85%')).toBeTruthy();
+    const { container } = render(
+      <NumberTicker value={0.85} format={(n) => `${Math.round(n * 100)}%`} fromZero={false} />,
+    );
+    expect(container.textContent).toBe('85%');
   });
 
   it('Typewriter 初始输出为空（逐字进行中）', () => {

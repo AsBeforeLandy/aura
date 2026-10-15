@@ -1,8 +1,13 @@
 'use client';
 
 /**
- * 庆祝粒子（canvas 2d）：`fire` 计数器变化时发射一轮。
- * reduced-motion 下不渲染任何内容；粒子全部离场后自动停止 rAF。
+ * 庆祝粒子（canvas 2d，物理精修版）：`fire` 计数器变化时发射一轮。
+ *
+ * 精修点：
+ * - 形态：纸条（1:2.6）+ 圆点，纸条以 scaleY 正弦翻转模拟 3D 翻面；
+ * - 物理：初速呈上抛扇形分布（±60°），空气阻力 0.985/帧，
+ *   翻转速度与下落速度耦合，末段低速时水平摇摆（纸片飘落感）；
+ * - reduced-motion 下不渲染任何内容；粒子全部离场后自动停止 rAF。
  */
 
 import { useEffect, useRef } from 'react';
@@ -24,11 +29,15 @@ interface Particle {
   vy: number;
   rot: number;
   vr: number;
-  size: number;
+  /** 翻面相位（scaleY = sin(tilt) 模拟 3D 翻转） */
+  tilt: number;
+  tiltSpeed: number;
+  w: number;
+  h: number;
   color: string;
   life: number;
   decay: number;
-  rect: boolean;
+  ribbon: boolean;
 }
 
 const DEFAULT_COLORS = [
@@ -48,7 +57,6 @@ export function Confetti({
 }: ConfettiProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = useReducedMotion();
-  const lastFire = useRef(0);
 
   useEffect(() => {
     if (!fire || reduced) return;
@@ -62,19 +70,28 @@ export function Confetti({
     const ox = origin.x * canvas.width;
     const oy = origin.y * canvas.height;
 
-    const parts: Particle[] = Array.from({ length: count }, (_, i) => ({
-      x: ox,
-      y: oy,
-      vx: (Math.random() - 0.5) * 16,
-      vy: -Math.random() * 14 - 4,
-      rot: Math.random() * Math.PI,
-      vr: (Math.random() - 0.5) * 0.3,
-      size: 6 + Math.random() * 6,
-      color: colors[i % colors.length],
-      life: 1,
-      decay: 0.008 + Math.random() * 0.008,
-      rect: Math.random() > 0.5,
-    }));
+    const parts: Particle[] = Array.from({ length: count }, (_, i) => {
+      // 上抛扇形：-90° ± 60°
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * ((Math.PI * 2) / 3);
+      const speed = 8 + Math.random() * 9;
+      const ribbon = Math.random() > 0.55;
+      return {
+        x: ox,
+        y: oy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        rot: Math.random() * Math.PI,
+        vr: (Math.random() - 0.5) * 0.2,
+        tilt: Math.random() * Math.PI * 2,
+        tiltSpeed: 0.12 + Math.random() * 0.22,
+        w: ribbon ? 5 + Math.random() * 4 : 7 + Math.random() * 5,
+        h: ribbon ? 16 + Math.random() * 8 : 7 + Math.random() * 5,
+        color: colors[i % colors.length],
+        life: 1,
+        decay: 0.007 + Math.random() * 0.007,
+        ribbon,
+      };
+    });
 
     let raf = 0;
     const tick = () => {
@@ -84,20 +101,30 @@ export function Confetti({
         p.life -= p.decay;
         if (p.life <= 0) continue;
         alive = true;
-        p.vy += 0.35;
+
+        // 空气阻力 + 重力
+        p.vx *= 0.985;
+        p.vy = p.vy * 0.985 + 0.32;
         p.x += p.vx;
         p.y += p.vy;
         p.rot += p.vr;
+
+        // 翻面速度与下落速度耦合；低速末段水平摇摆（纸片飘落）
+        p.tilt += p.tiltSpeed * (Math.abs(p.vy) / 14 + 0.35);
+        if (p.vy > -1 && p.life < 0.7) p.x += Math.sin(p.tilt * 0.5) * 0.35;
+
         ctx.save();
         ctx.globalAlpha = Math.max(p.life, 0);
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rot);
         ctx.fillStyle = p.color;
-        if (p.rect) {
-          ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        if (p.ribbon) {
+          // 纸条：scaleY 正弦翻转模拟 3D 翻面
+          ctx.scale(1, Math.sin(p.tilt));
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
         } else {
           ctx.beginPath();
-          ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+          ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
           ctx.fill();
         }
         ctx.restore();
@@ -109,7 +136,6 @@ export function Confetti({
       }
     };
     raf = requestAnimationFrame(tick);
-    lastFire.current = fire;
     return () => cancelAnimationFrame(raf);
     // origin/colors 变化不重发；fire 是唯一触发器
     // eslint-disable-next-line react-hooks/exhaustive-deps
