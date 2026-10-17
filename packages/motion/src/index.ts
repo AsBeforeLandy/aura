@@ -41,6 +41,14 @@ export { FocusRing } from './primitive/focus-ring';
 export type { FocusRingProps } from './primitive/focus-ring';
 export { Keyframes, KEYFRAMES_ALLOWED_PROPS } from './primitive/keyframes';
 export type { KeyframesProps } from './primitive/keyframes';
+export { TextShimmer } from './primitive/text-shimmer';
+export type { TextShimmerProps } from './primitive/text-shimmer';
+export { TypingDots } from './primitive/typing-dots';
+export type { TypingDotsProps } from './primitive/typing-dots';
+export { GradientBorder } from './primitive/gradient-border';
+export type { GradientBorderProps } from './primitive/gradient-border';
+export { Marquee } from './primitive/marquee';
+export type { MarqueeProps } from './primitive/marquee';
 
 // ---- 复杂场景 ----
 export { FlipList } from './composed/flip-list';
@@ -81,3 +89,7 @@ export { Aurora } from './composed/aurora';
 export type { AuroraProps } from './composed/aurora';
 export { LottiePlayer } from './composed/lottie-player';
 export type { LottiePlayerProps } from './composed/lottie-player';
+export { TiltCard } from './composed/tilt-card';
+export type { TiltCardProps } from './composed/tilt-card';
+export { ScrollScaleCard } from './composed/scroll-scale-card';
+export type { ScrollScaleCardProps } from './composed/scroll-scale-card';
