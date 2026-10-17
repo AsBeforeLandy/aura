@@ -36,14 +36,25 @@ export function PageTransition({
     <AnimatePresence mode={mode} initial={false}>
       <motion.div
         key={transitionKey}
-        initial={{ opacity: 0, y: 12 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
-        transition={{ duration: motionDurations[duration], ease: motionEases.standard }}
+        transition={{
+          // 快退慢进：外层只负责退场（0.6 倍时长 + accelerate）
+          duration: motionDurations[duration] * 0.6,
+          ease: motionEases.accelerate,
+        }}
         style={mode === 'sync' ? { position: 'relative', ...style } : style}
         {...rest}
       >
-        {children}
+        {/* 进场交给内层：更从容的 decelerate，形成「快退 + 慢进」的节奏对比 */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: motionDurations[duration], ease: motionEases.decelerate }}
+        >
+          {children}
+        </motion.div>
       </motion.div>
     </AnimatePresence>
   );
