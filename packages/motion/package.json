@@ -1,6 +1,6 @@
 {
   "name": "@aura-react-comp/motion",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Aura 动效组件库 — 令牌驱动的场景化动画组件（进出场、数字与文字特效、滚动驱动、编排、手势）",
   "keywords": [
     "aura",
