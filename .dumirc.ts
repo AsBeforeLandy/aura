@@ -268,6 +268,7 @@ export default defineConfig({
             { title: '快速开始', link: '/guide/quick-start' },
             { title: '安装', link: '/guide/installation' },
             { title: '主题定制', link: '/guide/theme' },
+            { title: '动效场景配方', link: '/guide/motion-recipes' },
             { title: '开发规范与性能指标', link: '/guide/standards' },
             { title: '工程化工具链', link: '/guide/toolchain' },
             { title: '发布流程', link: '/guide/releasing' },

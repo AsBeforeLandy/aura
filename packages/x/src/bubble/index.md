@@ -52,6 +52,36 @@ avatar / header / footer 三个插槽，footer 里放 Actions 操作组。
 
 <code src="./demo/slots.tsx" description="avatar + header + footer(Actions) 完整插槽。">插槽组合</code>
 
+### 动效增强（可选）
+
+搭配 [`@aura-react-comp/motion`](/motion-components) 升级等待态与生成态：
+
+```tsx | pure
+import { Bubble } from '@aura-react-comp/x';
+import { TypingDots, TextShimmer } from '@aura-react-comp/motion';
+
+// 思考中：三点脉冲（role="status"，无障碍友好）
+<Bubble
+  placement="start"
+  content={
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+      <TypingDots color="#534ab7" />
+      <span style={{ fontSize: 13, color: '#8a8984' }}>正在思考…</span>
+    </span>
+  }
+/>
+
+// 生成中：标题流动光
+<Bubble
+  placement="start"
+  header={<TextShimmer highlightColor="rgba(0,0,0,0.45)">正在生成…</TextShimmer>}
+  content="已收到问题，正在组织回答。"
+/>
+```
+
+motion 是可选依赖，未安装不影响 Bubble 的任何功能。完整场景（含流光边框、
+落地页揭示）见 [动效场景配方](/guide/motion-recipes)。
+
 ## API
 
 ### BubbleProps
