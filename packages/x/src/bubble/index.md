@@ -56,24 +56,27 @@ avatar / header / footer 三个插槽，footer 里放 Actions 操作组。
 
 搭配 [`@aura-react-comp/motion`](/motion-components) 升级等待态与生成态：
 
+<code src="./demo/motion.tsx" description="思考态（TypingDots）、生成态流光（TextShimmer）、流光边框（GradientBorder）与 3D 倾斜（TiltCard）四种组合。">动效增强</code>
+
 ```tsx | pure
 import { Bubble } from '@aura-react-comp/x';
 import { TypingDots, TextShimmer } from '@aura-react-comp/motion';
 
-// 思考中：三点脉冲（role="status"，无障碍友好）
+// 思考中：content 是字符串，自定义节点走 contentRender
 <Bubble
-  placement="start"
-  content={
+  role="assistant"
+  content=""
+  contentRender={() => (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
       <TypingDots color="#534ab7" />
       <span style={{ fontSize: 13, color: '#8a8984' }}>正在思考…</span>
     </span>
-  }
+  )}
 />
 
-// 生成中：标题流动光
+// 生成中：标题流动光（header 接受 ReactNode）
 <Bubble
-  placement="start"
+  role="assistant"
   header={<TextShimmer highlightColor="rgba(0,0,0,0.45)">正在生成…</TextShimmer>}
   content="已收到问题，正在组织回答。"
 />

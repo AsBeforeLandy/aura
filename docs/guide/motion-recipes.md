@@ -23,17 +23,20 @@ import { TypingDots } from '@aura-react-comp/motion';
 export function ThinkingBubble() {
   return (
     <Bubble
-      placement="start"
-      content={
+      role="assistant"
+      content=""
+      contentRender={() => (
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
           <TypingDots color="#534ab7" />
           <span style={{ fontSize: 13, color: '#8a8984' }}>正在思考…</span>
         </span>
-      }
+      )}
     />
   );
 }
 ```
+
+> 注意：`Bubble` 的 `content` 是字符串，自定义 ReactNode 请走 `contentRender`。
 
 ## 配方二：生成中的文字流光
 
@@ -67,7 +70,7 @@ import { GradientBorder } from '@aura-react-comp/motion';
 export function AiAnswerCard() {
   return (
     <GradientBorder radius={16} size={1.5} speed={4.5}>
-      <Bubble placement="start" content="这是带流光边框的 AI 回答卡片。" />
+      <Bubble role="assistant" content="这是带流光边框的 AI 回答卡片。" />
     </GradientBorder>
   );
 }
