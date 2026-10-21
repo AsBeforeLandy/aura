@@ -100,6 +100,9 @@ aura/
 ├── packages/
 │   ├── ui/        # @aura-react-comp/ui — UI 组件库
 │   ├── business/  # @aura-react-comp/business — 业务组件库（基于 antd 封装）
+│   ├── x/         # @aura-react-comp/x — AI 对话组件库（对标 Ant Design X）
+│   ├── motion/    # @aura-react-comp/motion — 动效组件库（30 组件，令牌驱动）
+│   ├── icons/     # @aura-react-comp/icons — 图标库
 │   ├── shared/    # @aura-react-comp/shared — 工具函数（classNames、prefixCls 等）
 │   ├── request/   # @aura-react-comp/request — HTTP 请求封装
 │   ├── cli/       # @aura-react-comp/cli — MCP Server 与 CLI 工具

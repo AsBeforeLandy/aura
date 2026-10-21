@@ -8,9 +8,18 @@
     "motion",
     "animation",
     "transition",
-    "spring"
+    "spring",
+    "text-shimmer",
+    "typing",
+    "tilt",
+    "parallax",
+    "aurora",
+    "confetti",
+    "reveal",
+    "split-text",
+    "scroll-animation"
   ],
-  "homepage": "https://asbeforelandy.github.io/aura/",
+  "homepage": "https://asbeforelandy.github.io/aura/motion-components",
   "bugs": {
     "url": "https://github.com/AsBeforeLandy/aura/issues"
   },
