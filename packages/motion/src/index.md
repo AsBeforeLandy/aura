@@ -18,6 +18,8 @@ toc: content
 组件只动画 `transform` / `opacity`，合成器友好。引擎为 Motion ^12（MIT），
 业务代码请一律从 `@aura-react-comp/motion` 导入，不要直接依赖 `motion/react`。
 
+<code src="./demo/showcase.tsx" description="8 个场景自动轮播（悬停暂停、点击圆点切换）：进出场、揭示、数字、文字、AI、卡片、氛围、加载。">动效演示墙</code>
+
 ## 组件一览
 
 ### 基础
@@ -34,6 +36,10 @@ toc: content
 | SkeletonShimmer                | 骨架屏光泽扫过                 |
 | FocusRing                      | 键盘焦点环跟随                 |
 | Keyframes                      | 令牌驱动的关键帧               |
+| TextShimmer                    | 文字流光（AI 生成中）          |
+| TypingDots                     | 思考三点脉冲（AI 等待态）      |
+| GradientBorder                 | 流光渐变边框                   |
+| Marquee                        | 无缝滚动横幅                   |
 
 ### 复杂场景
 
@@ -53,6 +59,8 @@ toc: content
 | Confetti                         | 庆祝粒子                             |
 | Aurora                           | 渐变氛围背景                         |
 | LottiePlayer                     | Lottie 动画（可选 peer）             |
+| TiltCard                         | 3D 倾斜卡片（指针驱动 + 光泽）       |
+| ScrollScaleCard                  | 滚动缩放揭示（landing 卡片）         |
 
 ## 引入令牌
 

@@ -33,4 +33,7 @@ toc: content
 | duration  | 时长令牌档位                              | `'instant' \| 'fast' \| 'normal' \| 'slow' \| 'deliberate'` | `'normal'`     |
 | ease      | 缓动令牌档位                              | `'standard' \| 'decelerate' \| 'accelerate'`                | `'decelerate'` |
 
+> `Collapse` 的显隐属性名是 **`open`**（不是 `visible`），其余四件套的显隐属性为
+> `visible`。
+
 其余属性透传给容器 `div`。组件根元素暴露 `data-motion-state`（`entered` / `exited`）。
