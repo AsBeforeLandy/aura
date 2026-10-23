@@ -32,6 +32,14 @@ import { PageContainer } from '@aura-react-comp/business';
 
 <code src="./demo/basic.tsx" description="包含面包屑、标题、描述与操作区的完整示例。">基本用法</code>
 
+### 动效增强（可选）
+
+`title` / `description` 接受 ReactNode——配合 `@aura-react-comp/motion` 可获得
+标题遮罩升起、指标数字滚动与卡片错峰进场。完整配方见
+[动效场景配方](/guide/motion-recipes)的「B 端场景」章节。
+
+<code src="./demo/motion.tsx" description="SplitText 标题 + NumberTicker 指标 + Reveal 错峰卡片。">动效增强</code>
+
 ## API
 
 ### PageContainerProps
