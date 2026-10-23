@@ -31,6 +31,11 @@ import { ProTable } from '@aura-react-comp/business';
 
 <code src="./demo/basic.tsx" description="内置查询表单、分页与 loading；request 返回 { data, total }。">基本用法</code>
 
+### 动效增强（可选）
+
+首屏可用错峰骨架替代白屏、数据就绪后整体 Reveal 进场（ProTable 内部刷新仍由
+antd Spin 接管）。配方与代码见[动效场景配方](/guide/motion-recipes)的「B 端场景」章节。
+
 ## API
 
 ### ProTableProps
