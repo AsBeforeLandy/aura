@@ -193,7 +193,7 @@ export function UserTable({ booting, ...props }: { booting: boolean }) {
 
 ### 配方八：ModalForm 内容逐项进场
 
-ModalForm 的 `destroyOnClose` 默认为 `true`——每次打开内容都会重新挂载，
+ModalForm 的 `destroyOnHidden` 默认为 `true`——每次打开内容都会重新挂载，
 Reveal 因此每次都能完整播放（`index` 逐项错峰）。
 
 ```tsx | pure

@@ -27,6 +27,13 @@ import { ModalForm } from '@aura-react-comp/business';
 
 <code src="./demo/basic.tsx" description="onFinish 返回 Promise 时自动接管确定按钮 loading。">基本用法</code>
 
+### 动效增强（可选）
+
+表单项可用 `Reveal` 逐项错峰进场——`destroyOnHidden` 默认开启，因此每次打开
+弹窗都完整重播。完整配方见[动效场景配方](/guide/motion-recipes)的「B 端场景」章节。
+
+<code src="./demo/motion.tsx" description="与原生 Modal 对照：动效版表单项按 index 递增错峰。">动效增强</code>
+
 ## 交互流程
 
 1. 点击「确定」→ 触发 antd Form 校验
