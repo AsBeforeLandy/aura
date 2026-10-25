@@ -27,6 +27,12 @@ export function Timeline({ children, autoplay = true, className, style }: Timeli
     if (!autoplay) return;
     const el = ref.current;
     if (!el) return;
+    // 无 IntersectionObserver 的环境（jsdom、老旧浏览器、SSR 水合前）直接播放，
+    // 避免 ReferenceError 与「内容永远停在 opacity 0」
+    if (typeof IntersectionObserver === 'undefined') {
+      setPlaying(true);
+      return;
+    }
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setPlaying(true);
