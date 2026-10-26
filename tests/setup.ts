@@ -70,3 +70,43 @@ if (typeof window !== 'undefined') {
   window.getComputedStyle = ((elt: Element) =>
     originalGetComputedStyle(elt)) as typeof window.getComputedStyle;
 }
+
+// IntersectionObserver —— 视口相关组件（Reveal / InViewport / Timeline 以及
+// motion 引擎的 whileInView）依赖；jsdom 未实现。
+// mock 语义为「observe 时立即进入视口」，使进场类行为在测试中可确定地发生。
+if (typeof window !== 'undefined' && !('IntersectionObserver' in window)) {
+  class IntersectionObserverMock {
+    root: Element | Document | null = null;
+    rootMargin = '';
+    thresholds: number[] = [];
+    private cb: IntersectionObserverCallback;
+    constructor(callback: IntersectionObserverCallback) {
+      this.cb = callback;
+    }
+    observe(target: Element) {
+      this.cb(
+        [{ isIntersecting: true, target } as IntersectionObserverEntry],
+        this as unknown as IntersectionObserver,
+      );
+    }
+    unobserve() {
+      /* noop */
+    }
+    disconnect() {
+      /* noop */
+    }
+    takeRecords(): IntersectionObserverEntry[] {
+      return [];
+    }
+  }
+  Object.defineProperty(window, 'IntersectionObserver', {
+    writable: true,
+    configurable: true,
+    value: IntersectionObserverMock,
+  });
+  Object.defineProperty(globalThis, 'IntersectionObserver', {
+    writable: true,
+    configurable: true,
+    value: IntersectionObserverMock,
+  });
+}
