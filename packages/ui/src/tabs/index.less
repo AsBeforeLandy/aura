@@ -25,10 +25,11 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    transition: color var(--aura-duration-normal) var(--aura-easing),
-                background-color var(--aura-duration-normal) var(--aura-easing),
-                border-color var(--aura-duration-normal) var(--aura-easing),
-                transform var(--aura-duration-fast) var(--aura-easing);
+    transition:
+      color var(--aura-duration-normal) var(--aura-easing),
+      background-color var(--aura-duration-normal) var(--aura-easing),
+      border-color var(--aura-duration-normal) var(--aura-easing),
+      transform var(--aura-duration-fast) var(--aura-easing);
     white-space: nowrap;
     user-select: none;
 
@@ -67,8 +68,9 @@
     height: 2px;
     background: var(--aura-primary-700);
     border-radius: 2px 2px 0 0;
-    transition: transform var(--aura-duration-slow) var(--aura-easing),
-                width var(--aura-duration-slow) var(--aura-easing);
+    transition:
+      transform var(--aura-duration-slow) var(--aura-easing),
+      width var(--aura-duration-slow) var(--aura-easing);
     will-change: transform, width;
   }
 
@@ -196,7 +198,7 @@
 }
 
 /* ===== 暗色模式 ===== */
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-tabs {
     &-tab {
       &:hover {

@@ -29,17 +29,17 @@ toc: content
 
 ### SuggestionProps
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| items | 建议列表 | `SuggestionItem[]` | - |
-| onSelect | 选中某条建议 | `(item: SuggestionItem) => void` | - |
-| open | 是否展示 | `boolean` | `true` |
+| 参数     | 说明         | 类型                             | 默认值 |
+| -------- | ------------ | -------------------------------- | ------ |
+| items    | 建议列表     | `SuggestionItem[]`               | -      |
+| onSelect | 选中某条建议 | `(item: SuggestionItem) => void` | -      |
+| open     | 是否展示     | `boolean`                        | `true` |
 
 ### SuggestionItem
 
-| 参数 | 说明 | 类型 |
-| --- | --- | --- |
-| key | 唯一键 | `React.Key` |
+| 参数  | 说明     | 类型        |
+| ----- | -------- | ----------- |
+| key   | 唯一键   | `React.Key` |
 | label | 建议文案 | `ReactNode` |
 
 ## 注意事项

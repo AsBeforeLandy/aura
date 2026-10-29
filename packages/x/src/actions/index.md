@@ -30,23 +30,23 @@ toc: content
 
 ### ActionsProps
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| items | 操作项 | `ActionItem[]` | - |
-| direction | 排列方向 | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| ariaLabel | 工具栏可访问名称 | `string` | `'操作'` |
+| 参数      | 说明             | 类型                         | 默认值         |
+| --------- | ---------------- | ---------------------------- | -------------- |
+| items     | 操作项           | `ActionItem[]`               | -              |
+| direction | 排列方向         | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| ariaLabel | 工具栏可访问名称 | `string`                     | `'操作'`       |
 
 ### ActionItem
 
-| 参数 | 说明 | 类型 |
-| --- | --- | --- |
-| key | 唯一键 | `React.Key` |
-| icon | 图标 | `ReactNode` |
-| label | 文案（同时作为按钮的可访问名称与 title） | `ReactNode` |
-| danger | 危险操作（红色态） | `boolean` |
-| active | 切换态（如已点赞） | `boolean` |
-| disabled | 禁用 | `boolean` |
-| onClick | 点击回调 | `() => void` |
+| 参数     | 说明                                     | 类型         |
+| -------- | ---------------------------------------- | ------------ |
+| key      | 唯一键                                   | `React.Key`  |
+| icon     | 图标                                     | `ReactNode`  |
+| label    | 文案（同时作为按钮的可访问名称与 title） | `ReactNode`  |
+| danger   | 危险操作（红色态）                       | `boolean`    |
+| active   | 切换态（如已点赞）                       | `boolean`    |
+| disabled | 禁用                                     | `boolean`    |
+| onClick  | 点击回调                                 | `() => void` |
 
 ## 注意事项
 

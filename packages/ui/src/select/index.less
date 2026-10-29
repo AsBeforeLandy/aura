@@ -369,12 +369,16 @@
 }
 
 @keyframes aura-select-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // 暗色模式
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-select {
     &-selector:focus-visible {
       box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);

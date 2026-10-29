@@ -73,7 +73,8 @@
     font-size: var(--aura-font-size-sm);
     color: var(--aura-text);
     transition: all var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
-    animation: aura-upload-fade-in var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    animation: aura-upload-fade-in var(--aura-duration-normal)
+      cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
       background: var(--aura-bg-tertiary);
@@ -307,8 +308,12 @@
 
 /* ===== 动画关键帧 ===== */
 @keyframes aura-upload-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes aura-upload-fade-in {
@@ -323,7 +328,7 @@
 }
 
 /* ===== 暗色模式 ===== */
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-upload {
     &-trigger {
       background: var(--aura-bg-secondary);

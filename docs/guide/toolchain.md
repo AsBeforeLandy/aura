@@ -60,9 +60,10 @@ toc: content
 | 检查                                                       | pre-commit |       `pnpm verify`       | CI（`ci.yml`） |
 | ---------------------------------------------------------- | :--------: | :-----------------------: | :------------: |
 | `eslint --fix`（仅暂存的 `*.{ts,tsx}`）                    |     ✅     |             -             |       -        |
-| `prettier --write`（仅暂存的 `*.{json,less,md,yml,yaml}`） |     ✅     |             -             |       -        |
+| `prettier --write`（暂存的 `*.{ts,tsx,json,less,md,css}`） |     ✅     |             -             |       -        |
 | `commitlint`（提交信息）                                   |     ✅     |             -             |       -        |
 | `pnpm lint`                                                |     -      |            ✅             |       ✅       |
+| `pnpm format:check:assets`（样式/文档/JSON 格式）          |     -      |            ✅             |       ✅       |
 | `pnpm typecheck`                                           |     -      |            ✅             |       ✅       |
 | 单元测试                                                   |     -      |            ✅             |       ✅       |
 | **覆盖率阈值**                                             |     -      |            ✅             |       ✅       |
@@ -70,12 +71,16 @@ toc: content
 | `postbuild-dts` 声明清理                                   |     -      | ✅（链在 `build:lib` 内） |       ✅       |
 | `pnpm size` 体积预算                                       |     -      |            ✅             |       ✅       |
 | `pnpm smoke` 产物冒烟                                      |     -      |            ✅             |       ✅       |
-| `pnpm format:check`（收敛进度探针，**未入门禁**）          |     -      |            ❌             |       ❌       |
+| `pnpm format:check`（全量含 ts/tsx，**进度探针未入门禁**） |     -      |            ❌             |       ❌       |
+
+> 格式门禁的边界：`format:check:assets` 覆盖 `json/less/md/css/yml/yaml`（历史遗留已清零，
+> 全绿入门禁）；`format:check` 是全量探针，含 300+ 历史 `ts/tsx` 存量——不做一次性重排
+> 以免折断 `git blame`，新代码由 pre-commit 的 `prettier --write` 保证合规。
 
 一键执行：
 
 ```bash
-pnpm verify       # 完整门禁：lint → typecheck → test:coverage → build:lib → size → smoke
+pnpm verify       # 完整门禁：lint → format:check:assets → typecheck → test:coverage → build:lib → size → smoke
 pnpm verify:fast  # 跳过覆盖率插桩，用于紧凑的内循环
 ```
 

@@ -81,23 +81,47 @@
   &&-disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    &:hover .aura-radio-inner { border-color: var(--aura-border); box-shadow: none; }
-    &.aura-radio-checked .aura-radio-inner { border-color: var(--aura-border); }
-    .aura-radio-inner::after { background: var(--aura-text-tertiary); }
+    &:hover .aura-radio-inner {
+      border-color: var(--aura-border);
+      box-shadow: none;
+    }
+    &.aura-radio-checked .aura-radio-inner {
+      border-color: var(--aura-border);
+    }
+    .aura-radio-inner::after {
+      background: var(--aura-text-tertiary);
+    }
   }
 
   // 标签文本
-  &-label { font-size: inherit; line-height: inherit; }
+  &-label {
+    font-size: inherit;
+    line-height: inherit;
+  }
 
   // 尺寸
   &&-sm {
     font-size: var(--aura-font-size-sm);
-    .aura-radio-inner { width: 14px; height: 14px; &::after { width: 6px; height: 6px; } }
+    .aura-radio-inner {
+      width: 14px;
+      height: 14px;
+      &::after {
+        width: 6px;
+        height: 6px;
+      }
+    }
   }
 
   &&-lg {
     font-size: var(--aura-font-size-lg);
-    .aura-radio-inner { width: 18px; height: 18px; &::after { width: 10px; height: 10px; } }
+    .aura-radio-inner {
+      width: 18px;
+      height: 18px;
+      &::after {
+        width: 10px;
+        height: 10px;
+      }
+    }
   }
 }
 
@@ -105,15 +129,27 @@
 .aura-radio-group {
   display: flex;
   gap: var(--aura-spacing-3);
-  &&-horizontal { flex-direction: row; flex-wrap: wrap; align-items: center; }
-  &&-vertical { flex-direction: column; }
+  &&-horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  &&-vertical {
+    flex-direction: column;
+  }
 }
 
 // 暗色模式
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-radio {
-    &-inner { border-color: rgba(139, 92, 246, 0.3); }
-    &:hover .aura-radio-inner { border-color: var(--aura-primary-600); }
-    &-input:focus-visible + .aura-radio-inner { box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2); }
+    &-inner {
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    &:hover .aura-radio-inner {
+      border-color: var(--aura-primary-600);
+    }
+    &-input:focus-visible + .aura-radio-inner {
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+    }
   }
 }

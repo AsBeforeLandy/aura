@@ -28,8 +28,7 @@
   padding: var(--aura-spacing-1) 0;
   font-size: var(--aura-font-size-md);
   cursor: default;
-  transition:
-    color var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color var(--aura-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     color: var(--aura-primary-700);
@@ -51,7 +50,7 @@
   }
 
   /* 可点击的 span */
-  span&[role="button"] {
+  span&[role='button'] {
     cursor: pointer;
 
     &:hover {
@@ -81,7 +80,7 @@
 }
 
 /* ===== 暗色模式 ===== */
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-breadcrumb-item {
     color: var(--aura-text-secondary);
 

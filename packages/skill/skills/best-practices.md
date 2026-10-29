@@ -7,15 +7,15 @@ description: Use when reviewing or optimizing Aura component usage - covers acce
 
 ## 组件选择
 
-| 场景 | 推荐组件 | 原因 |
-|------|----------|------|
-| 操作反馈 | Message | 轻量级，不打断流程 |
-| 重要通知 | Notification | 含标题，吸引注意 |
-| 危险操作确认 | Popconfirm | 气泡确认，防止误操作 |
-| 结果展示 | Result | 全页面展示，含操作引导 |
-| 多步骤流程 | Steps | 清晰进度指示 |
-| 数据切换 | Tabs | 同区域多内容 |
-| 内容折叠 | Collapse | 节省空间 |
+| 场景         | 推荐组件     | 原因                   |
+| ------------ | ------------ | ---------------------- |
+| 操作反馈     | Message      | 轻量级，不打断流程     |
+| 重要通知     | Notification | 含标题，吸引注意       |
+| 危险操作确认 | Popconfirm   | 气泡确认，防止误操作   |
+| 结果展示     | Result       | 全页面展示，含操作引导 |
+| 多步骤流程   | Steps        | 清晰进度指示           |
+| 数据切换     | Tabs         | 同区域多内容           |
+| 内容折叠     | Collapse     | 节省空间               |
 
 ## 可访问性 (a11y)
 

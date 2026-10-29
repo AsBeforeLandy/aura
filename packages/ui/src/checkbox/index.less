@@ -102,23 +102,45 @@
   &&-disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    &:hover .aura-checkbox-inner { border-color: var(--aura-border); box-shadow: none; }
+    &:hover .aura-checkbox-inner {
+      border-color: var(--aura-border);
+      box-shadow: none;
+    }
   }
 
   // 标签文本
-  &-label { font-size: inherit; line-height: inherit; }
+  &-label {
+    font-size: inherit;
+    line-height: inherit;
+  }
 
   // 尺寸
   &&-sm {
     font-size: var(--aura-font-size-sm);
-    .aura-checkbox-inner { width: 14px; height: 14px; }
-    .aura-checkbox-inner::after { left: 3px; top: 0; width: 4px; height: 7px; }
+    .aura-checkbox-inner {
+      width: 14px;
+      height: 14px;
+    }
+    .aura-checkbox-inner::after {
+      left: 3px;
+      top: 0;
+      width: 4px;
+      height: 7px;
+    }
   }
 
   &&-lg {
     font-size: var(--aura-font-size-lg);
-    .aura-checkbox-inner { width: 18px; height: 18px; }
-    .aura-checkbox-inner::after { left: 5px; top: 2px; width: 6px; height: 10px; }
+    .aura-checkbox-inner {
+      width: 18px;
+      height: 18px;
+    }
+    .aura-checkbox-inner::after {
+      left: 5px;
+      top: 2px;
+      width: 6px;
+      height: 10px;
+    }
   }
 }
 
@@ -127,15 +149,27 @@
   display: flex;
   gap: var(--aura-spacing-3);
 
-  &&-horizontal { flex-direction: row; flex-wrap: wrap; align-items: center; }
-  &&-vertical { flex-direction: column; }
+  &&-horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  &&-vertical {
+    flex-direction: column;
+  }
 }
 
 // 暗色模式
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-checkbox {
-    &-inner { border-color: rgba(139, 92, 246, 0.3); }
-    &:hover .aura-checkbox-inner { border-color: var(--aura-primary-600); }
-    &-input:focus-visible + .aura-checkbox-inner { box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2); }
+    &-inner {
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    &:hover .aura-checkbox-inner {
+      border-color: var(--aura-primary-600);
+    }
+    &-input:focus-visible + .aura-checkbox-inner {
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+    }
   }
 }

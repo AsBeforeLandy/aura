@@ -6,7 +6,9 @@
   background: var(--aura-gray-300);
   border-radius: var(--aura-radius-full);
   cursor: pointer;
-  transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-sizing: border-box;
   padding: 0;
   vertical-align: middle;
@@ -71,11 +73,19 @@
     width: 28px;
     height: 16px;
 
-    .aura-switch-inner { margin: 0 4px; font-size: 10px; }
-    .aura-switch-handle { width: 12px; height: 12px; }
+    .aura-switch-inner {
+      margin: 0 4px;
+      font-size: 10px;
+    }
+    .aura-switch-handle {
+      width: 12px;
+      height: 12px;
+    }
 
     &.aura-switch-checked {
-      .aura-switch-handle { transform: translateX(12px); }
+      .aura-switch-handle {
+        transform: translateX(12px);
+      }
     }
   }
 
@@ -84,11 +94,18 @@
     width: 40px;
     height: 22px;
 
-    .aura-switch-inner { margin: 0 8px; }
-    .aura-switch-handle { width: 18px; height: 18px; }
+    .aura-switch-inner {
+      margin: 0 8px;
+    }
+    .aura-switch-handle {
+      width: 18px;
+      height: 18px;
+    }
 
     &.aura-switch-checked {
-      .aura-switch-handle { transform: translateX(18px); }
+      .aura-switch-handle {
+        transform: translateX(18px);
+      }
     }
   }
 
@@ -97,11 +114,19 @@
     width: 52px;
     height: 28px;
 
-    .aura-switch-inner { margin: 0 10px; font-size: var(--aura-font-size-sm); }
-    .aura-switch-handle { width: 24px; height: 24px; }
+    .aura-switch-inner {
+      margin: 0 10px;
+      font-size: var(--aura-font-size-sm);
+    }
+    .aura-switch-handle {
+      width: 24px;
+      height: 24px;
+    }
 
     &.aura-switch-checked {
-      .aura-switch-handle { transform: translateX(24px); }
+      .aura-switch-handle {
+        transform: translateX(24px);
+      }
     }
   }
 
@@ -118,7 +143,7 @@
 }
 
 // 暗色模式光晕效果
-[data-theme="dark"] {
+[data-theme='dark'] {
   .aura-switch {
     &:hover:not(.aura-switch-disabled):not(.aura-switch-loading) {
       box-shadow: 0 0 8px rgba(124, 58, 237, 0.15);

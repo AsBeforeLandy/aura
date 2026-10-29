@@ -29,10 +29,10 @@ toc: content
 
 ### WelcomeProps
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| icon | 顶部图标 / 头像 | `ReactNode` | - |
-| title | 欢迎标题 | `ReactNode` | - |
-| description | 副标题 / 描述 | `ReactNode` | - |
-| extra | 附加内容插槽（常放 Prompts） | `ReactNode` | - |
-| variant | `board`（带边框面板）/ `simple`（纯内容） | `'board' \| 'simple'` | `'board'` |
+| 参数        | 说明                                      | 类型                  | 默认值    |
+| ----------- | ----------------------------------------- | --------------------- | --------- |
+| icon        | 顶部图标 / 头像                           | `ReactNode`           | -         |
+| title       | 欢迎标题                                  | `ReactNode`           | -         |
+| description | 副标题 / 描述                             | `ReactNode`           | -         |
+| extra       | 附加内容插槽（常放 Prompts）              | `ReactNode`           | -         |
+| variant     | `board`（带边框面板）/ `simple`（纯内容） | `'board' \| 'simple'` | `'board'` |

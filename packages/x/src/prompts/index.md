@@ -35,18 +35,18 @@ toc: content
 
 ### PromptsProps
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| items | 提示词列表 | `PromptItem[]` | - |
-| onItemClick | 点击某条提示词 | `(item: PromptItem) => void` | - |
-| direction | 排列方向 | `'vertical' \| 'horizontal'` | `'vertical'` |
-| title | 分组标题 | `ReactNode` | - |
+| 参数        | 说明           | 类型                         | 默认值       |
+| ----------- | -------------- | ---------------------------- | ------------ |
+| items       | 提示词列表     | `PromptItem[]`               | -            |
+| onItemClick | 点击某条提示词 | `(item: PromptItem) => void` | -            |
+| direction   | 排列方向       | `'vertical' \| 'horizontal'` | `'vertical'` |
+| title       | 分组标题       | `ReactNode`                  | -            |
 
 ### PromptItem
 
-| 参数 | 说明 | 类型 |
-| --- | --- | --- |
-| key | 唯一键 | `React.Key` |
-| label | 主文案 | `ReactNode` |
+| 参数        | 说明     | 类型        |
+| ----------- | -------- | ----------- |
+| key         | 唯一键   | `React.Key` |
+| label       | 主文案   | `ReactNode` |
 | description | 补充说明 | `ReactNode` |
-| icon | 图标 | `ReactNode` |
+| icon        | 图标     | `ReactNode` |

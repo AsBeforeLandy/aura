@@ -79,8 +79,10 @@
 
   /* Shadows */
   --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --aura-shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --aura-shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
   --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.3);
 
   /* Font Size */
@@ -109,12 +111,14 @@
   --aura-x-accent-soft: rgba(124, 58, 237, 0.08);
   --aura-x-accent-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
   --aura-x-glass-blur: saturate(180%) blur(14px);
-  --aura-x-glow: 0 0 0 1px rgba(124, 58, 237, 0.16), 0 12px 32px -8px rgba(124, 58, 237, 0.28);
+  --aura-x-glow:
+    0 0 0 1px rgba(124, 58, 237, 0.16),
+    0 12px 32px -8px rgba(124, 58, 237, 0.28);
   --aura-x-focus-ring: 0 0 0 3px rgba(124, 58, 237, 0.16);
 }
 
 /* ===== Dark Theme ===== */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --aura-primary-50: #3b0764;
   --aura-primary-100: #4c1d95;
   --aura-primary-200: #5b21b6;
@@ -163,8 +167,10 @@
   --aura-selection-bg: rgba(196, 181, 253, 0.22);
 
   --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
-  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --aura-shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --aura-shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
   --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.4);
 
   /* ===== AI 组件（@aura-react-comp/x） ===== */
@@ -178,6 +184,7 @@
   --aura-x-accent-soft: rgba(167, 139, 250, 0.12);
   --aura-x-accent-gradient: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
   --aura-x-glass-blur: saturate(180%) blur(16px);
-  --aura-x-glow: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 12px 32px -8px rgba(139, 92, 246, 0.4);
+  --aura-x-glow:
+    0 0 0 1px rgba(139, 92, 246, 0.35), 0 12px 32px -8px rgba(139, 92, 246, 0.4);
   --aura-x-focus-ring: 0 0 0 3px rgba(139, 92, 246, 0.28);
 }

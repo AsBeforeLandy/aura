@@ -30,12 +30,12 @@ toc: content
 
 ### ThinkProps
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| content | 思考内容（长文本内部滚动） | `ReactNode` | - |
-| thinking | 是否正在思考 | `boolean` | `false` |
-| duration | 思考用时（秒），完成后标题显示 | `number` | - |
-| defaultExpanded | 默认是否展开 | `boolean` | `false` |
+| 参数            | 说明                           | 类型        | 默认值  |
+| --------------- | ------------------------------ | ----------- | ------- |
+| content         | 思考内容（长文本内部滚动）     | `ReactNode` | -       |
+| thinking        | 是否正在思考                   | `boolean`   | `false` |
+| duration        | 思考用时（秒），完成后标题显示 | `number`    | -       |
+| defaultExpanded | 默认是否展开                   | `boolean`   | `false` |
 
 ## 注意事项
 

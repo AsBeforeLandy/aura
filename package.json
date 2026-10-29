@@ -25,14 +25,20 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm build:lib && changeset publish",
-    "verify": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build:lib && pnpm size && pnpm smoke",
+    "verify": "pnpm lint && pnpm format:check:assets && pnpm typecheck && pnpm test:coverage && pnpm build:lib && pnpm size && pnpm smoke",
     "verify:fast": "pnpm lint && pnpm typecheck && pnpm test && pnpm build:lib && pnpm size && pnpm smoke",
     "prepare": "husky && dumi setup",
-    "clean": "rm -rf packages/*/lib packages/*/esm packages/*/dist .dumi"
+    "clean": "rm -rf packages/*/lib packages/*/esm packages/*/dist .dumi",
+    "format:check:assets": "prettier --check \"{packages,tests,docs}/**/*.{json,less,md,css,yml,yaml}\""
   },
   "lint-staged": {
-    "*.{ts,tsx}": "eslint --fix",
-    "*.{json,less,md,yml,yaml}": "prettier --write"
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,less,md,yml,yaml,css}": [
+      "prettier --write"
+    ]
   },
   "size-limit": [
     {
