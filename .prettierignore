@@ -7,3 +7,5 @@ coverage
 .worktrees
 .workbuddy
 pnpm-lock.yaml
+# 主题令牌源：结构被 tokens.test.ts 的自定义解析器依赖，格式化会破坏断言
+packages/ui/src/theme/tokens.css

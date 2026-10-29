@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Lint / Typecheck / Coverage / Build / Size / Smoke
+    name: Lint / Format / Typecheck / Coverage / Build / Size / Smoke
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -37,6 +37,11 @@ jobs:
 
       - name: Lint
         run: pnpm lint
+
+      # 样式 / 文档 / JSON 的格式门禁（ts/tsx 只做增量格式化，不重排历史）。
+      # 与 package.json 的 verify 链路保持一致。
+      - name: Format check (assets)
+        run: pnpm format:check:assets
 
       - name: Typecheck
         run: pnpm typecheck
