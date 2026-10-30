@@ -9,6 +9,8 @@ toc: content
 
 `@aura-react-comp/business` 是基于 **antd v6** 二次封装的业务组件层，专注 B 端中后台（OA / ERP / 管理后台）高频场景，把「查、翻、展、填」这类重复劳动收敛成开箱即用的组件。
 
+<code src="./demo/showcase.tsx" description="3 个场景自动轮播：高级表格 / 查询表单 / 页面骨架。">业务组件演示墙</code>
+
 ## 为什么需要它
 
 `@aura-react-comp/ui` 聚焦基础组件，而中后台页面真正耗费工时的往往是**页面级骨架**与**列表页范式**。业务组件层用 antd 补齐这部分能力，同时通过 `BusinessProvider` 把主题桥接回 Aura 的紫罗兰视觉体系，保证两套组件混用时不割裂。
