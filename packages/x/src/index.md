@@ -16,6 +16,14 @@ toc: content
 是它的主题桥接层：把 Aura 设计令牌映射到 antd 的主题系统，使 AI 对话组件与
 `@aura-react-comp/ui`、`@aura-react-comp/business` 保持一致的紫罗兰视觉语言。
 
+## 完整对话页
+
+下面是一个可直接交互的完整对话页：空态引导（Welcome + Prompts）→ 提问 → 逐字流式
+回复 → Markdown 渲染。回复由前端模拟（**无需 API Key**），用来直观展示 `useXChat`
+与 `Bubble.List` / `Sender` / `Welcome` / `Prompts` 的协作方式。
+
+<code src="./demo/showcase.tsx" description="点提示词或直接输入，观察逐字流式写入与 Markdown 渲染；生成中可点停止。">完整对话页</code>
+
 ## 组件总览
 
 按 RICH 交互范式分阶段组织：
