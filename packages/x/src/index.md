@@ -24,6 +24,14 @@ toc: content
 
 <code src="./demo/showcase.tsx" description="点提示词或直接输入，观察逐字流式写入与 Markdown 渲染；生成中可点停止。">完整对话页</code>
 
+## RICH 范式全貌
+
+一条 assistant 消息可以叠齐四段能力：**确认**（`Think` 思考过程 + `ThoughtChain` 推理链）
+与**反馈**（`Sources` 引用来源 + `Actions` 操作组）。下面的示例把五个组件组合成
+一条完整的「深度回答」消息——思考面板与推理链都可展开查看。
+
+<code src="./demo/rich-paradigm.tsx" description="Think 折叠思考 → ThoughtChain 四步推理 → Bubble 回答 → Sources 来源 → Actions 操作组。">RICH 范式全貌</code>
+
 ## 组件总览
 
 按 RICH 交互范式分阶段组织：
