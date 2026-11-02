@@ -1,5 +1,13 @@
 # @aura-react-comp/motion
 
+## 0.2.8
+
+### Patch Changes
+
+- aac8592: - **亮色主题下 `TiltCard` 的光泽改为紫色**（`--aura-motion-sheen` 亮色由
+  `rgba(255,255,255,.9)` 改为 `rgba(124,58,237,.12)`）——浅色卡片上白色光泽几乎不可见，
+  换成低饱和紫光后既保留"掠过"的质感又不刺眼；暗色仍为白色光泽。
+
 ## 0.2.7
 
 ### Patch Changes
