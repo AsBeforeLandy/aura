@@ -76,19 +76,17 @@
   border-top-right-radius: var(--aura-radius-sm);
 }
 
-/* AI：玻璃拟态 */
+/* AI：实色 + 细边框（清爽优先；需要玻璃质感时用 shadow 变体） */
 .aura-x-bubble--start.aura-x-bubble--filled .aura-x-bubble-content {
   background: var(--aura-x-bubble-ai-bg);
   border: 1px solid var(--aura-x-bubble-border);
-  backdrop-filter: var(--aura-x-glass-blur);
-  -webkit-backdrop-filter: var(--aura-x-glass-blur);
 }
 
 /* 用户：品牌渐变 + 光晕投影 */
 .aura-x-bubble--end.aura-x-bubble--filled .aura-x-bubble-content {
   background: var(--aura-x-bubble-user-bg);
   color: var(--aura-x-bubble-user-text);
-  box-shadow: 0 6px 18px -6px rgba(124, 58, 237, 0.55);
+  box-shadow: 0 2px 8px -4px rgba(124, 58, 237, 0.35);
 }
 
 /* outlined：细边框玻璃 */
