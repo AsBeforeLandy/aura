@@ -27,7 +27,7 @@ export function TypingDots({
   size = 6,
   gap = 5,
   color = 'currentColor',
-  duration = 1.1,
+  duration = 1.2,
   className,
   style,
 }: TypingDotsProps) {

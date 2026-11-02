@@ -53,6 +53,10 @@ export function Draggable({
         drag={axis === 'both' ? true : axis}
         dragConstraints={bounds === 'parent' ? wrapRef : false}
         dragMomentum={inertia}
+        /* 拖出边界时的橡皮筋系数；0.5 是 Motion 的默认值，手感最接近原生 */
+        dragElastic={0.5}
+        /* 松手惯性：power 控制甩出的力度，timeConstant 控制滑行时长 */
+        dragTransition={{ power: 0.3, timeConstant: 700 }}
         style={{
           x,
           y,

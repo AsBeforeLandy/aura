@@ -19,6 +19,7 @@ import {
   motionDurations,
   motionDistances,
   motionEases,
+  motionSprings,
   type DistanceToken,
   type DurationToken,
   type EaseToken,
@@ -33,6 +34,27 @@ export interface TransitionBaseProps extends Omit<
 > {
   duration?: DurationToken;
   ease?: EaseToken;
+  /**
+   * 是否用弹簧物理驱动，**默认 true**。
+   *
+   * 弹簧是 Motion 系动效"跟手"的来源：位移/缩放看起来有质量，而不是匀速滑过去。
+   * 需要与其它动画严格对齐时序（或时长可预测）时设 `false`，退回 `duration + ease`。
+   * 开启弹簧时 `duration` / `ease` 不生效。
+   */
+  spring?: boolean;
+}
+
+/** 统一过渡：弹簧（默认）或 duration + ease */
+function transitionFor(
+  spring: boolean,
+  duration: DurationToken,
+  ease: EaseToken,
+):
+  | { type: 'spring'; stiffness: number; damping: number }
+  | { duration: number; ease: [number, number, number, number] } {
+  return spring
+    ? motionSprings.spring
+    : { duration: motionDurations[duration], ease: motionEases[ease] };
 }
 
 function offsetFor(direction: Direction, distance: DistanceToken) {
@@ -62,6 +84,7 @@ export function Slide({
   distance = 'md',
   duration = 'normal',
   ease = 'decelerate',
+  spring = true,
   style,
   ...rest
 }: SlideProps) {
@@ -71,10 +94,7 @@ export function Slide({
       initial={{ opacity: 0, ...offset }}
       animate={visible ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...offset }}
       exit={{ opacity: 0, ...offset }}
-      transition={{
-        duration: motionDurations[duration],
-        ease: motionEases[ease],
-      }}
+      transition={transitionFor(spring, duration, ease)}
       data-motion-state={visible ? 'entered' : 'exited'}
       style={style}
       {...rest}
@@ -89,6 +109,7 @@ export function Fade({
   visible = true,
   duration = 'normal',
   ease = 'standard',
+  spring = true,
   style,
   ...rest
 }: FadeProps) {
@@ -97,10 +118,7 @@ export function Fade({
       initial={{ opacity: 0 }}
       animate={{ opacity: visible ? 1 : 0 }}
       exit={{ opacity: 0 }}
-      transition={{
-        duration: motionDurations[duration],
-        ease: motionEases[ease],
-      }}
+      transition={transitionFor(spring, duration, ease)}
       data-motion-state={visible ? 'entered' : 'exited'}
       style={style}
       {...rest}
@@ -120,6 +138,7 @@ export function Zoom({
   fromScale = 0.92,
   duration = 'normal',
   ease = 'decelerate',
+  spring = true,
   style,
   ...rest
 }: ZoomProps) {
@@ -128,10 +147,7 @@ export function Zoom({
       initial={{ opacity: 0, scale: fromScale }}
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : fromScale }}
       exit={{ opacity: 0, scale: fromScale }}
-      transition={{
-        duration: motionDurations[duration],
-        ease: motionEases[ease],
-      }}
+      transition={transitionFor(spring, duration, ease)}
       data-motion-state={visible ? 'entered' : 'exited'}
       style={style}
       {...rest}
@@ -152,6 +168,9 @@ export interface CollapseProps extends Omit<
  *
  * ⚠️ 实现使用 `height: auto` 动画（motion 内部测量）——这会触发逐帧布局，
  * **不要用于长列表或页面级区域**；此类场景请改用 `<Slide>` / `<Fade>`。
+ *
+ * 高度动画**刻意不接弹簧**：弹簧会带来超调（高度先冲过再回落），在折叠面板里
+ * 观感是"抖动"，且时长不可预测。故 Collapse 始终走 `duration + easeOut`。
  */
 export function Collapse({
   open = false,

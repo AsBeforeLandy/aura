@@ -26,7 +26,7 @@ export interface TextShimmerProps {
 
 export function TextShimmer({
   children,
-  duration = 2.2,
+  duration = 1.8,
   spread = 12,
   baseColor = 'currentColor',
   highlightColor = 'var(--aura-motion-shimmer, rgba(124, 58, 237, 0.85))',

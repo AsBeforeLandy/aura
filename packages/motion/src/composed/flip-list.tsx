@@ -6,7 +6,7 @@
  */
 
 import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
-import { motionDurations, motionEases } from '../tokens';
+import { motionDurations, motionEases, motionSprings } from '../tokens';
 
 export interface FlipListItem<T extends string = string> {
   /** 稳定唯一键（同时也是 AnimatePresence 的 key） */
@@ -35,9 +35,17 @@ export function FlipList<T extends string = string>({
   ...rest
 }: FlipListProps<T>) {
   const ListTag = motion[Tag] as typeof motion.ul;
-  const transition = {
+  // 分层过渡（Motion 的 per-value transition）：位置重排走弹簧（跟手、无拖影），
+  // 进出场的透明度 / 位移 / 缩放仍走时长（节奏可预测，便于与列表其它动画对齐）。
+  const fade = {
     duration: motionDurations[duration],
     ease: motionEases.standard,
+  };
+  const transition = {
+    layout: motionSprings.spring,
+    opacity: fade,
+    y: fade,
+    scale: fade,
   };
 
   return (

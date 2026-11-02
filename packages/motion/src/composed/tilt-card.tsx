@@ -48,12 +48,12 @@ export function TiltCard({
   const px = useMotionValue(0.5);
   const py = useMotionValue(0.5);
   const rotX = useSpring(useTransform(py, [0, 1], [maxTilt, -maxTilt]), {
-    stiffness: 220,
-    damping: 24,
+    stiffness: 300,
+    damping: 30,
   });
   const rotY = useSpring(useTransform(px, [0, 1], [-maxTilt, maxTilt]), {
-    stiffness: 220,
-    damping: 24,
+    stiffness: 300,
+    damping: 30,
   });
   const glareX = useTransform(px, [0, 1], ['0%', '100%']);
   const glareY = useTransform(py, [0, 1], ['0%', '100%']);
