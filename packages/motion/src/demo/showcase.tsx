@@ -20,24 +20,43 @@ import {
 /** 演示墙：8 个场景自动轮播，悬停暂停，点击圆点切换（深色科技舞台） */
 
 const PALETTE = {
-  bg: '#08090d',
-  surface: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.09)',
-  text: '#f2f3f7',
-  muted: 'rgba(255,255,255,0.48)',
-  violet: 'linear-gradient(135deg,#6d28d9 0%,#a855f7 100%)',
-  cyan: 'linear-gradient(135deg,#0891b2 0%,#22d3ee 100%)',
-  blue: 'linear-gradient(135deg,#1d4ed8 0%,#60a5fa 100%)',
-  fuchsia: 'linear-gradient(135deg,#a21caf 0%,#e879f9 100%)',
+  bg: 'var(--demo-stage-bg)',
+  surface: 'var(--demo-surface)',
+  border: 'var(--demo-border)',
+  text: 'var(--demo-text)',
+  muted: 'var(--demo-muted)',
+  violet: 'var(--demo-violet)',
+  cyan: 'var(--demo-cyan)',
+  blue: 'var(--demo-blue)',
+  fuchsia: 'var(--demo-fuchsia)',
+  panel: 'var(--demo-panel-bg)',
+  panelText: 'var(--demo-panel-text)',
+  panelMuted: 'var(--demo-panel-muted)',
 };
 
+/** 舞台光斑（亮/暗各一套，定义见 .dumi/global.css 的 --demo-*） */
+const STAGE_GLOW =
+  'radial-gradient(120% 90% at 15% -10%, var(--demo-stage-glow-a), transparent 55%), radial-gradient(100% 80% at 100% 110%, var(--demo-stage-glow-b), transparent 55%), var(--demo-stage-bg)';
+
+/** 渐变卡：底色饱和，统一用白字（亮/暗主题下都可读） */
 const glowCard: React.CSSProperties = {
   borderRadius: 12,
   color: '#fff',
   fontWeight: 500,
   fontSize: 14,
   padding: '14px 18px',
-  boxShadow: '0 8px 24px -8px rgba(124,58,237,0.45)',
+  boxShadow: 'var(--demo-glow)',
+};
+
+/** 表面卡：底色随主题（亮 = 白 / 暗 = 半透明白），文字必须用主题文字色 */
+const surfaceCard: React.CSSProperties = {
+  borderRadius: 12,
+  color: 'var(--demo-text)',
+  fontWeight: 500,
+  fontSize: 14,
+  padding: '14px 18px',
+  background: 'var(--demo-surface)',
+  border: '1px solid var(--demo-border)',
 };
 
 function SceneTransitions() {
@@ -79,16 +98,7 @@ function SceneReveal() {
             variant={(['mask', 'blur', 'scale'] as const)[i]}
             index={i}
           >
-            <div
-              style={{
-                ...glowCard,
-                background: PALETTE.surface,
-                border: `1px solid ${PALETTE.border}`,
-                boxShadow: 'none',
-              }}
-            >
-              {label}
-            </div>
+            <div style={surfaceCard}>{label}</div>
           </Reveal>
         ),
       )}
@@ -101,7 +111,8 @@ function SceneNumbers() {
     fontSize: 36,
     fontWeight: 700,
     letterSpacing: '-0.02em',
-    backgroundImage: 'linear-gradient(135deg,#a855f7,#22d3ee)',
+    backgroundImage:
+      'linear-gradient(135deg, var(--demo-num-from), var(--demo-num-to))',
     WebkitBackgroundClip: 'text',
     backgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
@@ -155,7 +166,7 @@ function SceneText() {
           fontSize: 20,
           fontWeight: 700,
           letterSpacing: 3,
-          color: '#a855f7',
+          color: 'var(--demo-dot-active)',
           textShadow: '0 0 18px rgba(168,85,247,0.55)',
         }}
       />
@@ -165,13 +176,25 @@ function SceneText() {
 
 function SceneAI() {
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
+    <div
+      style={{
+        display: 'grid',
+        gap: 16,
+        padding: 18,
+        borderRadius: 14,
+        background: PALETTE.panel,
+        border: `1px solid ${PALETTE.border}`,
+        color: PALETTE.panelText,
+      }}
+    >
       <div style={{ fontSize: 16, fontWeight: 600 }}>
         <TextShimmer duration={1.8}>正在为你生成季度报告…</TextShimmer>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <TypingDots color="#a855f7" />
-        <span style={{ fontSize: 13, color: PALETTE.muted }}>AI 正在思考</span>
+        <TypingDots color="var(--demo-dot-active)" />
+        <span style={{ fontSize: 13, color: PALETTE.panelMuted }}>
+          AI 正在思考
+        </span>
       </div>
     </div>
   );
@@ -184,13 +207,22 @@ function SceneCard() {
         radius={14}
         size={1.5}
         speed={4.5}
-        colors={['#7c3aed', '#22d3ee', '#e879f9', '#7c3aed']}
-        background="#0b0d13"
+        colors={[
+          'var(--demo-num-from)',
+          'var(--demo-num-to)',
+          'var(--demo-dot-active)',
+          'var(--demo-num-from)',
+        ]}
+        background="var(--demo-panel-bg)"
         style={{ flex: 1 }}
       >
         <div style={{ padding: 16 }}>
           <div
-            style={{ fontWeight: 600, marginBottom: 4, color: PALETTE.text }}
+            style={{
+              fontWeight: 600,
+              marginBottom: 4,
+              color: PALETTE.panelText,
+            }}
           >
             流光边框
           </div>
@@ -204,9 +236,9 @@ function SceneCard() {
           style={{
             padding: 16,
             borderRadius: 14,
-            background: 'linear-gradient(150deg,#171a24 0%,#0b0d13 100%)',
+            background: 'var(--demo-panel-bg)',
             border: `1px solid ${PALETTE.border}`,
-            color: PALETTE.text,
+            color: PALETTE.panelText,
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: 4 }}>3D 倾斜</div>
@@ -222,7 +254,14 @@ function SceneCard() {
 function SceneAtmosphere() {
   return (
     <div style={{ position: 'relative' }}>
-      <Aurora height={220} colors={['#7c3aed', '#22d3ee', '#e879f9']} />
+      <Aurora
+        height={220}
+        colors={[
+          'var(--demo-num-from)',
+          'var(--demo-num-to)',
+          'var(--demo-dot-active)',
+        ]}
+      />
       <div
         style={{
           position: 'absolute',
@@ -342,11 +381,8 @@ export default () => {
         position: 'relative',
         border: `1px solid ${PALETTE.border}`,
         borderRadius: 18,
-        background: `radial-gradient(120% 90% at 15% -10%, rgba(124,58,237,0.22), transparent 55%),
-                     radial-gradient(100% 80% at 100% 110%, rgba(34,211,238,0.14), transparent 55%),
-                     ${PALETTE.bg}`,
-        boxShadow:
-          '0 24px 70px -30px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06)',
+        background: STAGE_GLOW,
+        boxShadow: 'var(--demo-stage-shadow)',
         overflow: 'hidden',
       }}
     >
@@ -424,8 +460,9 @@ export default () => {
               borderRadius: 4,
               border: 'none',
               cursor: 'pointer',
-              background: i === cur ? '#a855f7' : 'rgba(255,255,255,0.18)',
-              boxShadow: i === cur ? '0 0 12px rgba(168,85,247,0.8)' : 'none',
+              background:
+                i === cur ? 'var(--demo-dot-active)' : 'var(--demo-dot)',
+              boxShadow: i === cur ? 'var(--demo-dot-glow)' : 'none',
               transition: 'all 260ms cubic-bezier(0.21, 0.47, 0.32, 0.98)',
             }}
           />

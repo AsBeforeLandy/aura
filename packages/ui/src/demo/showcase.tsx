@@ -222,9 +222,9 @@ export default () => {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       style={{
-        border: '1px solid #e8e6de',
+        border: '1px solid var(--demo-border)',
         borderRadius: 16,
-        background: '#faf9f5',
+        background: 'var(--demo-stage-bg)',
         overflow: 'hidden',
       }}
     >
@@ -237,11 +237,13 @@ export default () => {
       >
         <div>
           <div style={{ fontWeight: 600, fontSize: 15 }}>{scene.title}</div>
-          <div style={{ color: '#8a8984', fontSize: 12, marginTop: 2 }}>
+          <div
+            style={{ color: 'var(--demo-muted)', fontSize: 12, marginTop: 2 }}
+          >
             {scene.tag}
           </div>
         </div>
-        <div style={{ color: '#b4b2a9', fontSize: 12 }}>
+        <div style={{ color: 'var(--demo-muted)', fontSize: 12 }}>
           {paused ? '已暂停' : '自动轮播'}
         </div>
       </div>
@@ -293,7 +295,8 @@ export default () => {
               borderRadius: 4,
               border: 'none',
               cursor: 'pointer',
-              background: i === cur ? '#7c3aed' : '#d3d1c7',
+              background:
+                i === cur ? 'var(--demo-dot-active)' : 'var(--demo-dot)',
               transition: 'all 260ms cubic-bezier(0.21, 0.47, 0.32, 0.98)',
             }}
           />
