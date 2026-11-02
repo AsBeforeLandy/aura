@@ -16,6 +16,15 @@ type ScrollOffsetOption = NonNullable<
 
 export interface ScrollDrivenProps {
   children: (progress: MotionValue<number>) => ReactNode;
+  /**
+   * 进度语义：
+   * - `'target'`（默认）：**元素在容器内的可见进度**（由 `offset` 定义 0 与 1 锚点）。
+   *   适合"进入视口时揭示"。
+   * - `'container'`：**滚动容器自身的滚动位置**——顶部 0、底部 1。
+   *   适合阅读进度条 / 滚动叙事；无内层容器时等价于页面滚动进度。
+   */
+  mode?: 'container' | 'target';
+  /** 仅 `mode='target'` 时生效：进度判定区间 */
   offset?: ScrollOffsetOption;
   /** 给进度加一层弹簧平滑（0 关闭） */
   smooth?: number;
@@ -30,6 +39,7 @@ export interface ScrollDrivenProps {
 
 export function ScrollDriven({
   children,
+  mode = 'target',
   offset = ['start end', 'end start'],
   smooth = 0,
   container,
@@ -38,12 +48,24 @@ export function ScrollDriven({
 }: ScrollDrivenProps) {
   const ref = useRef<HTMLDivElement>(null);
   const scrollContainer = useScrollContainer(ref, container);
-  const raw = useScroll({ target: ref, container: scrollContainer, offset });
-  const springed = useSpring(raw.scrollYProgress, {
+
+  // 容器自身的滚动位置（无内层容器时即页面滚动轴）：顶部 0 → 底部 1
+  const containerScroll = useScroll({
+    container: scrollContainer,
+  }).scrollYProgress;
+  // 元素相对容器的可见进度（需要 offset 锚点）
+  const targetScroll = useScroll({
+    target: ref,
+    container: scrollContainer,
+    offset,
+  }).scrollYProgress;
+
+  const raw = mode === 'container' ? containerScroll : targetScroll;
+  const springed = useSpring(raw, {
     stiffness: 200,
     damping: 40,
   });
-  const progress = smooth > 0 ? springed : raw.scrollYProgress;
+  const progress = smooth > 0 ? springed : raw;
 
   return (
     <div ref={ref} className={className} style={style}>

@@ -22,7 +22,7 @@ export default () => {
           zIndex: 1,
         }}
       >
-        <ScrollDriven offset={['start start', 'end end']}>
+        <ScrollDriven mode="container">
           {(progress) => {
             const percent = useTransform(
               progress,
