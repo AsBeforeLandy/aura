@@ -58,11 +58,7 @@ export type { MarqueeProps } from './primitive/marquee';
 export { FlipList } from './composed/flip-list';
 export type { FlipListProps, FlipListItem } from './composed/flip-list';
 export { LayoutGroup } from './composed/layout-group';
-export {
-  Reorder,
-  ReorderGroup,
-  ReorderItem,
-} from './composed/reorder';
+export { Reorder, ReorderGroup, ReorderItem } from './composed/reorder';
 export { PageTransition } from './composed/page-transition';
 export type { PageTransitionProps } from './composed/page-transition';
 export { ViewTransition, useViewTransition } from './composed/view-transition';

@@ -3,9 +3,9 @@ import { Button, Space } from 'antd';
 import { PageTransition } from '@aura-react-comp/motion';
 
 const PAGES: Record<string, { title: string; color: string }> = {
-  '/home': { title: '首页', color: '#534ab7' },
-  '/reports': { title: '报表', color: '#0f6e56' },
-  '/settings': { title: '设置', color: '#185fa5' },
+  '/home': { title: '首页', color: '#7c3aed' },
+  '/reports': { title: '报表', color: '#0891b2' },
+  '/settings': { title: '设置', color: '#1d4ed8' },
 };
 
 /** transitionKey 变化 → 旧页退出、新页进场（mode="wait"） */
@@ -17,7 +17,11 @@ export default () => {
     <Space direction="vertical" size={16} style={{ width: '100%' }}>
       <Space>
         {Object.keys(PAGES).map((p) => (
-          <Button key={p} type={path === p ? 'primary' : 'default'} onClick={() => setPath(p)}>
+          <Button
+            key={p}
+            type={path === p ? 'primary' : 'default'}
+            onClick={() => setPath(p)}
+          >
             {PAGES[p].title}
           </Button>
         ))}

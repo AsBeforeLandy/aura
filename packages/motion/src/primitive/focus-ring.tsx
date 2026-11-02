@@ -61,7 +61,7 @@ export function FocusRing({
     };
   }, []);
 
-  const ringColor = color ?? 'var(--aura-motion-focus-color, #534ab7)';
+  const ringColor = color ?? 'var(--aura-motion-focus-color, #7c3aed)';
 
   return (
     <div
@@ -82,7 +82,11 @@ export function FocusRing({
             height: rect.height,
             opacity: 1,
           }}
-          transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 32 }}
+          transition={
+            reduced
+              ? { duration: 0 }
+              : { type: 'spring', stiffness: 400, damping: 32 }
+          }
           style={{
             position: 'absolute',
             pointerEvents: 'none',

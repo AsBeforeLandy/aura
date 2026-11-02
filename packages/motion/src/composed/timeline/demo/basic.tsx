@@ -19,7 +19,7 @@ export default () => (
               width: 36,
               height: 36,
               borderRadius: 18,
-              background: '#534ab7',
+              background: '#7c3aed',
               color: '#fff',
               display: 'grid',
               placeItems: 'center',

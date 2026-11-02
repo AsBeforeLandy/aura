@@ -9,7 +9,9 @@ import { useRef, type ReactNode } from 'react';
 import { motion, useScroll, useSpring, type MotionValue } from 'motion/react';
 
 /** 直接复用引擎的 offset 类型（字符串联合 + 模板字面量，比自造类型精确） */
-type ScrollOffsetOption = NonNullable<Parameters<typeof useScroll>[0]>['offset'];
+type ScrollOffsetOption = NonNullable<
+  Parameters<typeof useScroll>[0]
+>['offset'];
 
 export interface ScrollDrivenProps {
   children: (progress: MotionValue<number>) => ReactNode;
@@ -29,7 +31,10 @@ export function ScrollDriven({
 }: ScrollDrivenProps) {
   const ref = useRef<HTMLDivElement>(null);
   const raw = useScroll({ target: ref, offset });
-  const springed = useSpring(raw.scrollYProgress, { stiffness: 200, damping: 40 });
+  const springed = useSpring(raw.scrollYProgress, {
+    stiffness: 200,
+    damping: 40,
+  });
   const progress = smooth > 0 ? springed : raw.scrollYProgress;
 
   return (
@@ -54,7 +59,7 @@ export function ScrollProgressBar({ smooth = 0.2 }: { smooth?: number }) {
         right: 0,
         height: 3,
         transformOrigin: '0 50%',
-        background: 'var(--aura-motion-focus-color, #534ab7)',
+        background: 'var(--aura-motion-focus-color, #7c3aed)',
         scaleX,
       }}
     />

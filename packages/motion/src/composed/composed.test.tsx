@@ -62,7 +62,9 @@ describe('Cursor', () => {
   });
 
   it('variant 参数不改变降级行为', () => {
-    const { container } = render(<Cursor variant="blob" hoverTargets="[data-x]" />);
+    const { container } = render(
+      <Cursor variant="blob" hoverTargets="[data-x]" />,
+    );
     expect(container.firstChild).toBeNull();
   });
 });
@@ -94,7 +96,9 @@ describe('FlipList', () => {
   });
 
   it('as="ol" 渲染有序列表', () => {
-    const { container } = render(<FlipList as="ol" items={[{ id: 'a', node: 'A' }]} />);
+    const { container } = render(
+      <FlipList as="ol" items={[{ id: 'a', node: 'A' }]} />,
+    );
     expect(container.querySelector('ol')).toBeTruthy();
   });
 });

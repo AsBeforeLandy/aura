@@ -6,7 +6,12 @@
  */
 
 import { useRef, type ReactNode } from 'react';
-import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from 'motion/react';
 import { motionSprings } from '../tokens';
 
 export interface MagneticProps {

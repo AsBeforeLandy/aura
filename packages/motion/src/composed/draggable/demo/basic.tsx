@@ -4,7 +4,7 @@ import { Draggable } from '@aura-react-comp/motion';
 const chip: React.CSSProperties = {
   padding: '10px 18px',
   borderRadius: 24,
-  background: '#534ab7',
+  background: '#7c3aed',
   color: '#fff',
   fontWeight: 500,
   cursor: 'grab',
@@ -24,7 +24,11 @@ export default () => (
           'repeating-linear-gradient(0deg, transparent, transparent 39px, #f1efe8 39px, #f1efe8 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, #f1efe8 39px, #f1efe8 40px)',
       }}
     >
-      <Draggable bounds="parent" grid={[40, 40]} style={{ position: 'absolute', top: 16, left: 16 }}>
+      <Draggable
+        bounds="parent"
+        grid={[40, 40]}
+        style={{ position: 'absolute', top: 16, left: 16 }}
+      >
         <div style={chip}>拖我（40px 网格吸附）</div>
       </Draggable>
     </div>
@@ -36,8 +40,12 @@ export default () => (
         border: '1px dashed #b4b2a9',
       }}
     >
-      <Draggable bounds="parent" axis="x" style={{ position: 'absolute', top: 16, left: 16 }}>
-        <div style={{ ...chip, background: '#0f6e56' }}>只能左右拖</div>
+      <Draggable
+        bounds="parent"
+        axis="x"
+        style={{ position: 'absolute', top: 16, left: 16 }}
+      >
+        <div style={{ ...chip, background: '#0891b2' }}>只能左右拖</div>
       </Draggable>
     </div>
   </div>

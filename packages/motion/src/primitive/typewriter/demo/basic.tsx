@@ -30,7 +30,14 @@ export default () => {
         />
       </div>
       <Space>
-        <Button onClick={() => { setDone(false); setSeed((s) => s + 1); }}>重放</Button>
+        <Button
+          onClick={() => {
+            setDone(false);
+            setSeed((s) => s + 1);
+          }}
+        >
+          重放
+        </Button>
         <span style={{ color: '#5f5e5a', fontSize: 12 }}>
           {done ? '✓ onComplete 已触发' : '输出中…'}
         </span>

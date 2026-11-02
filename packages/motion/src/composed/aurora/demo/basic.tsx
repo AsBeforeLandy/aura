@@ -5,7 +5,7 @@ import { Aurora } from '@aura-react-comp/motion';
 export default () => (
   <div style={{ display: 'grid', gap: 20 }}>
     <div style={{ position: 'relative' }}>
-      <Aurora colors={['#534ab7', '#7f77dd', '#1d9e75']} height={200} />
+      <Aurora colors={['#7c3aed', '#a855f7', '#22d3ee']} height={200} />
       <div
         style={{
           position: 'absolute',
@@ -20,7 +20,12 @@ export default () => (
         登录页氛围背景
       </div>
     </div>
-    <Aurora colors={['#185fa5', '#1d9e75']} blobs={2} height={140} />
-    <Aurora colors={['#d4537e', '#ba7517', '#534ab7', '#0f6e56']} blobs={4} height={140} blur={60} />
+    <Aurora colors={['#1d4ed8', '#22d3ee']} blobs={2} height={140} />
+    <Aurora
+      colors={['#e879f9', '#f59e0b', '#7c3aed', '#0891b2']}
+      blobs={4}
+      height={140}
+      blur={60}
+    />
   </div>
 );

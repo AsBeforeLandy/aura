@@ -27,8 +27,10 @@ import {
 type Direction = 'up' | 'down' | 'left' | 'right';
 
 /** 保留式显隐省略时（undefined），组件默认可见，退场交给外层 AnimatePresence */
-export interface TransitionBaseProps
-  extends Omit<HTMLMotionProps<'div'>, 'initial' | 'animate' | 'exit' | 'transition'> {
+export interface TransitionBaseProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'initial' | 'animate' | 'exit' | 'transition'
+> {
   duration?: DurationToken;
   ease?: EaseToken;
 }
@@ -69,7 +71,10 @@ export function Slide({
       initial={{ opacity: 0, ...offset }}
       animate={visible ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...offset }}
       exit={{ opacity: 0, ...offset }}
-      transition={{ duration: motionDurations[duration], ease: motionEases[ease] }}
+      transition={{
+        duration: motionDurations[duration],
+        ease: motionEases[ease],
+      }}
       data-motion-state={visible ? 'entered' : 'exited'}
       style={style}
       {...rest}
@@ -92,7 +97,10 @@ export function Fade({
       initial={{ opacity: 0 }}
       animate={{ opacity: visible ? 1 : 0 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: motionDurations[duration], ease: motionEases[ease] }}
+      transition={{
+        duration: motionDurations[duration],
+        ease: motionEases[ease],
+      }}
       data-motion-state={visible ? 'entered' : 'exited'}
       style={style}
       {...rest}
@@ -120,7 +128,10 @@ export function Zoom({
       initial={{ opacity: 0, scale: fromScale }}
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : fromScale }}
       exit={{ opacity: 0, scale: fromScale }}
-      transition={{ duration: motionDurations[duration], ease: motionEases[ease] }}
+      transition={{
+        duration: motionDurations[duration],
+        ease: motionEases[ease],
+      }}
       data-motion-state={visible ? 'entered' : 'exited'}
       style={style}
       {...rest}
@@ -128,8 +139,10 @@ export function Zoom({
   );
 }
 
-export interface CollapseProps
-  extends Omit<HTMLMotionProps<'div'>, 'initial' | 'animate' | 'exit' | 'transition'> {
+export interface CollapseProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'initial' | 'animate' | 'exit' | 'transition'
+> {
   open?: boolean;
   duration?: DurationToken;
 }
@@ -150,9 +163,14 @@ export function Collapse({
   return (
     <motion.div
       initial={false}
-      animate={open ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+      animate={
+        open ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }
+      }
       exit={{ height: 0, opacity: 0 }}
-      transition={{ duration: motionDurations[duration], ease: motionEases.standard }}
+      transition={{
+        duration: motionDurations[duration],
+        ease: motionEases.standard,
+      }}
       style={{ overflow: 'hidden', ...style }}
       {...rest}
     >

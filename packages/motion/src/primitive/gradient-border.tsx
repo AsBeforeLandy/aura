@@ -31,14 +31,21 @@ export function GradientBorder({
   children,
   size = 1.5,
   speed = 4,
-  colors = ['#534ab7', '#1d9e75', '#534ab7'],
+  colors = [
+    'var(--aura-motion-accent, #7c3aed)',
+    'var(--aura-motion-cyan, #22d3ee)',
+  ],
   background = 'var(--aura-motion-card-bg, #ffffff)',
   radius = 12,
   className,
   style,
 }: GradientBorderProps) {
   const reduced = useReducedMotion();
-  const [c1, c2] = [colors[0] ?? '#534ab7', colors[1] ?? '#1d9e75'];
+  // 光带取前两个色（起点 → 终点），其余忽略
+  const [c1, c2] = [
+    colors[0] ?? 'var(--aura-motion-accent, #7c3aed)',
+    colors[1] ?? 'var(--aura-motion-cyan, #22d3ee)',
+  ];
 
   return (
     <div

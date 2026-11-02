@@ -46,7 +46,7 @@ describe('TypingDots', () => {
 describe('GradientBorder', () => {
   it('渲染 children 且存在旋转光带层', () => {
     const { container } = render(
-      <GradientBorder colors={['#534ab7', '#1d9e75']}>
+      <GradientBorder colors={['#7c3aed', '#22d3ee']}>
         <div>边框内容</div>
       </GradientBorder>,
     );

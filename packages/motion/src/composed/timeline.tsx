@@ -5,7 +5,14 @@
  * loop / 倒放的完整编排器属 M3；本版覆盖"依次揭示"这一最高频场景。
  */
 
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import { motion, type HTMLMotionProps } from 'motion/react';
 import { motionDurations, motionEases, type DurationToken } from '../tokens';
 
@@ -19,7 +26,12 @@ export interface TimelineProps {
   style?: React.CSSProperties;
 }
 
-export function Timeline({ children, autoplay = true, className, style }: TimelineProps) {
+export function Timeline({
+  children,
+  autoplay = true,
+  className,
+  style,
+}: TimelineProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -52,14 +64,20 @@ export function Timeline({ children, autoplay = true, className, style }: Timeli
   );
 }
 
-export interface TimelineStepProps
-  extends Omit<HTMLMotionProps<'div'>, 'initial' | 'animate' | 'transition'> {
+export interface TimelineStepProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'initial' | 'animate' | 'transition'
+> {
   /** 相对序列起点的触发时刻（秒） */
   at: number;
   duration?: DurationToken;
 }
 
-export function TimelineStepBase({ at, duration = 'normal', ...rest }: TimelineStepProps) {
+export function TimelineStepBase({
+  at,
+  duration = 'normal',
+  ...rest
+}: TimelineStepProps) {
   const { playing } = useContext(TimelineContext);
   return (
     <motion.div

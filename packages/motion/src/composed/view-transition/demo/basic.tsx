@@ -13,7 +13,11 @@ export default () => {
     <Space direction="vertical" size={16}>
       <Space>
         {[1, 2, 3].map((n) => (
-          <Button key={n} type={page === n ? 'primary' : 'default'} onClick={() => go(n)}>
+          <Button
+            key={n}
+            type={page === n ? 'primary' : 'default'}
+            onClick={() => go(n)}
+          >
             第 {n} 页
           </Button>
         ))}
@@ -23,13 +27,14 @@ export default () => {
           style={{
             padding: 24,
             borderRadius: 12,
-            background: 'linear-gradient(135deg, #185fa5, #378add)',
+            background: 'linear-gradient(135deg, #1d4ed8, #60a5fa)',
             color: '#fff',
             fontSize: 18,
             fontWeight: 600,
           }}
         >
-          第 {page} 页内容 —— Chrome/Edge/Safari 中切换时有原生平滑转场，Firefox 中直接切换
+          第 {page} 页内容 —— Chrome/Edge/Safari 中切换时有原生平滑转场，Firefox
+          中直接切换
         </div>
       </ViewTransition>
     </Space>

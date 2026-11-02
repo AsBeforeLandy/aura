@@ -12,14 +12,17 @@ import {
 /** primitive 剩余组件的意图断言（第三批） */
 
 describe('Reveal', () => {
-  it.each(['fade', 'blur', 'mask', 'scale'] as const)('variant=%s 渲染 children', (variant) => {
-    render(
-      <Reveal variant={variant}>
-        <div>揭示内容</div>
-      </Reveal>,
-    );
-    expect(screen.getByText('揭示内容')).toBeTruthy();
-  });
+  it.each(['fade', 'blur', 'mask', 'scale'] as const)(
+    'variant=%s 渲染 children',
+    (variant) => {
+      render(
+        <Reveal variant={variant}>
+          <div>揭示内容</div>
+        </Reveal>,
+      );
+      expect(screen.getByText('揭示内容')).toBeTruthy();
+    },
+  );
 
   it('index 错峰不改变渲染结果', () => {
     render(
@@ -84,7 +87,9 @@ describe('SkeletonShimmer', () => {
   });
 
   it('index 与自定义半径不报错', () => {
-    const { container } = render(<SkeletonShimmer index={3} radius={12} width="60%" />);
+    const { container } = render(
+      <SkeletonShimmer index={3} radius={12} width="60%" />,
+    );
     expect(container.firstElementChild).toBeTruthy();
   });
 });

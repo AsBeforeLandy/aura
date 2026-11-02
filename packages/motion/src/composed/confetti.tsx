@@ -12,6 +12,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'motion/react';
+import { motionConfettiColors } from '../tokens';
 
 export interface ConfettiProps {
   /** 发射触发器：计数器 +1 发射一轮 */
@@ -40,14 +41,7 @@ interface Particle {
   ribbon: boolean;
 }
 
-const DEFAULT_COLORS = [
-  '#534ab7',
-  '#1d9e75',
-  '#d85a30',
-  '#d4537e',
-  '#378add',
-  '#ba7517',
-];
+const DEFAULT_COLORS = [...motionConfettiColors];
 
 export function Confetti({
   fire,

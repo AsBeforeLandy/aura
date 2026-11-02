@@ -9,8 +9,10 @@
 import { motion, type HTMLMotionProps } from 'motion/react';
 import { motionDurations, motionEases, type DurationToken } from '../tokens';
 
-export interface InViewportProps
-  extends Omit<HTMLMotionProps<'div'>, 'initial' | 'whileInView' | 'viewport' | 'transition'> {
+export interface InViewportProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'initial' | 'whileInView' | 'viewport' | 'transition'
+> {
   /** 只播放一次；默认 true */
   once?: boolean;
   /** IntersectionObserver rootMargin（提前/延后触发） */
@@ -34,7 +36,10 @@ export function InViewport({
       initial={{ opacity: 0, y: offset }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, margin }}
-      transition={{ duration: motionDurations[duration], ease: motionEases.decelerate }}
+      transition={{
+        duration: motionDurations[duration],
+        ease: motionEases.decelerate,
+      }}
       style={style}
       {...rest}
     >

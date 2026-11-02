@@ -6,7 +6,13 @@
  */
 
 import { useRef, type ReactNode } from 'react';
-import { motion, useScroll, useSpring, useTransform, type MotionValue } from 'motion/react';
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from 'motion/react';
 
 export interface ParallaxLayerSpec {
   /** 速度因子：0.3 = 滚动 100px 该层移动 30px；负值反向 */
@@ -31,16 +37,29 @@ function useLayerOffset(
     target: containerRef,
     offset: ['start end', 'end start'],
   });
-  const raw = useTransform(scrollYProgress, [0, 1], [speed * 100, speed * -100]);
+  const raw = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [speed * 100, speed * -100],
+  );
   const springed = useSpring(raw, { stiffness: 150, damping: 30 });
   return smooth > 0 ? springed : raw;
 }
 
-export function Parallax({ layers, smooth = 0, style, className }: ParallaxProps) {
+export function Parallax({
+  layers,
+  smooth = 0,
+  style,
+  className,
+}: ParallaxProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div ref={containerRef} className={className} style={{ position: 'relative', ...style }}>
+    <div
+      ref={containerRef}
+      className={className}
+      style={{ position: 'relative', ...style }}
+    >
       {layers.map((layer, i) => (
         <ParallaxLayer
           key={i}
@@ -67,9 +86,5 @@ function ParallaxLayer({
   children: ReactNode;
 }) {
   const y = useLayerOffset(containerRef, speed, smooth);
-  return (
-    <motion.div style={{ y }}>
-      {children}
-    </motion.div>
-  );
+  return <motion.div style={{ y }}>{children}</motion.div>;
 }

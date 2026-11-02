@@ -14,8 +14,10 @@ export interface FlipListItem<T extends string = string> {
   node: React.ReactNode;
 }
 
-export interface FlipListProps<T extends string = string>
-  extends Omit<HTMLMotionProps<'ul'>, 'children'> {
+export interface FlipListProps<T extends string = string> extends Omit<
+  HTMLMotionProps<'ul'>,
+  'children'
+> {
   items: FlipListItem<T>[];
   /** 渲染为哪种列表标签 */
   as?: 'ul' | 'ol';
@@ -33,10 +35,16 @@ export function FlipList<T extends string = string>({
   ...rest
 }: FlipListProps<T>) {
   const ListTag = motion[Tag] as typeof motion.ul;
-  const transition = { duration: motionDurations[duration], ease: motionEases.standard };
+  const transition = {
+    duration: motionDurations[duration],
+    ease: motionEases.standard,
+  };
 
   return (
-    <ListTag style={{ listStyle: 'none', margin: 0, padding: 0, ...style }} {...rest}>
+    <ListTag
+      style={{ listStyle: 'none', margin: 0, padding: 0, ...style }}
+      {...rest}
+    >
       <AnimatePresence initial={false} mode="popLayout">
         {items.map((item) => (
           <motion.li

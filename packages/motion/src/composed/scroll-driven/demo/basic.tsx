@@ -13,13 +13,26 @@ export default () => {
         borderRadius: 12,
       }}
     >
-      <div style={{ padding: 16, position: 'sticky', top: 0, background: '#fff', zIndex: 1 }}>
+      <div
+        style={{
+          padding: 16,
+          position: 'sticky',
+          top: 0,
+          background: '#fff',
+          zIndex: 1,
+        }}
+      >
         <ScrollDriven offset={['start start', 'end end']}>
           {(progress) => {
-            const percent = useTransform(progress, (v) => `${Math.round(v * 100)}%`);
+            const percent = useTransform(
+              progress,
+              (v) => `${Math.round(v * 100)}%`,
+            );
             return (
               <div>
-                <div style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 6 }}>
+                <div
+                  style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 6 }}
+                >
                   滚动进度（motion 数值直接驱动 DOM）
                 </div>
                 <div
@@ -33,13 +46,15 @@ export default () => {
                   <motion.div
                     style={{
                       height: '100%',
-                      background: 'linear-gradient(90deg, #534ab7, #7f77dd)',
+                      background: 'linear-gradient(90deg, #7c3aed, #a855f7)',
                       transformOrigin: '0 50%',
                       scaleX: progress,
                     }}
                   />
                 </div>
-                <motion.span style={{ fontWeight: 600, fontSize: 20 }}>{percent}</motion.span>
+                <motion.span style={{ fontWeight: 600, fontSize: 20 }}>
+                  {percent}
+                </motion.span>
               </div>
             );
           }}
@@ -49,7 +64,12 @@ export default () => {
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
-            style={{ padding: 16, borderRadius: 8, background: '#faf9f5', color: '#5f5e5a' }}
+            style={{
+              padding: 16,
+              borderRadius: 8,
+              background: '#faf9f5',
+              color: '#5f5e5a',
+            }}
           >
             内容块 {i + 1} —— 继续向下滚动
           </div>

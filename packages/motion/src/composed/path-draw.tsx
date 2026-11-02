@@ -6,7 +6,12 @@
  */
 
 import { motion } from 'motion/react';
-import { motionDurations, motionEases, type DurationToken, type EaseToken } from '../tokens';
+import {
+  motionDurations,
+  motionEases,
+  type DurationToken,
+  type EaseToken,
+} from '../tokens';
 
 export interface PathDrawProps {
   /** 一条或多条 SVG path 的 d 属性；多条时按顺序描边 */
@@ -40,7 +45,8 @@ export function PathDraw({
   className,
   style,
 }: PathDrawProps) {
-  const seconds = typeof duration === 'number' ? duration : motionDurations[duration];
+  const seconds =
+    typeof duration === 'number' ? duration : motionDurations[duration];
   const repeat = loop === true ? Infinity : (loop as number) || 0;
   return (
     <svg

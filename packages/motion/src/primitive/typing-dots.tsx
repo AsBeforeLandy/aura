@@ -43,7 +43,12 @@ export function TypingDots({
         {dots.map((i) => (
           <span
             key={i}
-            style={{ width: size, height: size, borderRadius: size / 2, background: color }}
+            style={{
+              width: size,
+              height: size,
+              borderRadius: size / 2,
+              background: color,
+            }}
           />
         ))}
       </span>
@@ -62,7 +67,12 @@ export function TypingDots({
         <motion.span
           key={i}
           aria-hidden
-          style={{ width: size, height: size, borderRadius: size / 2, background: color }}
+          style={{
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            background: color,
+          }}
           animate={{ scale: [0.55, 1, 0.55], opacity: [0.35, 1, 0.35] }}
           transition={{
             duration,

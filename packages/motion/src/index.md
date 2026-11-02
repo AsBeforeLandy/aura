@@ -67,3 +67,37 @@ toc: content
 ```ts | pure
 import '@aura-react-comp/motion/tokens.css';
 ```
+
+## 颜色令牌
+
+组件的默认配色全部来自 `--aura-motion-*` 颜色变量（源码内已无硬编码色值），
+业务方覆盖变量即可整体换肤；亮/暗各一套，`[data-theme='dark']` 下自动切换。
+
+| 令牌                               | 用途                             | 亮色                   | 暗色                    |
+| ---------------------------------- | -------------------------------- | ---------------------- | ----------------------- |
+| `--aura-motion-accent`             | 主强调（光标 / 焦点环 / 进度条） | `#7c3aed`              | `#a855f7`               |
+| `--aura-motion-accent-strong`      | 强调色加深                       | `#6d28d9`              | `#7c3aed`               |
+| `--aura-motion-accent-soft`        | 强调色浅底                       | `rgba(124,58,237,.12)` | `rgba(168,85,247,.18)`  |
+| `--aura-motion-accent-glow`        | 强调色发光                       | `rgba(124,58,237,.35)` | `rgba(168,85,247,.45)`  |
+| `--aura-motion-cyan`               | 辅助青（流光 / 氛围）            | `#22d3ee`              | `#22d3ee`               |
+| `--aura-motion-blue`               | 辅助蓝                           | `#3b82f6`              | `#60a5fa`               |
+| `--aura-motion-fuchsia`            | 辅助品红                         | `#e879f9`              | `#e879f9`               |
+| `--aura-motion-card-bg`            | 卡片内底（GradientBorder）       | `#ffffff`              | `#12141a`               |
+| `--aura-motion-skeleton`           | 骨架底                           | `rgba(15,23,42,.08)`   | `rgba(255,255,255,.1)`  |
+| `--aura-motion-skeleton-highlight` | 骨架扫光                         | `rgba(255,255,255,.9)` | `rgba(255,255,255,.5)`  |
+| `--aura-motion-shimmer`            | 文字流光高光                     | `rgba(124,58,237,.85)` | `rgba(255,255,255,.85)` |
+| `--aura-motion-sheen`              | 倾斜卡光泽                       | `rgba(255,255,255,.9)` | `rgba(255,255,255,.18)` |
+| `--aura-motion-focus-color`        | 焦点环 / 光标描边                | `#7c3aed`              | `#a855f7`               |
+
+覆盖示例（换成翡翠绿主题）：
+
+```css
+:root {
+  --aura-motion-accent: #10b981;
+  --aura-motion-focus-color: #10b981;
+  --aura-motion-shimmer: rgba(16, 185, 129, 0.85);
+}
+```
+
+> `Confetti` 用 canvas 2D 绘制，**无法解析 CSS 变量**——它的默认色板在 JS 侧
+> （`motionConfettiColors`）。需要让它跟随业务主题时，请显式传 `colors`。

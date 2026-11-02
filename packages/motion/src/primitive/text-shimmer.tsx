@@ -29,7 +29,7 @@ export function TextShimmer({
   duration = 2.2,
   spread = 12,
   baseColor = 'currentColor',
-  highlightColor = 'rgba(255, 255, 255, 0.75)',
+  highlightColor = 'var(--aura-motion-shimmer, rgba(124, 58, 237, 0.85))',
   className,
   style,
 }: TextShimmerProps) {

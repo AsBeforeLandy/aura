@@ -6,7 +6,9 @@ import { SplitText } from '@aura-react-comp/motion';
 export default () => (
   <Space direction="vertical" size={28} style={{ width: '100%' }}>
     <div>
-      <div style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 8 }}>variant="fade"</div>
+      <div style={{ color: '#5f5e5a', fontSize: 12, marginBottom: 8 }}>
+        variant="fade"
+      </div>
       <SplitText
         text="令牌驱动的动效组件库"
         granularity="char"

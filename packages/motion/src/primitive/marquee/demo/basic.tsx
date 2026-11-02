@@ -25,7 +25,10 @@ export default () => (
     </Marquee>
     <Marquee duration={18} direction="right" gap={28}>
       {brands.map((b) => (
-        <span key={b} style={{ ...chip, borderColor: '#e8e6de', background: '#faf9f5' }}>
+        <span
+          key={b}
+          style={{ ...chip, borderColor: '#e8e6de', background: '#faf9f5' }}
+        >
           {b}
         </span>
       ))}

@@ -5,12 +5,19 @@ import { Slide } from '@aura-react-comp/motion';
 /** 保留式：DOM 常驻，visible 切换动画 */
 export default () => {
   const [open, setOpen] = useState(true);
-  const [direction, setDirection] = useState<'up' | 'down' | 'left' | 'right'>('up');
+  const [direction, setDirection] = useState<'up' | 'down' | 'left' | 'right'>(
+    'up',
+  );
 
   return (
     <Space direction="vertical" size={16} style={{ width: '100%' }}>
       <Space wrap>
-        <Switch checked={open} onChange={setOpen} checkedChildren="显示" unCheckedChildren="隐藏" />
+        <Switch
+          checked={open}
+          onChange={setOpen}
+          checkedChildren="显示"
+          unCheckedChildren="隐藏"
+        />
         {(['up', 'down', 'left', 'right'] as const).map((d) => (
           <Button
             key={d}
@@ -27,7 +34,7 @@ export default () => {
           style={{
             padding: 24,
             borderRadius: 12,
-            background: 'linear-gradient(135deg, #534ab7, #7f77dd)',
+            background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
             color: '#fff',
             fontWeight: 500,
           }}

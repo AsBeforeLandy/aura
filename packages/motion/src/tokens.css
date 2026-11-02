@@ -17,6 +17,40 @@
   --aura-motion-distance-sm: 8px;
   --aura-motion-distance-md: 16px;
   --aura-motion-distance-lg: 32px;
+
+  /* ===== 颜色令牌 =====
+     组件默认配色的单一来源。组件内不再硬编码色值，
+     业务方只要覆盖这些变量即可整体换肤（亮/暗自成一套）。 */
+  --aura-motion-accent: #7c3aed;
+  --aura-motion-accent-strong: #6d28d9;
+  --aura-motion-accent-soft: rgba(124, 58, 237, 0.12);
+  --aura-motion-accent-glow: rgba(124, 58, 237, 0.35);
+  --aura-motion-cyan: #22d3ee;
+  --aura-motion-blue: #3b82f6;
+  --aura-motion-fuchsia: #e879f9;
+  --aura-motion-card-bg: #ffffff;
+  --aura-motion-skeleton: rgba(15, 23, 42, 0.08);
+  --aura-motion-skeleton-highlight: rgba(255, 255, 255, 0.9);
+  --aura-motion-shimmer: rgba(124, 58, 237, 0.85);
+  --aura-motion-sheen: rgba(255, 255, 255, 0.9);
+  --aura-motion-focus-color: #7c3aed;
+}
+
+/* 暗色：同一套语义，换成更亮的霓虹与更低的表面亮度 */
+[data-theme='dark'] {
+  --aura-motion-accent: #a855f7;
+  --aura-motion-accent-strong: #7c3aed;
+  --aura-motion-accent-soft: rgba(168, 85, 247, 0.18);
+  --aura-motion-accent-glow: rgba(168, 85, 247, 0.45);
+  --aura-motion-cyan: #22d3ee;
+  --aura-motion-blue: #60a5fa;
+  --aura-motion-fuchsia: #e879f9;
+  --aura-motion-card-bg: #12141a;
+  --aura-motion-skeleton: rgba(255, 255, 255, 0.1);
+  --aura-motion-skeleton-highlight: rgba(255, 255, 255, 0.5);
+  --aura-motion-shimmer: rgba(255, 255, 255, 0.85);
+  --aura-motion-sheen: rgba(255, 255, 255, 0.18);
+  --aura-motion-focus-color: #a855f7;
 }
 
 /* 可访问性第一层降级：令牌驱动的样式（工具类 / 业务自研 less）在此整体归零。

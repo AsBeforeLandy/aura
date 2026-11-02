@@ -20,13 +20,22 @@ export default () => {
 
   const add = () =>
     setItems((list) => {
-      const item = { id: `i${seq}`, label: `任务 ${String.fromCharCode(65 + (seq % 26))}`, score: 60 + Math.round(Math.random() * 38) };
+      const item = {
+        id: `i${seq}`,
+        label: `任务 ${String.fromCharCode(65 + (seq % 26))}`,
+        score: 60 + Math.round(Math.random() * 38),
+      };
       seq += 1;
       return [...list, item];
     });
-  const shuffle = () => setItems((list) => [...list].sort(() => Math.random() - 0.5));
+  const shuffle = () =>
+    setItems((list) => [...list].sort(() => Math.random() - 0.5));
   const remove = () =>
-    setItems((list) => (list.length > 1 ? list.filter((_, i) => i !== Math.floor(Math.random() * list.length)) : list));
+    setItems((list) =>
+      list.length > 1
+        ? list.filter((_, i) => i !== Math.floor(Math.random() * list.length))
+        : list,
+    );
 
   return (
     <Space direction="vertical" size={16} style={{ width: '100%' }}>

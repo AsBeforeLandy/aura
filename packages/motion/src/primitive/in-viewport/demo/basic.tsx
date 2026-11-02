@@ -12,7 +12,7 @@ export default () => (
         style={{
           padding: 20,
           borderRadius: 12,
-          background: 'linear-gradient(135deg, #0f6e56, #1d9e75)',
+          background: 'linear-gradient(135deg, #0891b2, #22d3ee)',
           color: '#fff',
           fontWeight: 500,
         }}
@@ -27,7 +27,7 @@ export default () => (
         style={{
           padding: 20,
           borderRadius: 12,
-          background: 'linear-gradient(135deg, #185fa5, #378add)',
+          background: 'linear-gradient(135deg, #1d4ed8, #60a5fa)',
           color: '#fff',
           fontWeight: 500,
         }}

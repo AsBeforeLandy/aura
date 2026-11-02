@@ -11,12 +11,10 @@ export default () => {
       <Space direction="vertical" align="center" size={12}>
         <PathDraw
           key={seed}
-          paths={[
-            'M 15 52 C 30 68, 42 70, 52 56 L 85 22',
-          ]}
+          paths={['M 15 52 C 30 68, 42 70, 52 56 L 85 22']}
           viewBox="0 0 100 80"
           width={160}
-          stroke="#0f6e56"
+          stroke="#0891b2"
           strokeWidth={6}
           duration="slow"
         />
@@ -28,7 +26,7 @@ export default () => {
         paths={['M 0 50 Q 12 20, 25 50 T 50 50 T 75 50 T 100 50']}
         viewBox="0 0 100 100"
         width={200}
-        stroke="#534ab7"
+        stroke="#7c3aed"
         strokeWidth={3}
         loop
         duration={1.2}

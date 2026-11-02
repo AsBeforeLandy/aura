@@ -14,8 +14,10 @@ import { motionDurations, motionEases, type DurationToken } from '../tokens';
 
 export type RevealVariant = 'fade' | 'blur' | 'mask' | 'scale';
 
-export interface RevealProps
-  extends Omit<HTMLMotionProps<'div'>, 'initial' | 'animate' | 'transition'> {
+export interface RevealProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'initial' | 'animate' | 'transition'
+> {
   /** 兄弟 Reveal 的序号，自动换算递增错峰延迟；缺省 0 */
   index?: number;
   /** 显式延迟（秒），与 index 二选一 */
@@ -82,7 +84,10 @@ export function Reveal({
           initial={{ y: rise }}
           whileInView={{ y: 0 }}
           viewport={{ once, margin }}
-          transition={{ ...transition, duration: motionDurations[duration] * 1.15 }}
+          transition={{
+            ...transition,
+            duration: motionDurations[duration] * 1.15,
+          }}
         >
           {children}
         </motion.div>

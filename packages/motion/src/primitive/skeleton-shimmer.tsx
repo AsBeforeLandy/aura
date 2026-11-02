@@ -41,7 +41,7 @@ export function SkeletonShimmer({
         width,
         height,
         borderRadius: radius,
-        background: 'rgba(127, 127, 127, 0.14)',
+        background: 'var(--aura-motion-skeleton, rgba(15, 23, 42, 0.08))',
         ...style,
       }}
     >
@@ -54,7 +54,7 @@ export function SkeletonShimmer({
             bottom: 0,
             width: '55%',
             background:
-              'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent)',
+              'linear-gradient(90deg, transparent, var(--aura-motion-skeleton-highlight, rgba(255, 255, 255, 0.9)), transparent)',
           }}
           initial={{ x: '-60%' }}
           animate={{ x: '180%' }}

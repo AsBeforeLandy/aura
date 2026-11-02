@@ -8,7 +8,12 @@
  * - reduced-motion 下静态呈现。
  */
 
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'motion/react';
 import { useRef } from 'react';
 
 export interface ScrollScaleCardProps {

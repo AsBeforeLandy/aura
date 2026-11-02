@@ -8,7 +8,12 @@
  */
 
 import { motion, type HTMLMotionProps } from 'motion/react';
-import { motionDurations, motionEases, type DurationToken, type EaseToken } from '../tokens';
+import {
+  motionDurations,
+  motionEases,
+  type DurationToken,
+  type EaseToken,
+} from '../tokens';
 
 /** 允许做关键帧动画的属性白名单（全部为 transform/opacity 家族） */
 export const KEYFRAMES_ALLOWED_PROPS = new Set([
@@ -23,8 +28,10 @@ export const KEYFRAMES_ALLOWED_PROPS = new Set([
   'skewY',
 ]);
 
-export interface KeyframesProps
-  extends Omit<HTMLMotionProps<'div'>, 'animate' | 'transition'> {
+export interface KeyframesProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'animate' | 'transition'
+> {
   /** 关键帧数组：如 { scale: [1, 1.08, 1] }、{ opacity: [1, 0.4, 1] } */
   animate: Record<string, (number | string)[]>;
   duration?: DurationToken;

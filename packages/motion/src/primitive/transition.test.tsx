@@ -27,11 +27,15 @@ describe('进出场四件套', () => {
 
   it('Fade / Zoom 同样暴露意图状态机', () => {
     const { unmount } = render(<Fade visible>内容</Fade>);
-    expect(screen.getByText('内容').getAttribute('data-motion-state')).toBe('entered');
+    expect(screen.getByText('内容').getAttribute('data-motion-state')).toBe(
+      'entered',
+    );
     unmount();
 
     render(<Zoom visible={false}>卡片</Zoom>);
-    expect(screen.getByText('卡片').getAttribute('data-motion-state')).toBe('exited');
+    expect(screen.getByText('卡片').getAttribute('data-motion-state')).toBe(
+      'exited',
+    );
   });
 
   it('卸载式：配合 AnimatePresence 挂载/卸载', async () => {
@@ -82,7 +86,9 @@ describe('SplitText', () => {
   });
 
   it('word 粒度按空白分词', () => {
-    const { container } = render(<SplitText text="Hello Aura Motion" granularity="word" />);
+    const { container } = render(
+      <SplitText text="Hello Aura Motion" granularity="word" />,
+    );
     const pieces = container.querySelectorAll('span[aria-hidden]');
     expect(pieces.length).toBe(3);
   });
@@ -90,13 +96,19 @@ describe('SplitText', () => {
 
 describe('NumberTicker / Typewriter', () => {
   it('NumberTicker 渲染格式化后的值（逐位渲染）', () => {
-    const { container } = render(<NumberTicker value={128940} fromZero={false} />);
+    const { container } = render(
+      <NumberTicker value={128940} fromZero={false} />,
+    );
     expect(container.textContent).toBe('128,940');
   });
 
   it('NumberTicker 尊重自定义 format', () => {
     const { container } = render(
-      <NumberTicker value={0.85} format={(n) => `${Math.round(n * 100)}%`} fromZero={false} />,
+      <NumberTicker
+        value={0.85}
+        format={(n) => `${Math.round(n * 100)}%`}
+        fromZero={false}
+      />,
     );
     expect(container.textContent).toBe('85%');
   });
@@ -111,7 +123,11 @@ describe('Keyframes 白名单', () => {
   it('开发环境对非合成器友好属性告警', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     render(
-      <Keyframes animate={{ width: [0, 100] }} repeat={Infinity} data-testid="kf" />,
+      <Keyframes
+        animate={{ width: [0, 100] }}
+        repeat={Infinity}
+        data-testid="kf"
+      />,
     );
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('width'));
     warn.mockRestore();

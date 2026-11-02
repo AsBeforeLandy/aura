@@ -13,10 +13,19 @@ export default () => (
         </div>
       </div>
     </GradientBorder>
-    <GradientBorder radius={14} size={2} colors={['#0f6e56', '#1d9e75']} speed={2.6}>
+    <GradientBorder
+      radius={14}
+      size={2}
+      colors={['#0891b2', '#22d3ee']}
+      speed={2.6}
+    >
       <div style={{ padding: 18 }}>
-        <div style={{ fontWeight: 600, marginBottom: 4 }}>升级加速（2.6s / 2px）</div>
-        <div style={{ color: '#5f5e5a', fontSize: 13 }}>更快的绕行速度与更粗的光带</div>
+        <div style={{ fontWeight: 600, marginBottom: 4 }}>
+          升级加速（2.6s / 2px）
+        </div>
+        <div style={{ color: '#5f5e5a', fontSize: 13 }}>
+          更快的绕行速度与更粗的光带
+        </div>
       </div>
     </GradientBorder>
   </Space>

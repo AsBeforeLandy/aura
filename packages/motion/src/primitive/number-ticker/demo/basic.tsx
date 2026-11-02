@@ -7,7 +7,10 @@ export default () => {
   const [base, setBase] = useState(128940);
 
   useEffect(() => {
-    const id = setInterval(() => setBase((b) => b + Math.round(Math.random() * 900) + 100), 2400);
+    const id = setInterval(
+      () => setBase((b) => b + Math.round(Math.random() * 900) + 100),
+      2400,
+    );
     return () => clearInterval(id);
   }, []);
 
@@ -16,7 +19,10 @@ export default () => {
       <Space wrap>
         <Card size="small" style={{ minWidth: 160 }}>
           <div style={{ color: '#5f5e5a', fontSize: 12 }}>累计请求</div>
-          <NumberTicker value={base} style={{ fontSize: 28, fontWeight: 600 }} />
+          <NumberTicker
+            value={base}
+            style={{ fontSize: 28, fontWeight: 600 }}
+          />
         </Card>
         <Card size="small" style={{ minWidth: 160 }}>
           <div style={{ color: '#5f5e5a', fontSize: 12 }}>成功率</div>

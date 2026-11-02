@@ -39,9 +39,17 @@ export interface ViewTransitionProps {
 }
 
 /** 为元素标记共享元素名（等价于 CSS 的 view-transition-name） */
-export function ViewTransition({ name, children, className, style }: ViewTransitionProps) {
+export function ViewTransition({
+  name,
+  children,
+  className,
+  style,
+}: ViewTransitionProps) {
   // React 的 CSSProperties 尚未收录该属性，显式断言
-  const styleWithVT = { ...style, viewTransitionName: name } as React.CSSProperties;
+  const styleWithVT = {
+    ...style,
+    viewTransitionName: name,
+  } as React.CSSProperties;
   return (
     <motion.div className={className} style={styleWithVT}>
       {children}

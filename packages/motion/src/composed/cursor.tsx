@@ -8,7 +8,12 @@
  */
 
 import { useEffect, useState } from 'react';
-import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from 'motion/react';
 
 export interface CursorProps {
   variant?: 'dot-ring' | 'blob';
@@ -77,11 +82,14 @@ export function Cursor({
           width: size * 4,
           height: size * 4,
           borderRadius: '50%',
-          border: '1.5px solid var(--aura-motion-focus-color, #534ab7)',
+          border: '1.5px solid var(--aura-motion-focus-color, #7c3aed)',
           pointerEvents: 'none',
           zIndex: 9999,
         }}
-        animate={{ scale: hovering ? hoverScale : 1, opacity: hovering ? 0.9 : 0.5 }}
+        animate={{
+          scale: hovering ? hoverScale : 1,
+          opacity: hovering ? 0.9 : 0.5,
+        }}
         transition={{ duration: 0.18 }}
       />
       {/* 点（快弹簧） */}
@@ -97,7 +105,7 @@ export function Cursor({
           width: isBlob ? size : size,
           height: isBlob ? size : size,
           borderRadius: '50%',
-          background: 'var(--aura-motion-focus-color, #534ab7)',
+          background: 'var(--aura-motion-focus-color, #7c3aed)',
           pointerEvents: 'none',
           zIndex: 9999,
         }}

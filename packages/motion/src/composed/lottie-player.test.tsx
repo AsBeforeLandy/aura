@@ -26,14 +26,26 @@ afterEach(() => {
 
 describe('LottiePlayer', () => {
   it('渲染 role=img 容器并应用尺寸', () => {
-    render(<LottiePlayer src="https://cdn.example.com/a.json" width={200} height={150} />);
+    render(
+      <LottiePlayer
+        src="https://cdn.example.com/a.json"
+        width={200}
+        height={150}
+      />,
+    );
     const el = screen.getByRole('img');
     expect(el.style.width).toBe('200px');
     expect(el.style.height).toBe('150px');
   });
 
   it('加载动画并透传 src / renderer / loop / autoplay', async () => {
-    render(<LottiePlayer src="https://cdn.example.com/b.json" loop={false} autoplay={false} />);
+    render(
+      <LottiePlayer
+        src="https://cdn.example.com/b.json"
+        loop={false}
+        autoplay={false}
+      />,
+    );
     await waitFor(() => expect(loadAnimation).toHaveBeenCalledTimes(1));
     expect(loadAnimation).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -46,7 +58,9 @@ describe('LottiePlayer', () => {
   });
 
   it('卸载时销毁动画实例', async () => {
-    const { unmount } = render(<LottiePlayer src="https://cdn.example.com/d.json" />);
+    const { unmount } = render(
+      <LottiePlayer src="https://cdn.example.com/d.json" />,
+    );
     await waitFor(() => expect(loadAnimation).toHaveBeenCalled());
     unmount();
     expect(destroy).toHaveBeenCalledTimes(1);

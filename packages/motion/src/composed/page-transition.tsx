@@ -15,8 +15,10 @@
 import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
 import { motionDurations, motionEases, type DurationToken } from '../tokens';
 
-export interface PageTransitionProps
-  extends Omit<HTMLMotionProps<'div'>, 'initial' | 'animate' | 'exit' | 'transition'> {
+export interface PageTransitionProps extends Omit<
+  HTMLMotionProps<'div'>,
+  'initial' | 'animate' | 'exit' | 'transition'
+> {
   /** 路由标识（如 usePathname() 的返回值）；变化即触发转场 */
   transitionKey: string;
   /** wait = 旧页退完新页再进；sync = 交叉过渡（需要父容器相对定位） */
@@ -51,7 +53,10 @@ export function PageTransition({
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: motionDurations[duration], ease: motionEases.decelerate }}
+          transition={{
+            duration: motionDurations[duration],
+            ease: motionEases.decelerate,
+          }}
         >
           {children}
         </motion.div>

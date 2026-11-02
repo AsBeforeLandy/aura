@@ -30,7 +30,11 @@ const ORBITS = [
 ];
 
 export function Aurora({
-  colors = ['#7c3aed', '#06b6d4', '#f472b6'],
+  colors = [
+    'var(--aura-motion-accent, #7c3aed)',
+    'var(--aura-motion-cyan, #22d3ee)',
+    'var(--aura-motion-fuchsia, #e879f9)',
+  ],
   blobs = 3,
   height = 320,
   blur = 120,
@@ -81,8 +85,16 @@ export function Aurora({
               reduced
                 ? undefined
                 : {
-                    x: { duration: orbit.duration, repeat: Infinity, ease: 'easeInOut' },
-                    y: { duration: orbit.duration, repeat: Infinity, ease: 'easeInOut' },
+                    x: {
+                      duration: orbit.duration,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    },
+                    y: {
+                      duration: orbit.duration,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    },
                     rotate: { duration: 60, repeat: Infinity, ease: 'linear' },
                   }
             }

@@ -79,7 +79,10 @@ export function SplitText({
           hidden: { y: '110%' },
           show: {
             y: '0%',
-            transition: { duration: motionDurations[duration] * 1.1, ease: motionEases.decelerate },
+            transition: {
+              duration: motionDurations[duration] * 1.1,
+              ease: motionEases.decelerate,
+            },
           },
         }
       : variant === 'flip'
@@ -88,7 +91,10 @@ export function SplitText({
             show: {
               opacity: 1,
               rotateX: 0,
-              transition: { duration: motionDurations[duration], ease: motionEases.decelerate },
+              transition: {
+                duration: motionDurations[duration],
+                ease: motionEases.decelerate,
+              },
             },
           }
         : {
@@ -96,21 +102,31 @@ export function SplitText({
             show: {
               opacity: 1,
               y: 0,
-              transition: { duration: motionDurations[duration], ease: motionEases.decelerate },
+              transition: {
+                duration: motionDurations[duration],
+                ease: motionEases.decelerate,
+              },
             },
           };
 
   const trigger =
     mode === 'inView'
-      ? { whileInView: 'show' as const, viewport: { once: true, margin: '0px 0px -32px 0px' } }
+      ? {
+          whileInView: 'show' as const,
+          viewport: { once: true, margin: '0px 0px -32px 0px' },
+        }
       : { animate: 'show' as const };
 
   const containerStyle: React.CSSProperties =
-    variant === 'flip' ? { display: 'inline-block', perspective, ...style } : { display: 'inline-block', ...style };
+    variant === 'flip'
+      ? { display: 'inline-block', perspective, ...style }
+      : { display: 'inline-block', ...style };
   const pieceStyle: React.CSSProperties = {
     display: 'inline-block',
     willChange: 'transform, opacity',
-    ...(variant === 'rise' && granularity === 'char' ? { whiteSpace: 'pre' } : null),
+    ...(variant === 'rise' && granularity === 'char'
+      ? { whiteSpace: 'pre' }
+      : null),
   };
 
   return (
@@ -139,7 +155,14 @@ export function SplitText({
         );
         // rise 形态：每片包一层独立 overflow hidden 裁切，实现逐字升起
         return variant === 'rise' ? (
-          <span key={i} style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}>
+          <span
+            key={i}
+            style={{
+              display: 'inline-block',
+              overflow: 'hidden',
+              verticalAlign: 'bottom',
+            }}
+          >
             {pieceNode}
           </span>
         ) : (

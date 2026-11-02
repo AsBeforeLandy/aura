@@ -21,14 +21,16 @@ export default () => {
           style={{
             padding: 24,
             borderRadius: 12,
-            background: 'linear-gradient(135deg, #534ab7, #7f77dd)',
+            background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
             color: '#fff',
             cursor: 'pointer',
           }}
         >
           <div style={{ fontSize: 20, fontWeight: 600 }}>{item.title}</div>
           <div style={{ marginTop: 8, opacity: 0.9 }}>{item.desc}</div>
-          <div style={{ marginTop: 12, fontSize: 13, opacity: 0.7 }}>点击任意处返回列表</div>
+          <div style={{ marginTop: 12, fontSize: 13, opacity: 0.7 }}>
+            点击任意处返回列表
+          </div>
         </motion.div>
       </LayoutGroup>
     );

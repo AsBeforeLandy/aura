@@ -7,7 +7,9 @@ import { Aurora, Confetti, Parallax, PathDraw, ScrollDriven } from '../index';
 describe('ScrollDriven', () => {
   it('以 render prop 形式接收滚动进度并渲染内容', () => {
     const { container } = render(
-      <ScrollDriven>{(progress) => <div>进度：{String(progress ? 'ok' : 'ok')}</div>}</ScrollDriven>,
+      <ScrollDriven>
+        {(progress) => <div>进度：{String(progress ? 'ok' : 'ok')}</div>}
+      </ScrollDriven>,
     );
     expect(container.textContent).toContain('进度');
   });
@@ -31,7 +33,9 @@ describe('Parallax', () => {
 
 describe('PathDraw', () => {
   it('每个 path 生成一个 SVG path 节点', () => {
-    const { container } = render(<PathDraw paths={['M0 0 L10 10', 'M10 10 L20 0']} />);
+    const { container } = render(
+      <PathDraw paths={['M0 0 L10 10', 'M10 10 L20 0']} />,
+    );
     expect(container.querySelector('svg')).toBeTruthy();
     expect(container.querySelectorAll('path').length).toBe(2);
   });
@@ -59,7 +63,7 @@ describe('Aurora', () => {
   });
 
   it('自定义颜色不报错', () => {
-    const { container } = render(<Aurora colors={['#534ab7']} />);
+    const { container } = render(<Aurora colors={['#7c3aed']} />);
     expect(container.firstElementChild).toBeTruthy();
   });
 });

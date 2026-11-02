@@ -10,7 +10,13 @@
  */
 
 import { useRef, type ReactNode } from 'react';
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'motion/react';
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from 'motion/react';
 
 export interface TiltCardProps {
   children: ReactNode;
@@ -54,7 +60,7 @@ export function TiltCard({
   const glareBg = useTransform(
     [glareX, glareY],
     ([x, y]: string[]) =>
-      `radial-gradient(240px circle at ${x} ${y}, rgba(255,255,255,0.65), transparent 62%)`,
+      `radial-gradient(240px circle at ${x} ${y}, var(--aura-motion-sheen, rgba(255, 255, 255, 0.9)), transparent 62%)`,
   );
   const glareAlpha = useMotionValue(0);
 
