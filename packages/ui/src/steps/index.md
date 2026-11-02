@@ -26,14 +26,21 @@ import { Steps } from '@aura-react-comp/ui';
 ## 代码演示
 
 <code src="./demo/default-variant.tsx" description="基础用法 — default 变体。">基础用法 — default 变体</code>
-<code src="./demo/dot.tsx" description="Dot 变体。">Dot 变体</code>
-<code src="./demo/navigation.tsx" description="Navigation 变体。">Navigation 变体</code>
 <code src="./demo/vertical.tsx" description="垂直方向。">垂直方向</code>
+
+<code src="./demo/dot.tsx" description="Dot 变体。">Dot 变体</code>
+
+<code src="./demo/navigation.tsx" description="Navigation 变体。">Navigation 变体</code>
+
 <code src="./demo/small.tsx" description="小尺寸。">小尺寸</code>
+
 <code src="./demo/disabled-step.tsx" description="禁用步骤。">禁用步骤</code>
+
 <code src="./demo/custom-icon.tsx" description="自定义图标。">自定义图标</code>
+
 <code src="./demo/variant.tsx" description="支持 `default`、`dot`、`navigation` 三种变体和垂直方向。">变体与方向</code>
-<code src="./demo/error.tsx" description="`status=\"error\"` 出错态与 `subTitle` 副标题。">出错步骤</code>
+
+<code src="./demo/error.tsx" description="`status='error'` 出错态与 `subTitle` 副标题。">出错步骤</code>
 
 ## API
 

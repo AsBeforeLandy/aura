@@ -26,13 +26,21 @@ import { Pagination } from '@aura-react-comp/ui';
 ## 代码演示
 
 <code src="./demo/basic-2.tsx" description="基础用法。">基础用法</code>
+
 <code src="./demo/controlled.tsx" description="受控模式。">受控模式</code>
+
 <code src="./demo/page-size.tsx" description="显示每页条数选择器。">显示每页条数选择器</code>
+
 <code src="./demo/quick-jump.tsx" description="显示快速跳转。">显示快速跳转</code>
+
 <code src="./demo/full.tsx" description="完整功能。">完整功能</code>
+
 <code src="./demo/small.tsx" description="小尺寸。">小尺寸</code>
+
 <code src="./demo/few-pages.tsx" description="少量数据（不足 7 页）。">少量数据（不足 7 页）</code>
+
 <code src="./demo/advanced.tsx" description="支持每页条数切换和快速跳转。">更多功能</code>
+
 <code src="./demo/total.tsx" description="`showTotal` 展示总条数与当前区间，`pageSizeOptions` 自定义条数选项，`onShowSizeChange` 独立回调。">总条数与条数选项</code>
 
 ## API
