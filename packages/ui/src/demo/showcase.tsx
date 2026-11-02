@@ -78,7 +78,7 @@ function SceneDisplay() {
           <Space direction="vertical" size="sm">
             <Space align="center" size="sm">
               <Avatar>A</Avatar>
-              <Text>李振虎</Text>
+              <Text>aura</Text>
               <Badge count={3} />
             </Space>
             <Text>前端工程师 · 杭州</Text>

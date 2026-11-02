@@ -1,6 +1,7 @@
 ---
 title: 动效场景配方
 order: 9
+toc: content
 ---
 
 # 动效场景配方
