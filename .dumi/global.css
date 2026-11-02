@@ -79,9 +79,9 @@
   --demo-dot: rgba(15, 23, 42, 0.15);
   --demo-dot-active: #7c3aed;
   --demo-dot-glow: 0 0 10px rgba(124, 58, 237, 0.45);
-  --demo-panel-bg: #0b0d13;
-  --demo-panel-text: #f2f3f7;
-  --demo-panel-muted: rgba(255, 255, 255, 0.55);
+  --demo-panel-bg: #ffffff;
+  --demo-panel-text: #0f172a;
+  --demo-panel-muted: rgba(15, 23, 42, 0.55);
 }
 
 [data-theme="dark"] {

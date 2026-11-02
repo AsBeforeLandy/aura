@@ -32,7 +32,7 @@
   --aura-motion-skeleton: rgba(15, 23, 42, 0.08);
   --aura-motion-skeleton-highlight: rgba(255, 255, 255, 0.9);
   --aura-motion-shimmer: rgba(124, 58, 237, 0.85);
-  --aura-motion-sheen: rgba(255, 255, 255, 0.9);
+  --aura-motion-sheen: rgba(124, 58, 237, 0.12);
   --aura-motion-focus-color: #7c3aed;
 }
 

@@ -29,9 +29,6 @@ const PALETTE = {
   cyan: 'var(--demo-cyan)',
   blue: 'var(--demo-blue)',
   fuchsia: 'var(--demo-fuchsia)',
-  panel: 'var(--demo-panel-bg)',
-  panelText: 'var(--demo-panel-text)',
-  panelMuted: 'var(--demo-panel-muted)',
 };
 
 /** 舞台光斑（亮/暗各一套，定义见 .dumi/global.css 的 --demo-*） */
@@ -182,9 +179,9 @@ function SceneAI() {
         gap: 16,
         padding: 18,
         borderRadius: 14,
-        background: PALETTE.panel,
+        background: 'var(--aura-motion-card-bg, #ffffff)',
         border: `1px solid ${PALETTE.border}`,
-        color: PALETTE.panelText,
+        color: 'var(--demo-text)',
       }}
     >
       <div style={{ fontSize: 16, fontWeight: 600 }}>
@@ -192,7 +189,7 @@ function SceneAI() {
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <TypingDots color="var(--demo-dot-active)" />
-        <span style={{ fontSize: 13, color: PALETTE.panelMuted }}>
+        <span style={{ fontSize: 13, color: 'var(--demo-muted)' }}>
           AI 正在思考
         </span>
       </div>
@@ -205,15 +202,13 @@ function SceneCard() {
     <div style={{ display: 'flex', gap: 16 }}>
       <GradientBorder
         radius={14}
-        size={1.5}
+        size={2.5}
         speed={4.5}
         colors={[
           'var(--demo-num-from)',
           'var(--demo-num-to)',
           'var(--demo-dot-active)',
-          'var(--demo-num-from)',
         ]}
-        background="var(--demo-panel-bg)"
         style={{ flex: 1 }}
       >
         <div style={{ padding: 16 }}>
@@ -221,7 +216,7 @@ function SceneCard() {
             style={{
               fontWeight: 600,
               marginBottom: 4,
-              color: PALETTE.panelText,
+              color: 'var(--demo-text)',
             }}
           >
             流光边框
@@ -236,9 +231,9 @@ function SceneCard() {
           style={{
             padding: 16,
             borderRadius: 14,
-            background: 'var(--demo-panel-bg)',
+            background: 'var(--aura-motion-card-bg, #ffffff)',
             border: `1px solid ${PALETTE.border}`,
-            color: PALETTE.panelText,
+            color: 'var(--demo-text)',
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: 4 }}>3D 倾斜</div>
