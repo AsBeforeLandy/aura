@@ -33,8 +33,12 @@ describe('TextShimmer', () => {
 describe('TypingDots', () => {
   it('role=status + 意图状态机 + 指定点数', () => {
     const { container } = render(<TypingDots count={4} />);
-    expect(screen.getByRole('status').getAttribute('aria-label')).toBe('正在输入');
-    expect(screen.getByRole('status').getAttribute('data-motion-state')).toBe('playing');
+    expect(screen.getByRole('status').getAttribute('aria-label')).toBe(
+      '正在输入',
+    );
+    expect(screen.getByRole('status').getAttribute('data-motion-state')).toBe(
+      'playing',
+    );
     expect(container.querySelectorAll('[role="status"] > span').length).toBe(4);
   });
 });
@@ -59,6 +63,21 @@ describe('Marquee', () => {
       </Marquee>,
     );
     expect(screen.getAllByText('AURA').length).toBe(2);
+  });
+
+  it('副本对读屏隐藏，且间距放在每份内容尾部（保证 -50% 位移对齐一个周期）', () => {
+    const { container } = render(
+      <Marquee gap={24}>
+        <span>AURA</span>
+      </Marquee>,
+    );
+    const copies = Array.from(
+      container.querySelectorAll('div[aria-hidden="true"]'),
+    );
+    expect(copies).toHaveLength(1);
+    copies.forEach((copy) => {
+      expect((copy as HTMLElement).style.paddingRight).toBe('24px');
+    });
   });
 });
 
