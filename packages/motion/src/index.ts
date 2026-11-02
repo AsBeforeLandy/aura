@@ -12,7 +12,13 @@ export * from './tokens';
 
 // ---- 全局配置与偏好 ----
 export { MotionConfig } from './config';
-export { useReducedMotion, useInView, useAnimationControls } from './hooks';
+export {
+  useReducedMotion,
+  useInView,
+  useAnimationControls,
+  useScrollContainer,
+  findScrollableAncestor,
+} from './hooks';
 // 编排 API：条件渲染的进出场（弹窗、轮播、列表增删）刚需
 export { AnimatePresence } from 'motion/react';
 // 源语：需要自定义编排（如场景轮播的进/退场）时使用；日常请优先用本包组件

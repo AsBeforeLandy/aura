@@ -8,13 +8,15 @@
  * - reduced-motion 下静态呈现。
  */
 
+import type { RefObject } from 'react';
+import { useRef } from 'react';
 import {
   motion,
   useReducedMotion,
   useScroll,
   useTransform,
 } from 'motion/react';
-import { useRef } from 'react';
+import { useScrollContainer } from '../hooks/use-scroll-container';
 
 export interface ScrollScaleCardProps {
   children: React.ReactNode;
@@ -22,7 +24,11 @@ export interface ScrollScaleCardProps {
   from?: number;
   /** 起始透明度 */
   fromOpacity?: number;
-  /** 进度映射区间：卡片进入视口底边 → 到达视口中部完成 */
+  /**
+   * 滚动容器。缺省时自动向上查找最近的可滚动祖先；
+   * 卡片位于内层滚动容器（抽屉 / 表格 / demo 预览框）时无需手动传。
+   */
+  container?: RefObject<HTMLElement | null>;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -31,13 +37,16 @@ export function ScrollScaleCard({
   children,
   from = 0.9,
   fromOpacity = 0.5,
+  container,
   className,
   style,
 }: ScrollScaleCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+  const scrollContainer = useScrollContainer(ref, container);
   const { scrollYProgress } = useScroll({
     target: ref,
+    container: scrollContainer,
     offset: ['start end', 'center center'],
   });
   const scale = useTransform(scrollYProgress, [0, 1], [from, 1]);

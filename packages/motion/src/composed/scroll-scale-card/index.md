@@ -19,8 +19,9 @@ reduced-motion 下静态呈现。
 
 ## API
 
-| 属性        | 说明       | 类型        | 默认值 |
-| ----------- | ---------- | ----------- | ------ |
-| children    | 卡片内容   | `ReactNode` | -      |
-| from        | 起始缩放   | `number`    | `0.9`  |
-| fromOpacity | 起始透明度 | `number`    | `0.5`  |
+| 属性        | 说明                                   | 类型                     | 默认值 |
+| ----------- | -------------------------------------- | ------------------------ | ------ |
+| children    | 卡片内容                               | `ReactNode`              | -      |
+| from        | 起始缩放                               | `number`                 | `0.9`  |
+| fromOpacity | 起始透明度                             | `number`                 | `0.5`  |
+| container   | 滚动容器；缺省自动探测最近的可滚动祖先 | `RefObject<HTMLElement>` | 自动   |

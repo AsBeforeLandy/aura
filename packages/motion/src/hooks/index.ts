@@ -6,3 +6,7 @@ export {
   useInView,
   useAnimationControls,
 } from 'motion/react';
+export {
+  useScrollContainer,
+  findScrollableAncestor,
+} from './use-scroll-container';

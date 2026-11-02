@@ -5,8 +5,9 @@
  * 接到任意 MotionValue 消费点（style、SVG 属性、数字……）。
  */
 
-import { useRef, type ReactNode } from 'react';
+import { useRef, type ReactNode, type RefObject } from 'react';
 import { motion, useScroll, useSpring, type MotionValue } from 'motion/react';
+import { useScrollContainer } from '../hooks/use-scroll-container';
 
 /** 直接复用引擎的 offset 类型（字符串联合 + 模板字面量，比自造类型精确） */
 type ScrollOffsetOption = NonNullable<
@@ -18,6 +19,11 @@ export interface ScrollDrivenProps {
   offset?: ScrollOffsetOption;
   /** 给进度加一层弹簧平滑（0 关闭） */
   smooth?: number;
+  /**
+   * 滚动容器。缺省时自动向上查找最近的可滚动祖先（抽屉 / 表格 / demo 预览框等），
+   * 只有页面滚动时才回退到 window。**内层容器滚动场景无需手动传**。
+   */
+  container?: RefObject<HTMLElement | null>;
   style?: React.CSSProperties;
   className?: string;
 }
@@ -26,11 +32,13 @@ export function ScrollDriven({
   children,
   offset = ['start end', 'end start'],
   smooth = 0,
+  container,
   style,
   className,
 }: ScrollDrivenProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const raw = useScroll({ target: ref, offset });
+  const scrollContainer = useScrollContainer(ref, container);
+  const raw = useScroll({ target: ref, container: scrollContainer, offset });
   const springed = useSpring(raw.scrollYProgress, {
     stiffness: 200,
     damping: 40,
