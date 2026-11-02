@@ -1,5 +1,12 @@
 # @aura-react-comp/x
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [4a7f087]
+  - @aura-react-comp/ui@0.1.1
+
 ## 0.1.1
 
 ### Patch Changes
