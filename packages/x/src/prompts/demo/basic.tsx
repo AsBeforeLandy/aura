@@ -2,9 +2,24 @@ import React, { useState } from 'react';
 import { Prompts } from '@aura-react-comp/x';
 
 const ITEMS = [
-  { key: 'a', label: '周报助手', description: '按本周提交生成工作周报', icon: '📝' },
-  { key: 'b', label: '代码审查', description: '检查潜在缺陷与风格', icon: '🔍' },
-  { key: 'c', label: '生成测试用例', description: '正常 / 边界 / 异常', icon: '🧪' },
+  {
+    key: 'a',
+    label: '周报助手',
+    description: '按本周提交生成工作周报',
+    icon: '📝',
+  },
+  {
+    key: 'b',
+    label: '代码审查',
+    description: '检查潜在缺陷与风格',
+    icon: '🔍',
+  },
+  {
+    key: 'c',
+    label: '生成测试用例',
+    description: '正常 / 边界 / 异常',
+    icon: '🧪',
+  },
 ];
 
 export default () => {

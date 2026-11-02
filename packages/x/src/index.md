@@ -130,3 +130,13 @@ export default () => (
   引入 `@aura-react-comp/ui/style.css` 并通过 `data-theme` 作用域切换，两者互不冲突。
 - `buildXThemeConfig` 作为命名导出暴露，便于在非组件场景（如 Storybook 装饰器、测试）
   复用同一份主题配置。
+
+## 样式引入
+
+本包的交互控件复用 `@aura-react-comp/ui` 的 `Button` / `Textarea` 等基础组件，
+因此**需要同时引入两套样式**（顺序不可颠倒）：
+
+```ts
+import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/x/style.css';
+```

@@ -8,6 +8,7 @@ import {
   Welcome,
   useXChat,
 } from '@aura-react-comp/x';
+import { Button, Input } from '@aura-react-comp/ui';
 import type {
   BubbleListItem,
   ConversationItem,
@@ -93,24 +94,25 @@ export default () => {
   const [renamingKey, setRenamingKey] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState('');
 
-  const { messages, loading, isDefaultMessagesRequesting, send, stop } = useXChat({
-    conversationKey: activeKey,
-    defaultMessages: async ({ conversationKey }) => {
-      const key = String(conversationKey);
-      const history = await server.load(key);
-      setOwnerKey(key); // 标记归属，写回才有依据
-      return history;
-    },
-    onRequest: async ({ message, signal, update }) => {
-      let acc = '';
-      for (const char of buildReply(message)) {
-        if (signal.aborted) throw signal.reason;
-        acc += char;
-        update({ content: acc });
-        await sleep(18);
-      }
-    },
-  });
+  const { messages, loading, isDefaultMessagesRequesting, send, stop } =
+    useXChat({
+      conversationKey: activeKey,
+      defaultMessages: async ({ conversationKey }) => {
+        const key = String(conversationKey);
+        const history = await server.load(key);
+        setOwnerKey(key); // 标记归属，写回才有依据
+        return history;
+      },
+      onRequest: async ({ message, signal, update }) => {
+        let acc = '';
+        for (const char of buildReply(message)) {
+          if (signal.aborted) throw signal.reason;
+          acc += char;
+          update({ content: acc });
+          await sleep(18);
+        }
+      },
+    });
 
   // 写回存储：只在消息确实属于当前会话时落盘
   useEffect(() => {
@@ -207,7 +209,14 @@ export default () => {
   const showWelcome = messages.length === 0 && !isDefaultMessagesRequesting;
 
   return (
-    <div style={{ display: 'flex', gap: 16, maxWidth: 880, alignItems: 'flex-start' }}>
+    <div
+      style={{
+        display: 'flex',
+        gap: 16,
+        maxWidth: 880,
+        alignItems: 'flex-start',
+      }}
+    >
       {/* ===== 左：会话列表 ===== */}
       <div
         style={{
@@ -218,8 +227,7 @@ export default () => {
           width: 232,
         }}
       >
-        <button
-          type="button"
+        <Button
           onClick={createConversation}
           style={{
             padding: '6px 12px',
@@ -232,7 +240,7 @@ export default () => {
           }}
         >
           ＋ 新建会话
-        </button>
+        </Button>
 
         {renamingKey !== null ? (
           <div style={{ display: 'flex', gap: 4 }}>
@@ -256,9 +264,9 @@ export default () => {
                 fontSize: 'var(--aura-font-size-sm)',
               }}
             />
-            <button type="button" onClick={commitRename} style={{ cursor: 'pointer' }}>
+            <Button onClick={commitRename} style={{ cursor: 'pointer' }}>
               确定
-            </button>
+            </Button>
           </div>
         ) : null}
 

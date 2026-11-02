@@ -21,13 +21,20 @@
     box-shadow: var(--aura-x-focus-ring);
   }
 
-  .ant-input {
+  .aura-textarea {
     flex: 1;
     min-width: 0;
+    /* 融入玻璃容器：容器自身已有内边距，这里清零避免双重缩进 */
+    padding: 0;
     border: none;
+    outline: none;
     background: transparent;
     box-shadow: none;
     resize: none;
+
+    &:focus {
+      box-shadow: none;
+    }
   }
 
   .aura-x-sender-actions {
@@ -35,7 +42,7 @@
     flex-shrink: 0;
   }
 
-  .ant-btn {
+  .aura-btn {
     border: none;
     color: #fff;
     background: var(--aura-x-accent-gradient);
@@ -46,12 +53,12 @@
       opacity var(--aura-duration-fast) var(--aura-easing);
   }
 
-  .ant-btn:not(:disabled):hover {
+  .aura-btn:not(:disabled):hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 16px -4px rgba(124, 58, 237, 0.65);
   }
 
-  .ant-btn:not(:disabled):active {
+  .aura-btn:not(:disabled):active {
     transform: translateY(0);
   }
 }
@@ -69,7 +76,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aura-x-sender .ant-btn:not(:disabled):hover {
+  .aura-x-sender .aura-btn:not(:disabled):hover {
     transform: none;
   }
 }

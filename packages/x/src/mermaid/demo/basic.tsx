@@ -17,7 +17,9 @@ const SEQUENCE = `sequenceDiagram
   A-->>U: 逐字流式回写 Bubble`;
 
 export default () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}>
+  <div
+    style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}
+  >
     <Mermaid>{FLOW}</Mermaid>
     <Mermaid>{SEQUENCE}</Mermaid>
   </div>

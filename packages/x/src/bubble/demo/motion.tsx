@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Space } from 'antd';
 import { Bubble } from '@aura-react-comp/x';
-import { GradientBorder, TextShimmer, TiltCard, TypingDots } from '@aura-react-comp/motion';
+import {
+  GradientBorder,
+  TextShimmer,
+  TiltCard,
+  TypingDots,
+} from '@aura-react-comp/motion';
 
 /** 四种动效增强组合：思考态 / 生成流光 / 流光边框 / 3D 倾斜 */
 export default () => {
@@ -25,7 +30,9 @@ export default () => {
         content=""
         contentRender={() =>
           thinking ? (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            <span
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
+            >
               <TypingDots color="#534ab7" />
               <span style={{ fontSize: 13, color: '#8a8984' }}>正在思考…</span>
             </span>
@@ -48,7 +55,10 @@ export default () => {
 
       {/* 3. 流光边框包裹回答卡片 */}
       <GradientBorder radius={16} size={1.5} speed={4.5}>
-        <Bubble role="assistant" content="这是带流光边框的 AI 回答卡片，光带沿边框缓慢绕行。" />
+        <Bubble
+          role="assistant"
+          content="这是带流光边框的 AI 回答卡片，光带沿边框缓慢绕行。"
+        />
       </GradientBorder>
 
       {/* 4. 3D 倾斜卡片（移动鼠标体验） */}

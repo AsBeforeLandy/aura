@@ -4,7 +4,13 @@ import type { AttachmentItem } from '@aura-react-comp/x';
 
 const INITIAL: AttachmentItem[] = [
   { id: 1, name: '需求文档.pdf', size: 1024 * 1024 * 2.4, status: 'done' },
-  { id: 2, name: '首页设计稿.png', size: 1024 * 780, status: 'uploading', percent: 60 },
+  {
+    id: 2,
+    name: '首页设计稿.png',
+    size: 1024 * 780,
+    status: 'uploading',
+    percent: 60,
+  },
 ];
 
 export default () => {
@@ -37,7 +43,9 @@ export default () => {
               items={items}
               overflow="scrollX"
               onRemove={(item) =>
-                setItems((prev) => prev.filter((current) => current.id !== item.id))
+                setItems((prev) =>
+                  prev.filter((current) => current.id !== item.id),
+                )
               }
             />
           ) : undefined

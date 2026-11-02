@@ -4,7 +4,9 @@ import { CodeHighlighter } from '@aura-react-comp/x';
 const SNIPPET = `const tokens = ['--aura-text', '--aura-x-code-bg'];`;
 
 export default () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}>
+  <div
+    style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}
+  >
     {/* header=false：完全不要头部 */}
     <CodeHighlighter lang="ts" header={false}>
       {SNIPPET}

@@ -13,9 +13,27 @@ interface DemoFile {
 }
 
 const INITIAL_FILES: DemoFile[] = [
-  { id: 1, name: '需求文档.pdf', size: 1024 * 1024 * 2.4, status: 'done', description: 'PRD v2.3 终稿' },
-  { id: 2, name: '首页设计稿.png', size: 1024 * 780, status: 'uploading', percent: 35 },
-  { id: 3, name: '接口规范.yaml', size: 1024 * 12, status: 'error', errorTip: '超过单文件 10 KB 限制' },
+  {
+    id: 1,
+    name: '需求文档.pdf',
+    size: 1024 * 1024 * 2.4,
+    status: 'done',
+    description: 'PRD v2.3 终稿',
+  },
+  {
+    id: 2,
+    name: '首页设计稿.png',
+    size: 1024 * 780,
+    status: 'uploading',
+    percent: 35,
+  },
+  {
+    id: 3,
+    name: '接口规范.yaml',
+    size: 1024 * 12,
+    status: 'error',
+    errorTip: '超过单文件 10 KB 限制',
+  },
   { id: 4, name: 'README', size: 512, status: 'init' },
 ];
 
@@ -27,7 +45,8 @@ export default () => {
     const timer = window.setInterval(() => {
       setFiles((prev) =>
         prev.map((file) => {
-          if (file.status !== 'uploading' || file.percent === undefined) return file;
+          if (file.status !== 'uploading' || file.percent === undefined)
+            return file;
           const next = Math.min(100, file.percent + 15);
           return next >= 100
             ? { ...file, status: 'done' as FileCardStatus, percent: 100 }

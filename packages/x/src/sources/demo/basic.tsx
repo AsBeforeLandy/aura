@@ -26,9 +26,23 @@ export default () => {
   const [clicked, setClicked] = useState('');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 560 }}>
-      <Sources items={ITEMS} onClick={(item) => setClicked(String(item.title))} />
-      <Sources items={ITEMS.slice(0, 2)} title="默认折叠" defaultExpanded={false} />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 560,
+      }}
+    >
+      <Sources
+        items={ITEMS}
+        onClick={(item) => setClicked(String(item.title))}
+      />
+      <Sources
+        items={ITEMS.slice(0, 2)}
+        title="默认折叠"
+        defaultExpanded={false}
+      />
       {clicked ? (
         <p
           style={{

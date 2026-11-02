@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { Button } from '@aura-react-comp/ui';
 import { CodeHighlighter } from '../code-highlighter';
 import './index.less';
 
@@ -72,7 +73,9 @@ async function loadMermaid(): Promise<MermaidRuntime> {
     } & MermaidRuntime;
     return mod.default ?? mod;
   } catch {
-    throw new Error('未安装 mermaid：请先 `pnpm add mermaid` 再使用 <Mermaid />');
+    throw new Error(
+      '未安装 mermaid：请先 `pnpm add mermaid` 再使用 <Mermaid />',
+    );
   }
 }
 
@@ -94,7 +97,9 @@ export const Mermaid: React.FC<MermaidProps> = ({
   const code = children ?? '';
   const [instanceId] = useState(nextInstanceId);
   const [view, setView] = useState<'image' | 'code'>('image');
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(
+    'loading',
+  );
   const [svg, setSvg] = useState('');
   const [error, setError] = useState('');
   const [scale, setScale] = useState(1);
@@ -134,7 +139,9 @@ export const Mermaid: React.FC<MermaidProps> = ({
         if (!isCurrent()) return;
         // 语法错误等：保留错误信息，同时把代码视图作为兜底呈现
         setError(
-          renderError instanceof Error ? renderError.message : String(renderError),
+          renderError instanceof Error
+            ? renderError.message
+            : String(renderError),
         );
         setStatus('error');
       }
@@ -162,7 +169,10 @@ export const Mermaid: React.FC<MermaidProps> = ({
 
   const zoom = useCallback((delta: number) => {
     setScale((prev) =>
-      Math.min(SCALE_MAX, Math.max(SCALE_MIN, Number((prev + delta).toFixed(2)))),
+      Math.min(
+        SCALE_MAX,
+        Math.max(SCALE_MIN, Number((prev + delta).toFixed(2))),
+      ),
     );
   }, []);
 
@@ -210,9 +220,10 @@ export const Mermaid: React.FC<MermaidProps> = ({
             ['code', '代码'],
           ] as const
         ).map(([value, label]) => (
-          <button
+          <Button
+            variant="text"
+            size="sm"
             key={value}
-            type="button"
             className={classNames(
               prefixCls('x-mermaid-view-btn'),
               view === value && prefixCls('x-mermaid-view-btn--active'),
@@ -221,60 +232,65 @@ export const Mermaid: React.FC<MermaidProps> = ({
             onClick={() => changeView(value)}
           >
             {label}
-          </button>
+          </Button>
         ))}
       </div>
       <div className={prefixCls('x-mermaid-actions')}>
         {showZoom ? (
           <>
-            <button
-              type="button"
+            <Button
+              variant="text"
+              size="sm"
               className={prefixCls('x-mermaid-action')}
               aria-label="放大"
               disabled={scale >= SCALE_MAX}
               onClick={() => zoom(SCALE_STEP)}
             >
               ＋
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variant="text"
+              size="sm"
               className={prefixCls('x-mermaid-action')}
               aria-label="缩小"
               disabled={scale <= SCALE_MIN}
               onClick={() => zoom(-SCALE_STEP)}
             >
               －
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variant="text"
+              size="sm"
               className={prefixCls('x-mermaid-action')}
               aria-label="重置缩放"
               onClick={() => setScale(1)}
             >
               重置
-            </button>
+            </Button>
           </>
         ) : null}
         {showCopy ? (
-          <button
-            type="button"
+          <Button
+            variant="text"
+            size="sm"
             className={prefixCls('x-mermaid-action')}
             aria-label={copied ? '已复制' : '复制源码'}
             onClick={handleCopy}
           >
             {copied ? '已复制' : '复制'}
-          </button>
+          </Button>
         ) : null}
         {showDownload ? (
-          <button
-            type="button"
+          <Button
+            variant="text"
+            size="sm"
             className={prefixCls('x-mermaid-action')}
             aria-label="下载 SVG"
             disabled={!svg}
             onClick={handleDownload}
           >
             下载
-          </button>
+          </Button>
         ) : null}
         {actions?.customActions}
       </div>

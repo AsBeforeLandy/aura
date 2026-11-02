@@ -23,7 +23,9 @@ const BASH = `pnpm --filter @aura-react-comp/x build
 pnpm verify`;
 
 export default () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}>
+  <div
+    style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}
+  >
     <CodeHighlighter lang="tsx">{TSX}</CodeHighlighter>
     <CodeHighlighter lang="css">{CSS}</CodeHighlighter>
     <CodeHighlighter lang="bash">{BASH}</CodeHighlighter>

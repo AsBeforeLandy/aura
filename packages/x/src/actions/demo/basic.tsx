@@ -7,7 +7,14 @@ export default () => {
   const [log, setLog] = useState('');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 560 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 560,
+      }}
+    >
       <Actions
         ariaLabel="消息操作"
         items={[
@@ -40,7 +47,9 @@ export default () => {
         ]}
       />
       {log ? (
-        <p style={{ fontSize: 13, color: 'var(--aura-text-secondary)' }}>{log}</p>
+        <p style={{ fontSize: 13, color: 'var(--aura-text-secondary)' }}>
+          {log}
+        </p>
       ) : null}
     </div>
   );

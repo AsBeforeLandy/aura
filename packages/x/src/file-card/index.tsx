@@ -1,5 +1,6 @@
 import React from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { Button } from '@aura-react-comp/ui';
 import './index.less';
 
 export type FileCardStatus = 'init' | 'uploading' | 'done' | 'error';
@@ -117,14 +118,15 @@ export const FileCard: React.FC<FileCardProps> = ({
             </span>
           ) : null}
           {onRemove ? (
-            <button
-              type="button"
+            <Button
+              variant="text"
+              size="sm"
               className={prefixCls('x-file-card-remove')}
               aria-label={`移除 ${name}`}
               onClick={() => onRemove(name)}
             >
               <span aria-hidden="true">×</span>
-            </button>
+            </Button>
           ) : null}
         </div>
         <div className={prefixCls('x-file-card-meta')}>

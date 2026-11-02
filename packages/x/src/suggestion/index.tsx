@@ -1,5 +1,6 @@
 import React from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { Button } from '@aura-react-comp/ui';
 import './index.less';
 
 export interface SuggestionItem {
@@ -40,13 +41,14 @@ export const Suggestion: React.FC<SuggestionProps> = ({
       <ul className={prefixCls('x-suggestion-list')} role="list">
         {items.map((item) => (
           <li key={item.key} role="listitem">
-            <button
-              type="button"
+            <Button
+              variant="text"
+              block
               className={prefixCls('x-suggestion-item')}
               onClick={() => onSelect?.(item)}
             >
               {item.label}
-            </button>
+            </Button>
           </li>
         ))}
       </ul>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useXStream } from '@aura-react-comp/x';
+import { Button } from '@aura-react-comp/ui';
 
 /**
  * 模拟一条 SSE 响应（真实场景这段由服务端返回）。
@@ -28,7 +29,9 @@ export default () => {
   const run = () => {
     setOutput('');
     setRawCount(0);
-    const url = URL.createObjectURL(new Blob([SSE_TEXT], { type: 'text/event-stream' }));
+    const url = URL.createObjectURL(
+      new Blob([SSE_TEXT], { type: 'text/event-stream' }),
+    );
     void fetchData({
       url,
       onMessage: (chunk) => {
@@ -45,9 +48,15 @@ export default () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 620 }}>
-      <button
-        type="button"
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 620,
+      }}
+    >
+      <Button
         onClick={run}
         disabled={streaming}
         style={{
@@ -61,7 +70,7 @@ export default () => {
         }}
       >
         {streaming ? '接收中…' : '发起 SSE 请求'}
-      </button>
+      </Button>
       <div
         style={{
           minHeight: 72,

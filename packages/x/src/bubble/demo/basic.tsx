@@ -33,7 +33,14 @@ export default () => {
   }, [send]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 720 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 720,
+      }}
+    >
       <Bubble.List
         items={messages.map((message) => ({
           key: message.id,
@@ -41,7 +48,9 @@ export default () => {
           content: message.content,
           loading: message.status === 'loading' && !message.content,
           contentRender:
-            message.role === 'assistant' ? (content) => <MarkdownContent>{content}</MarkdownContent> : undefined,
+            message.role === 'assistant'
+              ? (content) => <MarkdownContent>{content}</MarkdownContent>
+              : undefined,
         }))}
         style={{ maxHeight: 320, padding: 12 }}
       />

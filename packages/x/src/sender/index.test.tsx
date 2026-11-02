@@ -30,7 +30,9 @@ describe('Sender', () => {
 
   it('边界：Shift + Enter 换行不提交', () => {
     const onSubmit = vi.fn();
-    const { container } = render(<Sender onSubmit={onSubmit} defaultValue="x" />);
+    const { container } = render(
+      <Sender onSubmit={onSubmit} defaultValue="x" />,
+    );
 
     fireEvent.keyDown(getTextarea(container), {
       key: 'Enter',
@@ -54,7 +56,12 @@ describe('Sender', () => {
     const onCancel = vi.fn();
     const onSubmit = vi.fn();
     const { container } = render(
-      <Sender loading defaultValue="生成中" onSubmit={onSubmit} onCancel={onCancel} />,
+      <Sender
+        loading
+        defaultValue="生成中"
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+      />,
     );
 
     fireEvent.click(screen.getByRole('button', { name: '停止生成' }));

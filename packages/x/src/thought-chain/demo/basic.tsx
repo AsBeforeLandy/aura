@@ -26,8 +26,18 @@ const DONE_CHAIN: ThoughtChainItem[] = [
 
 /** 含失败步骤与待办步骤的链路：展示四态节点混排 */
 const MIXED_CHAIN: ThoughtChainItem[] = [
-  { key: 'plan', title: '拆解任务', status: 'success', description: '共 4 个子任务' },
-  { key: 'fetch', title: '拉取远端仓库', status: 'error', description: '网络超时，已重试 2 次' },
+  {
+    key: 'plan',
+    title: '拆解任务',
+    status: 'success',
+    description: '共 4 个子任务',
+  },
+  {
+    key: 'fetch',
+    title: '拉取远端仓库',
+    status: 'error',
+    description: '网络超时，已重试 2 次',
+  },
   { key: 'retry', title: '改用本地缓存继续', status: 'thinking' },
   { key: 'report', title: '汇总报告', status: 'pending' },
 ];

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Input } from 'antd';
+import { Button, Textarea } from '@aura-react-comp/ui';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 
@@ -30,7 +30,7 @@ export interface SenderProps {
    * @default 'enter'
    */
   submitType?: 'enter' | 'shiftEnter';
-  /** textarea 行数范围（透传 antd autoSize） */
+  /** 输入框行数范围（透传给 ui Textarea 的 autoSize） */
   autoSize?: { minRows?: number; maxRows?: number };
   /** 顶部插槽（如附件条、提示条） */
   header?: React.ReactNode;
@@ -103,29 +103,37 @@ export const Sender: React.FC<SenderProps> = ({
       )}
       style={style}
     >
-      {header ? <div className={prefixCls('x-sender-header')}>{header}</div> : null}
-      <Input.TextArea
+      {header ? (
+        <div className={prefixCls('x-sender-header')}>{header}</div>
+      ) : null}
+      <Textarea
+        className={prefixCls('x-sender-input')}
         value={current}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={disabled}
         autoFocus={autoFocus}
-        autoSize={autoSize}
+        autoSize={{
+          minRows: autoSize?.minRows ?? 1,
+          maxRows: autoSize?.maxRows ?? 6,
+        }}
         aria-label="消息输入框"
       />
       <div className={prefixCls('x-sender-actions')}>
         <Button
-          type="primary"
-          shape="round"
+          variant="primary"
           disabled={disabled}
           onClick={loading ? onCancel : triggerSubmit}
           aria-label={loading ? '停止生成' : '发送'}
+          style={{ borderRadius: 999, paddingInline: 22 }}
         >
           {loading ? '停止' : '发送'}
         </Button>
       </div>
-      {footer ? <div className={prefixCls('x-sender-footer')}>{footer}</div> : null}
+      {footer ? (
+        <div className={prefixCls('x-sender-footer')}>{footer}</div>
+      ) : null}
     </div>
   );
 };

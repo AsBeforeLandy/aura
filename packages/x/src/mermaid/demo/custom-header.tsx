@@ -5,7 +5,9 @@ const GRAPH = `graph LR
   A[源码] --> B[Mermaid] --> C[SVG]`;
 
 export default () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 560 }}>
+  <div
+    style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 560 }}
+  >
     {/* header=null：完全不要头部 */}
     <Mermaid header={null}>{GRAPH}</Mermaid>
 
@@ -29,6 +31,8 @@ export default () => (
     </Mermaid>
 
     {/* 只保留下载，其余按钮关掉 */}
-    <Mermaid actions={{ enableZoom: false, enableCopy: false }}>{GRAPH}</Mermaid>
+    <Mermaid actions={{ enableZoom: false, enableCopy: false }}>
+      {GRAPH}
+    </Mermaid>
   </div>
 );

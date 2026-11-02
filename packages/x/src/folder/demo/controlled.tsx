@@ -45,7 +45,14 @@ export default () => {
   );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 720 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 720,
+      }}
+    >
       <Folder
         treeData={TREE}
         selectedFile={selected}

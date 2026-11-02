@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { ThoughtChain } from '@aura-react-comp/x';
+import { Button } from '@aura-react-comp/ui';
 import type { ThoughtChainItem, ThoughtChainStatus } from '@aura-react-comp/x';
 
 const STEPS = [
   { key: 'retrieve', title: '检索知识库', description: '匹配到 3 篇相关文档' },
-  { key: 'analyze', title: '分析组件差距', description: '比对 antdx 官方组件清单' },
+  {
+    key: 'analyze',
+    title: '分析组件差距',
+    description: '比对 antdx 官方组件清单',
+  },
   { key: 'generate', title: '生成改进结论', description: '输出 5 项待补组件' },
 ];
 
@@ -17,7 +22,10 @@ export default () => {
   // 每 900ms 推进一步，直到全部完成
   useEffect(() => {
     if (cursor < 0 || cursor >= STEPS.length) return undefined;
-    const timer = window.setTimeout(() => setCursor((prev) => prev + 1), STEP_INTERVAL);
+    const timer = window.setTimeout(
+      () => setCursor((prev) => prev + 1),
+      STEP_INTERVAL,
+    );
     return () => window.clearTimeout(timer);
   }, [cursor]);
 
@@ -37,9 +45,15 @@ export default () => {
   }));
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 560 }}>
-      <button
-        type="button"
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 560,
+      }}
+    >
+      <Button
         disabled={running}
         onClick={() => setCursor(0)}
         style={{
@@ -54,10 +68,16 @@ export default () => {
         }}
       >
         {running ? '推理中…' : cursor >= STEPS.length ? '重新推理' : '开始推理'}
-      </button>
+      </Button>
       <ThoughtChain items={items} />
-      <p style={{ fontSize: 'var(--aura-font-size-xs)', color: 'var(--aura-text-secondary)' }}>
-        有步骤处于 <code>thinking</code> 时链路强制展开，头部不可点击；全部完成后自动收起，
+      <p
+        style={{
+          fontSize: 'var(--aura-font-size-xs)',
+          color: 'var(--aura-text-secondary)',
+        }}
+      >
+        有步骤处于 <code>thinking</code>{' '}
+        时链路强制展开，头部不可点击；全部完成后自动收起，
         此时点击头部可回看完整链路。
       </p>
     </div>

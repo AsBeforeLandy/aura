@@ -1,5 +1,6 @@
 import React from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { Button } from '@aura-react-comp/ui';
 import './index.less';
 
 export interface ActionItem {
@@ -49,9 +50,9 @@ export const Actions: React.FC<ActionsProps> = ({
     style={style}
   >
     {items.map((item) => (
-      <button
+      <Button
         key={item.key}
-        type="button"
+        variant="text"
         className={classNames(
           prefixCls('x-actions-item'),
           item.danger && prefixCls('x-actions-item--danger'),
@@ -64,9 +65,11 @@ export const Actions: React.FC<ActionsProps> = ({
       >
         {item.icon}
         {item.label ? (
-          <span className={prefixCls('x-actions-item-label')}>{item.label}</span>
+          <span className={prefixCls('x-actions-item-label')}>
+            {item.label}
+          </span>
         ) : null}
-      </button>
+      </Button>
     ))}
   </div>
 );

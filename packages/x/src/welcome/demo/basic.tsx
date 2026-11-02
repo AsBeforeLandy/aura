@@ -13,7 +13,11 @@ export default () => {
         extra={
           <Prompts
             items={[
-              { key: 'p1', label: '总结这份文档', description: '提炼要点与结论' },
+              {
+                key: 'p1',
+                label: '总结这份文档',
+                description: '提炼要点与结论',
+              },
               { key: 'p2', label: '审查这段代码', description: '指出潜在缺陷' },
             ]}
             onItemClick={(item) => setPicked(item.label)}
@@ -21,7 +25,13 @@ export default () => {
         }
       />
       {picked ? (
-        <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--aura-text-secondary)' }}>
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: 13,
+            color: 'var(--aura-text-secondary)',
+          }}
+        >
           已选择：{picked}
         </p>
       ) : null}

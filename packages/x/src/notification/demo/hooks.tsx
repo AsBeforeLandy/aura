@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNotification } from '@aura-react-comp/x';
+import { Button } from '@aura-react-comp/ui';
 
 export default () => {
-  const [{ permission }, { open, close, requestPermission }] = useNotification();
+  const [{ permission }, { open, close, requestPermission }] =
+    useNotification();
 
   const handleOpen = async () => {
     if (permission !== 'granted') {
@@ -18,7 +20,14 @@ export default () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 560 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 560,
+      }}
+    >
       <p
         style={{
           margin: 0,
@@ -32,16 +41,12 @@ export default () => {
         {(
           [
             ['申请权限并推送', handleOpen],
-            [
-              '关闭 tag=report',
-              () => close(['report']),
-            ],
+            ['关闭 tag=report', () => close(['report'])],
             ['关闭全部', () => close()],
           ] as const
         ).map(([label, handler]) => (
-          <button
+          <Button
             key={label}
-            type="button"
             onClick={handler}
             style={{
               padding: '6px 14px',
@@ -54,7 +59,7 @@ export default () => {
             }}
           >
             {label}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

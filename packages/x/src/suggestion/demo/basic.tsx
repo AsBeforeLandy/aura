@@ -12,7 +12,10 @@ export default () => {
 
   return (
     <div style={{ maxWidth: 420 }}>
-      <Suggestion items={SUGGESTIONS} onSelect={(item) => setSelected(item.label)} />
+      <Suggestion
+        items={SUGGESTIONS}
+        onSelect={(item) => setSelected(item.label)}
+      />
       {selected ? (
         <p style={{ fontSize: 13, color: 'var(--aura-text-secondary)' }}>
           已选择：{selected}

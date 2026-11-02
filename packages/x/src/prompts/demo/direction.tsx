@@ -7,8 +7,18 @@ export default () => (
       direction="horizontal"
       title="横向排列（适合工具入口）"
       items={[
-        { key: 'a', label: '生成图表', description: '从表格数据生成', icon: '📊' },
-        { key: 'b', label: '润色文案', description: '正式 / 口语化', icon: '✍️' },
+        {
+          key: 'a',
+          label: '生成图表',
+          description: '从表格数据生成',
+          icon: '📊',
+        },
+        {
+          key: 'b',
+          label: '润色文案',
+          description: '正式 / 口语化',
+          icon: '✍️',
+        },
         { key: 'c', label: '翻译', description: '中英互译', icon: '🌐' },
       ]}
     />

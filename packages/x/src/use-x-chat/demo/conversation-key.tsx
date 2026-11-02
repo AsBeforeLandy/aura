@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 import { useXChat } from '@aura-react-comp/x';
+import { Button } from '@aura-react-comp/ui';
 import type { XMessage } from '@aura-react-comp/x';
 
 /** 模拟远端：按会话返回历史（异步），体现 conversationKey 的初始化语义 */
 const remote: Record<string, XMessage[]> = {
   alpha: [
     { id: 'a1', role: 'user', content: 'Alpha 会话的历史提问' },
-    { id: 'a2', role: 'assistant', content: 'Alpha 会话的历史回答', status: 'success' },
+    {
+      id: 'a2',
+      role: 'assistant',
+      content: 'Alpha 会话的历史回答',
+      status: 'success',
+    },
   ],
-  beta: [{ id: 'b1', role: 'assistant', content: 'Beta 会话只有一句问候', status: 'success' }],
+  beta: [
+    {
+      id: 'b1',
+      role: 'assistant',
+      content: 'Beta 会话只有一句问候',
+      status: 'success',
+    },
+  ],
 };
 
 const loadHistory = async (key: string): Promise<XMessage[]> => {
@@ -42,29 +55,43 @@ export default () => {
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 640 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        maxWidth: 640,
+      }}
+    >
       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
         {['alpha', 'beta'].map((item) => (
-          <button
+          <Button
             key={item}
-            type="button"
             onClick={() => setKey(item)}
             aria-pressed={key === item}
             style={{
               padding: '6px 14px',
               border: '1px solid var(--aura-x-bubble-border)',
               borderRadius: 'var(--aura-radius-sm)',
-              background: key === item ? 'var(--aura-x-accent-soft)' : 'transparent',
+              background:
+                key === item ? 'var(--aura-x-accent-soft)' : 'transparent',
               color: key === item ? 'var(--aura-x-accent)' : 'var(--aura-text)',
               fontSize: 'var(--aura-font-size-sm)',
               cursor: 'pointer',
             }}
           >
             切换会话 {item}
-          </button>
+          </Button>
         ))}
-        <span style={{ fontSize: 'var(--aura-font-size-xs)', color: 'var(--aura-text-tertiary)' }}>
-          {isDefaultMessagesRequesting ? '加载历史中…' : `共 ${messages.length} 条`}
+        <span
+          style={{
+            fontSize: 'var(--aura-font-size-xs)',
+            color: 'var(--aura-text-tertiary)',
+          }}
+        >
+          {isDefaultMessagesRequesting
+            ? '加载历史中…'
+            : `共 ${messages.length} 条`}
         </span>
       </div>
 
@@ -79,9 +106,14 @@ export default () => {
               fontSize: 'var(--aura-font-size-sm)',
             }}
           >
-            <span style={{ color: 'var(--aura-x-accent)' }}>{message.role}</span>
+            <span style={{ color: 'var(--aura-x-accent)' }}>
+              {message.role}
+            </span>
             {message.status ? (
-              <span style={{ color: 'var(--aura-text-tertiary)' }}> · {message.status}</span>
+              <span style={{ color: 'var(--aura-text-tertiary)' }}>
+                {' '}
+                · {message.status}
+              </span>
             ) : null}
             <div>{message.content || '…'}</div>
           </div>
@@ -89,22 +121,25 @@ export default () => {
       </div>
 
       <div style={{ display: 'flex', gap: 8 }}>
-        <button type="button" disabled={loading} onClick={() => send('这条属于当前会话')}>
+        <Button disabled={loading} onClick={() => send('这条属于当前会话')}>
           发送
-        </button>
-        <button type="button" disabled={!loading} onClick={stop}>
+        </Button>
+        <Button disabled={!loading} onClick={stop}>
           停止
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
           onClick={() =>
             setMessages([
-              { id: 'injected', role: 'assistant', content: 'setMessages 直接替换，不触发请求' },
+              {
+                id: 'injected',
+                role: 'assistant',
+                content: 'setMessages 直接替换，不触发请求',
+              },
             ])
           }
         >
           setMessages 替换
-        </button>
+        </Button>
       </div>
     </div>
   );

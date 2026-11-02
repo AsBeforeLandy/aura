@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bubble, MarkdownContent, Sender, useXChat, XProvider } from '@aura-react-comp/x';
+import {
+  Bubble,
+  MarkdownContent,
+  Sender,
+  useXChat,
+  XProvider,
+} from '@aura-react-comp/x';
+import { Button } from '@aura-react-comp/ui';
 
 const COLORS = [
   { label: '紫罗兰', value: '#7c3aed' },
@@ -8,7 +15,8 @@ const COLORS = [
   { label: '珊瑚橙', value: '#ea580c' },
 ];
 
-const GREETING = '你好！我是 **Aura AI 助手**。\n\n试试右上角的色板与暗色开关——组件视觉会即时跟随。';
+const GREETING =
+  '你好！我是 **Aura AI 助手**。\n\n试试右上角的色板与暗色开关——组件视觉会即时跟随。';
 
 export default () => {
   const [color, setColor] = useState(COLORS[0].value);
@@ -50,9 +58,8 @@ export default () => {
         }}
       >
         {COLORS.map((c) => (
-          <button
+          <Button
             key={c.value}
-            type="button"
             aria-pressed={color === c.value}
             onClick={() => setColor(c.value)}
             style={{
@@ -64,16 +71,23 @@ export default () => {
               cursor: 'pointer',
               fontSize: 13,
               border: `1px solid ${color === c.value ? c.value : 'var(--aura-x-bubble-border)'}`,
-              background: color === c.value ? 'var(--aura-x-accent-soft)' : 'transparent',
+              background:
+                color === c.value ? 'var(--aura-x-accent-soft)' : 'transparent',
               color: 'var(--aura-text)',
             }}
           >
-            <span style={{ width: 10, height: 10, borderRadius: '50%', background: c.value }} />
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                background: c.value,
+              }}
+            />
             {c.label}
-          </button>
+          </Button>
         ))}
-        <button
-          type="button"
+        <Button
           aria-pressed={dark}
           onClick={() => setDark((v) => !v)}
           style={{
@@ -88,7 +102,7 @@ export default () => {
           }}
         >
           {dark ? '☀️ 切换亮色' : '🌙 切换暗色'}
-        </button>
+        </Button>
       </div>
 
       {/* 主题作用域内的对话预览：色板 / 暗色开关即时生效 */}
@@ -105,7 +119,11 @@ export default () => {
             transition: 'background 0.3s',
           }}
         >
-          <Bubble role="assistant" content={GREETING} contentRender={(c) => <MarkdownContent>{c}</MarkdownContent>} />
+          <Bubble
+            role="assistant"
+            content={GREETING}
+            contentRender={(c) => <MarkdownContent>{c}</MarkdownContent>}
+          />
           <Bubble.List
             items={messages.map((message) => ({
               key: message.id,
@@ -119,7 +137,12 @@ export default () => {
             }))}
             style={{ maxHeight: 280 }}
           />
-          <Sender loading={loading} onSubmit={send} onCancel={stop} placeholder="向 AI 发送消息…" />
+          <Sender
+            loading={loading}
+            onSubmit={send}
+            onCancel={stop}
+            placeholder="向 AI 发送消息…"
+          />
         </div>
       </XProvider>
     </div>

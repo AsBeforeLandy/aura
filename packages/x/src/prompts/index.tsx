@@ -1,5 +1,6 @@
 import React from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { Button } from '@aura-react-comp/ui';
 import './index.less';
 
 export interface PromptItem {
@@ -49,23 +50,28 @@ export const Prompts: React.FC<PromptsProps> = ({
     <ul className={prefixCls('x-prompts-list')} role="list">
       {items.map((item) => (
         <li key={item.key} role="listitem">
-          <button
-            type="button"
+          <Button
+            variant="text"
+            block
             className={prefixCls('x-prompts-item')}
             onClick={() => onItemClick?.(item)}
           >
             {item.icon ? (
-              <span className={prefixCls('x-prompts-item-icon')}>{item.icon}</span>
+              <span className={prefixCls('x-prompts-item-icon')}>
+                {item.icon}
+              </span>
             ) : null}
             <span className={prefixCls('x-prompts-item-body')}>
-              <span className={prefixCls('x-prompts-item-label')}>{item.label}</span>
+              <span className={prefixCls('x-prompts-item-label')}>
+                {item.label}
+              </span>
               {item.description ? (
                 <span className={prefixCls('x-prompts-item-description')}>
                   {item.description}
                 </span>
               ) : null}
             </span>
-          </button>
+          </Button>
         </li>
       ))}
     </ul>

@@ -9,6 +9,7 @@ import React, {
 import { Highlight } from 'prism-react-renderer';
 import type { Language } from 'prism-react-renderer';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { Button } from '@aura-react-comp/ui';
 import { auraCodeTheme } from './prism-theme';
 import './index.less';
 
@@ -156,15 +157,16 @@ export const CodeHighlighter = forwardRef<
       return (
         <div className={prefixCls('x-code-highlighter-header')}>
           <span className={prefixCls('x-code-highlighter-lang')}>{lang}</span>
-          <button
-            type="button"
+          <Button
+            variant="text"
+            size="sm"
             className={prefixCls('x-code-highlighter-copy')}
             onClick={handleCopy}
             aria-label={copied ? copiedText : '复制代码'}
           >
             <CopyGlyph />
             <span>{copied ? copiedText : '复制'}</span>
-          </button>
+          </Button>
         </div>
       );
     })();

@@ -4,7 +4,9 @@ import { MarkdownContent } from '@aura-react-comp/x';
 const FENCE = '```js\nconsole.log(1);\n```';
 
 export default () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}>
+  <div
+    style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}
+  >
     {/* 默认：交给 CodeHighlighter */}
     <MarkdownContent>{FENCE}</MarkdownContent>
 
