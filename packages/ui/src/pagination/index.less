@@ -104,26 +104,16 @@
 
 /* ===== 每页条数选择器 ===== */
 .aura-pagination-size-changer {
-  height: 32px;
-  padding: 0 var(--aura-spacing-3);
+  /* 视觉（边框 / 背景 / 字号）由 Select 自身负责，这里只做尺寸与对齐 */
+  width: 108px;
+  min-width: 108px;
   margin-left: var(--aura-spacing-2);
-  font-size: var(--aura-font-size-sm);
-  font-family: inherit;
-  color: var(--aura-text);
-  background: var(--aura-bg);
-  border: 1px solid var(--aura-border);
-  border-radius: var(--aura-radius-sm);
-  cursor: pointer;
-  transition: border-color var(--aura-duration-normal)
-    cubic-bezier(0.4, 0, 0.2, 1);
+  vertical-align: middle;
 
-  &:hover {
-    border-color: var(--aura-primary-300);
-  }
-
-  &:focus {
-    outline: 2px solid var(--aura-primary-500);
-    outline-offset: 2px;
+  .aura-select-selector {
+    min-height: 32px;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 }
 
@@ -181,8 +171,14 @@
   }
 
   .aura-pagination-size-changer {
-    height: 28px;
-    font-size: var(--aura-font-size-xs);
+    width: 100px;
+    min-width: 100px;
+
+    .aura-select-selector {
+      min-height: 28px;
+      padding: 2px 22px 2px 8px;
+      font-size: var(--aura-font-size-xs);
+    }
   }
 
   .aura-pagination-jumper-input {
@@ -224,11 +220,7 @@
     }
   }
 
-  .aura-pagination-size-changer {
-    color: var(--aura-text);
-    background: var(--aura-bg-secondary);
-    border-color: var(--aura-border);
-  }
+  /* 每页条数选择器的暗色配色完全由 Select 自身的暗色令牌负责 */
 
   .aura-pagination-jumper-input {
     color: var(--aura-text);

@@ -1,6 +1,7 @@
 import React, { forwardRef, useState, useCallback } from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
 import { ChevronLeft, ChevronRight } from '@aura-react-comp/icons';
+import { Select } from '../select';
 import './index.less';
 
 /* ===== 页码范围计算 ===== */
@@ -21,7 +22,14 @@ function generatePages(current: number, totalPages: number): number[] {
     pages.push(2, 3, 4, 5, -1, totalPages);
   } else if (current >= totalPages - 3) {
     // 靠近末尾
-    pages.push(-1, totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+    pages.push(
+      -1,
+      totalPages - 4,
+      totalPages - 3,
+      totalPages - 2,
+      totalPages - 1,
+      totalPages,
+    );
   } else {
     // 中间
     pages.push(-1, current - 1, current, current + 1, -1, totalPages);
@@ -89,7 +97,9 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
   ) => {
     /* --- 受控/非受控 --- */
     const [internalCurrent, setInternalCurrent] = useState(defaultCurrent);
-    const [internalPageSize, setInternalPageSize] = useState(controlledPageSize ?? 10);
+    const [internalPageSize, setInternalPageSize] = useState(
+      controlledPageSize ?? 10,
+    );
 
     const isControlled = controlledCurrent !== undefined;
     const currentPage = isControlled ? controlledCurrent : internalCurrent;
@@ -168,7 +178,13 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
     const nextDisabled = currentPage >= totalPages;
 
     return (
-      <div ref={ref} className={wrapperCls} style={style} role="navigation" aria-label="分页">
+      <div
+        ref={ref}
+        className={wrapperCls}
+        style={style}
+        role="navigation"
+        aria-label="分页"
+      >
         {/* 总条数展示 */}
         {showTotal && (
           <span className={prefixCls('pagination-total')}>
@@ -239,20 +255,19 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
           <ChevronRight size={14} />
         </button>
 
-        {/* 每页条数选择器 */}
+        {/* 每页条数选择器（使用组件库自有的 Select，保证与整体视觉一致） */}
         {showSizeChanger && (
-          <select
+          <Select
             className={prefixCls('pagination-size-changer')}
+            size={size}
             value={pageSize}
-            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+            options={pageSizeOptions.map((option) => ({
+              label: `${option} 条/页`,
+              value: option,
+            }))}
+            onChange={(value) => handlePageSizeChange(Number(value))}
             aria-label="每页条数"
-          >
-            {pageSizeOptions.map((size) => (
-              <option key={size} value={size}>
-                {size} 条/页
-              </option>
-            ))}
-          </select>
+          />
         )}
 
         {/* 快速跳转 */}

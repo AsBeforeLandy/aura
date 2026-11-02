@@ -3,6 +3,33 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import { Pagination } from './index';
 
+/**
+ * 打开「每页条数」下拉并点选指定项。
+ * 条数选择器使用组件库的 Select（自定义下拉），不能用 fireEvent.change。
+ */
+function pickPageSize(container: HTMLElement, text: string) {
+  const selector = container.querySelector(
+    '.aura-pagination-size-changer .aura-select-selector',
+  ) as HTMLElement;
+  fireEvent.click(selector);
+  const option = Array.from(
+    container.querySelectorAll('.aura-select-option'),
+  ).find((el) => el.textContent?.trim() === text) as HTMLElement | undefined;
+  if (!option) throw new Error(`未找到条数选项：${text}`);
+  fireEvent.click(option);
+}
+
+/** 打开下拉并返回当前渲染的条数选项文案 */
+function pageSizeOptionTexts(container: HTMLElement): string[] {
+  const selector = container.querySelector(
+    '.aura-pagination-size-changer .aura-select-selector',
+  ) as HTMLElement;
+  fireEvent.click(selector);
+  return Array.from(container.querySelectorAll('.aura-select-option')).map(
+    (el) => el.textContent?.trim() ?? '',
+  );
+}
+
 describe('Pagination', () => {
   // ===== 基础渲染 =====
   it('应该正确渲染分页组件', () => {
@@ -21,7 +48,11 @@ describe('Pagination', () => {
 
   it('应该应用自定义 className 和 style', () => {
     const { container } = render(
-      <Pagination total={100} className="custom-pagination" style={{ margin: 10 }} />,
+      <Pagination
+        total={100}
+        className="custom-pagination"
+        style={{ margin: 10 }}
+      />,
     );
     const pagination = container.firstChild as HTMLElement;
     expect(pagination.classList.contains('custom-pagination')).toBe(true);
@@ -69,13 +100,19 @@ describe('Pagination', () => {
   it('第一页时上一页按钮应该禁用', () => {
     const { container } = render(<Pagination total={100} defaultCurrent={1} />);
     const prevBtn = container.querySelector('.aura-pagination-prev');
-    expect(prevBtn?.classList.contains('aura-pagination-btn-disabled')).toBe(true);
+    expect(prevBtn?.classList.contains('aura-pagination-btn-disabled')).toBe(
+      true,
+    );
   });
 
   it('最后一页时下一页按钮应该禁用', () => {
-    const { container } = render(<Pagination total={100} defaultCurrent={10} />);
+    const { container } = render(
+      <Pagination total={100} defaultCurrent={10} />,
+    );
     const nextBtn = container.querySelector('.aura-pagination-next');
-    expect(nextBtn?.classList.contains('aura-pagination-btn-disabled')).toBe(true);
+    expect(nextBtn?.classList.contains('aura-pagination-btn-disabled')).toBe(
+      true,
+    );
   });
 
   // ===== 受控模式 =====
@@ -100,9 +137,7 @@ describe('Pagination', () => {
 
   // ===== Size Changer =====
   it('showSizeChanger 应该渲染每页条数选择器', () => {
-    const { container } = render(
-      <Pagination total={100} showSizeChanger />,
-    );
+    const { container } = render(<Pagination total={100} showSizeChanger />);
     const select = container.querySelector('.aura-pagination-size-changer');
     expect(select).not.toBeNull();
   });
@@ -112,16 +147,13 @@ describe('Pagination', () => {
     const { container } = render(
       <Pagination total={100} showSizeChanger onChange={onChange} />,
     );
-    const select = container.querySelector('.aura-pagination-size-changer') as HTMLSelectElement;
-    fireEvent.change(select, { target: { value: '20' } });
+    pickPageSize(container, '20 条/页');
     expect(onChange).toHaveBeenCalledWith(1, 20);
   });
 
   // ===== Quick Jumper =====
   it('showQuickJumper 应该渲染跳转输入框', () => {
-    const { container } = render(
-      <Pagination total={100} showQuickJumper />,
-    );
+    const { container } = render(<Pagination total={100} showQuickJumper />);
     const input = container.querySelector('.aura-pagination-jumper-input');
     expect(input).not.toBeNull();
   });
@@ -131,7 +163,9 @@ describe('Pagination', () => {
     const { container } = render(
       <Pagination total={100} showQuickJumper onChange={onChange} />,
     );
-    const input = container.querySelector('.aura-pagination-jumper-input') as HTMLInputElement;
+    const input = container.querySelector(
+      '.aura-pagination-jumper-input',
+    ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: '5' } });
     fireEvent.keyDown(input, { key: 'Enter' });
     expect(onChange).toHaveBeenCalledWith(5, 10);
@@ -168,7 +202,9 @@ describe('Pagination', () => {
         total={95}
         defaultCurrent={2}
         pageSize={10}
-        showTotal={(total, range) => `共 ${total} 条，当前 ${range[0]}-${range[1]}`}
+        showTotal={(total, range) =>
+          `共 ${total} 条，当前 ${range[0]}-${range[1]}`
+        }
       />,
     );
     const totalEl = container.querySelector('.aura-pagination-total');
@@ -177,7 +213,10 @@ describe('Pagination', () => {
 
   it('total 为 0 时区间应为 [0, 0]', () => {
     const { container } = render(
-      <Pagination total={0} showTotal={(total, range) => `${total}:${range[0]},${range[1]}`} />,
+      <Pagination
+        total={0}
+        showTotal={(total, range) => `${total}:${range[0]},${range[1]}`}
+      />,
     );
     expect(container.querySelector('.aura-pagination-total')?.textContent).toBe(
       '0:0,0',
@@ -189,10 +228,7 @@ describe('Pagination', () => {
     const { container } = render(
       <Pagination total={100} showSizeChanger pageSizeOptions={[5, 15, 30]} />,
     );
-    const options = container.querySelectorAll(
-      '.aura-pagination-size-changer option',
-    );
-    expect(Array.from(options).map((o) => o.textContent)).toEqual([
+    expect(pageSizeOptionTexts(container)).toEqual([
       '5 条/页',
       '15 条/页',
       '30 条/页',
@@ -201,11 +237,9 @@ describe('Pagination', () => {
 
   it('未传 pageSizeOptions 时使用默认选项', () => {
     const { container } = render(<Pagination total={100} showSizeChanger />);
-    const options = container.querySelectorAll(
-      '.aura-pagination-size-changer option',
-    );
-    expect(options.length).toBe(4);
-    expect(options[0]?.textContent).toBe('10 条/页');
+    const texts = pageSizeOptionTexts(container);
+    expect(texts).toHaveLength(4);
+    expect(texts[0]).toBe('10 条/页');
   });
 
   // ===== onShowSizeChange =====
@@ -221,10 +255,7 @@ describe('Pagination', () => {
         onChange={onChange}
       />,
     );
-    const select = container.querySelector(
-      '.aura-pagination-size-changer',
-    ) as HTMLSelectElement;
-    fireEvent.change(select, { target: { value: '50' } });
+    pickPageSize(container, '50 条/页');
     expect(onShowSizeChange).toHaveBeenCalledWith(3, 50);
     expect(onChange).toHaveBeenCalledWith(1, 50);
   });

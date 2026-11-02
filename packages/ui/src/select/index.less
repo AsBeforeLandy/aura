@@ -429,3 +429,43 @@
     }
   }
 }
+
+/* ===== 尺寸 ===== */
+/* 说明：`size` prop 必然输出 aura-select-{size} 类名，此前样式缺失导致该 prop 无效。
+   md 为默认尺寸（基础样式），这里仅定义 sm / lg 的覆盖。 */
+.aura-select-sm {
+  min-width: 96px;
+
+  .aura-select-selector {
+    min-height: 28px;
+    padding: 3px 24px 3px 8px;
+    font-size: var(--aura-font-size-sm);
+    border-radius: var(--aura-radius-sm);
+  }
+
+  .aura-select-arrow {
+    right: 6px;
+  }
+
+  .aura-select-option {
+    padding: 5px 8px;
+    font-size: var(--aura-font-size-sm);
+  }
+}
+
+.aura-select-lg {
+  .aura-select-selector {
+    min-height: 44px;
+    padding: 10px 34px 10px 14px;
+    font-size: var(--aura-font-size-md);
+    border-radius: var(--aura-radius-md);
+  }
+
+  .aura-select-arrow {
+    right: 12px;
+  }
+
+  .aura-select-option {
+    padding: 10px 14px;
+  }
+}
