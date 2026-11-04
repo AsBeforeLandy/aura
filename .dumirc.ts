@@ -78,6 +78,11 @@ const GROUP_ORDER = [
   '反馈',
   '业务',
   'AI 组件',
+  // 图表库与编辑器
+  '图表 · 基础',
+  '图表 · 进阶',
+  '图表 · 指标',
+  '编辑器',
   // 以下为 @aura-react-comp/x（AI 组件）的侧栏子分组
   '主题桥接',
   '数据流',
@@ -165,6 +170,38 @@ const motionSidebar = collectSidebarGroups([
   { dir: 'packages/motion/src', prefix: '/motion-components' },
 ]);
 
+/**
+ * 图表与编辑器：手工的「开始」分组 + 由 index.md frontmatter 自动生成的组件分组。
+ * 同一个侧栏配置挂在多个路由前缀上，保证从概览页或组件页进入时菜单一致。
+ */
+const chartsSidebar = [
+  {
+    title: '开始',
+    children: [
+      { title: '概览', link: '/charts' },
+      { title: '主题定制', link: '/charts-theme' },
+      { title: '动画', link: '/charts-animation' },
+    ],
+  },
+  ...collectSidebarGroups([
+    { dir: 'packages/charts/src/charts', prefix: '/charts' },
+    { dir: 'packages/charts/src/components', prefix: '/charts' },
+  ]),
+];
+
+const editorSidebar = [
+  {
+    title: '开始',
+    children: [
+      { title: '概览', link: '/editor' },
+      { title: '扩展与定制', link: '/editor-advanced' },
+    ],
+  },
+  ...collectSidebarGroups([
+    { dir: 'packages/editor/src', prefix: '/editor-components' },
+  ]),
+];
+
 // 注意：文档路由（含 /x-components）的侧栏由 dumi 依据 frontmatter 的
 // 嵌套 group（title + order）自动生成，这里无需（也无法）用 themeConfig
 // sidebar 干预——要调整各包组件文档的分组与排序，请改对应 index.md 的
@@ -186,6 +223,11 @@ export default defineConfig({
       { type: 'motion-component', dir: 'packages/motion/src' },
       { type: 'motion-component', dir: 'packages/motion/src/primitive' },
       { type: 'motion-component', dir: 'packages/motion/src/composed' },
+      // 'chart' → 路由前缀 /charts（与概览页 docs/charts.md 同前缀，互不冲突）
+      { type: 'chart', dir: 'packages/charts/src/charts' },
+      { type: 'chart', dir: 'packages/charts/src/components' },
+      // 'editor-component' → /editor-components
+      { type: 'editor-component', dir: 'packages/editor/src' },
     ],
     entryFile: './packages/ui/src/index.ts',
     codeBlockMode: 'active',
@@ -226,7 +268,10 @@ export default defineConfig({
     ),
     '@aura-react-comp/icons': path.resolve(__dirname, 'packages/icons/src'),
     '@aura-react-comp/ui': path.resolve(__dirname, 'packages/ui/src'),
-    '@aura-react-comp/business': path.resolve(__dirname, 'packages/business/src'),
+    '@aura-react-comp/business': path.resolve(
+      __dirname,
+      'packages/business/src',
+    ),
     '@aura-react-comp/x': path.resolve(__dirname, 'packages/x/src'),
     // 必须排在 `@aura-react-comp/motion` 之前（前缀匹配，同 ui/style.css 的原因）
     '@aura-react-comp/motion/tokens.css': path.resolve(
@@ -234,6 +279,8 @@ export default defineConfig({
       'packages/motion/src/tokens.css',
     ),
     '@aura-react-comp/motion': path.resolve(__dirname, 'packages/motion/src'),
+    '@aura-react-comp/charts': path.resolve(__dirname, 'packages/charts/src'),
+    '@aura-react-comp/editor': path.resolve(__dirname, 'packages/editor/src'),
     '@aura-react-comp/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura-react-comp/request': path.resolve(__dirname, 'packages/request/src'),
   },
@@ -245,8 +292,7 @@ export default defineConfig({
     name: 'Aura',
     logo: '/aura/logo.svg',
     socialLinks: { github: 'https://github.com/AsBeforeLandy/aura' },
-    footer:
-      'Open-source MIT Licensed | Copyright © 2026-present Aura Team',
+    footer: 'Open-source MIT Licensed | Copyright © 2026-present Aura Team',
     prefersColor: { default: 'light', switch: true },
     nav: [
       { title: '指南', link: '/guide' },
@@ -256,6 +302,8 @@ export default defineConfig({
       { title: '业务组件', link: '/businesses' },
       { title: 'AI 组件', link: '/x-components' },
       { title: '动效组件', link: '/motion-components' },
+      { title: '图表', link: '/charts' },
+      { title: '编辑器', link: '/editor' },
       { title: '更新日志', link: '/changelog' },
     ],
     sidebar: {
@@ -280,6 +328,12 @@ export default defineConfig({
       '/components': componentSidebar,
       '/businesses': businessSidebar,
       '/motion-components': motionSidebar,
+      '/charts': chartsSidebar,
+      '/charts-theme': chartsSidebar,
+      '/charts-animation': chartsSidebar,
+      '/editor': editorSidebar,
+      '/editor-advanced': editorSidebar,
+      '/editor-components': editorSidebar,
     },
     showLineNum: true,
     lastUpdated: true,

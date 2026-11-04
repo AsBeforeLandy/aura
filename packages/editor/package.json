@@ -1,0 +1,82 @@
+{
+  "name": "@aura-react-comp/editor",
+  "version": "0.1.0",
+  "description": "Aura 富文本编辑器 — 基于 Tiptap/ProseMirror 的 headless 引擎封装，Aura 令牌主题与开箱即用的完整工具栏",
+  "keywords": [
+    "aura",
+    "react",
+    "editor",
+    "rich-text",
+    "wysiwyg",
+    "tiptap",
+    "prosemirror",
+    "markdown",
+    "contenteditable"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/editor",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/editor"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
+  "type": "module",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "files": [
+    "esm"
+  ],
+  "sideEffects": [
+    "**/*.less",
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./esm/index.d.ts",
+      "import": "./esm/index.js",
+      "default": "./esm/index.js"
+    },
+    "./style.css": "./esm/style.css",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "father build && node scripts/build-styles.mjs",
+    "dev": "father dev"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@aura-react-comp/shared": "workspace:*",
+    "@tiptap/extension-character-count": "^3.32.2",
+    "@tiptap/extension-code-block-lowlight": "^3.32.2",
+    "@tiptap/extension-color": "^3.32.2",
+    "@tiptap/extension-highlight": "^3.32.2",
+    "@tiptap/extension-image": "^3.32.2",
+    "@tiptap/extension-placeholder": "^3.32.2",
+    "@tiptap/extension-subscript": "^3.32.2",
+    "@tiptap/extension-superscript": "^3.32.2",
+    "@tiptap/extension-table": "^3.32.2",
+    "@tiptap/extension-task-item": "^3.32.2",
+    "@tiptap/extension-task-list": "^3.32.2",
+    "@tiptap/extension-text-align": "^3.32.2",
+    "@tiptap/extension-text-style": "^3.32.2",
+    "@tiptap/pm": "^3.32.2",
+    "@tiptap/react": "^3.32.2",
+    "@tiptap/starter-kit": "^3.32.2",
+    "lowlight": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "less": "^4.9.1"
+  }
+}

@@ -20,6 +20,42 @@ afterEach(() => {
   cleanup();
 });
 
+// Range 的几何 API 在 jsdom 中未实现。
+// ProseMirror 的 scrollIntoView → coordsAtPos 会调用 range.getClientRects()，
+// 缺失时会在 requestAnimationFrame 回调里抛 TypeError，被 vitest 记为
+// unhandled error（测试全绿但进程退出码为 1）。
+if (typeof Range !== 'undefined') {
+  const emptyRect: DOMRect = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    toJSON: () => ({}),
+  };
+
+  if (typeof Range.prototype.getClientRects !== 'function') {
+    Range.prototype.getClientRects = function getClientRects() {
+      return {
+        length: 0,
+        item: () => null,
+        [Symbol.iterator]: function* iterate() {
+          /* 无矩形可返回 */
+        },
+      } as unknown as DOMRectList;
+    };
+  }
+
+  if (typeof Range.prototype.getBoundingClientRect !== 'function') {
+    Range.prototype.getBoundingClientRect = function getBoundingClientRect() {
+      return emptyRect;
+    };
+  }
+}
+
 /**
  * antd 在 jsdom 环境下依赖若干浏览器 API，集中在此处补齐。
  * 仅影响测试环境，不改变运行时行为。

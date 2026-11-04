@@ -1,0 +1,539 @@
+/* ===== @aura-react-comp/editor ===== */
+
+.aura-editor {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--aura-border, #e5e7eb);
+  border-radius: var(--aura-radius-md, 10px);
+  background: var(--aura-bg, #ffffff);
+  color: var(--aura-text, #111827);
+  overflow: hidden;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:focus-within {
+    border-color: var(--aura-primary-700, #7c3aed);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+  }
+
+  &[data-readonly] {
+    background: var(--aura-bg-secondary, #f9fafb);
+  }
+}
+
+/* ---------- 工具栏 ---------- */
+
+.aura-editor__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--aura-border, #e5e7eb);
+  background: var(--aura-bg-secondary, #f9fafb);
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.aura-editor__group {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+
+  & + & {
+    padding-left: 6px;
+    margin-left: 6px;
+    border-left: 1px solid var(--aura-border, #e5e7eb);
+  }
+
+  &--table {
+    gap: 4px;
+  }
+}
+
+.aura-editor__tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--aura-radius-sm, 6px);
+  background: transparent;
+  color: var(--aura-text-secondary, #6b7280);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--aura-bg-tertiary, #f3f4f6);
+    color: var(--aura-text, #111827);
+  }
+
+  &--active {
+    background: var(--aura-primary-100, #f3e8ff);
+    color: var(--aura-primary-700, #7c3aed);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--aura-primary-300, #d8b4fe);
+    outline-offset: 1px;
+  }
+}
+
+.aura-editor__select {
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: var(--aura-radius-sm, 6px);
+  background: transparent;
+  color: var(--aura-text-secondary, #6b7280);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--aura-bg-tertiary, #f3f4f6);
+    color: var(--aura-text, #111827);
+  }
+
+  &--sm {
+    width: 52px;
+  }
+}
+
+.aura-editor__color {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--aura-radius-sm, 6px);
+  color: var(--aura-text-secondary, #6b7280);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--aura-bg-tertiary, #f3f4f6);
+    color: var(--aura-text, #111827);
+  }
+
+  input[type='color'] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+  }
+}
+
+.aura-editor__mini {
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--aura-border, #e5e7eb);
+  border-radius: var(--aura-radius-sm, 6px);
+  background: var(--aura-bg, #fff);
+  color: var(--aura-text-secondary, #6b7280);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--aura-primary-300, #d8b4fe);
+    color: var(--aura-primary-700, #7c3aed);
+  }
+}
+
+/* ---------- 气泡面板 ---------- */
+
+.aura-editor__popover-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.aura-editor__popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  padding: 8px;
+  border: 1px solid var(--aura-border, #e5e7eb);
+  border-radius: var(--aura-radius-md, 10px);
+  background: var(--aura-bg, #fff);
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.12);
+
+  &--right {
+    left: auto;
+    right: 0;
+  }
+}
+
+.aura-editor__form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &--column {
+    flex-direction: column;
+    align-items: stretch;
+    width: 240px;
+  }
+}
+
+.aura-editor__form-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.aura-editor__input {
+  width: 220px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--aura-border, #e5e7eb);
+  border-radius: var(--aura-radius-sm, 6px);
+  background: var(--aura-bg, #fff);
+  color: var(--aura-text, #111827);
+  font-size: 13px;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    border-color: var(--aura-primary-700, #7c3aed);
+  }
+}
+
+.aura-editor__primary,
+.aura-editor__secondary {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--aura-radius-sm, 6px);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.aura-editor__primary {
+  background: var(--aura-primary-700, #7c3aed);
+  color: #fff;
+
+  &:hover {
+    background: var(--aura-primary-800, #6d28d9);
+  }
+}
+
+.aura-editor__secondary {
+  background: var(--aura-bg, #fff);
+  border-color: var(--aura-border, #e5e7eb);
+  color: var(--aura-text-secondary, #6b7280);
+
+  &:hover {
+    border-color: var(--aura-primary-300, #d8b4fe);
+    color: var(--aura-primary-700, #7c3aed);
+  }
+}
+
+/* ---------- 编辑区 ---------- */
+
+.aura-editor__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.aura-editor__content {
+  /* Tiptap 会把 class 加在 ProseMirror 上；同时兜底 .tiptap */
+}
+
+.aura-editor__body .tiptap,
+.aura-editor__body .ProseMirror {
+  padding: 16px 18px;
+  outline: none;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--aura-text, #111827);
+  min-height: 100%;
+  word-break: break-word;
+
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  /* 占位符 */
+  p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+    color: var(--aura-text-tertiary, #9ca3af);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0.8em 0 0.4em;
+    color: var(--aura-text, #111827);
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  h4 {
+    font-size: 16px;
+  }
+
+  h5 {
+    font-size: 14px;
+  }
+
+  h6 {
+    font-size: 13px;
+    color: var(--aura-text-secondary, #6b7280);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: var(--aura-primary-700, #7c3aed);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: var(--aura-bg-tertiary, #f3f4f6);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    color: var(--aura-error, #ef4444);
+  }
+
+  mark {
+    background: #fef08a;
+    border-radius: 2px;
+    padding: 0 2px;
+    color: inherit;
+  }
+
+  blockquote {
+    margin: 0.75em 0;
+    padding: 4px 0 4px 14px;
+    border-left: 3px solid var(--aura-primary-300, #d8b4fe);
+    color: var(--aura-text-secondary, #6b7280);
+  }
+
+  hr {
+    margin: 1.2em 0;
+    border: 0;
+    border-top: 1px solid var(--aura-border, #e5e7eb);
+  }
+
+  ul,
+  ol {
+    padding-left: 1.4em;
+    margin: 0.4em 0;
+  }
+
+  li > p {
+    margin: 0;
+  }
+
+  li + li {
+    margin-top: 2px;
+  }
+
+  /* 任务列表 */
+  ul[data-type='taskList'] {
+    list-style: none;
+    padding-left: 0.2em;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+
+      > label {
+        flex: 0 0 auto;
+        margin-top: 5px;
+        user-select: none;
+      }
+
+      > div {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+    }
+
+    input[type='checkbox'] {
+      accent-color: var(--aura-primary-700, #7c3aed);
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+  }
+
+  /* 代码块 */
+  pre {
+    margin: 0.8em 0;
+    padding: 14px 16px;
+    border-radius: var(--aura-radius-md, 10px);
+    background: var(--aura-gray-900, #111827);
+    color: var(--aura-gray-100, #f3f4f6);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    overflow-x: auto;
+
+    code {
+      padding: 0;
+      background: none;
+      color: inherit;
+      font-size: inherit;
+    }
+  }
+
+  /* 表格 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.8em 0;
+    table-layout: fixed;
+    overflow: hidden;
+
+    th,
+    td {
+      border: 1px solid var(--aura-border, #e5e7eb);
+      padding: 6px 10px;
+      vertical-align: top;
+      position: relative;
+      min-width: 40px;
+    }
+
+    th {
+      background: var(--aura-bg-secondary, #f9fafb);
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .selectedCell::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(124, 58, 237, 0.1);
+      pointer-events: none;
+    }
+
+    .column-resize-handle {
+      position: absolute;
+      right: -2px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--aura-primary-400, #c084fc);
+      cursor: col-resize;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--aura-radius-sm, 6px);
+
+    &.ProseMirror-selectednode {
+      outline: 2px solid var(--aura-primary-500, #a855f7);
+    }
+  }
+
+  /* 选区：与 Aura 令牌保持一致，避免浏览器默认蓝色与紫色主题打架 */
+  ::selection {
+    background: var(--aura-selection-bg, rgba(124, 58, 237, 0.22));
+  }
+
+  &:focus ::selection {
+    background: var(--aura-selection-bg, rgba(124, 58, 237, 0.22));
+  }
+
+  /* 空文档光标高度兜底 */
+  .ProseMirror-gapcursor::after {
+    border-top-color: var(--aura-primary-700, #7c3aed);
+  }
+}
+
+/* 代码高亮（lowlight / highlight.js token 类名） */
+.hljs-comment,
+.hljs-quote {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal {
+  color: #c084fc;
+}
+
+.hljs-string,
+.hljs-attr {
+  color: #86efac;
+}
+
+.hljs-number,
+.hljs-built_in {
+  color: #fbbf24;
+}
+
+.hljs-title,
+.hljs-function .hljs-title {
+  color: #60a5fa;
+}
+
+.hljs-variable,
+.hljs-template-variable {
+  color: #f87171;
+}
+
+/* ---------- 底部状态栏 ---------- */
+
+.aura-editor__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 12px;
+  border-top: 1px solid var(--aura-border, #e5e7eb);
+  background: var(--aura-bg-secondary, #f9fafb);
+  font-size: 12px;
+  color: var(--aura-text-tertiary, #9ca3af);
+  flex: 0 0 auto;
+}

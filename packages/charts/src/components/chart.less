@@ -1,0 +1,164 @@
+.aura-chart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: var(--aura-font-family, inherit);
+  color: var(--aura-text, #111827);
+
+  &__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    padding: 0 4px 8px;
+    font-size: 12px;
+    line-height: 20px;
+    flex: 0 0 auto;
+    user-select: none;
+
+    &--bottom {
+      padding: 8px 4px 0;
+    }
+
+    &--center {
+      justify-content: center;
+    }
+
+    &--right {
+      justify-content: flex-end;
+    }
+  }
+
+  &__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 0.75;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--aura-primary-300, #d8b4fe);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    &--inactive {
+      opacity: 0.45;
+    }
+  }
+
+  &__legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex: 0 0 auto;
+  }
+
+  &__plot {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__tooltip {
+    position: absolute;
+    z-index: 10;
+    min-width: 120px;
+    max-width: 280px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    font-size: 12px;
+    line-height: 1.6;
+    pointer-events: none;
+    transform: translate(-50%, -100%);
+    transition:
+      left 0.08s linear,
+      top 0.08s linear;
+  }
+
+  &__tooltip-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+    opacity: 0.75;
+  }
+
+  &__tooltip-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: space-between;
+  }
+
+  &__tooltip-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    opacity: 0.85;
+  }
+
+  &__tooltip-value {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 13px;
+    color: var(--aura-text-tertiary, #9ca3af);
+  }
+
+  &__title {
+    padding: 0 4px 8px;
+    flex: 0 0 auto;
+  }
+
+  &__title-main {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 22px;
+    color: var(--aura-text, #111827);
+  }
+
+  &__title-sub {
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--aura-text-secondary, #6b7280);
+  }
+
+  /* 无障碍数据表：视觉上隐藏，屏幕阅读器可读 */
+  &__a11y-table {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

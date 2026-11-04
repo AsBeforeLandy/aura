@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "exclude": ["node_modules", "esm"],
+  "compilerOptions": {
+    "paths": {
+      "@aura-react-comp/editor": ["./src/index.ts"]
+    }
+  }
+}

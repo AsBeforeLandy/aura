@@ -47,6 +47,8 @@ export default defineConfig({
       '@aura-react-comp/x': path.resolve(__dirname, 'packages/x/src'),
       '@aura-react-comp/request': path.resolve(__dirname, 'packages/request/src'),
       '@aura-react-comp/icons': path.resolve(__dirname, 'packages/icons/src'),
+      '@aura-react-comp/charts': path.resolve(__dirname, 'packages/charts/src'),
+      '@aura-react-comp/editor': path.resolve(__dirname, 'packages/editor/src'),
     },
   },
 });

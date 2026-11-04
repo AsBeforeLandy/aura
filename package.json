@@ -75,6 +75,16 @@
       "name": "motion (全量 esm)",
       "path": "packages/motion/esm/**/*.js",
       "limit": "32 kB"
+    },
+    {
+      "name": "charts (全量 esm，14 个图表全量引入)",
+      "path": "packages/charts/esm/**/*.js",
+      "limit": "62 kB"
+    },
+    {
+      "name": "editor (全量 esm，不含 Tiptap 引擎)",
+      "path": "packages/editor/esm/**/*.js",
+      "limit": "12 kB"
     }
   ],
   "keywords": [

@@ -1,0 +1,67 @@
+{
+  "name": "@aura-react-comp/charts",
+  "version": "0.1.0",
+  "description": "Aura 图表库 — 自研 SVG/Canvas 双渲染内核，令牌驱动的主题体系，覆盖市面主流图表类型",
+  "keywords": [
+    "aura",
+    "react",
+    "charts",
+    "chart",
+    "visualization",
+    "dataviz",
+    "svg",
+    "canvas",
+    "line-chart",
+    "bar-chart",
+    "pie-chart"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/charts",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/charts"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
+  "type": "module",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "files": [
+    "esm"
+  ],
+  "sideEffects": [
+    "**/*.less",
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./esm/index.d.ts",
+      "import": "./esm/index.js",
+      "default": "./esm/index.js"
+    },
+    "./style.css": "./esm/style.css",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "father build && node scripts/build-styles.mjs",
+    "dev": "father dev"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@aura-react-comp/shared": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "less": "^4.9.1"
+  }
+}
