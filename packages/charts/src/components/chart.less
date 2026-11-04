@@ -71,6 +71,53 @@
     overflow: hidden;
   }
 
+  &__zoom {
+    flex: 0 0 auto;
+    padding: 6px 12px 2px;
+    box-sizing: content-box;
+  }
+
+  &__zoom-track {
+    position: relative;
+    height: 100%;
+    border-radius: 4px;
+    background: var(--aura-bg-tertiary, #f3f4f6);
+    cursor: pointer;
+  }
+
+  &__zoom-window {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 4px;
+    background: rgba(124, 58, 237, 0.12);
+    border: 1px solid var(--aura-primary-500, #a855f7);
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__zoom-handle {
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 16px;
+    margin-top: -8px;
+    border-radius: 3px;
+    background: var(--aura-primary-700, #7c3aed);
+    cursor: ew-resize;
+
+    &--start {
+      left: -4px;
+    }
+
+    &--end {
+      right: -4px;
+    }
+  }
+
   &__canvas {
     display: block;
     width: 100%;

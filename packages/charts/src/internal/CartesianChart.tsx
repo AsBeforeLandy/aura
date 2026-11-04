@@ -18,6 +18,7 @@ import { paintScene } from '../scene/canvas';
 import { createBandScale, createLinearScale, linearTicks } from '../core/scale';
 import { computeLayout, suggestTickCount } from '../core/layout';
 import { estimateTextWidth, formatNumber } from '../core/format';
+import { sampleSeriesIndices } from '../core/sampling';
 import { linePath, roundedRectPath, type CurvePoint } from '../core/shape';
 import { withAlpha } from '../theme';
 import { useChartTheme } from '../hooks/useChartTheme';
@@ -38,6 +39,9 @@ import '../components/chart.less';
 
 /** Canvas 切换阈值：超过这个图元数量，SVG 的 DOM 开销会明显拖慢滚动 */
 const CANVAS_THRESHOLD = 2000;
+
+/** 单系列默认最大点数：超过后降采样。800 在 1000px 宽的图上约每像素 0.8 个点 */
+const DEFAULT_SAMPLING = 800;
 
 export interface CartesianChartProps extends BaseChartProps {
   /** 系列默认类型，由各图表组件注入 */
@@ -95,6 +99,11 @@ export function CartesianChart(props: CartesianChartProps) {
     xAxis,
     yAxis,
     yAxisRight,
+    dataZoom,
+    defaultZoom,
+    zoom,
+    onZoomChange,
+    sampling,
     className,
     style,
     ariaLabel,
@@ -112,11 +121,143 @@ export function CartesianChart(props: CartesianChartProps) {
 
   const hiddenSet = useMemo(() => new Set(hiddenKeys), [hiddenKeys]);
 
-  const xValues = useMemo(() => resolveXValues(data, xKey), [data, xKey]);
+  // ---- dataZoom 窗口 ----
+  const [innerZoom, setInnerZoom] = useState<[number, number]>(
+    defaultZoom ?? [0, 1],
+  );
+  const zoomRange = zoom ?? innerZoom;
+  const zoomEnabled = dataZoom !== undefined && dataZoom !== false;
+  const zoomOptions = typeof dataZoom === 'object' ? dataZoom : {};
+
+  const allXValues = useMemo(() => resolveXValues(data, xKey), [data, xKey]);
+
+  const windowed = useMemo(() => {
+    const total = allXValues.length;
+    if (!zoomEnabled || total <= 1) {
+      return { data, xValues: allXValues, from: 0, to: Math.max(0, total - 1) };
+    }
+    const from = Math.min(
+      total - 1,
+      Math.max(0, Math.floor(zoomRange[0] * (total - 1))),
+    );
+    // 至少保留两个点，否则折线没有意义
+    const to = Math.min(
+      total - 1,
+      Math.max(from + 1, Math.ceil(zoomRange[1] * (total - 1))),
+    );
+    return {
+      data: data.slice(from, to + 1),
+      xValues: allXValues.slice(from, to + 1),
+      from,
+      to,
+    };
+  }, [data, allXValues, zoomEnabled, zoomRange]);
+
+  /**
+   * 降采样：只对窗口内的点做，且多系列共用同一套下标
+   * （各自采样会让折线错位，看起来像两列数据互相穿插）。
+   */
+  const sampledIndices = useMemo(() => {
+    const threshold = sampling === false ? 0 : (sampling ?? DEFAULT_SAMPLING);
+    const total = windowed.xValues.length;
+    if (!threshold || total <= threshold) return null;
+
+    const matrix = seriesConfig.map((config) =>
+      windowed.data.map((row) => {
+        const raw = row[config.key];
+        return typeof raw === 'number' && Number.isFinite(raw) ? raw : null;
+      }),
+    );
+    return sampleSeriesIndices(matrix, threshold);
+  }, [windowed, seriesConfig, sampling]);
+
+  const viewData = useMemo(
+    () =>
+      sampledIndices
+        ? sampledIndices.map((index) => windowed.data[index])
+        : windowed.data,
+    [sampledIndices, windowed.data],
+  );
+
+  const xValues = useMemo(
+    () =>
+      sampledIndices
+        ? sampledIndices.map((index) => windowed.xValues[index])
+        : windowed.xValues,
+    [sampledIndices, windowed.xValues],
+  );
+
+  const applyZoom = useCallback(
+    (next: [number, number]) => {
+      const start = Math.max(0, Math.min(1, next[0]));
+      const end = Math.max(0, Math.min(1, next[1]));
+      // 最小窗口 2%，再窄就只剩一两个点，窗口本身也抓不住
+      if (end - start < 0.02) return;
+      if (!zoom) setInnerZoom([start, end]);
+      onZoomChange?.([start, end]);
+    },
+    [zoom, onZoomChange],
+  );
+
+  const zoomTrackRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<{
+    mode: 'start' | 'end' | 'move';
+    startX: number;
+    initial: [number, number];
+  } | null>(null);
+  // 拖拽回调里要用最新窗口，放进 ref 避免事件闭包拿到旧值
+  const zoomRef = useRef<[number, number]>(zoomRange);
+  zoomRef.current = zoomRange;
+
+  const beginDrag =
+    (mode: 'start' | 'end' | 'move') => (event: React.PointerEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      dragRef.current = {
+        mode,
+        startX: event.clientX,
+        initial: zoomRef.current,
+      };
+    };
+
+  useEffect(() => {
+    if (!zoomEnabled) return undefined;
+
+    const onMove = (event: PointerEvent) => {
+      const drag = dragRef.current;
+      const track = zoomTrackRef.current;
+      if (!drag || !track) return;
+
+      const width = track.getBoundingClientRect().width || 1;
+      const delta = (event.clientX - drag.startX) / width;
+      const [from, to] = drag.initial;
+      const span = to - from;
+
+      if (drag.mode === 'move') {
+        const start = Math.min(1 - span, Math.max(0, from + delta));
+        applyZoom([start, start + span]);
+      } else if (drag.mode === 'start') {
+        applyZoom([Math.max(0, Math.min(to - 0.02, from + delta)), to]);
+      } else {
+        applyZoom([from, Math.max(from + 0.02, Math.min(1, to + delta))]);
+      }
+    };
+
+    const onUp = () => {
+      dragRef.current = null;
+    };
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+  }, [zoomEnabled, applyZoom]);
 
   const resolved = useMemo(() => {
     const list = resolveSeries({
-      data,
+      data: viewData,
       series: seriesConfig,
       theme,
       defaultType,
@@ -125,7 +266,7 @@ export function CartesianChart(props: CartesianChartProps) {
     if (stack) assignDefaultStack(list, true);
     applyStacking(list);
     return list;
-  }, [data, seriesConfig, theme, defaultType, hiddenSet, stack]);
+  }, [viewData, seriesConfig, theme, defaultType, hiddenSet, stack]);
 
   const hasVisibleSeries = resolved.some((item) => item.visible);
   const isEmpty = data.length === 0 || seriesConfig.length === 0;
@@ -850,6 +991,52 @@ export function CartesianChart(props: CartesianChartProps) {
           config={tooltip}
         />
       </div>
+
+      {zoomEnabled && zoomOptions.show !== false ? (
+        <div
+          className={prefixCls('chart__zoom')}
+          style={{ height: zoomOptions.height ?? 26 }}
+        >
+          <div
+            ref={zoomTrackRef}
+            className={prefixCls('chart__zoom-track')}
+            onPointerDown={(event) => {
+              // 点击轨道空白处：把窗口整体平移到点击位置并保持跨度
+              const track = zoomTrackRef.current;
+              if (!track) return;
+              const rect = track.getBoundingClientRect();
+              const ratio = (event.clientX - rect.left) / (rect.width || 1);
+              const span = zoomRef.current[1] - zoomRef.current[0];
+              const start = Math.min(1 - span, Math.max(0, ratio - span / 2));
+              applyZoom([start, start + span]);
+            }}
+          >
+            <div
+              className={prefixCls('chart__zoom-window')}
+              style={{
+                left: `${zoomRange[0] * 100}%`,
+                width: `${(zoomRange[1] - zoomRange[0]) * 100}%`,
+              }}
+              onPointerDown={beginDrag('move')}
+            >
+              <span
+                className={classNames(
+                  prefixCls('chart__zoom-handle'),
+                  prefixCls('chart__zoom-handle--start'),
+                )}
+                onPointerDown={beginDrag('start')}
+              />
+              <span
+                className={classNames(
+                  prefixCls('chart__zoom-handle'),
+                  prefixCls('chart__zoom-handle--end'),
+                )}
+                onPointerDown={beginDrag('end')}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {/* 无障碍数据表：读屏器与 SEO 到此读取真实数值 */}
       <table className={prefixCls('chart__a11y-table')}>

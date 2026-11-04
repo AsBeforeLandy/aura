@@ -108,6 +108,14 @@ export type ChartRenderer = 'svg' | 'canvas' | 'auto';
 export type ChartAnimationInput = boolean | ChartAnimationOptions;
 
 /** 所有图表共享的 props */
+/** 底部缩略轴（dataZoom）配置 */
+export interface DataZoomOptions {
+  /** 是否显示缩略轴，默认 true */
+  show?: boolean;
+  /** 缩略轴高度（像素） */
+  height?: number;
+}
+
 export interface BaseChartProps {
   data?: ChartDataRow[];
   /** 作为 x 轴的字段名 */
@@ -127,6 +135,22 @@ export interface BaseChartProps {
   grid?: boolean;
   /** 入场动画。传对象可配置时长 / 缓动 / 错峰 */
   animation?: ChartAnimationInput;
+  /**
+   * 底部缩略轴。开启后可拖动窗口只看局部区间，
+   * 数据量大时配合 sampling 使用。
+   */
+  dataZoom?: boolean | DataZoomOptions;
+  /** 非受控的初始窗口 [起, 止]，取值 0~1 */
+  defaultZoom?: [number, number];
+  /** 受控窗口 [起, 止]，取值 0~1 */
+  zoom?: [number, number];
+  /** 窗口变化回调 */
+  onZoomChange?: (range: [number, number]) => void;
+  /**
+   * 单系列最大点数。超过后按 LTTB 保形降采样；
+   * 传 false 关闭（数据量很大时建议保持开启）。
+   */
+  sampling?: number | false;
   /** 渲染器。auto 会在大量数据点时自动切 Canvas */
   renderer?: ChartRenderer;
   xAxis?: AxisConfig;

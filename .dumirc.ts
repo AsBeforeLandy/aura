@@ -183,6 +183,7 @@ const chartsSidebar = [
       { title: '概览', link: '/charts' },
       { title: '主题定制', link: '/charts-theme' },
       { title: '动画', link: '/charts-animation' },
+      { title: '大数据与缩放', link: '/charts-bigdata' },
     ],
   },
   ...collectSidebarGroups([
@@ -333,6 +334,7 @@ export default defineConfig({
       '/charts': chartsSidebar,
       '/charts-theme': chartsSidebar,
       '/charts-animation': chartsSidebar,
+      '/charts-bigdata': chartsSidebar,
       '/editor': editorSidebar,
       '/editor-advanced': editorSidebar,
       '/editor-components': editorSidebar,

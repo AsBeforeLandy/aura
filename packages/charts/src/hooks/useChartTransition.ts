@@ -67,7 +67,23 @@ export function useChartTransition(
     const from = entering ? matrix : displayRef.current;
     const to = matrix;
 
-    if (entering) progressRef.current = 0;
+    /**
+     * 形状变化（行数或列数不同）时不做插值。
+     * 典型场景是 dataZoom 切换窗口：点数量变了，新旧数据之间没有对应关系，
+     * 硬插值会让图「从 0 长出来」，比直接切换更难看。
+     */
+    const sameShape =
+      from.length === to.length &&
+      to.every((row, index) => row.length === (from[index]?.length ?? -1));
+
+    if (entering) {
+      progressRef.current = 0;
+    } else if (!sameShape) {
+      displayRef.current = to;
+      progressRef.current = 1;
+      forceRender();
+      return undefined;
+    }
 
     let frame = 0;
     let cancelled = false;
