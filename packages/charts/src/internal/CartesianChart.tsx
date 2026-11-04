@@ -43,6 +43,12 @@ const CANVAS_THRESHOLD = 2000;
 /** 单系列默认最大点数：超过后降采样。800 在 1000px 宽的图上约每像素 0.8 个点 */
 const DEFAULT_SAMPLING = 800;
 
+/**
+ * 无障碍数据表最多渲染多少行。
+ * 读屏器不会去听 8000 行数据，全量渲染只会让 DOM 白白膨胀。
+ */
+const A11Y_ROW_LIMIT = 200;
+
 export interface CartesianChartProps extends BaseChartProps {
   /** 系列默认类型，由各图表组件注入 */
   defaultType: SeriesType;
@@ -268,7 +274,11 @@ export function CartesianChart(props: CartesianChartProps) {
     return list;
   }, [viewData, seriesConfig, theme, defaultType, hiddenSet, stack]);
 
-  const hasVisibleSeries = resolved.some((item) => item.visible);
+  const visibleSeries = useMemo(
+    () => resolved.filter((item) => item.visible),
+    [resolved],
+  );
+  const hasVisibleSeries = visibleSeries.length > 0;
   const isEmpty = data.length === 0 || seriesConfig.length === 0;
 
   /**
@@ -1038,30 +1048,44 @@ export function CartesianChart(props: CartesianChartProps) {
         </div>
       ) : null}
 
-      {/* 无障碍数据表：读屏器与 SEO 到此读取真实数值 */}
-      <table className={prefixCls('chart__a11y-table')}>
-        <caption>{autoAriaLabel}</caption>
-        <thead>
-          <tr>
-            <th scope="col">{xKey}</th>
-            {resolved.map((item) => (
-              <th key={item.key} scope="col">
-                {item.name}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              <th scope="row">{xValues[rowIndex]}</th>
-              {resolved.map((item) => (
-                <td key={item.key}>{item.values[rowIndex] ?? '—'}</td>
+      {/*
+        无障碍数据表：读屏器与 SEO 到此读取真实数值。
+        必须套一层 div —— table 的 display 会忽略 height/overflow，
+        直接给 table 加 1px 高度挡不住它撑开文档滚动高度。
+      */}
+      <div className={prefixCls('chart__a11y')}>
+        <table className={prefixCls('chart__a11y-table')}>
+          <caption>{autoAriaLabel}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{xKey}</th>
+              {visibleSeries.map((item) => (
+                <th key={item.key} scope="col">
+                  {item.name}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {/* 用当前视图数据：窗口缩放与采样后表格要和图上看到的一致 */}
+            {viewData.slice(0, A11Y_ROW_LIMIT).map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                <th scope="row">{xValues[rowIndex]}</th>
+                {visibleSeries.map((item) => (
+                  <td key={item.key}>{item.values[rowIndex] ?? '—'}</td>
+                ))}
+              </tr>
+            ))}
+            {viewData.length > A11Y_ROW_LIMIT ? (
+              <tr>
+                <td colSpan={visibleSeries.length + 1}>
+                  {`另有 ${viewData.length - A11Y_ROW_LIMIT} 行数据未列出`}
+                </td>
+              </tr>
+            ) : null}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
