@@ -75,6 +75,13 @@ const data = [
 | [CandlestickChart](/charts/candlestick-chart) | 行情       | 蜡烛 + 均线 + 成交量副图，红涨绿跌 |
 | [Chart](/charts/chart)                        | 配置式入口 | ECharts 风格 option、AI 生成友好   |
 
+**层级类**
+
+| 组件                                  | 用途        | 关键能力                  |
+| ------------------------------------- | ----------- | ------------------------- |
+| [TreemapChart](/charts/treemap-chart) | 占比 + 层级 | squarified 布局、多层展开 |
+| [TreeChart](/charts/tree-chart)       | 从属结构    | 横向展开、正交连线        |
+
 **指标类**
 
 | 组件                                  | 用途     | 关键能力                     |
@@ -85,7 +92,7 @@ const data = [
 
 ## 关于体积
 
-包体约 58 kB（brotli），是「14 个图表全量引入」的上限。实际业务按需 import，tree-shaking 后单个图表通常只有 3~6 kB：
+包体约 62 kB（brotli），是「16 个图表全量引入」的上限。实际业务按需 import，tree-shaking 后单个图表通常只有 3~6 kB：
 
 ```ts
 import { LineChart } from '@aura-react-comp/charts'; // 只带走折线图与共用内核
@@ -114,5 +121,5 @@ import { LineChart } from '@aura-react-comp/charts'; // 只带走折线图与共
 - **地图图表未实现**：涉中国地图必须使用自然资源部标准地图数据源，这是合规红线
 - **Canvas 渲染器不支持逐图元命中**：此时 tooltip 按 x 轴索引命中，不区分具体图元
 - **暂不支持 dataZoom 与框选联动**：大数据量只能靠采样
-- **关系图族**（Sankey / Treemap / Graph / Tree / Chord 等）尚未实现
+- **关系图族**目前只做了层级部分（Treemap / Tree），Sankey / Graph / Chord 尚未实现
 - **双轴已支持但请克制**：`yAxisRight` + `series[].yAxisIndex` 可用，使用纪律见[组合图](/charts/combo-chart)

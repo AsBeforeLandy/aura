@@ -9,7 +9,9 @@
 
 自研 SVG / Canvas 双渲染内核，不依赖任何第三方图表引擎：
 
-- **图表组件（14 个）**：LineChart、BarChart、AreaChart、PieChart、FunnelChart、WaterfallChart、ComboChart、ScatterChart、RadarChart、HeatmapChart、CandlestickChart、GaugeChart、RingProgress、Sparkline
+- **图表组件（16 个）**：LineChart、BarChart、AreaChart、PieChart、FunnelChart、
+  WaterfallChart、ComboChart、ScatterChart、RadarChart、HeatmapChart、CandlestickChart、
+  TreemapChart、TreeChart、GaugeChart、RingProgress、Sparkline
 - **渲染内核**：刻度算法（1/2/2.5/5 × 10^n）、band / point / linear 三种坐标、路径生成器（linear / monotone / smooth / step、扇形、圆弧、圆角矩形、符号）、场景图与 Canvas 批量绘制
 - **主题**：运行时读取 Aura CSS 变量，默认为组件库主题；支持 `'dark'`、`createChartTheme` 局部覆盖与 `palette` 快捷替换；`data-theme` 切换后自动跟随
 - **无障碍**：SVG `role="img"` + 隐藏数据表，读屏器可读取真实数值

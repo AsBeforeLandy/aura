@@ -50,6 +50,10 @@ export type {
   CandlestickChartProps,
   CandlestickItem,
 } from './charts/candlestick-chart';
+export { TreemapChart } from './charts/treemap-chart';
+export type { TreemapChartProps } from './charts/treemap-chart';
+export { TreeChart } from './charts/tree-chart';
+export type { TreeChartProps } from './charts/tree-chart';
 
 // 配置式入口
 export { Chart } from './components/chart';
@@ -123,3 +127,14 @@ export {
   formatPercent,
   estimateTextWidth,
 } from './core/format';
+export {
+  squarify,
+  buildTreemap,
+  layoutTree,
+  sumValues,
+} from './core/hierarchy';
+export type {
+  HierarchyNode,
+  TreemapCell,
+  TreeLayoutNode,
+} from './core/hierarchy';
