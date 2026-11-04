@@ -77,9 +77,9 @@
       "limit": "32 kB"
     },
     {
-      "name": "charts (全量 esm，16 个图表全量引入)",
+      "name": "charts (全量 esm，18 个图表全量引入)",
       "path": "packages/charts/esm/**/*.js",
-      "limit": "68 kB"
+      "limit": "76 kB"
     },
     {
       "name": "editor (全量 esm，不含 Tiptap 引擎)",

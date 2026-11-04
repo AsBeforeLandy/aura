@@ -83,6 +83,12 @@ export interface TextNode extends Base {
   /** 绕自身锚点旋转的度数（x 轴刻度标签拥挤时用） */
   rotate?: number;
   fontFamily?: string;
+  /**
+   * 文字描边色。配合 strokeWidth 形成「光晕」，
+   * 让文字压在色带/网格上时仍然可读（paint-order 保证描边在填充下方）。
+   */
+  stroke?: string;
+  strokeWidth?: number;
 }
 
 export type SceneNode =

@@ -104,6 +104,11 @@ function renderNode(node: SceneNode): React.ReactElement | null {
               ? `rotate(${node.rotate} ${node.x} ${node.y})`
               : undefined
           }
+          stroke={node.stroke}
+          strokeWidth={node.strokeWidth}
+          // 描边画在填充下面，形成光晕而不是把字吃细
+          paintOrder="stroke"
+          strokeLinejoin="round"
           {...common}
         >
           {node.text}

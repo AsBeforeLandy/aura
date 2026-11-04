@@ -54,6 +54,10 @@ export { TreemapChart } from './charts/treemap-chart';
 export type { TreemapChartProps } from './charts/treemap-chart';
 export { TreeChart } from './charts/tree-chart';
 export type { TreeChartProps } from './charts/tree-chart';
+export { SankeyChart } from './charts/sankey-chart';
+export type { SankeyChartProps } from './charts/sankey-chart';
+export { GraphChart } from './charts/graph-chart';
+export type { GraphChartProps } from './charts/graph-chart';
 
 // 配置式入口
 export { Chart } from './components/chart';
