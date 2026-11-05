@@ -317,6 +317,7 @@ export function TreemapChart({
           x={activeCell ? activeCell.x + activeCell.width / 2 : 0}
           y={activeCell ? activeCell.y + 8 : 0}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

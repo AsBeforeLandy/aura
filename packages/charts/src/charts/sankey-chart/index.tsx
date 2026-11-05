@@ -346,6 +346,7 @@ export function SankeyChart({
           }
           y={12}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

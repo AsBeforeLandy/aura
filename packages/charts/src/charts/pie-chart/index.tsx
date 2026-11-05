@@ -393,6 +393,7 @@ export function PieChart({
           x={geometry.cx}
           y={activeIndex !== null ? geometry.cy - geometry.outer * 0.5 : 0}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

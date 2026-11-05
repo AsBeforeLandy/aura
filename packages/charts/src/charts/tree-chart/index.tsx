@@ -261,6 +261,7 @@ export function TreeChart({
           x={active ? active.x : 0}
           y={active ? active.y - 12 : 0}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

@@ -350,6 +350,7 @@ export function RadarChart({
           x={geometry.cx}
           y={geometry.cy - geometry.radius * 0.6}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

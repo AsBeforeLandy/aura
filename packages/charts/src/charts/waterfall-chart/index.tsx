@@ -385,6 +385,7 @@ export function WaterfallChart({
           x={active ? (xScale.center(active.name) ?? 0) : 0}
           y={active ? yScale.scale(Math.max(active.start, active.end)) - 10 : 0}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

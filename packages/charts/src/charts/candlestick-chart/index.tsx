@@ -483,6 +483,7 @@ export function CandlestickChart({
           }
           y={geometry.top + 12}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

@@ -627,6 +627,12 @@ export function CartesianChart(props: CartesianChartProps) {
         item.config.yAxisIndex === 1 && hasRightAxis ? yScaleRight : yScale;
 
       if (item.type === 'bar') {
+        // 堆叠组内成员：用来判断某一段是不是「最远端」
+        const stackMembers = item.stackId
+          ? resolved.filter(
+              (other) => other.visible && other.stackId === item.stackId,
+            )
+          : [];
         const slotId = item.stackId ?? `__solo__${item.key}`;
         const slotIndex = barSlots.map.get(slotId) ?? 0;
         const barWidth = Math.max(
@@ -654,7 +660,20 @@ export function CartesianChart(props: CartesianChartProps) {
           const x =
             bandLeft + barSlotWidth * slotIndex + (barSlotWidth - barWidth) / 2;
 
-          // 圆角只加在「远离基线」的那一端，贴基线的一端保持直角
+          /**
+           * 圆角只加在「整柱最远端」。
+           *
+           * 堆叠柱每一段都圆角会在段与段之间留下月牙形缺口，
+           * 看起来像三根柱子叠在一起而不是一根柱子。
+           * 判断依据：有没有同组系列的基线正好落在我的顶端 ——
+           * 有就说明上面还叠着一段，我这一端不该圆。
+           */
+          const hasStackedBeyond = stackMembers.some((other) => {
+            if (other === item) return false;
+            const otherBase = other.base[index] ?? 0;
+            return Math.abs(otherBase - (item.top[index] ?? 0)) < 1e-6;
+          });
+          const roundFarEnd = !hasStackedBeyond;
           const isPositive = value >= base;
           const radius =
             item.config.barMaxWidth === 0 ? 0 : theme.series.barRadius;
@@ -669,8 +688,8 @@ export function CartesianChart(props: CartesianChartProps) {
               h,
               radius,
               isPositive
-                ? { tl: true, tr: true, bl: false, br: false }
-                : { tl: false, tr: false, bl: true, br: true },
+                ? { tl: roundFarEnd, tr: roundFarEnd, bl: false, br: false }
+                : { tl: false, tr: false, bl: roundFarEnd, br: roundFarEnd },
             ),
             fill: item.color,
             opacity: activeIndex === null || activeIndex === index ? 1 : 0.55,
@@ -997,6 +1016,7 @@ export function CartesianChart(props: CartesianChartProps) {
           x={tooltipPosition.x}
           y={tooltipPosition.y}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

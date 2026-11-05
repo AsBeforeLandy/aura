@@ -315,6 +315,7 @@ export function GraphChart({
           x={activePosition ? activePosition.x : 0}
           y={activePosition ? activePosition.y - 20 : 0}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

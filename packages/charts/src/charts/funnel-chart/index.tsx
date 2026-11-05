@@ -274,6 +274,7 @@ export function FunnelChart({
               : 0
           }
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />

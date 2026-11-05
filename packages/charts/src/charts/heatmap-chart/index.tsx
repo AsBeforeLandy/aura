@@ -396,6 +396,7 @@ export function HeatmapChart({
           x={size.width / 2}
           y={16}
           containerWidth={size.width}
+          containerHeight={size.height}
           theme={theme}
           config={tooltip}
         />
