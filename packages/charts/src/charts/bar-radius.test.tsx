@@ -37,7 +37,7 @@ const stackSeries = [
 ];
 
 /** path 里出现 A 命令说明有圆角弧线 */
-const hasArc = (d: string | null) => /\dA|A\d/.test(d ?? '');
+const hasArc = (d: string | null | undefined) => /\dA|A\d/.test(d ?? '');
 
 describe('堆叠柱圆角', () => {
   // 渲染顺序是「按系列、系列内按 x」，所以前两个 path 是底部系列的两个柱子

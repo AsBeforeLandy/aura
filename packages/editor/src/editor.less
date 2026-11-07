@@ -153,6 +153,16 @@
     border-color: var(--aura-primary-300, #d8b4fe);
     color: var(--aura-primary-700, #7c3aed);
   }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: var(--aura-border, #e5e7eb);
+      color: var(--aura-text-secondary, #6b7280);
+    }
+  }
 }
 
 /* ---------- 气泡面板 ---------- */
@@ -243,6 +253,16 @@
   &:hover {
     border-color: var(--aura-primary-300, #d8b4fe);
     color: var(--aura-primary-700, #7c3aed);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: var(--aura-border, #e5e7eb);
+      color: var(--aura-text-secondary, #6b7280);
+    }
   }
 }
 

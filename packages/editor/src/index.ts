@@ -10,6 +10,14 @@ export { Toolbar } from './toolbar';
 export type { ToolbarProps } from './toolbar';
 export { buildExtensions } from './extensions';
 export type { BuildExtensionsOptions } from './extensions';
+export {
+  canMergeTableColumn,
+  canMergeTableRow,
+  canSplitTableCell,
+  mergeTableColumn,
+  mergeTableRow,
+  splitTableCell,
+} from './table-merge';
 export { resolveFeatures } from './types';
 export type {
   EditorProps,

@@ -3,6 +3,14 @@ import { classNames, prefixCls } from '@aura-react-comp/shared';
 import type { Editor as TiptapEditor } from '@tiptap/react';
 import type { ResolvedFeatures } from '../types';
 import {
+  canMergeTableColumn,
+  canMergeTableRow,
+  canSplitTableCell,
+  mergeTableColumn,
+  mergeTableRow,
+  splitTableCell,
+} from '../table-merge';
+import {
   AlignCenterIcon,
   AlignLeftIcon,
   AlignRightIcon,
@@ -72,6 +80,9 @@ const TEXT = {
     deleteRow: '删行',
     deleteColumn: '删列',
     deleteTable: '删表格',
+    mergeRow: '合并行',
+    mergeColumn: '合并列',
+    splitCell: '拆分',
     clear: '清除格式',
     paragraph: '正文',
     headings: '标题',
@@ -112,6 +123,9 @@ const TEXT = {
     deleteRow: 'Delete row',
     deleteColumn: 'Delete column',
     deleteTable: 'Delete table',
+    mergeRow: 'Merge row',
+    mergeColumn: 'Merge column',
+    splitCell: 'Split',
     clear: 'Clear format',
     paragraph: 'Paragraph',
     headings: 'Heading',
@@ -674,6 +688,33 @@ export function Toolbar({ editor, features, locale }: ToolbarProps) {
             onClick={() => editor.chain().focus().deleteColumn().run()}
           >
             {t.deleteColumn}
+          </button>
+          <button
+            type="button"
+            className={prefixCls('editor__mini')}
+            disabled={!canMergeTableRow(editor)}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => mergeTableRow(editor)}
+          >
+            {t.mergeRow}
+          </button>
+          <button
+            type="button"
+            className={prefixCls('editor__mini')}
+            disabled={!canMergeTableColumn(editor)}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => mergeTableColumn(editor)}
+          >
+            {t.mergeColumn}
+          </button>
+          <button
+            type="button"
+            className={prefixCls('editor__mini')}
+            disabled={!canSplitTableCell(editor)}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => splitTableCell(editor)}
+          >
+            {t.splitCell}
           </button>
           <button
             type="button"
