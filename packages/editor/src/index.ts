@@ -11,11 +11,9 @@ export type { ToolbarProps } from './toolbar';
 export { buildExtensions } from './extensions';
 export type { BuildExtensionsOptions } from './extensions';
 export {
-  canMergeTableColumn,
-  canMergeTableRow,
+  canMergeSelectedCells,
   canSplitTableCell,
-  mergeTableColumn,
-  mergeTableRow,
+  mergeSelectedCells,
   splitTableCell,
 } from './table-merge';
 export { resolveFeatures } from './types';
