@@ -8,10 +8,14 @@ import {
   mergeSelectedCells,
   splitTableCell,
 } from '../table-merge';
+import { getCellVerticalAlign, setCellVerticalAlign } from '../table-align';
 import {
+  AlignBottomVIcon,
   AlignCenterIcon,
   AlignLeftIcon,
+  AlignMiddleVIcon,
   AlignRightIcon,
+  AlignTopVIcon,
   BoldIcon,
   ClearIcon,
   CodeBlockIcon,
@@ -80,6 +84,9 @@ const TEXT = {
     deleteTable: '删表格',
     mergeCells: '合并',
     splitCell: '拆分',
+    verticalTop: '单元格顶部对齐',
+    verticalMiddle: '单元格垂直居中',
+    verticalBottom: '单元格底部对齐',
     clear: '清除格式',
     paragraph: '正文',
     headings: '标题',
@@ -122,6 +129,9 @@ const TEXT = {
     deleteTable: 'Delete table',
     mergeCells: 'Merge cells',
     splitCell: 'Split',
+    verticalTop: 'Align cell top',
+    verticalMiddle: 'Align cell middle',
+    verticalBottom: 'Align cell bottom',
     clear: 'Clear format',
     paragraph: 'Paragraph',
     headings: 'Heading',
@@ -645,6 +655,32 @@ export function Toolbar({ editor, features, locale }: ToolbarProps) {
           </ToolButton>
         )}
       </div>
+
+      {inTable && features.table && features.align && (
+        <div className={prefixCls('editor__group')}>
+          <ToolButton
+            label={t.verticalTop}
+            active={getCellVerticalAlign(editor) === 'top'}
+            onClick={() => setCellVerticalAlign(editor, 'top')}
+          >
+            <AlignTopVIcon />
+          </ToolButton>
+          <ToolButton
+            label={t.verticalMiddle}
+            active={getCellVerticalAlign(editor) === 'middle'}
+            onClick={() => setCellVerticalAlign(editor, 'middle')}
+          >
+            <AlignMiddleVIcon />
+          </ToolButton>
+          <ToolButton
+            label={t.verticalBottom}
+            active={getCellVerticalAlign(editor) === 'bottom'}
+            onClick={() => setCellVerticalAlign(editor, 'bottom')}
+          >
+            <AlignBottomVIcon />
+          </ToolButton>
+        </div>
+      )}
 
       {inTable && features.table && (
         <div

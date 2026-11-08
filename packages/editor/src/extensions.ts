@@ -6,6 +6,7 @@ import Color from '@tiptap/extension-color';
 import { TextStyle, FontSize } from '@tiptap/extension-text-style';
 import Image from '@tiptap/extension-image';
 import { TableKit } from '@tiptap/extension-table';
+import { auraTableCell, auraTableHeader } from './table-align';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
 import TextAlign from '@tiptap/extension-text-align';
@@ -104,11 +105,17 @@ export function buildExtensions({
 
   if (features.table) {
     extensions.push(
+      // 自定义 cell / header：挂 verticalAlign 属性（垂直对齐）。
+      // name 不变，TableKit 的 table 子扩展按名字引用 schema，兼容。
+      auraTableCell,
+      auraTableHeader,
       TableKit.configure({
         table: {
           resizable: true,
           HTMLAttributes: { class: 'aura-editor__table' },
         },
+        tableCell: false,
+        tableHeader: false,
       }),
     );
   }

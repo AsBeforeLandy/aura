@@ -16,6 +16,13 @@ export {
   mergeSelectedCells,
   splitTableCell,
 } from './table-merge';
+export {
+  getCellVerticalAlign,
+  setCellVerticalAlign,
+  auraTableCell,
+  auraTableHeader,
+} from './table-align';
+export type { CellVerticalAlign } from './table-align';
 export { resolveFeatures } from './types';
 export type {
   EditorProps,

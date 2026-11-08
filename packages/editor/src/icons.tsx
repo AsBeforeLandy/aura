@@ -107,6 +107,31 @@ export const AlignCenterIcon = ({ size }: IconProps) =>
     size,
   );
 
+/** 垂直对齐：横轴线 + 竖线内容块，是水平对齐图标的镜像 */
+export const AlignTopVIcon = ({ size }: IconProps) =>
+  wrap(
+    <>
+      <path d="M3 2.5h10M5.5 6v6.5M10.5 6v4.5" />
+    </>,
+    size,
+  );
+
+export const AlignMiddleVIcon = ({ size }: IconProps) =>
+  wrap(
+    <>
+      <path d="M3 8h10M5.5 3v3.5M10.5 3v4M5.5 9.5v3.5M10.5 9v3.5" />
+    </>,
+    size,
+  );
+
+export const AlignBottomVIcon = ({ size }: IconProps) =>
+  wrap(
+    <>
+      <path d="M3 13.5h10M5.5 3.5V10M10.5 5.5V10" />
+    </>,
+    size,
+  );
+
 export const AlignRightIcon = ({ size }: IconProps) =>
   wrap(
     <>
