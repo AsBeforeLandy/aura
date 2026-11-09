@@ -172,11 +172,15 @@ export function GaugeChart({
     }
 
     // 量程端点数值
+    // 端点标签按容器边界收敛：小卡片里「100」这类标签溢出会被裁成「10C」
+    const clampToCard = (value: number, max: number) =>
+      Math.min(Math.max(value, 10), Math.max(10, max - 10));
+
     nodes.push({
       kind: 'text',
       key: 'min-label',
-      x: cx + Math.cos(start) * (outer + ring * 0.9),
-      y: cy + Math.sin(start) * (outer + ring * 0.9),
+      x: clampToCard(cx + Math.cos(start) * (outer + ring * 0.9), size.width),
+      y: clampToCard(cy + Math.sin(start) * (outer + ring * 0.9), size.height),
       text: formatNumber(min),
       fill: theme.text.secondary,
       fontSize: theme.font.sizeSmall,
@@ -187,8 +191,14 @@ export function GaugeChart({
     nodes.push({
       kind: 'text',
       key: 'max-label',
-      x: cx + Math.cos(start + sweep) * (outer + ring * 0.9),
-      y: cy + Math.sin(start + sweep) * (outer + ring * 0.9),
+      x: clampToCard(
+        cx + Math.cos(start + sweep) * (outer + ring * 0.9),
+        size.width,
+      ),
+      y: clampToCard(
+        cy + Math.sin(start + sweep) * (outer + ring * 0.9),
+        size.height,
+      ),
       text: formatNumber(max),
       fill: theme.text.secondary,
       fontSize: theme.font.sizeSmall,
