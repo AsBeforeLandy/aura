@@ -12,6 +12,7 @@ import {
   WaterfallChart,
   darkTheme,
 } from '@aura-react-comp/charts';
+import { Scene3D, Surface3D } from '@aura-react-comp/charts-3d';
 
 /**
  * 大屏示例：把 18 个图表里的代表组合成一块深色监控大屏。
@@ -75,6 +76,20 @@ const funnel = [
   { name: '下单', value: 3100 },
   { name: '支付', value: 1880 },
 ];
+
+/** 曲面：双峰高斯 + 正弦扰动，确定性生成 */
+const surface = Array.from({ length: 14 }, (_, row) =>
+  Array.from({ length: 14 }, (_, col) => {
+    const dx = col / 13 - 0.5;
+    const dz = row / 13 - 0.5;
+    return Math.round(
+      50 +
+        Math.exp(-(dx * dx + dz * dz) * 22) * 55 +
+        Math.exp(-((dx - 0.32) ** 2 + (dz + 0.3) ** 2) * 30) * 30 +
+        Math.sin(col / 2 + row) * 6,
+    );
+  }),
+);
 
 const waterfall = [
   { name: 'Q3 结余', value: 820, isTotal: true },
@@ -372,6 +387,18 @@ const BigScreen: React.FC = () => (
         <WaterfallChart data={waterfall} height={220} theme={darkTheme} />
       </Card>
 
+      <Card title="能耗曲面（3D · 可拖转）">
+        <Scene3D height={230} cameraPosition={[260, 220, 300]} autoRotate>
+          <Surface3D
+            values={surface}
+            width={200}
+            depth={200}
+            maxHeight={70}
+            wireframe
+          />
+        </Scene3D>
+      </Card>
+
       <Card title="大屏构建要点">
         <ul
           style={{
@@ -389,6 +416,7 @@ const BigScreen: React.FC = () => (
           <li>全部数据确定性生成，刷新不变，可直接录屏</li>
           <li>点数超阈值自动切 Canvas，缩略轴 / 采样开箱即用</li>
           <li>无障碍：每张图都有隐藏数据表，读屏可用</li>
+          <li>3D 曲面：@aura-react-comp/charts-3d，同套令牌与拖转交互</li>
         </ul>
       </Card>
     </div>

@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import { useScene } from '../core/Scene3D';
 import { mixColor } from '@aura-react-comp/charts';
 import { normalizeRatio, scaleBarHeights } from '../core/projection';
@@ -90,6 +91,73 @@ function TextSprite({
         depthWrite={false}
       />
     </sprite>
+  );
+}
+
+/** 入场生长动画的时长（秒）与错峰比例 */
+const GROWTH_DURATION = 0.62;
+const GROWTH_STAGGER = 0.5;
+
+function easeOutQuint(t: number): number {
+  return 1 - (1 - t) ** 5;
+}
+
+/** 单根柱体：从基线错峰生长。数据更新不重播（progress 闭包保持） */
+function AnimatedBar({
+  bar,
+  cellSize,
+  delayRatio,
+  hasHover,
+  isHover,
+  onOver,
+  onOut,
+}: {
+  bar: { item: Bar3DDataItem; x: number; z: number; h: number; color: string };
+  cellSize: number;
+  delayRatio: number;
+  hasHover: boolean;
+  isHover: boolean;
+  onOver: () => void;
+  onOut: () => void;
+}) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const progress = useRef(0);
+
+  useFrame((_, delta) => {
+    const mesh = meshRef.current;
+    if (!mesh || progress.current >= 1) return;
+    // 负值阶段是错峰等待：delayRatio * 时长内不动
+    progress.current = Math.min(1, progress.current + delta / GROWTH_DURATION);
+    const elapsed =
+      progress.current * (1 + GROWTH_STAGGER) - delayRatio * GROWTH_STAGGER;
+    const eased = easeOutQuint(Math.max(0, Math.min(1, elapsed)));
+    mesh.scale.y = Math.max(eased, 0.001);
+    mesh.position.y = (bar.h * eased) / 2;
+  });
+
+  return (
+    <mesh
+      ref={meshRef}
+      position={[bar.x, bar.h / 2, bar.z]}
+      onPointerOver={(event) => {
+        event.stopPropagation();
+        onOver();
+      }}
+      onPointerOut={onOut}
+    >
+      <boxGeometry args={[cellSize, Math.max(bar.h, 1), cellSize]} />
+      <meshStandardMaterial
+        color={
+          isHover
+            ? mixColor(bar.color, '#ffffff', 0.35)
+            : hasHover
+              ? mixColor(bar.color, '#0f172a', 0.45)
+              : bar.color
+        }
+        roughness={0.45}
+        metalness={0.15}
+      />
+    </mesh>
   );
 }
 
@@ -184,13 +252,18 @@ export function Bar3D({
         </line>
       ))}
 
-      {/* 柱体 */}
-      {model.bars.map((bar) => (
-        <mesh
+      {/* 柱体：入场时从基线错峰生长 */}
+      {model.bars.map((bar, index) => (
+        <AnimatedBar
           key={`${bar.item.x}-${bar.item.z}`}
-          position={[bar.x, bar.h / 2, bar.z]}
-          onPointerOver={(event) => {
-            event.stopPropagation();
+          bar={bar}
+          cellSize={cellSize}
+          delayRatio={
+            model.bars.length > 1 ? index / (model.bars.length - 1) : 0
+          }
+          hasHover={hover !== null}
+          isHover={hover?.item === bar.item}
+          onOver={() => {
             setHover({
               item: bar.item,
               top: new THREE.Vector3(bar.x, bar.h + 6, bar.z),
@@ -214,22 +287,11 @@ export function Bar3D({
               );
             }
           }}
-          onPointerOut={() => {
+          onOut={() => {
             setHover(null);
             if (tooltip && scene) scene.showTooltip(null, new THREE.Vector3());
           }}
-        >
-          <boxGeometry args={[cellSize, Math.max(bar.h, 1), cellSize]} />
-          <meshStandardMaterial
-            color={
-              hover?.item === bar.item
-                ? mixColor(bar.color, '#ffffff', 0.35)
-                : bar.color
-            }
-            roughness={0.45}
-            metalness={0.15}
-          />
-        </mesh>
+        />
       ))}
 
       {/* 行 / 列标签 */}

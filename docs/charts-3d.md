@@ -18,7 +18,40 @@ pnpm add @aura-react-comp/charts-3d three
 
 在场景里**拖动鼠标可旋转视角**，滚轮缩放；鼠标悬停柱体查看数值。
 
-<code src="./demo/chart-3d.tsx" description="汇报周期 × 区域的交付量矩阵：X / Z 两个分类维度，高度编码数值，颜色沿色带映射。拖动可旋转视角。">Bar3D 柱状矩阵</code>
+<code src="./demo/chart-3d.tsx" description="汇报周期 × 区域的交付量矩阵：X / Z 两个分类维度，高度编码数值，颜色沿色带映射。拖动可旋转视角，柱体入场时错峰生长。">Bar3D 柱状矩阵</code>
+
+## Scatter3D
+
+三个数值维度的位置编码（X / Y / Z），点大小与颜色可作为第四、第五个编码通道——但编码通道越多读者越难还原数值，按类别着色是默认。
+
+<code src="./demo/chart-3d-scatter.tsx" description="三类用户聚簇 + 两个离群点：散点图的价值之一就是把离群点暴露出来。拖动旋转查看聚簇结构。">用户分层</code>
+
+| 属性         | 说明                                      | 类型               | 默认值  |
+| ------------ | ----------------------------------------- | ------------------ | ------- |
+| data         | 散点数据                                  | `Scatter3DPoint[]` | `[]`    |
+| pointSize    | 点半径（世界单位）                        | `number`           | `5`     |
+| colorByValue | 按 Y 值渐变着色（关闭时按 category 着色） | `boolean`          | `true`  |
+| colorRange   | 色带两端                                  | `[string, string]` | 紫 → 青 |
+| ranges       | 坐标轴范围覆盖                            | `{ x?; y?; z? }`   | 自动    |
+| axisLength   | 三条轴的长度                              | `number`           | `240`   |
+
+## Surface3D
+
+值矩阵 `values[row][col]` → 连续曲面：行列映射到 X / Z 平面，值映射到 Y 高度，顶点色沿多段色带渐变。适合优化地形、概率密度、能量面这类「双变量函数」。
+
+| 属性          | 说明                         | 类型         | 默认值       |
+| ------------- | ---------------------------- | ------------ | ------------ |
+| values        | 值矩阵（任意 ≥2 的行列尺寸） | `number[][]` | `[]`         |
+| width / depth | 网格宽深                     | `number`     | `240`        |
+| maxHeight     | 最大起伏                     | `number`     | `90`         |
+| colorRange    | 色带（支持多段）             | `string[]`   | 青 → 紫 → 粉 |
+| wireframe     | 叠加线框                     | `boolean`    | `false`      |
+
+## 动画
+
+Bar3D 入场时从基线**错峰生长**（easeOutQuint，后一根柱子比前一根晚出发）——与 2D 图表的错峰语义一致：整排同时弹起是噪音，扫过才有方向感。数据更新不重播：3D 大屏多为展示态，更新直接落位。
+
+## 后续规划
 
 ## Scene3D
 
@@ -61,7 +94,5 @@ WebGL 无法在 jsdom 里运行，所以 3D 库的测试重心在**纯函数层*
 
 ## 后续规划
 
-- Scatter3D（3D 散点，点大小与颜色双编码）
-- Surface3D（3D 曲面）
-- 柱体生长动画（复用 charts 的缓动体系）
-- InstancedMesh：柱体规模超过 300 时合并 draw call
+- InstancedMesh：柱体规模超过 300 时合并 draw call（当前每柱一 mesh，300 格内无压力）
+- 自动旋转与视角预设的场景模板（巡检模式）
