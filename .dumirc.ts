@@ -84,6 +84,7 @@ const GROUP_ORDER = [
   '图表 · 层级',
   '图表 · 关系',
   '图表 · 指标',
+  '图表 · 3D',
   '编辑器',
   // 以下为 @aura-react-comp/x（AI 组件）的侧栏子分组
   '主题桥接',
@@ -185,6 +186,7 @@ const chartsSidebar = [
       { title: '动画', link: '/charts-animation' },
       { title: '大数据与缩放', link: '/charts-bigdata' },
       { title: '大屏示例', link: '/charts-bigscreen' },
+      { title: '3D 示例', link: '/charts-3d' },
     ],
   },
   ...collectSidebarGroups([
@@ -284,6 +286,10 @@ export default defineConfig({
     ),
     '@aura-react-comp/motion': path.resolve(__dirname, 'packages/motion/src'),
     '@aura-react-comp/charts': path.resolve(__dirname, 'packages/charts/src'),
+    '@aura-react-comp/charts-3d': path.resolve(
+      __dirname,
+      'packages/charts-3d/src',
+    ),
     '@aura-react-comp/editor': path.resolve(__dirname, 'packages/editor/src'),
     '@aura-react-comp/shared': path.resolve(__dirname, 'packages/shared/src'),
     '@aura-react-comp/request': path.resolve(__dirname, 'packages/request/src'),
@@ -337,6 +343,7 @@ export default defineConfig({
       '/charts-animation': chartsSidebar,
       '/charts-bigdata': chartsSidebar,
       '/charts-bigscreen': chartsSidebar,
+      '/charts-3d': chartsSidebar,
       '/editor': editorSidebar,
       '/editor-advanced': editorSidebar,
       '/editor-components': editorSidebar,

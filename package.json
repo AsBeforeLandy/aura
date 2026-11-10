@@ -85,6 +85,11 @@
       "name": "editor (全量 esm，不含 Tiptap 引擎)",
       "path": "packages/editor/esm/**/*.js",
       "limit": "12 kB"
+    },
+    {
+      "name": "charts-3d (全量 esm，不含 three)",
+      "path": "packages/charts-3d/esm/**/*.js",
+      "limit": "20 kB"
     }
   ],
   "keywords": [

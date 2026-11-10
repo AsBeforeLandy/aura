@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "paths": {
+      "@aura-react-comp/charts-3d": ["./src/index.ts"],
+      "@aura-react-comp/charts": ["../charts/src/index.ts"],
+      "@aura-react-comp/shared": ["../shared/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

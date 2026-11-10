@@ -59,6 +59,10 @@ export type { SankeyChartProps } from './charts/sankey-chart';
 export { GraphChart } from './charts/graph-chart';
 export type { GraphChartProps } from './charts/graph-chart';
 
+// Tooltip 组件（3D 图表等外部场景复用）
+export { Tooltip } from './components/Tooltip';
+export { useElementSize } from './hooks/useElementSize';
+
 // 配置式入口
 export { Chart } from './components/chart';
 export type {

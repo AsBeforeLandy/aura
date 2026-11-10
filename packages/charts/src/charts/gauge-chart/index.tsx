@@ -248,6 +248,8 @@ export function GaugeChart({
     theme,
     animatedValue,
     unit,
+    size.width,
+    size.height,
     label,
     min,
     max,

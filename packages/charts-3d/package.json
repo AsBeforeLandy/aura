@@ -1,0 +1,64 @@
+{
+  "name": "@aura-react-comp/charts-3d",
+  "version": "0.1.0",
+  "description": "Aura 3D 图表库 — 基于 three.js 与 React Three Fiber 的 3D 数据可视化，与 charts 共享设计令牌与提示框",
+  "keywords": [
+    "aura",
+    "react",
+    "charts-3d",
+    "3d",
+    "three",
+    "webgl",
+    "visualization",
+    "bar3d"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/charts-3d"
+  },
+  "homepage": "https://asbeforelandy.github.io/aura/charts-3d",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "files": [
+    "esm"
+  ],
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@aura-react-comp/charts": "workspace:*",
+    "@react-three/fiber": "^8.17.10",
+    "three-stdlib": "^2.36.1"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "three": ">=0.160"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/three": "^0.171.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "three": "^0.171.0"
+  },
+  "scripts": {
+    "build": "father build"
+  },
+  "exports": {
+    ".": {
+      "types": "./esm/index.d.ts",
+      "import": "./esm/index.js",
+      "default": "./esm/index.js"
+    },
+    "./package.json": "./package.json"
+  }
+}
