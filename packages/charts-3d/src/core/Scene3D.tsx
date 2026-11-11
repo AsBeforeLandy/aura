@@ -63,6 +63,62 @@ interface SceneContextValue {
 
 const SceneContext = createContext<SceneContextValue | null>(null);
 
+interface ErrorBoundaryProps {
+  fallback: React.ReactNode;
+  children: React.ReactNode;
+}
+
+/**
+ * 场景错误边界。
+ *
+ * WebGL 上下文创建失败是运行时常态而非异常态：浏览器对同时存在的
+ * WebGL 上下文有数量上限（超出后新的 create 会直接抛错）、驱动禁用、
+ * headless 环境无软渲染兜底等都会命中。图表库在这样的页面里
+ * 绝不能把整个大屏拖垮 —— 降级展示一块占位说明。
+ */
+class SceneErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  { failed: boolean }
+> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { failed: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: Error) {
+    // 上下文创建失败是预期分支，只在 console 留痕便于排查
+    console.warn('[charts-3d] WebGL 场景创建失败，已降级：', error.message);
+  }
+
+  render() {
+    if (this.state.failed) return this.props.fallback;
+    return this.props.children;
+  }
+}
+
+/** 默认的降级占位 */
+function SceneFallback({ height }: { height: number }) {
+  return (
+    <div
+      style={{
+        height,
+        display: 'grid',
+        placeItems: 'center',
+        border: '1px dashed rgba(148, 163, 184, 0.4)',
+        borderRadius: 10,
+        color: 'rgba(148, 163, 184, 0.9)',
+        fontSize: 12,
+      }}
+    >
+      当前环境不支持 WebGL，3D 场景已降级
+    </div>
+  );
+}
+
 export function useScene(): SceneContextValue | null {
   return useContext(SceneContext);
 }
@@ -151,39 +207,37 @@ export function Scene3D({
       onPointerLeave={() => setTooltip(null)}
     >
       {size.width > 0 && size.height > 0 ? (
-        <Canvas
-          dpr={[1, 2]}
-          camera={{ position: cameraPosition, fov: 40, near: 1, far: 3000 }}
-          onCreated={({ camera: created }) => setCamera(created)}
-        >
-          <ambientLight intensity={0.8} />
-          <directionalLight position={[320, 420, 240]} intensity={0.9} />
-          <directionalLight position={[-240, 160, -180]} intensity={0.35} />
-          <SceneControls enableRotate={enableRotate} autoRotate={autoRotate} />
-          <SceneContext.Provider value={context}>
-            {children}
-          </SceneContext.Provider>
-        </Canvas>
+        <SceneErrorBoundary fallback={<SceneFallback height={height} />}>
+          <Canvas
+            dpr={[1, 2]}
+            camera={{ position: cameraPosition, fov: 40, near: 1, far: 3000 }}
+            onCreated={({ camera: created }) => setCamera(created)}
+            fallback={<SceneFallback height={height} />}
+          >
+            <ambientLight intensity={0.8} />
+            <directionalLight position={[320, 420, 240]} intensity={0.9} />
+            <directionalLight position={[-240, 160, -180]} intensity={0.35} />
+            <SceneControls
+              enableRotate={enableRotate}
+              autoRotate={autoRotate}
+            />
+            <SceneContext.Provider value={context}>
+              {children}
+            </SceneContext.Provider>
+          </Canvas>
+        </SceneErrorBoundary>
       ) : null}
 
       {tooltip ? (
-        <div
-          style={{
-            position: 'absolute',
-            left: Math.min(
-              Math.max(tooltip.screen.x, 60),
-              Math.max(size.width - 60, 60),
-            ),
-            top: Math.max(tooltip.screen.y - 14, 8),
-            transform: 'translate(-50%, -100%)',
-            pointerEvents: 'none',
-          }}
-        >
+        // overlay 只做定位容器，边界收敛（clamp / 到顶翻转）全部交给
+        // Tooltip 自身 —— 与 2D 图表的提示框行为保持一致
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
           <Tooltip
             payload={tooltip.payload}
-            x={0}
-            y={0}
+            x={tooltip.screen.x}
+            y={tooltip.screen.y}
             containerWidth={size.width}
+            containerHeight={size.height}
             theme={tooltipTheme}
           />
         </div>

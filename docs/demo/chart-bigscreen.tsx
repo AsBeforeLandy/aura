@@ -23,6 +23,27 @@ import { Scene3D, Surface3D } from '@aura-react-comp/charts-3d';
  * 不需要改任何图表组件。
  */
 
+/* ---------- 配色体系：必须在所有数据定义之前 ---------- */
+
+const PALETTE = {
+  bg: '#0b1220',
+  panel: 'rgba(148,163,184,0.07)',
+  border: 'rgba(148,163,184,0.22)',
+  text: '#e2e8f0',
+  sub: '#94a3b8',
+  accent: '#a855f7',
+  cyan: '#22d3ee',
+};
+
+/**
+ * 大屏配色体系：深空蓝底上只允许两个色相——
+ *   青色（#22d3ee 系）承载数据，紫色（#a855f7 系）做品牌强调；
+ *   同色系用明度阶梯区分层级，红 / 绿只保留给涨跌语义。
+ * 多系列图表统一传这一组 palette，避免默认色板的多色相在深底上互相打架。
+ */
+/** 环图 / 漏斗的单色系明度阶梯：层级靠明度，不靠色相 */
+const CYAN_LADDER = ['#0e7490', '#0891b2', '#22d3ee', '#67e8f9', '#a5f3fc'];
+
 /* ---------- 确定性数据（不用 Math.random，保证每次渲染一致） ---------- */
 
 const line = Array.from({ length: 24 }, (_, i) => ({
@@ -49,11 +70,13 @@ const radarSeries = [
     key: 'thisWeek',
     name: '本周',
     values: [86, 72, 90, 64, 78],
+    color: PALETTE.cyan,
   },
   {
     key: 'lastWeek',
     name: '上周',
     values: [70, 66, 82, 58, 70],
+    color: '#64748b',
   },
 ];
 
@@ -100,16 +123,6 @@ const waterfall = [
 ];
 
 /* ---------- 卡片与布局 ---------- */
-
-const PALETTE = {
-  bg: '#0b1220',
-  panel: 'rgba(148,163,184,0.07)',
-  border: 'rgba(148,163,184,0.22)',
-  text: '#e2e8f0',
-  sub: '#94a3b8',
-  accent: '#a855f7',
-  cyan: '#22d3ee',
-};
 
 const cardStyle: React.CSSProperties = {
   background: PALETTE.panel,
@@ -194,17 +207,39 @@ const Kpi: React.FC<{
 const Title: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div
     style={{
-      textAlign: 'center',
-      padding: '10px 0 6px',
-      fontSize: 20,
-      fontWeight: 700,
-      letterSpacing: 6,
-      color: PALETTE.text,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 18,
+      padding: '12px 0 10px',
       borderBottom: `1px solid ${PALETTE.border}`,
     }}
   >
-    {children}
-    <span style={{ color: PALETTE.accent }} />
+    {/* 大屏标题的两侧装饰线：向青色渐隐，收住整屏的视线 */}
+    <span
+      style={{
+        flex: 1,
+        height: 1,
+        background: `linear-gradient(to left, ${PALETTE.cyan}, transparent)`,
+      }}
+    />
+    <span
+      style={{
+        fontSize: 20,
+        fontWeight: 700,
+        letterSpacing: 6,
+        color: PALETTE.text,
+      }}
+    >
+      {children}
+    </span>
+    <span
+      style={{
+        flex: 1,
+        height: 1,
+        background: `linear-gradient(to right, ${PALETTE.cyan}, transparent)`,
+      }}
+    />
   </div>
 );
 
@@ -274,8 +309,8 @@ const BigScreen: React.FC = () => (
           theme={darkTheme}
           legend={{ position: 'top' }}
           series={[
-            { key: 'online', name: '线上' },
-            { key: 'offline', name: '线下' },
+            { key: 'online', name: '线上', color: PALETTE.cyan },
+            { key: 'offline', name: '线下', color: '#64748b' },
           ]}
         />
       </Card>
@@ -287,6 +322,7 @@ const BigScreen: React.FC = () => (
           stack
           height={210}
           theme={darkTheme}
+          palette={[PALETTE.cyan, PALETTE.accent]}
           series={[
             { key: 'online', name: '线上' },
             { key: 'store', name: '门店' },
@@ -366,7 +402,13 @@ const BigScreen: React.FC = () => (
               theme={darkTheme}
             />
             <div style={{ display: 'grid', justifyItems: 'center', gap: 2 }}>
-              <RingProgress value={76} max={100} size={52} theme={darkTheme}>
+              <RingProgress
+                value={76}
+                max={100}
+                size={52}
+                theme={darkTheme}
+                color={PALETTE.cyan}
+              >
                 <span
                   style={{ fontSize: 12, fontWeight: 700, color: PALETTE.text }}
                 >
@@ -380,11 +422,23 @@ const BigScreen: React.FC = () => (
       </Card>
 
       <Card title="转化漏斗">
-        <FunnelChart data={funnel} height={220} theme={darkTheme} />
+        <FunnelChart
+          data={funnel}
+          height={220}
+          theme={darkTheme}
+          palette={[...CYAN_LADDER].reverse().slice(0, 4)}
+        />
       </Card>
 
       <Card title="季度预算瀑布（万）">
-        <WaterfallChart data={waterfall} height={220} theme={darkTheme} />
+        <WaterfallChart
+          data={waterfall}
+          height={220}
+          theme={darkTheme}
+          positiveColor={PALETTE.cyan}
+          negativeColor="#fb7185"
+          totalColor="#818cf8"
+        />
       </Card>
 
       <Card title="能耗曲面（3D · 可拖转）">
