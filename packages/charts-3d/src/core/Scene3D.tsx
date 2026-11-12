@@ -35,13 +35,67 @@ const tooltipTheme = {
  *     这里投影成屏幕坐标并渲染与 2D 图表同款的 DOM 提示框
  */
 
+export type ScenePreset = 'default' | 'inspection' | 'top' | 'front';
+
+interface ScenePresetConfig {
+  camera: [number, number, number];
+  autoRotate: boolean;
+  autoRotateSpeed: number;
+  maxPolarAngle: number;
+}
+
+/**
+ * 视角预设（场景模板）。
+ *
+ * · default    斜视角，静态，适合交互分析
+ * · inspection 巡检：低角度自动环绕，转速 2.2°/帧级，适合大屏展示态
+ * · top        正俯视：看平面分布，避免透视遮挡
+ * · front      正视图：当「图表」用，接近 2D 阅读习惯
+ *
+ * maxPolarAngle 统一限制在 π/2.05 —— 不允许钻到地面以下，
+ * 那会让柱体的底面朝上、文字镜像，用户不知道自己看到了什么。
+ */
+const SCENE_PRESETS: Record<ScenePreset, ScenePresetConfig> = {
+  default: {
+    camera: [320, 260, 380],
+    autoRotate: false,
+    autoRotateSpeed: 1.2,
+    maxPolarAngle: Math.PI / 2.05,
+  },
+  inspection: {
+    camera: [300, 170, 320],
+    autoRotate: true,
+    autoRotateSpeed: 2.2,
+    maxPolarAngle: Math.PI / 2.05,
+  },
+  top: {
+    camera: [0.1, 540, 0.1],
+    autoRotate: false,
+    autoRotateSpeed: 1.2,
+    maxPolarAngle: Math.PI / 2.05,
+  },
+  front: {
+    camera: [0, 150, 520],
+    autoRotate: false,
+    autoRotateSpeed: 1.2,
+    maxPolarAngle: Math.PI / 2.05,
+  },
+};
+
+/** 读取视角预设配置（未知值回退 default） */
+export function getScenePresetConfig(preset: ScenePreset): ScenePresetConfig {
+  return SCENE_PRESETS[preset] ?? SCENE_PRESETS.default;
+}
+
 export interface Scene3DProps {
   height?: number;
-  /** 相机位置，默认右前上方的斜视角 */
+  /** 视角预设（场景模板）；显式 cameraPosition / autoRotate 会覆盖预设 */
+  preset?: ScenePreset;
+  /** 相机位置，默认取视角预设的相机位 */
   cameraPosition?: [number, number, number];
   /** 是否允许拖转 / 缩放视角 */
   enableRotate?: boolean;
-  /** 自动旋转（展示模式） */
+  /** 自动旋转（展示模式）；默认取视角预设的配置 */
   autoRotate?: boolean;
   /** 命中提示框内容；null 关闭 */
   children: React.ReactNode;
@@ -127,9 +181,13 @@ export function useScene(): SceneContextValue | null {
 function SceneControls({
   enableRotate,
   autoRotate,
+  maxPolarAngle,
+  autoRotateSpeed,
 }: {
   enableRotate: boolean;
   autoRotate: boolean;
+  maxPolarAngle: number;
+  autoRotateSpeed: number;
 }) {
   const { camera, gl } = useThree();
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
@@ -139,16 +197,16 @@ function SceneControls({
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     // 不允许钻到地面以下，保持图表的可读朝向
-    controls.maxPolarAngle = Math.PI / 2.05;
+    controls.maxPolarAngle = maxPolarAngle;
     controls.enabled = enableRotate;
     controls.autoRotate = autoRotate;
-    controls.autoRotateSpeed = 1.2;
+    controls.autoRotateSpeed = autoRotateSpeed;
     controlsRef.current = controls;
     return () => {
       controls.dispose();
       controlsRef.current = null;
     };
-  }, [camera, gl, enableRotate, autoRotate]);
+  }, [camera, gl, enableRotate, autoRotate, maxPolarAngle, autoRotateSpeed]);
 
   useFrame(() => {
     controlsRef.current?.update();
@@ -159,11 +217,16 @@ function SceneControls({
 
 export function Scene3D({
   height = 360,
-  cameraPosition = [320, 260, 380],
+  cameraPosition: cameraPositionProp,
+  autoRotate: autoRotateProp,
+  preset = 'default',
   enableRotate = true,
-  autoRotate = false,
   children,
 }: Scene3DProps) {
+  // preset 提供视角基线，显式 props 覆盖（调用方只想微调一项时不用抄整套）
+  const presetConfig = useMemo(() => getScenePresetConfig(preset), [preset]);
+  const cameraPosition = cameraPositionProp ?? presetConfig.camera;
+  const autoRotate = autoRotateProp ?? presetConfig.autoRotate;
   const { ref: containerRef, size } = useElementSize<HTMLDivElement>();
   const [camera, setCamera] = useState<Camera | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
@@ -220,6 +283,8 @@ export function Scene3D({
             <SceneControls
               enableRotate={enableRotate}
               autoRotate={autoRotate}
+              maxPolarAngle={presetConfig.maxPolarAngle}
+              autoRotateSpeed={presetConfig.autoRotateSpeed}
             />
             <SceneContext.Provider value={context}>
               {children}

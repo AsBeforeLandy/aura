@@ -2,6 +2,11 @@ import React, { useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useScene } from '../core/Scene3D';
+import {
+  buildInstanceColors,
+  buildInstanceTransforms,
+  type InstanceDatum,
+} from '../core/instancing';
 import { mixColor } from '@aura-react-comp/charts';
 import { normalizeRatio, scaleBarHeights } from '../core/projection';
 
@@ -98,6 +103,9 @@ function TextSprite({
 const GROWTH_DURATION = 0.62;
 const GROWTH_STAGGER = 0.5;
 
+/** 柱体规模阈值：超过后切 InstancedMesh（整屏一次 draw call） */
+const INSTANCE_THRESHOLD = 300;
+
 function easeOutQuint(t: number): number {
   return 1 - (1 - t) ** 5;
 }
@@ -158,6 +166,111 @@ function AnimatedBar({
         metalness={0.15}
       />
     </mesh>
+  );
+}
+
+/**
+ * InstancedBars：柱体规模 > 300 时的渲染分支。
+ *
+ * 全部柱体共用一个 BoxGeometry（实例矩阵区分位置与高度），
+ * 整屏一次 draw call；拾取用 raycaster 的 instanceId 反查数据。
+ * 生长动画每帧重建实例矩阵 —— 3000 柱每帧 3000 次矩阵写，可接受。
+ */
+function InstancedBars({
+  instances,
+  cellSize,
+  colorRange,
+  hoverIndex,
+  onHover,
+  onOut,
+}: {
+  instances: InstanceDatum[];
+  cellSize: number;
+  colorRange: [string, string];
+  hoverIndex: number;
+  onHover: (index: number) => void;
+  onOut: () => void;
+}) {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const progress = useRef(0);
+
+  const instanceColors = useMemo(
+    () => buildInstanceColors(instances, colorRange),
+    [instances, colorRange],
+  );
+
+  // 初始：矩阵与颜色一次写入
+  React.useLayoutEffect(() => {
+    const mesh = meshRef.current;
+    if (!mesh) return;
+    const { matrices } = buildInstanceTransforms(
+      instances,
+      cellSize,
+      0,
+      GROWTH_STAGGER,
+    );
+    matrices.forEach((matrix, index) => mesh.setMatrixAt(index, matrix));
+    instanceColors.forEach((color, index) =>
+      mesh.setColorAt(index, new THREE.Color(color.r, color.g, color.b)),
+    );
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  }, [instances, instanceColors, cellSize]);
+
+  // 生长动画：每帧按错峰进度重建实例矩阵
+  useFrame((_, delta) => {
+    const mesh = meshRef.current;
+    if (!mesh || progress.current >= 1) return;
+    progress.current = Math.min(1, progress.current + delta / GROWTH_DURATION);
+    const { matrices } = buildInstanceTransforms(
+      instances,
+      cellSize,
+      progress.current,
+      GROWTH_STAGGER,
+    );
+    matrices.forEach((matrix, index) => mesh.setMatrixAt(index, matrix));
+    mesh.instanceMatrix.needsUpdate = true;
+  });
+
+  // hover 高亮：命中实例提亮，上一个恢复（只更新两个实例，不整批重刷）
+  const previousHover = useRef(-1);
+  React.useEffect(() => {
+    const mesh = meshRef.current;
+    if (!mesh || !mesh.instanceColor) return;
+    if (previousHover.current >= 0 && instanceColors[previousHover.current]) {
+      const original = instanceColors[previousHover.current];
+      mesh.setColorAt(
+        previousHover.current,
+        new THREE.Color(original.r, original.g, original.b),
+      );
+    }
+    if (hoverIndex >= 0 && instanceColors[hoverIndex]) {
+      const original = instanceColors[hoverIndex];
+      const highlight = new THREE.Color(
+        original.r,
+        original.g,
+        original.b,
+      ).lerp(new THREE.Color('#ffffff'), 0.4);
+      mesh.setColorAt(hoverIndex, highlight);
+    }
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    previousHover.current = hoverIndex;
+  }, [hoverIndex, instanceColors]);
+
+  return (
+    <instancedMesh
+      ref={meshRef}
+      args={[undefined, undefined, Math.max(1, instances.length)]}
+      onPointerOver={(event) => {
+        event.stopPropagation();
+        const index = event.instanceId ?? -1;
+        if (index >= 0) onHover(index);
+      }}
+      onPointerOut={() => onOut()}
+    >
+      <boxGeometry args={[cellSize, 1, cellSize]} />
+      <meshStandardMaterial roughness={0.45} metalness={0.15} />
+    </instancedMesh>
   );
 }
 
@@ -226,7 +339,31 @@ export function Bar3D({
       gridLines.push({ a: [-halfW, 0, z], b: [halfW, 0, z] });
     }
 
-    return { bars, gridLines, xLabels, zLabels, spacing, halfW, halfD };
+    const useInstances = bars.length > INSTANCE_THRESHOLD;
+    const instances: InstanceDatum[] = useInstances
+      ? bars.map((bar, index) => ({
+          index,
+          x: bar.x,
+          z: bar.z,
+          height: bar.h,
+          ratio: Math.min(
+            1,
+            Math.max(0, normalizeRatio(values[index], min, max)),
+          ),
+        }))
+      : [];
+
+    return {
+      bars,
+      gridLines,
+      xLabels,
+      zLabels,
+      spacing,
+      halfW,
+      halfD,
+      useInstances,
+      instances,
+    };
   }, [data, maxHeight, cellSize, colorRange]);
 
   return (
@@ -252,18 +389,16 @@ export function Bar3D({
         </line>
       ))}
 
-      {/* 柱体：入场时从基线错峰生长 */}
-      {model.bars.map((bar, index) => (
-        <AnimatedBar
-          key={`${bar.item.x}-${bar.item.z}`}
-          bar={bar}
+      {/* 柱体：大规模切 InstancedMesh（一次 draw call） */}
+      {model.useInstances ? (
+        <InstancedBars
+          instances={model.instances}
           cellSize={cellSize}
-          delayRatio={
-            model.bars.length > 1 ? index / (model.bars.length - 1) : 0
-          }
-          hasHover={hover !== null}
-          isHover={hover?.item === bar.item}
-          onOver={() => {
+          colorRange={colorRange}
+          hoverIndex={model.bars.findIndex((bar) => hover?.item === bar.item)}
+          onHover={(index) => {
+            const bar = model.bars[index];
+            if (!bar) return;
             setHover({
               item: bar.item,
               top: new THREE.Vector3(bar.x, bar.h + 6, bar.z),
@@ -292,7 +427,49 @@ export function Bar3D({
             if (tooltip && scene) scene.showTooltip(null, new THREE.Vector3());
           }}
         />
-      ))}
+      ) : (
+        model.bars.map((bar, index) => (
+          <AnimatedBar
+            key={`${bar.item.x}-${bar.item.z}`}
+            bar={bar}
+            cellSize={cellSize}
+            delayRatio={
+              model.bars.length > 1 ? index / (model.bars.length - 1) : 0
+            }
+            hasHover={hover !== null}
+            isHover={hover?.item === bar.item}
+            onOver={() => {
+              setHover({
+                item: bar.item,
+                top: new THREE.Vector3(bar.x, bar.h + 6, bar.z),
+              });
+              if (tooltip && scene) {
+                scene.showTooltip(
+                  {
+                    label: `${bar.item.x} · ${bar.item.z}`,
+                    row: null,
+                    series: [
+                      {
+                        key: 'value',
+                        name: '数值',
+                        color: bar.color,
+                        value: bar.item.value,
+                        formatted: String(bar.item.value),
+                      },
+                    ],
+                  },
+                  new THREE.Vector3(bar.x, bar.h + 6, bar.z),
+                );
+              }
+            }}
+            onOut={() => {
+              setHover(null);
+              if (tooltip && scene)
+                scene.showTooltip(null, new THREE.Vector3());
+            }}
+          />
+        ))
+      )}
 
       {/* 行 / 列标签 */}
       {model.xLabels.map((label, index) => {
