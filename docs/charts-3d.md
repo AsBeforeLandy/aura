@@ -20,11 +20,15 @@ pnpm add @aura-react-comp/charts-3d three
 
 <code src="./demo/chart-3d.tsx" description="汇报周期 × 区域的交付量矩阵：X / Z 两个分类维度，高度编码数值，颜色沿色带映射。拖动可旋转视角，柱体入场时错峰生长。">Bar3D 柱状矩阵</code>
 
+<code src="./demo/chart-3d-bar-diff.tsx" description="差值类数据：负值（节省）落在色带左端、正值（超支）落在右端——colorRange 换一组颜色即可反转语义。">差值数据与自定义色带</code>
+
 ## Scatter3D
 
 三个数值维度的位置编码（X / Y / Z），点大小与颜色可作为第四、第五个编码通道——但编码通道越多读者越难还原数值，按类别着色是默认。
 
 <code src="./demo/chart-3d-scatter.tsx" description="三类用户聚簇 + 两个离群点：散点图的价值之一就是把离群点暴露出来。拖动旋转查看聚簇结构。">用户分层</code>
+
+<code src="./demo/chart-3d-scatter-value.tsx" description="colorByValue：颜色沿色带按 Y 值（海拔）映射，自动旋转适合展示态。">按值渐变</code>
 
 | 属性         | 说明                                      | 类型               | 默认值  |
 | ------------ | ----------------------------------------- | ------------------ | ------- |
