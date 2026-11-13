@@ -12,7 +12,7 @@ import {
   WaterfallChart,
   darkTheme,
 } from '@aura-react-comp/charts';
-import { Scene3D, Surface3D } from '@aura-react-comp/charts-3d';
+import { ParticleField, Scene3D, Surface3D } from '@aura-react-comp/charts-3d';
 
 /**
  * 大屏示例：把 18 个图表里的代表组合成一块深色监控大屏。
@@ -26,13 +26,14 @@ import { Scene3D, Surface3D } from '@aura-react-comp/charts-3d';
 /* ---------- 配色体系：必须在所有数据定义之前 ---------- */
 
 const PALETTE = {
-  bg: '#0b1220',
-  panel: 'rgba(148,163,184,0.07)',
-  border: 'rgba(148,163,184,0.22)',
-  text: '#e2e8f0',
-  sub: '#94a3b8',
-  accent: '#a855f7',
-  cyan: '#22d3ee',
+  /** 径向渐变底：顶部微亮的天蓝晕开到深空蓝，比纯灰黑更有纵深 */
+  bg: 'radial-gradient(ellipse at 50% -10%, #10305e 0%, #081428 58%)',
+  panel: 'rgba(23, 68, 130, 0.22)',
+  border: 'rgba(56, 189, 248, 0.24)',
+  text: '#e0f2fe',
+  sub: '#8fb8d8',
+  accent: '#a78bfa',
+  cyan: '#38bdf8',
 };
 
 /**
@@ -42,7 +43,7 @@ const PALETTE = {
  * 多系列图表统一传这一组 palette，避免默认色板的多色相在深底上互相打架。
  */
 /** 环图 / 漏斗的单色系明度阶梯：层级靠明度，不靠色相 */
-const CYAN_LADDER = ['#0e7490', '#0891b2', '#22d3ee', '#67e8f9', '#a5f3fc'];
+const CYAN_LADDER = ['#0c4a6e', '#0369a1', '#0ea5e9', '#38bdf8', '#7dd3fc'];
 
 /* ---------- 确定性数据（不用 Math.random，保证每次渲染一致） ---------- */
 
@@ -253,226 +254,255 @@ const BigScreen: React.FC = () => (
       padding: '0 14px 14px',
       color: PALETTE.text,
       overflow: 'hidden',
+      position: 'relative',
     }}
   >
-    <Title>AURA 智慧运营大屏</Title>
-
-    {/* KPI 行 */}
+    {/* 粒子星野：背景装饰层（无连线、低透明度），内容层叠在其上 */}
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 10,
-        margin: '10px 0',
+        position: 'absolute',
+        inset: 0,
+        pointerEvents: 'none',
+        opacity: 0.55,
       }}
     >
-      <Kpi
-        label="今日订单"
-        value="18,204"
-        delta="▲ 12.4% vs 昨日"
-        data={[8, 9, 7, 11, 10, 13, 12, 15]}
-      />
-      <Kpi
-        label="GMV（万）"
-        value="3,264"
-        delta="▲ 8.1% vs 昨日"
-        data={[12, 10, 13, 12, 14, 13, 16, 17]}
-      />
-      <Kpi
-        label="在线设备"
-        value="1,842"
-        delta="在线率 96.2%"
-        data={[14, 13, 14, 15, 14, 16, 15, 16]}
-      />
-      <Kpi
-        label="支付转化"
-        value="3.86%"
-        delta="▲ 0.4pp"
-        data={[5, 6, 5, 7, 6, 8, 7, 9]}
+      <ParticleField
+        count={170}
+        showLinks={false}
+        speed={0.5}
+        particleSize={1.8}
       />
     </div>
 
-    {/* 三列主网格 */}
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: 10,
-      }}
-    >
-      <Card title="订单趋势（24h）">
-        <LineChart
-          data={line}
-          xKey="hour"
-          height={210}
-          smooth
-          theme={darkTheme}
-          legend={{ position: 'top' }}
-          series={[
-            { key: 'online', name: '线上', color: PALETTE.cyan },
-            { key: 'offline', name: '线下', color: '#64748b' },
-          ]}
-        />
-      </Card>
+    <div style={{ position: 'relative' }}>
+      <Title>AURA 智慧运营大屏</Title>
 
-      <Card title="区域销量（线上 / 门店）">
-        <BarChart
-          data={bars}
-          xKey="region"
-          stack
-          height={210}
-          theme={darkTheme}
-          palette={[PALETTE.cyan, PALETTE.accent]}
-          series={[
-            { key: 'online', name: '线上' },
-            { key: 'store', name: '门店' },
-          ]}
+      {/* KPI 行 */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: 10,
+          margin: '10px 0',
+        }}
+      >
+        <Kpi
+          label="今日订单"
+          value="18,204"
+          delta="▲ 12.4% vs 昨日"
+          data={[8, 9, 7, 11, 10, 13, 12, 15]}
         />
-      </Card>
-
-      <Card title="渠道占比">
-        <PieChart
-          data={pie}
-          height={210}
-          innerRadius={0.62}
-          theme={darkTheme}
+        <Kpi
+          label="GMV（万）"
+          value="3,264"
+          delta="▲ 8.1% vs 昨日"
+          data={[12, 10, 13, 12, 14, 13, 16, 17]}
         />
-      </Card>
-
-      <Card title="服务能力评估">
-        <RadarChart
-          indicators={[
-            { name: '响应', max: 100 },
-            { name: '交付', max: 100 },
-            { name: '质量', max: 100 },
-            { name: '服务', max: 100 },
-            { name: '成本', max: 100 },
-          ]}
-          series={radarSeries}
-          height={220}
-          theme={darkTheme}
+        <Kpi
+          label="在线设备"
+          value="1,842"
+          delta="在线率 96.2%"
+          data={[14, 13, 14, 15, 14, 16, 15, 16]}
         />
-      </Card>
-
-      <Card title="时段活跃热力">
-        <HeatmapChart
-          data={heat}
-          height={220}
-          cellGap={2}
-          showValue={false}
-          theme={darkTheme}
-          colorRange={['#134e4a', '#22d3ee']}
+        <Kpi
+          label="支付转化"
+          value="3.86%"
+          delta="▲ 0.4pp"
+          data={[5, 6, 5, 7, 6, 8, 7, 9]}
         />
-      </Card>
+      </div>
 
-      <Card title="履约指标">
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            height: '100%',
-          }}
-        >
-          <div style={{ display: 'grid', placeItems: 'center' }}>
-            <GaugeChart
-              value={92}
-              min={0}
-              max={100}
-              unit="%"
-              label="设备完好率"
-              height={200}
-              theme={darkTheme}
-            />
-          </div>
+      {/* 三列主网格 */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 10,
+        }}
+      >
+        <Card title="订单趋势（24h）">
+          <LineChart
+            data={line}
+            xKey="hour"
+            height={210}
+            smooth
+            theme={darkTheme}
+            legend={{ position: 'top' }}
+            series={[
+              { key: 'online', name: '线上', color: PALETTE.cyan },
+              { key: 'offline', name: '线下', color: '#64748b' },
+            ]}
+          />
+        </Card>
+
+        <Card title="区域销量（线上 / 门店）">
+          <BarChart
+            data={bars}
+            xKey="region"
+            stack
+            height={210}
+            theme={darkTheme}
+            palette={[PALETTE.cyan, PALETTE.accent]}
+            series={[
+              { key: 'online', name: '线上' },
+              { key: 'store', name: '门店' },
+            ]}
+          />
+        </Card>
+
+        <Card title="渠道占比">
+          <PieChart
+            data={pie}
+            height={210}
+            innerRadius={0.62}
+            theme={darkTheme}
+            palette={CYAN_LADDER}
+          />
+        </Card>
+
+        <Card title="服务能力评估">
+          <RadarChart
+            indicators={[
+              { name: '响应', max: 100 },
+              { name: '交付', max: 100 },
+              { name: '质量', max: 100 },
+              { name: '服务', max: 100 },
+              { name: '成本', max: 100 },
+            ]}
+            series={radarSeries}
+            height={220}
+            theme={darkTheme}
+          />
+        </Card>
+
+        <Card title="时段活跃热力">
+          <HeatmapChart
+            data={heat}
+            height={220}
+            cellGap={2}
+            showValue={false}
+            theme={darkTheme}
+            colorRange={['#134e4a', '#22d3ee']}
+          />
+        </Card>
+
+        <Card title="履约指标">
           <div
             style={{
               display: 'grid',
-              gridTemplateRows: '1fr auto',
-              placeItems: 'center',
-              gap: 6,
+              gridTemplateColumns: '1fr 1fr',
+              height: '100%',
             }}
           >
-            <GaugeChart
-              value={87}
-              min={0}
-              max={100}
-              unit="%"
-              label="准时交付"
-              height={140}
-              theme={darkTheme}
-            />
-            <div style={{ display: 'grid', justifyItems: 'center', gap: 2 }}>
-              <RingProgress
-                value={76}
+            <div style={{ display: 'grid', placeItems: 'center' }}>
+              <GaugeChart
+                value={92}
+                min={0}
                 max={100}
-                size={52}
+                unit="%"
+                label="设备完好率"
+                height={200}
                 theme={darkTheme}
-                color={PALETTE.cyan}
-              >
-                <span
-                  style={{ fontSize: 12, fontWeight: 700, color: PALETTE.text }}
+                ranges={[{ to: 100, color: PALETTE.cyan }]}
+              />
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateRows: '1fr auto',
+                placeItems: 'center',
+                gap: 6,
+              }}
+            >
+              <GaugeChart
+                value={87}
+                min={0}
+                max={100}
+                unit="%"
+                label="准时交付"
+                height={140}
+                theme={darkTheme}
+                ranges={[{ to: 100, color: PALETTE.cyan }]}
+              />
+              <div style={{ display: 'grid', justifyItems: 'center', gap: 2 }}>
+                <RingProgress
+                  value={76}
+                  max={100}
+                  size={52}
+                  theme={darkTheme}
+                  color={PALETTE.cyan}
                 >
-                  76%
+                  <span
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: PALETTE.text,
+                    }}
+                  >
+                    76%
+                  </span>
+                </RingProgress>
+                <span style={{ fontSize: 11, color: PALETTE.sub }}>
+                  库存周转
                 </span>
-              </RingProgress>
-              <span style={{ fontSize: 11, color: PALETTE.sub }}>库存周转</span>
+              </div>
             </div>
           </div>
-        </div>
-      </Card>
+        </Card>
 
-      <Card title="转化漏斗">
-        <FunnelChart
-          data={funnel}
-          height={220}
-          theme={darkTheme}
-          palette={[...CYAN_LADDER].reverse().slice(0, 4)}
-        />
-      </Card>
-
-      <Card title="季度预算瀑布（万）">
-        <WaterfallChart
-          data={waterfall}
-          height={220}
-          theme={darkTheme}
-          positiveColor={PALETTE.cyan}
-          negativeColor="#fb7185"
-          totalColor="#818cf8"
-        />
-      </Card>
-
-      <Card title="能耗曲面（3D · 可拖转）">
-        <Scene3D height={230} cameraPosition={[260, 220, 300]} autoRotate>
-          <Surface3D
-            values={surface}
-            width={200}
-            depth={200}
-            maxHeight={70}
-            wireframe
+        <Card title="转化漏斗">
+          <FunnelChart
+            data={funnel}
+            height={220}
+            theme={darkTheme}
+            palette={[...CYAN_LADDER].reverse().slice(0, 4)}
           />
-        </Scene3D>
-      </Card>
+        </Card>
 
-      <Card title="大屏构建要点">
-        <ul
-          style={{
-            margin: '6px 0 0',
-            paddingLeft: 18,
-            fontSize: 12,
-            lineHeight: 1.9,
-            color: PALETTE.sub,
-          }}
-        >
-          <li>
-            深色 = <b style={{ color: PALETTE.text }}>data-theme="dark"</b> +
-            图表传 darkTheme，组件零改动
-          </li>
-          <li>全部数据确定性生成，刷新不变，可直接录屏</li>
-          <li>点数超阈值自动切 Canvas，缩略轴 / 采样开箱即用</li>
-          <li>无障碍：每张图都有隐藏数据表，读屏可用</li>
-          <li>3D 曲面：@aura-react-comp/charts-3d，同套令牌与拖转交互</li>
-        </ul>
-      </Card>
+        <Card title="季度预算瀑布（万）">
+          <WaterfallChart
+            data={waterfall}
+            height={220}
+            theme={darkTheme}
+            positiveColor={PALETTE.cyan}
+            negativeColor="#fb7185"
+            totalColor="#818cf8"
+          />
+        </Card>
+
+        <Card title="能耗曲面（3D · 可拖转）">
+          <Scene3D height={230} cameraPosition={[260, 220, 300]} autoRotate>
+            <Surface3D
+              values={surface}
+              width={200}
+              depth={200}
+              maxHeight={70}
+              wireframe
+            />
+          </Scene3D>
+        </Card>
+
+        <Card title="大屏构建要点">
+          <ul
+            style={{
+              margin: '6px 0 0',
+              paddingLeft: 18,
+              fontSize: 12,
+              lineHeight: 1.9,
+              color: PALETTE.sub,
+            }}
+          >
+            <li>
+              深色 = <b style={{ color: PALETTE.text }}>data-theme="dark"</b> +
+              图表传 darkTheme，组件零改动
+            </li>
+            <li>全部数据确定性生成，刷新不变，可直接录屏</li>
+            <li>点数超阈值自动切 Canvas，缩略轴 / 采样开箱即用</li>
+            <li>无障碍：每张图都有隐藏数据表，读屏可用</li>
+            <li>3D 曲面：@aura-react-comp/charts-3d，同套令牌与拖转交互</li>
+          </ul>
+        </Card>
+      </div>
     </div>
   </div>
 );

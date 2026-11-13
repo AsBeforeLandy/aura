@@ -10,6 +10,14 @@ export {
   sampleGradient,
 } from './charts/Surface3D';
 export type { Surface3DProps, SurfaceGeometryData } from './charts/Surface3D';
+export { ParticleField } from './charts/ParticleField';
+export type { ParticleFieldProps } from './charts/ParticleField';
+export {
+  initParticles,
+  advanceParticles,
+  collectLinks,
+  type ParticleBounds,
+} from './core/particles';
 export {
   projectToScreen,
   scaleBarHeights,

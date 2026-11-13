@@ -186,13 +186,27 @@ const chartsSidebar = [
       { title: '动画', link: '/charts-animation' },
       { title: '大数据与缩放', link: '/charts-bigdata' },
       { title: '大屏示例', link: '/charts-bigscreen' },
-      { title: '3D 示例', link: '/charts-3d' },
     ],
   },
   ...collectSidebarGroups([
     { dir: 'packages/charts/src/charts', prefix: '/charts' },
     { dir: 'packages/charts/src/components', prefix: '/charts' },
   ]),
+];
+
+/** 3D 图表模块的侧栏：手动维护（demo 与 API 页均在 docs/ 下） */
+const charts3dSidebar = [
+  {
+    title: '图表 · 3D',
+    children: [
+      { title: '概览', link: '/charts-3d' },
+      { title: 'Scene3D 场景', link: '/charts-3d-scene' },
+      { title: 'Bar3D', link: '/charts-3d-bar3d' },
+      { title: 'Scatter3D', link: '/charts-3d-scatter3d' },
+      { title: 'Surface3D', link: '/charts-3d-surface3d' },
+      { title: 'ParticleField', link: '/charts-3d-particles' },
+    ],
+  },
 ];
 
 const editorSidebar = [
@@ -343,7 +357,12 @@ export default defineConfig({
       '/charts-animation': chartsSidebar,
       '/charts-bigdata': chartsSidebar,
       '/charts-bigscreen': chartsSidebar,
-      '/charts-3d': chartsSidebar,
+      '/charts-3d': charts3dSidebar,
+      '/charts-3d-scene': charts3dSidebar,
+      '/charts-3d-bar3d': charts3dSidebar,
+      '/charts-3d-scatter3d': charts3dSidebar,
+      '/charts-3d-surface3d': charts3dSidebar,
+      '/charts-3d-particles': charts3dSidebar,
       '/editor': editorSidebar,
       '/editor-advanced': editorSidebar,
       '/editor-components': editorSidebar,
