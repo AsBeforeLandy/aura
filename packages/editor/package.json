@@ -1,6 +1,6 @@
 {
   "name": "@aura-react-comp/editor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Aura 富文本编辑器 — 基于 Tiptap/ProseMirror 的 headless 引擎封装，Aura 令牌主题与开箱即用的完整工具栏",
   "keywords": [
     "aura",

@@ -1,6 +1,6 @@
 {
   "name": "@aura-react-comp/charts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Aura 图表库 — 自研 SVG/Canvas 双渲染内核，令牌驱动的主题体系，覆盖市面主流图表类型",
   "keywords": [
     "aura",
