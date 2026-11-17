@@ -177,16 +177,11 @@ const motionSidebar = collectSidebarGroups([
  * 图表与编辑器：手工的「开始」分组 + 由 index.md frontmatter 自动生成的组件分组。
  * 同一个侧栏配置挂在多个路由前缀上，保证从概览页或组件页进入时菜单一致。
  */
-const charts3dSidebar = [
-  {
-    title: '开始',
-    children: [
-      { title: '主题定制', link: '/charts-theme' },
-      { title: '动画', link: '/charts-animation' },
-      { title: '大数据与缩放', link: '/charts-bigdata' },
-      { title: '大屏示例', link: '/charts-bigscreen' },
-    ],
-  },
+
+/** 3D 分组：并入 chartsSidebar 统一展示（demo 与 API 页均在 docs/ 下）。
+ *  所有 /charts* 与 /charts-3d* 页面挂同一个侧栏 —— 开始组只出现一次，
+ *  2D 的 18 个图表与 3D 的 6 个页面互为邻居，不再按路由切换两套菜单。 */
+const charts3dGroup = [
   {
     title: '图表 · 3D',
     children: [
@@ -215,8 +210,8 @@ const chartsSidebar = [
     { dir: 'packages/charts/src/charts', prefix: '/charts' },
     { dir: 'packages/charts/src/components', prefix: '/charts' },
   ]),
-  // 3D 模块：2D 侧栏里同样可见，两个模块互相可达
-  ...charts3dSidebar,
+  // 3D 模块：与 2D 分组并列展示，同一套侧栏贯穿 2D / 3D 全部页面
+  ...charts3dGroup,
 ];
 
 /** 3D 图表模块的侧栏：手动维护（demo 与 API 页均在 docs/ 下）。
@@ -370,12 +365,12 @@ export default defineConfig({
       '/charts-animation': chartsSidebar,
       '/charts-bigdata': chartsSidebar,
       '/charts-bigscreen': chartsSidebar,
-      '/charts-3d': charts3dSidebar,
-      '/charts-3d-scene': charts3dSidebar,
-      '/charts-3d-bar3d': charts3dSidebar,
-      '/charts-3d-scatter3d': charts3dSidebar,
-      '/charts-3d-surface3d': charts3dSidebar,
-      '/charts-3d-particles': charts3dSidebar,
+      '/charts-3d': chartsSidebar,
+      '/charts-3d-scene': chartsSidebar,
+      '/charts-3d-bar3d': chartsSidebar,
+      '/charts-3d-scatter3d': chartsSidebar,
+      '/charts-3d-surface3d': chartsSidebar,
+      '/charts-3d-particles': chartsSidebar,
       '/editor': editorSidebar,
       '/editor-advanced': editorSidebar,
       '/editor-components': editorSidebar,
