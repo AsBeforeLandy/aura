@@ -177,6 +177,29 @@ const motionSidebar = collectSidebarGroups([
  * 图表与编辑器：手工的「开始」分组 + 由 index.md frontmatter 自动生成的组件分组。
  * 同一个侧栏配置挂在多个路由前缀上，保证从概览页或组件页进入时菜单一致。
  */
+const charts3dSidebar = [
+  {
+    title: '开始',
+    children: [
+      { title: '主题定制', link: '/charts-theme' },
+      { title: '动画', link: '/charts-animation' },
+      { title: '大数据与缩放', link: '/charts-bigdata' },
+      { title: '大屏示例', link: '/charts-bigscreen' },
+    ],
+  },
+  {
+    title: '图表 · 3D',
+    children: [
+      { title: '概览', link: '/charts-3d' },
+      { title: 'Scene3D 场景', link: '/charts-3d-scene' },
+      { title: 'Bar3D', link: '/charts-3d-bar3d' },
+      { title: 'Scatter3D', link: '/charts-3d-scatter3d' },
+      { title: 'Surface3D', link: '/charts-3d-surface3d' },
+      { title: 'ParticleField', link: '/charts-3d-particles' },
+    ],
+  },
+];
+
 const chartsSidebar = [
   {
     title: '开始',
@@ -192,22 +215,12 @@ const chartsSidebar = [
     { dir: 'packages/charts/src/charts', prefix: '/charts' },
     { dir: 'packages/charts/src/components', prefix: '/charts' },
   ]),
+  // 3D 模块：2D 侧栏里同样可见，两个模块互相可达
+  ...charts3dSidebar,
 ];
 
-/** 3D 图表模块的侧栏：手动维护（demo 与 API 页均在 docs/ 下） */
-const charts3dSidebar = [
-  {
-    title: '图表 · 3D',
-    children: [
-      { title: '概览', link: '/charts-3d' },
-      { title: 'Scene3D 场景', link: '/charts-3d-scene' },
-      { title: 'Bar3D', link: '/charts-3d-bar3d' },
-      { title: 'Scatter3D', link: '/charts-3d-scatter3d' },
-      { title: 'Surface3D', link: '/charts-3d-surface3d' },
-      { title: 'ParticleField', link: '/charts-3d-particles' },
-    ],
-  },
-];
+/** 3D 图表模块的侧栏：手动维护（demo 与 API 页均在 docs/ 下）。
+ *  顶部「开始」组回链 2D 的指南页 —— 2D 与 3D 的侧栏互相可达。 */
 
 const editorSidebar = [
   {
