@@ -14,6 +14,10 @@ pnpm add @aura-react-comp/charts-3d three
 
 `three` 是 peerDependency——不使用 3D 库时不会为其它包增加任何体积；使用 3D 时显式安装自己需要的版本。
 
+## 30 秒看到效果
+
+<code src="./demo/chart-3d.tsx" description="Bar3D 三维柱状矩阵：拖动旋转视角，滚轮缩放，悬停查看数值，柱体错峰生长入场。各组件的完整示例见上方索引对应的页面。">拖转我</code>
+
 ## 组件索引（5 个）
 
 | 组件                                  | 用途         | 关键能力                                 |
