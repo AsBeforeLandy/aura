@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import * as THREE from 'three';
-import { mixColor } from '@aura-react-comp/charts';
+import { useScene } from '../core/Scene3D';
+import { formatNumber, mixColor } from '@aura-react-comp/charts';
 import { normalizeRatio } from '../core/projection';
 
 /**
@@ -27,6 +28,8 @@ export interface Surface3DProps {
   colorRange?: string[];
   /** 线框叠加：排查网格结构时用 */
   wireframe?: boolean;
+  /** 悬停提示框：显示命中面片的行列与数值 */
+  tooltip?: boolean;
 }
 
 /** 在多段色带上取 t（0~1）位置的颜色 */
@@ -112,7 +115,16 @@ export function Surface3D({
   maxHeight = 90,
   colorRange = ['#0ea5e9', '#a855f7', '#f472b6'],
   wireframe = false,
+  tooltip = true,
 }: Surface3DProps) {
+  const scene = useScene();
+  // 与 buildSurfaceGeometryData 内部同一套 min/max，保证 tooltip 色带一致
+  const valueRange = useMemo<[number, number]>(() => {
+    const numeric = values.flat().filter((value) => Number.isFinite(value));
+    if (!numeric.length) return [0, 1];
+    return [Math.min(...numeric), Math.max(...numeric)];
+  }, [values]);
+
   const geometry = useMemo(() => {
     const data = buildSurfaceGeometryData(values, {
       width,
@@ -154,7 +166,45 @@ export function Surface3D({
 
   return (
     <group>
-      <mesh geometry={geometry}>
+      <mesh
+        geometry={geometry}
+        onPointerMove={(event) => {
+          if (!tooltip || !scene) return;
+          event.stopPropagation();
+          const faceIndex = event.faceIndex ?? -1;
+          const indexAttr = geometry.getIndex();
+          if (faceIndex < 0 || !indexAttr) return;
+          const cols = values[0]?.length ?? 0;
+          if (!cols) return;
+          const vertexIndex = Number(indexAttr.getX(faceIndex * 3));
+          const row = Math.floor(vertexIndex / cols);
+          const col = vertexIndex % cols;
+          const raw = values[row]?.[col];
+          if (!Number.isFinite(raw)) return;
+          const value = raw;
+          const ratio = normalizeRatio(value, valueRange[0], valueRange[1]);
+          const color = sampleGradient(colorRange, ratio);
+          scene.showTooltip(
+            {
+              label: `位置 (${row}, ${col})`,
+              row: null,
+              series: [
+                {
+                  key: 'value',
+                  name: '数值',
+                  color,
+                  value,
+                  formatted: formatNumber(value),
+                },
+              ],
+            },
+            event.point.clone().add(new THREE.Vector3(0, 6, 0)),
+          );
+        }}
+        onPointerOut={() => {
+          if (scene) scene.showTooltip(null, new THREE.Vector3());
+        }}
+      >
         <meshStandardMaterial
           vertexColors
           side={THREE.DoubleSide}

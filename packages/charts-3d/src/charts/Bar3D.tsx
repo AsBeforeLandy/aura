@@ -7,7 +7,8 @@ import {
   buildInstanceTransforms,
   type InstanceDatum,
 } from '../core/instancing';
-import { mixColor } from '@aura-react-comp/charts';
+import { ColorBandLegend } from '../core/SceneLegend';
+import { formatNumber, mixColor } from '@aura-react-comp/charts';
 import { normalizeRatio, scaleBarHeights } from '../core/projection';
 
 /**
@@ -38,6 +39,12 @@ export interface Bar3DProps {
   colorRange?: [string, string];
   /** 命中提示框 */
   tooltip?: boolean;
+  /** 显示色带图例与数值参考刻度 */
+  legend?: boolean;
+  /** 入场生长动画；数据频繁刷新的监控场景可关闭 */
+  animation?: boolean;
+  /** 点击柱体回调 */
+  onBarClick?: (item: Bar3DDataItem) => void;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -115,21 +122,26 @@ function AnimatedBar({
   bar,
   cellSize,
   delayRatio,
+  animated,
   hasHover,
   isHover,
   onOver,
   onOut,
+  onClick,
 }: {
   bar: { item: Bar3DDataItem; x: number; z: number; h: number; color: string };
   cellSize: number;
   delayRatio: number;
+  animated: boolean;
   hasHover: boolean;
   isHover: boolean;
   onOver: () => void;
   onOut: () => void;
+  onClick: () => void;
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const progress = useRef(0);
+  // 动画关闭时初始即为终态：useFrame 首帧直接跳过
+  const progress = useRef(animated ? 0 : 1);
 
   useFrame((_, delta) => {
     const mesh = meshRef.current;
@@ -152,6 +164,10 @@ function AnimatedBar({
         onOver();
       }}
       onPointerOut={onOut}
+      onClick={(event) => {
+        event.stopPropagation();
+        onClick();
+      }}
     >
       <boxGeometry args={[cellSize, Math.max(bar.h, 1), cellSize]} />
       <meshStandardMaterial
@@ -183,6 +199,8 @@ function InstancedBars({
   hoverIndex,
   onHover,
   onOut,
+  onClick,
+  animated,
 }: {
   instances: InstanceDatum[];
   cellSize: number;
@@ -190,9 +208,11 @@ function InstancedBars({
   hoverIndex: number;
   onHover: (index: number) => void;
   onOut: () => void;
+  onClick: (index: number) => void;
+  animated: boolean;
 }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
-  const progress = useRef(0);
+  const progress = useRef(animated ? 1 : 0);
 
   const instanceColors = useMemo(
     () => buildInstanceColors(instances, colorRange),
@@ -267,6 +287,11 @@ function InstancedBars({
         if (index >= 0) onHover(index);
       }}
       onPointerOut={() => onOut()}
+      onClick={(event) => {
+        event.stopPropagation();
+        const index = event.instanceId ?? -1;
+        if (index >= 0) onClick(index);
+      }}
     >
       <boxGeometry args={[cellSize, 1, cellSize]} />
       <meshStandardMaterial roughness={0.45} metalness={0.15} />
@@ -280,12 +305,34 @@ export function Bar3D({
   cellSize = 26,
   colorRange = DEFAULT_RANGE,
   tooltip = true,
+  legend = true,
+  animation = true,
+  onBarClick,
 }: Bar3DProps) {
   const scene = useScene();
   const [hover, setHover] = useState<{
     item: Bar3DDataItem;
     top: THREE.Vector3;
   } | null>(null);
+
+  // 色带图例：声明到 Scene3D 的 DOM 覆盖层，卸载时清除
+  React.useEffect(() => {
+    if (!scene || !legend || data.length === 0) return undefined;
+    const values = data.map((item) =>
+      Number.isFinite(item.value) ? item.value : 0,
+    );
+    const min = Math.min(...values, 0);
+    const max = Math.max(...values, 0);
+    scene.setOverlay(
+      <ColorBandLegend
+        min={min}
+        max={max}
+        colorRange={colorRange}
+        label="数值色带"
+      />,
+    );
+    return () => scene.setOverlay(null);
+  }, [scene, legend, data, colorRange]);
 
   const model = useMemo(() => {
     const xLabels: string[] = [];
@@ -353,6 +400,14 @@ export function Bar3D({
         }))
       : [];
 
+    // 数值参考刻度：max 值的 25% / 50% / 75% / 100% 四档
+    // heights 的映射是 value / valueMax * maxHeight，所以 ratio 高度处的数值就是 valueMax * ratio
+    const valueMax = Math.max(...values, 0);
+    const yTicks = [0.25, 0.5, 0.75, 1].map((ratio) => ({
+      y: ratio * maxHeight,
+      label: formatNumber(valueMax * ratio, { compact: true }),
+    }));
+
     return {
       bars,
       gridLines,
@@ -363,6 +418,7 @@ export function Bar3D({
       halfD,
       useInstances,
       instances,
+      yTicks,
     };
   }, [data, maxHeight, cellSize, colorRange]);
 
@@ -395,6 +451,7 @@ export function Bar3D({
           instances={model.instances}
           cellSize={cellSize}
           colorRange={colorRange}
+          animated={animation}
           hoverIndex={model.bars.findIndex((bar) => hover?.item === bar.item)}
           onHover={(index) => {
             const bar = model.bars[index];
@@ -426,6 +483,7 @@ export function Bar3D({
             setHover(null);
             if (tooltip && scene) scene.showTooltip(null, new THREE.Vector3());
           }}
+          onClick={(index) => onBarClick?.(model.bars[index].item)}
         />
       ) : (
         model.bars.map((bar, index) => (
@@ -436,6 +494,7 @@ export function Bar3D({
             delayRatio={
               model.bars.length > 1 ? index / (model.bars.length - 1) : 0
             }
+            animated={animation}
             hasHover={hover !== null}
             isHover={hover?.item === bar.item}
             onOver={() => {
@@ -467,9 +526,48 @@ export function Bar3D({
               if (tooltip && scene)
                 scene.showTooltip(null, new THREE.Vector3());
             }}
+            onClick={() => onBarClick?.(bar.item)}
           />
         ))
       )}
+
+      {/* 数值参考刻度：25% / 50% / 75% / 100% 四档水平线 + 数值标注 */}
+      {legend
+        ? model.yTicks.map((tick, index) => (
+            <group key={`ytick-${index}`}>
+              {/* 前边缘与左边缘的两条参考线 */}
+              <line>
+                <bufferGeometry
+                  attach="geometry"
+                  onUpdate={(self) =>
+                    self.setFromPoints([
+                      new THREE.Vector3(-model.halfW, tick.y, model.halfD),
+                      new THREE.Vector3(model.halfW, tick.y, model.halfD),
+                    ])
+                  }
+                />
+                <lineBasicMaterial color="#64748b" transparent opacity={0.4} />
+              </line>
+              <line>
+                <bufferGeometry
+                  attach="geometry"
+                  onUpdate={(self) =>
+                    self.setFromPoints([
+                      new THREE.Vector3(-model.halfW, tick.y, -model.halfD),
+                      new THREE.Vector3(-model.halfW, tick.y, model.halfD),
+                    ])
+                  }
+                />
+                <lineBasicMaterial color="#64748b" transparent opacity={0.4} />
+              </line>
+              <TextSprite
+                text={tick.label}
+                position={[-model.halfW - 16, tick.y, model.halfD + 4]}
+                scale={0.2}
+              />
+            </group>
+          ))
+        : null}
 
       {/* 行 / 列标签 */}
       {model.xLabels.map((label, index) => {

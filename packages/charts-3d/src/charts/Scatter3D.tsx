@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useScene } from '../core/Scene3D';
 import { mixColor } from '@aura-react-comp/charts';
 import { normalizeRatio } from '../core/projection';
+import { CategoryLegend, ColorBandLegend } from '../core/SceneLegend';
 
 /**
  * Scatter3D：三维散点图。
@@ -125,6 +126,32 @@ export function Scatter3D({
     () => buildScatterModel(data, axisLength, ranges),
     [data, axisLength, ranges],
   );
+
+  // 图例：类别模式列色点；按值模式列色带（两端标注 Y 量程）
+  React.useEffect(() => {
+    if (!scene || data.length === 0) return undefined;
+    if (colorByValue) {
+      const [minY, maxY] = model.ranges.y;
+      scene.setOverlay(
+        <ColorBandLegend
+          min={minY}
+          max={maxY}
+          colorRange={colorRange}
+          label="Y 值"
+        />,
+      );
+    } else {
+      scene.setOverlay(
+        <CategoryLegend
+          items={categories.map((category, index) => ({
+            label: category,
+            color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
+          }))}
+        />,
+      );
+    }
+    return () => scene.setOverlay(null);
+  }, [scene, data.length, colorByValue, categories, model, colorRange]);
 
   const colorOf = (point: Scatter3DPoint, valueRatio: number): string => {
     if (colorByValue) return mixColor(colorRange[0], colorRange[1], valueRatio);

@@ -113,6 +113,12 @@ interface SceneContextValue {
   project: (worldPosition: Vector3) => ScreenPoint;
   /** 读取 --aura-* 设计令牌色值（:root 级），缺失时回退 */
   readToken: (token: string, fallback: string) => string;
+  /**
+   * DOM 覆盖层通道：图表组件往场景容器上渲染图例等 React 节点。
+   * 传 null 清除。图例属于「图表的一部分」而非「页面的装饰」，
+   * 所以由图表自己声明，Scene3D 只提供落点。
+   */
+  setOverlay: (node: React.ReactNode | null) => void;
 }
 
 const SceneContext = createContext<SceneContextValue | null>(null);
@@ -258,8 +264,10 @@ export function Scene3D({
     return value || fallback;
   }, []);
 
+  const [overlay, setOverlay] = useState<React.ReactNode>(null);
+
   const context = useMemo<SceneContextValue>(
-    () => ({ showTooltip, project, readToken }),
+    () => ({ showTooltip, project, readToken, setOverlay }),
     [showTooltip, project, readToken],
   );
 
@@ -292,6 +300,8 @@ export function Scene3D({
           </Canvas>
         </SceneErrorBoundary>
       ) : null}
+
+      {overlay}
 
       {tooltip ? (
         // overlay 只做定位容器，边界收敛（clamp / 到顶翻转）全部交给
