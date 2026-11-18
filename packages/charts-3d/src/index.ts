@@ -13,6 +13,17 @@ export {
 export type { Surface3DProps, SurfaceGeometryData } from './charts/Surface3D';
 export { ParticleField } from './charts/ParticleField';
 export type { ParticleFieldProps } from './charts/ParticleField';
+export { Voxel3D } from './charts/Voxel3D';
+export type { Voxel3DProps } from './charts/Voxel3D';
+export { HoloRing } from './charts/HoloRing';
+export type { HoloRingProps } from './charts/HoloRing';
+export {
+  buildVoxelModel,
+  buildVoxelTransforms,
+  type VoxelDatum,
+  type VoxelModel,
+  type VoxelInstance,
+} from './core/voxel';
 export {
   initParticles,
   advanceParticles,

@@ -58,7 +58,7 @@ const DEFAULT_RANGE: [string, string] = ['#3b2f7a', '#c4b5fd'];
  * three 渲染文字不引入额外字体的最轻做法：把文字画到离屏 canvas，
  * 作为 sprite 贴图。高分辨率绘制（4 倍）避免近距离发虚。
  */
-function TextSprite({
+export function TextSprite({
   text,
   color = '#94a3b8',
   position,
