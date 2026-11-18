@@ -8,7 +8,7 @@ toc: content
 
 ## 代码演示
 
-<code src="../demo/chart-3d-voxel.tsx" description="区域 × 机柜层 × 时间的温度采样：三层堆叠的体素阵列，值映射深青 → 亮青 → 金色带。拖动旋转可逐层检视。">温度采样</code>
+<code src="./demo/chart-3d-voxel.tsx" description="区域 × 机柜层 × 时间的温度采样：三层堆叠的体素阵列，值映射深青 → 亮青 → 金色带。拖动旋转可逐层检视。">温度采样</code>
 
 ## API
 

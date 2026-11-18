@@ -22,6 +22,8 @@ export interface HoloRingProps {
   coreOpacity?: number;
   /** 环管粗细（世界单位） */
   tube?: number;
+  /** 容器高度（px） */
+  height?: number;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -78,6 +80,7 @@ export function HoloRing({
   speed = 1,
   coreOpacity = 0.5,
   tube = 3.2,
+  height = 340,
   className,
   style,
 }: HoloRingProps) {
@@ -119,7 +122,7 @@ export function HoloRing({
     <div
       ref={containerRef}
       className={className}
-      style={{ width: '100%', height: '100%', position: 'relative', ...style }}
+      style={{ width: '100%', height, position: 'relative', ...style }}
       aria-hidden
     >
       {size.width > 0 && size.height > 0 ? (

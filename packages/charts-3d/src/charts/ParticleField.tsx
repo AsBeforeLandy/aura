@@ -38,7 +38,8 @@ export interface ParticleFieldProps {
   speed?: number;
   /** 鼠标视差：相机随光标轻微偏移 */
   interactive?: boolean;
-  /** 尊重 prefers-reduced-motion：命中时完全静止 */
+  /** 容器高度（px） */
+  height?: number;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -222,6 +223,7 @@ export function ParticleField({
   linkColor = '#0ea5e9',
   speed = 1,
   interactive = true,
+  height = 300,
   className,
   style,
 }: ParticleFieldProps) {
@@ -231,7 +233,7 @@ export function ParticleField({
     <div
       ref={containerRef}
       className={className}
-      style={{ width: '100%', height: '100%', position: 'relative', ...style }}
+      style={{ width: '100%', height, position: 'relative', ...style }}
       aria-hidden
     >
       {size.width > 0 && size.height > 0 ? (

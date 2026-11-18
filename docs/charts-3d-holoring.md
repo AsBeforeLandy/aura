@@ -8,7 +8,7 @@ toc: content
 
 ## 代码演示
 
-<code src="../demo/chart-3d-holoring.tsx" description="双层反转旋转与三层全息对照。相邻层反向旋转是「机械感」的关键；中央核心光点可关。">科技环</code>
+<code src="./demo/chart-3d-holoring.tsx" description="双层反转旋转与三层全息对照。相邻层反向旋转是「机械感」的关键；中央核心光点可关。">科技环</code>
 
 ## API
 
