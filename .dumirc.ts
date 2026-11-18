@@ -206,6 +206,7 @@ const chartsSidebar = [
       { title: '动画', link: '/charts-animation' },
       { title: '大数据与缩放', link: '/charts-bigdata' },
       { title: '大屏示例', link: '/charts-bigscreen' },
+      { title: '色系卡', link: '/charts-colors' },
     ],
   },
   ...collectSidebarGroups([
@@ -367,6 +368,7 @@ export default defineConfig({
       '/charts-animation': chartsSidebar,
       '/charts-bigdata': chartsSidebar,
       '/charts-bigscreen': chartsSidebar,
+      '/charts-colors': chartsSidebar,
       '/charts-3d': chartsSidebar,
       '/charts-3d-scene': chartsSidebar,
       '/charts-3d-bar3d': chartsSidebar,
