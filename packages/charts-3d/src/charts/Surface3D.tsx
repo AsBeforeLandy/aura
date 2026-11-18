@@ -113,7 +113,7 @@ export function Surface3D({
   width = 240,
   depth = 240,
   maxHeight = 90,
-  colorRange = ['#0ea5e9', '#a855f7', '#f472b6'],
+  colorRange = ['#38bdf8', '#6366f1', '#a855f7'],
   wireframe = false,
   tooltip = true,
 }: Surface3DProps) {

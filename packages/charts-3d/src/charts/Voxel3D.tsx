@@ -41,7 +41,7 @@ export interface Voxel3DProps {
   onVoxelClick?: (datum: VoxelDatum) => void;
 }
 
-const DEFAULT_RANGE: [string, string] = ['#0c4a6e', '#7dd3fc'];
+const DEFAULT_RANGE: [string, string] = ['#c4b5fd', '#7c3aed'];
 
 /** InstancedMesh 体素层：矩阵 / 颜色 / 拾取 / 错峰生长 */
 function InstancedVoxels({

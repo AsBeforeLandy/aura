@@ -27,7 +27,7 @@ const Demo: React.FC = () => (
     <Voxel3D
       data={data}
       voxelSize={15}
-      colorRange={['#0c4a6e', '#38bdf8', '#fde68a']}
+      colorRange={['#ddd6fe', '#8b5cf6', '#312e81']}
     />
   </Scene3D>
 );

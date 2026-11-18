@@ -37,7 +37,7 @@ export interface Scatter3DProps {
   tooltip?: boolean;
 }
 
-const DEFAULT_RANGE: [string, string] = ['#7c3aed', '#22d3ee'];
+const DEFAULT_RANGE: [string, string] = ['#7c3aed', '#0ea5e9'];
 /** 三个类目以上的循环色板（暗底可读） */
 const CATEGORY_COLORS = [
   '#a78bfa',
