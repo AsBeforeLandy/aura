@@ -25,6 +25,14 @@ export {
   type VoxelInstance,
 } from './core/voxel';
 export {
+  MULTIHUE_HUES,
+  SERIES_ORDER,
+  CONTINUOUS_ORDER,
+  seriesColor,
+  continuousColor,
+} from './theme/multihue';
+export type { MultihueHue, MultihueLevel } from './theme/multihue';
+export {
   initParticles,
   advanceParticles,
   collectLinks,

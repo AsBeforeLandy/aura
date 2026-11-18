@@ -40,7 +40,7 @@ const Demo: React.FC = () => (
       data={data}
       pointSize={4}
       colorByValue
-      colorRange={['#1e3a8a', '#22d3ee', '#facc15']}
+      colorRange={['#c4b5fd', '#8b5cf6', '#6d28d9']}
       axisLength={230}
     />
   </Scene3D>

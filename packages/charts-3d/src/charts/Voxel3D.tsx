@@ -1,10 +1,11 @@
 import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { formatNumber, mixColor } from '@aura-react-comp/charts';
+import { formatNumber } from '@aura-react-comp/charts';
+import { sampleGradient } from './Surface3D';
 import { TextSprite } from './Bar3D';
 import { useScene } from '../core/Scene3D';
-import { ColorBandLegend, CategoryLegend } from '../core/SceneLegend';
+import { ColorBandLegend } from '../core/SceneLegend';
 import {
   buildVoxelModel,
   buildVoxelTransforms,
@@ -29,8 +30,8 @@ export interface Voxel3DProps {
   data?: VoxelDatum[];
   /** 体素边长（世界单位） */
   voxelSize?: number;
-  /** 色带两端；缺省深青 → 亮青 */
-  colorRange?: [string, string];
+  /** 色带（支持多段，低浅高深）；缺省紫阶 400 → 500 → 700 */
+  colorRange?: string[];
   /** 图例形态：色带（按值）或省略 */
   legend?: boolean;
   /** 入场缩放动画 */
@@ -41,7 +42,7 @@ export interface Voxel3DProps {
   onVoxelClick?: (datum: VoxelDatum) => void;
 }
 
-const DEFAULT_RANGE: [string, string] = ['#c4b5fd', '#7c3aed'];
+const DEFAULT_RANGE: string[] = ['#a78bfa', '#8b5cf6', '#6d28d9'];
 
 /** InstancedMesh 体素层：矩阵 / 颜色 / 拾取 / 错峰生长 */
 function InstancedVoxels({
@@ -56,7 +57,7 @@ function InstancedVoxels({
 }: {
   model: ReturnType<typeof buildVoxelModel>;
   voxelSize: number;
-  colorRange: [string, string];
+  colorRange: string[];
   hoverIndex: number;
   animated: boolean;
   onHover: (index: number) => void;
@@ -68,10 +69,10 @@ function InstancedVoxels({
 
   const instanceColors = useMemo(
     () =>
-      model.instances.map((instance) => {
-        const mixed = mixColor(colorRange[0], colorRange[1], instance.ratio);
-        return new THREE.Color(mixed);
-      }),
+      model.instances.map(
+        (instance) =>
+          new THREE.Color(sampleGradient(colorRange, instance.ratio)),
+      ),
     [model, colorRange],
   );
 
@@ -200,7 +201,7 @@ export function Voxel3D({
           {
             key: 'value',
             name: '数值',
-            color: mixColor(colorRange[0], colorRange[1], instance.ratio),
+            color: sampleGradient(colorRange, instance.ratio),
             value: datum.value,
             formatted: formatNumber(datum.value),
           },

@@ -44,7 +44,7 @@ const Demo: React.FC = () => (
           width={210}
           depth={210}
           maxHeight={80}
-          colorRange={['#0e7490', '#22d3ee', '#fde68a']}
+          colorRange={['#5CB9E0', '#668FE2', '#7E54DE']}
         />
       </Scene3D>
     </div>
@@ -64,7 +64,7 @@ const Demo: React.FC = () => (
           depth={210}
           maxHeight={70}
           wireframe
-          colorRange={['#164e63', '#22d3ee', '#e0f2fe']}
+          colorRange={['#279BCC', '#668FE2', '#7E54DE']}
         />
       </Scene3D>
     </div>
