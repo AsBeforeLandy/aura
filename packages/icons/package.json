@@ -34,7 +34,8 @@
       "import": "./esm/index.js",
       "default": "./esm/index.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./purple-icon.css": "./esm/theme/purple-icon-color-rules.css"
   },
   "scripts": {
     "build": "father build",

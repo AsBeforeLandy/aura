@@ -1,0 +1,110 @@
+/* Purple Icon System v1.2 · 图标色彩构成规范
+ * 总纲：色相编码「对象」，明暗编码「层级」；状态色独立，不参与两者。
+ * 多色 = 一个图标里有几个对象；单色 = 一个对象里的前/中/后景。
+ *
+ * 与 v1.1 purple-icon-tokens.css 并存：本文件只管「图标内部怎么上色」，
+ * default / hover / active / disabled / onBrand 仍由 v1.1 的 icon.* 决定锚点。
+ *
+ * 硬规则：
+ *  1) 多色 ≤2 色相（叙事型面性 ≤3），主对象锁 --icon-multi-violet；
+ *  2) 线性图标保持单色，层级靠 stroke-width（2.25 / 1.75），禁用 opacity；
+ *  3) 单色锁 1 色相用 4 档明暗，M1 只作背景、M2 需 1px 描边；
+ *  4) 状态切换只覆盖 --icon-mono-1..4，图标组件不改代码。
+ */
+:root {
+  /* 多色板：品牌紫锚点 + 5 个等亮度辅助色相 */
+  --icon-multi-violet: #7c3aed; /* 紫 · 锚点 · 主对象 / 品牌符号 */
+  --icon-multi-sky: #279bcc; /* 天青 · 辅助对象 · 信息 / 连接 */
+  --icon-multi-emerald: #1fa473; /* 翠绿 · 辅助对象 · 完成 / 可用 */
+  --icon-multi-amber: #be8624; /* 琥珀 · 辅助对象 · 提醒 / 待办 */
+  --icon-multi-rose: #e3697e; /* 玫红 · 辅助对象 · 警示 / 关注 */
+  --icon-multi-indigo: #668fe2; /* 靛蓝 · 辅助对象 · 结构 / 层级 */
+
+  /* 单色主推 · 品牌紫 4 档（M1 背景 → M4 深面） */
+  --icon-mono-m1: #efe5fa; /* 背景面 / 后景 · 1.22:1 */
+  --icon-mono-m2: #b383fc; /* 次面 / 装饰 · 2.77:1 */
+  --icon-mono-m3: #7c3aed; /* 主形 / 轮廓 · 5.70:1 */
+  --icon-mono-m4: #411d9a; /* 深面 / 叠压 · 11.25:1 */
+
+  /* 单色严格 · 全档 ≥3:1，每档都可承载识别信息 */
+  --icon-mono-strict-s1: #a064fa;
+  --icon-mono-strict-s2: #7c3aed;
+  --icon-mono-strict-s3: #5220c5;
+  --icon-mono-strict-s4: #411d9a;
+
+  /* 默认态 · 中性 4 档（默认图标不用紫） */
+  --icon-mono-neutral-n1: #e9e9ef;
+  --icon-mono-neutral-n2: #a9a9bc;
+  --icon-mono-neutral-n3: #44445a;
+  --icon-mono-neutral-n4: #1b1b29;
+
+  /* 线性图标：只用一档色，层级靠线宽 */
+  --icon-line-main: 2.25;
+  --icon-line-detail: 1.75;
+  --icon-face-stroke: rgba(255, 255, 255, 0.28);
+
+  /* WCAG：非文本图形 ≥3:1；M1 仅背景、M2 需描边 */
+  --icon-m2-stroke-required: 1px;
+}
+
+/* 深色模式：明度反转，M3 最亮 */
+[data-theme='dark'] {
+  --icon-mono-m1: #2a1f41; /* 反转：1.24:1 on #101018 */
+  --icon-mono-m2: #5220c5; /* 反转：2.14:1 on #101018 */
+  --icon-mono-m3: #b383fc; /* 反转：6.82:1 on #101018 */
+  --icon-mono-m4: #ddc6fa; /* 反转：12.20:1 on #101018 */
+}
+
+/* 状态只换这 4 个变量 —— 图标组件内部无需分支 */
+.icon:hover {
+  --icon-mono-m3: #a064fa;
+}
+.icon.is-active {
+  --icon-mono-m1: #ddc6fa;
+  --icon-mono-m2: #b383fc;
+  --icon-mono-m3: #5220c5;
+  --icon-mono-m4: #311877;
+}
+.icon.is-disabled {
+  --icon-mono-m1: #d5d5e0;
+  --icon-mono-m2: #d5d5e0;
+  --icon-mono-m3: #d5d5e0;
+  --icon-mono-m4: #d5d5e0;
+}
+.icon.on-brand {
+  --icon-mono-m1: rgba(255, 255, 255, 0.22);
+  --icon-mono-m2: rgba(255, 255, 255, 0.48);
+  --icon-mono-m3: #ffffff;
+  --icon-mono-m4: #efe5fa;
+}
+
+/* 参考：面性图标分层 & 线性图标线宽 */
+.icon--mono .face-back {
+  fill: var(--icon-mono-m1);
+}
+.icon--mono .face-sub {
+  fill: var(--icon-mono-m2);
+  stroke: var(--icon-face-stroke);
+  stroke-width: 1;
+}
+.icon--mono .face-main {
+  fill: var(--icon-mono-m3);
+}
+.icon--mono .face-deep {
+  fill: var(--icon-mono-m4);
+}
+.icon--linear {
+  stroke: var(--icon-mono-m3);
+  fill: none;
+  stroke-width: var(--icon-line-main);
+  stroke-linecap: round;
+}
+.icon--linear .detail {
+  stroke-width: var(--icon-line-detail);
+}
+.icon--multi .obj-main {
+  fill: var(--icon-multi-violet);
+}
+.icon--multi .obj-aux {
+  fill: var(--icon-multi-sky);
+}

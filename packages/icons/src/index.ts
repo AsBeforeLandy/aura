@@ -84,3 +84,16 @@ export {
 } from './general';
 
 export type { IconProps, TwoToneIconProps } from './types';
+
+// Purple Icon System v1.2 · 图标色彩常量（与 theme/purple-icon-color-rules.css 同源）
+export {
+  ICON_MULTI,
+  ICON_MONO_LIGHT,
+  ICON_MONO_STRICT,
+  ICON_MONO_NEUTRAL,
+  ICON_MONO_DARK,
+  ICON_LINE_WIDTH,
+  ICON_FACE_STROKE,
+  ICON_STATES,
+} from './theme/iconColors';
+export type { IconMonoLevel } from './theme/iconColors';
