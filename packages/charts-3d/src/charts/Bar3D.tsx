@@ -50,7 +50,7 @@ export interface Bar3DProps {
 }
 
 /** 色带端点：跟随暗色场景（Scene3D 内部是深色底） */
-const DEFAULT_RANGE: [string, string] = ['#c4b5fd', '#7c3aed'];
+const DEFAULT_RANGE: [string, string] = ['#a78bfa', '#6d28d9'];
 
 /**
  * Canvas 纹理文字。
