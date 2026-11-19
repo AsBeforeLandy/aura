@@ -3,7 +3,11 @@ import { Button, Space } from 'antd';
 import { Reveal } from '@aura-react-comp/motion';
 
 const variants = [
-  { v: 'fade' as const, label: 'fade · 淡入上移', bg: '#7c3aed' },
+  {
+    v: 'fade' as const,
+    label: 'fade · 淡入上移',
+    bg: 'var(--aura-primary-700, #7c3aed)',
+  },
   { v: 'blur' as const, label: 'blur · 对焦揭示', bg: '#0891b2' },
   { v: 'mask' as const, label: 'mask · 遮罩升起', bg: '#1d4ed8' },
   { v: 'scale' as const, label: 'scale · 卡片揭示', bg: '#e879f9' },

@@ -38,7 +38,7 @@ export default () => {
             fontWeight: 500,
           }}
           whileDrag={{
-            background: '#eae8f9',
+            background: 'var(--aura-primary-100, #eae8f9)',
             boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
           }}
         >

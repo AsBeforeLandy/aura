@@ -36,4 +36,26 @@ describe('动效令牌双端一致性（tokens.ts ↔ tokens.css）', () => {
     expect(css).toContain('@media (prefers-reduced-motion: reduce)');
     expect(css).toContain('--aura-motion-duration-normal: 0ms');
   });
+
+  it('双轴主题：每个色板（violet/ocean/sunset）的亮暗块都有 accent 系令牌', () => {
+    // 换主色必须同步派生令牌，否则动效组件会残留上一套主色
+    const selectors = [
+      "[data-palette='ocean']",
+      "[data-mode='dark'][data-palette='ocean']",
+      "[data-palette='sunset']",
+      "[data-mode='dark'][data-palette='sunset']",
+    ];
+    for (const selector of selectors) {
+      const index = css.indexOf(selector);
+      expect(index, `missing ${selector}`).toBeGreaterThan(-1);
+      const block = css.slice(index, css.indexOf('}', index));
+      expect(block).toContain('--aura-motion-accent:');
+      expect(block).toContain('--aura-motion-accent-strong:');
+      expect(block).toContain('--aura-motion-focus-color:');
+    }
+  });
+
+  it('历史选择器 [data-theme=dark] 保留兼容（violet 暗色）', () => {
+    expect(css).toContain("[data-theme='dark']");
+  });
 });

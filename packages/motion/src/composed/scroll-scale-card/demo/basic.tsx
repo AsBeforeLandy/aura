@@ -5,17 +5,18 @@ const cards = [
   {
     title: '令牌驱动',
     desc: '时长与缓动来自动效令牌，一处调整全局一致',
-    bg: '#7c3aed',
+    // 渐变直接用令牌组：随全局双轴主题联动（primary-700 → 800 同色系深一档）
+    bg: 'linear-gradient(135deg, var(--aura-primary-700, #7c3aed), var(--aura-primary-800, #6d28d9))',
   },
   {
     title: '合成器友好',
     desc: '只动画 transform 与 opacity，不触发布局',
-    bg: '#0891b2',
+    bg: 'linear-gradient(135deg, #0891b2, rgba(8, 145, 178, 0.73))',
   },
   {
     title: '渐进增强',
     desc: 'reduced-motion 下静态呈现，功能零损失',
-    bg: '#1d4ed8',
+    bg: 'linear-gradient(135deg, #1d4ed8, rgba(29, 78, 216, 0.73))',
   },
 ];
 
@@ -47,7 +48,7 @@ export default () => (
             style={{
               padding: 28,
               borderRadius: 16,
-              background: `linear-gradient(135deg, ${c.bg}, ${c.bg}bb)`,
+              background: c.bg,
               color: '#fff',
             }}
           >

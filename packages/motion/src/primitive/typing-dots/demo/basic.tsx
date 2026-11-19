@@ -19,7 +19,7 @@ export default () => (
         display: 'flex',
         alignItems: 'center',
         gap: 8,
-        color: '#7c3aed',
+        color: 'var(--aura-primary-700, #7c3aed)',
       }}
     >
       <TypingDots />

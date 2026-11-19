@@ -34,7 +34,13 @@ export default () => (
         {
           speed: 0.4,
           node: (
-            <div style={{ ...layer, background: '#7c3aed', width: '70%' }}>
+            <div
+              style={{
+                ...layer,
+                background: 'var(--aura-primary-700, #7c3aed)',
+                width: '70%',
+              }}
+            >
               speed 0.4（慢层）
             </div>
           ),

@@ -5,7 +5,14 @@ import { Aurora } from '@aura-react-comp/motion';
 export default () => (
   <div style={{ display: 'grid', gap: 20 }}>
     <div style={{ position: 'relative' }}>
-      <Aurora colors={['#7c3aed', '#a855f7', '#22d3ee']} height={200} />
+      <Aurora
+        colors={[
+          'var(--aura-primary-700, #7c3aed)',
+          'var(--aura-primary-500, #a855f7)',
+          '#22d3ee',
+        ]}
+        height={200}
+      />
       <div
         style={{
           position: 'absolute',
@@ -22,7 +29,12 @@ export default () => (
     </div>
     <Aurora colors={['#1d4ed8', '#22d3ee']} blobs={2} height={140} />
     <Aurora
-      colors={['#e879f9', '#f59e0b', '#7c3aed', '#0891b2']}
+      colors={[
+        '#e879f9',
+        '#f59e0b',
+        'var(--aura-primary-700, #7c3aed)',
+        '#0891b2',
+      ]}
       blobs={4}
       height={140}
       blur={60}

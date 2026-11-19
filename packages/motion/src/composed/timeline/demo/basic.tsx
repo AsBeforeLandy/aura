@@ -19,7 +19,7 @@ export default () => (
               width: 36,
               height: 36,
               borderRadius: 18,
-              background: '#7c3aed',
+              background: 'var(--aura-primary-700, #7c3aed)',
               color: '#fff',
               display: 'grid',
               placeItems: 'center',

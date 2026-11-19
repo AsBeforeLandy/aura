@@ -99,5 +99,7 @@ import '@aura-react-comp/motion/tokens.css';
 }
 ```
 
-> `Confetti` 用 canvas 2D 绘制，**无法解析 CSS 变量**——它的默认色板在 JS 侧
-> （`motionConfettiColors`）。需要让它跟随业务主题时，请显式传 `colors`。
+> `Confetti` 用 canvas 2D 绘制，无法逐帧解析 CSS 变量——但它的**默认色板会在
+> 发射时实时读取** `--aura-motion-*` 令牌，随全局双轴主题
+> （`data-mode` × `data-palette`）自动切换；令牌缺失时回退内置霓虹色板
+> （`motionConfettiColors`）。需要固定配色时显式传 `colors` 即可覆盖。

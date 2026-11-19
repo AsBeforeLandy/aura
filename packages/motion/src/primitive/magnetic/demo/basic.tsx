@@ -19,7 +19,11 @@ export default () => (
       <Button
         shape="circle"
         size="large"
-        style={{ background: '#7c3aed', color: '#fff', border: 'none' }}
+        style={{
+          background: 'var(--aura-primary-700, #7c3aed)',
+          color: '#fff',
+          border: 'none',
+        }}
       >
         0.9
       </Button>

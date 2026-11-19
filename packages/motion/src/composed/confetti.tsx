@@ -43,11 +43,37 @@ interface Particle {
 
 const DEFAULT_COLORS = [...motionConfettiColors];
 
+/**
+ * 从全局令牌实时读取 Confetti 默认色板：
+ * --aura-motion-accent / cyan / blue / fuchsia 随双轴主题
+ * （data-mode × data-palette）切换，fire 时读取即与当前主题一致。
+ * 令牌缺失（SSR / 未引入 tokens.css）时回退 motionConfettiColors。
+ */
+function readThemeConfettiColors(): string[] {
+  if (
+    typeof getComputedStyle !== 'function' ||
+    typeof document === 'undefined'
+  ) {
+    return DEFAULT_COLORS;
+  }
+  const styles = getComputedStyle(document.documentElement);
+  const token = (name: string, fallback: string) =>
+    styles.getPropertyValue(name).trim() || fallback;
+  return [
+    token('--aura-motion-accent', DEFAULT_COLORS[0]),
+    token('--aura-motion-cyan', DEFAULT_COLORS[1]),
+    token('--aura-motion-blue', DEFAULT_COLORS[2]),
+    token('--aura-motion-fuchsia', DEFAULT_COLORS[3]),
+    token('--aura-motion-accent-strong', DEFAULT_COLORS[4]),
+    token('--aura-motion-cyan', DEFAULT_COLORS[5]),
+  ];
+}
+
 export function Confetti({
   fire,
   count = 120,
   origin = { x: 0.5, y: 0.6 },
-  colors = DEFAULT_COLORS,
+  colors,
 }: ConfettiProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = useReducedMotion();
@@ -63,6 +89,9 @@ export function Confetti({
     canvas.height = window.innerHeight;
     const ox = origin.x * canvas.width;
     const oy = origin.y * canvas.height;
+
+    // 发射瞬间取色：未显式传 colors 时跟当前主题（令牌实时值）
+    const palette = colors ?? readThemeConfettiColors();
 
     const parts: Particle[] = Array.from({ length: count }, (_, i) => {
       // 上抛扇形：-90° ± 60°
@@ -80,7 +109,7 @@ export function Confetti({
         tiltSpeed: 0.12 + Math.random() * 0.22,
         w: ribbon ? 5 + Math.random() * 4 : 7 + Math.random() * 5,
         h: ribbon ? 16 + Math.random() * 8 : 7 + Math.random() * 5,
-        color: colors[i % colors.length],
+        color: palette[i % palette.length],
         life: 1,
         decay: 0.007 + Math.random() * 0.007,
         ribbon,

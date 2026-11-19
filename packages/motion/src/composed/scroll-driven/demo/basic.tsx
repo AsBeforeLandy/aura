@@ -46,7 +46,8 @@ export default () => {
                   <motion.div
                     style={{
                       height: '100%',
-                      background: 'linear-gradient(90deg, #7c3aed, #a855f7)',
+                      background:
+                        'linear-gradient(90deg, var(--aura-primary-700, #7c3aed), var(--aura-primary-500, #a855f7))',
                       transformOrigin: '0 50%',
                       scaleX: progress,
                     }}

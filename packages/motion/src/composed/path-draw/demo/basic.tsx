@@ -26,7 +26,7 @@ export default () => {
         paths={['M 0 50 Q 12 20, 25 50 T 50 50 T 75 50 T 100 50']}
         viewBox="0 0 100 100"
         width={200}
-        stroke="#7c3aed"
+        stroke="var(--aura-primary-700, #7c3aed)"
         strokeWidth={3}
         loop
         duration={1.2}

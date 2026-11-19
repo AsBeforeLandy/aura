@@ -164,7 +164,8 @@ function SceneText() {
           fontWeight: 700,
           letterSpacing: 3,
           color: 'var(--demo-dot-active)',
-          textShadow: '0 0 18px rgba(168,85,247,0.55)',
+          textShadow:
+            '0 0 18px var(--aura-motion-accent-glow, rgba(168, 85, 247, 0.55))',
         }}
       />
     </div>
@@ -267,7 +268,8 @@ function SceneAtmosphere() {
           fontWeight: 700,
           fontSize: 24,
           letterSpacing: 4,
-          textShadow: '0 0 28px rgba(168,85,247,0.65)',
+          textShadow:
+            '0 0 28px var(--aura-motion-accent-glow, rgba(168, 85, 247, 0.65))',
         }}
       >
         AURA MOTION

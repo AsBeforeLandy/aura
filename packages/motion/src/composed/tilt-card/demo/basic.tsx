@@ -31,7 +31,8 @@ export default () => (
           width: 220,
           padding: 24,
           borderRadius: 16,
-          background: 'linear-gradient(145deg, #7c3aed, #a855f7)',
+          background:
+            'linear-gradient(145deg, var(--aura-primary-700, #7c3aed), var(--aura-primary-500, #a855f7))',
           color: '#fff',
         }}
       >

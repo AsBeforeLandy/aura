@@ -34,7 +34,8 @@ export default () => {
           style={{
             padding: 24,
             borderRadius: 12,
-            background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+            background:
+              'linear-gradient(135deg, var(--aura-primary-700, #7c3aed), var(--aura-primary-500, #a855f7))',
             color: '#fff',
             fontWeight: 500,
           }}

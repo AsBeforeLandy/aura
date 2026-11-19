@@ -3,7 +3,7 @@ import { Button, Space } from 'antd';
 import { PageTransition } from '@aura-react-comp/motion';
 
 const PAGES: Record<string, { title: string; color: string }> = {
-  '/home': { title: '首页', color: '#7c3aed' },
+  '/home': { title: '首页', color: 'var(--aura-primary-700, #7c3aed)' },
   '/reports': { title: '报表', color: '#0891b2' },
   '/settings': { title: '设置', color: '#1d4ed8' },
 };
