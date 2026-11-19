@@ -37,15 +37,17 @@ export interface Scatter3DProps {
   tooltip?: boolean;
 }
 
-const DEFAULT_RANGE: [string, string] = ['#7c3aed', '#0ea5e9'];
-/** 三个类目以上的循环色板（暗底可读） */
-const CATEGORY_COLORS = [
-  '#a78bfa',
-  '#22d3ee',
-  '#f472b6',
-  '#facc15',
-  '#4ade80',
-  '#fb923c',
+/**
+ * 场景外（无 SceneContext，如纯 jsdom 测试）的兜底系列色板。
+ * 正常渲染时以 Scene3D 下发的 seriesColors 为准 —— 与 2D 图表同一套色板。
+ */
+const DEFAULT_SERIES = [
+  '#7c3aed',
+  '#0ea5e9',
+  '#10b981',
+  '#f59e0b',
+  '#ec4899',
+  '#6366f1',
 ];
 
 /**
@@ -102,7 +104,7 @@ export function Scatter3D({
   data = [],
   pointSize = 5,
   colorByValue = true,
-  colorRange = DEFAULT_RANGE,
+  colorRange,
   ranges,
   axisLength = 240,
   tooltip = true,
@@ -127,6 +129,19 @@ export function Scatter3D({
     [data, axisLength, ranges],
   );
 
+  // 主锚关联色：全部从场景系列色板取（与 2D 图表同源、随主题联动）；
+  // 显式传入的 colorRange 优先，分类循环板直接用系列色板前段。
+  const range = useMemo<[string, string]>(() => {
+    if (colorRange) return colorRange;
+    const series = scene?.seriesColors ?? DEFAULT_SERIES;
+    return [series[0], series[1]];
+  }, [scene, colorRange]);
+
+  const categoryColors = useMemo<string[]>(
+    () => scene?.seriesColors ?? DEFAULT_SERIES,
+    [scene],
+  );
+
   // 图例：类别模式列色点；按值模式列色带（两端标注 Y 量程）
   React.useEffect(() => {
     if (!scene || data.length === 0) return undefined;
@@ -136,7 +151,7 @@ export function Scatter3D({
         <ColorBandLegend
           min={minY}
           max={maxY}
-          colorRange={colorRange}
+          colorRange={range}
           label="Y 值"
         />,
       );
@@ -145,18 +160,26 @@ export function Scatter3D({
         <CategoryLegend
           items={categories.map((category, index) => ({
             label: category,
-            color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
+            color: categoryColors[index % categoryColors.length],
           }))}
         />,
       );
     }
     return () => scene.setOverlay(null);
-  }, [scene, data.length, colorByValue, categories, model, colorRange]);
+  }, [
+    scene,
+    data.length,
+    colorByValue,
+    categories,
+    model,
+    range,
+    categoryColors,
+  ]);
 
   const colorOf = (point: Scatter3DPoint, valueRatio: number): string => {
-    if (colorByValue) return mixColor(colorRange[0], colorRange[1], valueRatio);
+    if (colorByValue) return mixColor(range[0], range[1], valueRatio);
     const categoryIndex = categories.indexOf(point.category ?? '__default__');
-    return CATEGORY_COLORS[categoryIndex % CATEGORY_COLORS.length];
+    return categoryColors[categoryIndex % categoryColors.length];
   };
 
   // 坐标轴框架：三条轴线沿 X / Y / Z

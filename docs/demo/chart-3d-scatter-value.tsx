@@ -36,13 +36,7 @@ const Demo: React.FC = () => (
     enableRotate
     autoRotate
   >
-    <Scatter3D
-      data={data}
-      pointSize={4}
-      colorByValue
-      colorRange={['#c4b5fd', '#8b5cf6', '#6d28d9']}
-      axisLength={230}
-    />
+    <Scatter3D data={data} pointSize={4} colorByValue axisLength={230} />
   </Scene3D>
 );
 

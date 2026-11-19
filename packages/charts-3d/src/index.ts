@@ -1,5 +1,6 @@
 export { Scene3D, useScene, getScenePresetConfig } from './core/Scene3D';
 export type { Scene3DProps, ScenePreset } from './core/Scene3D';
+export { useThemeVersion, readTokenColor } from './core/useThemeVersion';
 export { ColorBandLegend, CategoryLegend } from './core/SceneLegend';
 export { Bar3D } from './charts/Bar3D';
 export type { Bar3DProps, Bar3DDataItem } from './charts/Bar3D';

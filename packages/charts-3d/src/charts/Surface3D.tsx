@@ -113,11 +113,27 @@ export function Surface3D({
   width = 240,
   depth = 240,
   maxHeight = 90,
-  colorRange = ['#5CB9E0', '#668FE2', '#7E54DE'],
+  colorRange,
   wireframe = false,
   tooltip = true,
 }: Surface3DProps) {
   const scene = useScene();
+
+  // 主锚关联色：曲面热力默认用系列色板首色（品牌主锚，随主题联动）的
+  // 明度渐变（低 → 中 → 高），符合热力图惯例且切色板不违和；
+  // 显式传入的 colorRange 优先。
+  const range = useMemo<string[]>(() => {
+    if (colorRange) return colorRange;
+    const anchor =
+      scene?.seriesColors?.[0] ??
+      scene?.readToken('--aura-primary-600', '#7E54DE') ??
+      '#7E54DE';
+    return [
+      mixColor(anchor, '#ffffff', 0.45),
+      anchor,
+      mixColor(anchor, '#000000', 0.42),
+    ];
+  }, [scene, colorRange]);
   // 与 buildSurfaceGeometryData 内部同一套 min/max，保证 tooltip 色带一致
   const valueRange = useMemo<[number, number]>(() => {
     const numeric = values.flat().filter((value) => Number.isFinite(value));
@@ -130,7 +146,7 @@ export function Surface3D({
       width,
       depth,
       maxHeight,
-      colorRange,
+      colorRange: range,
     });
 
     const bufferGeometry = new THREE.BufferGeometry();
@@ -145,7 +161,7 @@ export function Surface3D({
     bufferGeometry.setIndex(data.indices);
     bufferGeometry.computeVertexNormals();
     return bufferGeometry;
-  }, [values, width, depth, maxHeight, colorRange]);
+  }, [values, width, depth, maxHeight, range]);
 
   const lineGeometry = useMemo(() => {
     // 线框用同几何的索引，换成线渲染
@@ -183,7 +199,7 @@ export function Surface3D({
           if (!Number.isFinite(raw)) return;
           const value = raw;
           const ratio = normalizeRatio(value, valueRange[0], valueRange[1]);
-          const color = sampleGradient(colorRange, ratio);
+          const color = sampleGradient(range, ratio);
           scene.showTooltip(
             {
               label: `位置 (${row}, ${col})`,

@@ -303,7 +303,7 @@ export function Bar3D({
   data = [],
   maxHeight = 160,
   cellSize = 26,
-  colorRange = DEFAULT_RANGE,
+  colorRange,
   tooltip = true,
   legend = true,
   animation = true,
@@ -314,6 +314,21 @@ export function Bar3D({
     item: Bar3DDataItem;
     top: THREE.Vector3;
   } | null>(null);
+
+  // 主锚关联色：默认色带从系列色板首色（品牌主锚，随主题联动）派生
+  // 明度梯度 —— 亮端 mix 白、深端 mix 黑（中性色，任何色相下都不发脏）；
+  // 显式传入的 colorRange 优先。
+  const range = useMemo<[string, string]>(() => {
+    if (colorRange) return colorRange;
+    const anchor =
+      scene?.seriesColors?.[0] ??
+      scene?.readToken('--aura-primary-700', DEFAULT_RANGE[0]) ??
+      DEFAULT_RANGE[0];
+    return [
+      mixColor(anchor, '#ffffff', 0.3),
+      mixColor(anchor, '#000000', 0.42),
+    ];
+  }, [scene, colorRange]);
 
   // 色带图例：声明到 Scene3D 的 DOM 覆盖层，卸载时清除
   React.useEffect(() => {
@@ -327,12 +342,12 @@ export function Bar3D({
       <ColorBandLegend
         min={min}
         max={max}
-        colorRange={colorRange}
+        colorRange={range}
         label="数值色带"
       />,
     );
     return () => scene.setOverlay(null);
-  }, [scene, legend, data, colorRange]);
+  }, [scene, legend, data, range]);
 
   const model = useMemo(() => {
     const xLabels: string[] = [];
@@ -366,7 +381,7 @@ export function Bar3D({
         x,
         z,
         h,
-        color: mixColor(colorRange[0], colorRange[1], ratio),
+        color: mixColor(range[0], range[1], ratio),
       };
     });
 
@@ -420,7 +435,7 @@ export function Bar3D({
       instances,
       yTicks,
     };
-  }, [data, maxHeight, cellSize, colorRange]);
+  }, [data, maxHeight, cellSize, range]);
 
   return (
     <group>
@@ -450,7 +465,7 @@ export function Bar3D({
         <InstancedBars
           instances={model.instances}
           cellSize={cellSize}
-          colorRange={colorRange}
+          colorRange={range}
           animated={animation}
           hoverIndex={model.bars.findIndex((bar) => hover?.item === bar.item)}
           onHover={(index) => {

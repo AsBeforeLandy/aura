@@ -24,11 +24,7 @@ const data = ['R1', 'R2', 'R3', 'R4'].flatMap((room, roomIndex) =>
 
 const Demo: React.FC = () => (
   <Scene3D height={420} cameraPosition={[300, 240, 360]} enableRotate>
-    <Voxel3D
-      data={data}
-      voxelSize={15}
-      colorRange={['#a78bfa', '#8b5cf6', '#6d28d9']}
-    />
+    <Voxel3D data={data} voxelSize={15} />
   </Scene3D>
 );
 

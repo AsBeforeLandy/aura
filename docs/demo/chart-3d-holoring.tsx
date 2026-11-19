@@ -23,13 +23,7 @@ const Demo: React.FC = () => (
         三层全息：加深绿第三环、提高转速，作为标题背景或空态装饰
       </div>
       <div style={DARK_BG}>
-        <HoloRing
-          height={300}
-          layers={3}
-          colors={['#38bdf8', '#a78bfa', '#34d399']}
-          speed={1.6}
-          coreOpacity={0.3}
-        />
+        <HoloRing height={300} layers={3} speed={1.6} coreOpacity={0.3} />
       </div>
     </div>
   </div>

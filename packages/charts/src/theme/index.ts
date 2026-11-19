@@ -230,12 +230,16 @@ function cssVar(
   return value || fallback;
 }
 
-/** 当前是否为暗色（以 documentElement 的 data-theme 为准，与 ui 的 ThemeProvider 一致） */
+/** 当前是否为暗色（双轴：优先 data-mode，兼容历史 data-theme，与 tokens.css 的选择器一致） */
 export function detectDarkMode(element?: HTMLElement | null): boolean {
   if (typeof document === 'undefined') return false;
   const host = element ?? document.documentElement;
-  const explicit = host?.closest?.('[data-theme]')?.getAttribute('data-theme');
-  const root = document.documentElement.getAttribute('data-theme');
+  const explicit =
+    host?.closest?.('[data-theme]')?.getAttribute('data-theme') ??
+    host?.closest?.('[data-mode]')?.getAttribute('data-mode');
+  const root =
+    document.documentElement.getAttribute('data-theme') ??
+    document.documentElement.getAttribute('data-mode');
   return (explicit ?? root) === 'dark';
 }
 
@@ -329,8 +333,10 @@ export function resolveTheme(
   if (Array.isArray(candidate.palette) && candidate.font && candidate.axis) {
     return candidate;
   }
-  const dark = detectDarkMode(element);
-  const base = dark ? darkTheme : readAuraTheme(element);
+  // 不再区分亮暗分支：readAuraTheme 内部会按 data-mode/data-theme 判定暗色，
+  // 并读取当前色板生效的 CSS 变量 —— 静态 darkTheme 的 accent 等主锚色写死
+  // 在默认紫罗兰上，暗色叠加局部覆盖时会跟色板脱节。
+  const base = readAuraTheme(element);
   return deepMerge(base, input as DeepPartial<ChartTheme>);
 }
 

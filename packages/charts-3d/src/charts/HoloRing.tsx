@@ -1,7 +1,8 @@
 import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useElementSize } from '@aura-react-comp/charts';
+import { readAuraTheme, useElementSize } from '@aura-react-comp/charts';
+import { useThemeVersion } from '../core/useThemeVersion';
 
 /**
  * HoloRing：科技环装饰层。
@@ -76,7 +77,7 @@ function Ring({
 
 export function HoloRing({
   layers = 2,
-  colors = DEFAULT_COLORS,
+  colors,
   speed = 1,
   coreOpacity = 0.5,
   tube = 3.2,
@@ -86,6 +87,20 @@ export function HoloRing({
 }: HoloRingProps) {
   const { ref: containerRef, size } = useElementSize<HTMLDivElement>();
   const layerCount = Math.min(Math.max(layers, 1), 3);
+
+  // 环色与 2D/3D 图表同源：取系列色板前 3 色（主锚 + 相邻系列色），
+  // 随双轴主题联动；显式传入的 colors 优先。
+  const themeVersion = useThemeVersion();
+  const ringColors = useMemo<string[]>(() => {
+    if (colors) return colors;
+    const series = readAuraTheme().palette;
+    return [
+      series[1] ?? DEFAULT_COLORS[0],
+      series[0] ?? DEFAULT_COLORS[1],
+      series[2] ?? DEFAULT_COLORS[2],
+    ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- themeVersion 变化即重读令牌
+  }, [colors, themeVersion]);
 
   // 静态降级：WebGL 不可用时用 CSS 圆环占位
   const fallback = useMemo(
@@ -99,7 +114,7 @@ export function HoloRing({
         }}
         aria-hidden
       >
-        {colors.slice(0, layerCount).map((color, index) => (
+        {ringColors.slice(0, layerCount).map((color, index) => (
           <span
             key={index}
             style={{
@@ -115,7 +130,8 @@ export function HoloRing({
         ))}
       </div>
     ),
-    [colors, layerCount],
+
+    [ringColors, layerCount],
   );
 
   return (
@@ -142,7 +158,7 @@ export function HoloRing({
               <Ring
                 key={index}
                 index={index}
-                color={colors[index % colors.length]}
+                color={ringColors[index % ringColors.length]}
                 speed={speed}
                 tube={tube}
               />
@@ -151,7 +167,7 @@ export function HoloRing({
               <mesh>
                 <sphereGeometry args={[14, 24, 24]} />
                 <meshBasicMaterial
-                  color={colors[0]}
+                  color={ringColors[0]}
                   transparent
                   opacity={coreOpacity}
                 />

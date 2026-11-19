@@ -9,10 +9,15 @@ import React, {
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import type { Camera, Vector3 } from 'three';
-import { darkTheme, useElementSize } from '@aura-react-comp/charts';
+import {
+  darkTheme,
+  useElementSize,
+  readAuraTheme,
+} from '@aura-react-comp/charts';
 import { Tooltip } from '@aura-react-comp/charts';
 import type { TooltipPayload } from '@aura-react-comp/charts';
 import { projectToScreen, type ScreenPoint } from './projection';
+import { useThemeVersion } from './useThemeVersion';
 
 /** 提示框主题：暗色底，覆盖 darkTheme 的 tooltip 分支 */
 const tooltipTheme = {
@@ -113,6 +118,18 @@ interface SceneContextValue {
   project: (worldPosition: Vector3) => ScreenPoint;
   /** 读取 --aura-* 设计令牌色值（:root 级），缺失时回退 */
   readToken: (token: string, fallback: string) => string;
+  /**
+   * 主题版本号：<html> 的 data-mode / data-palette / data-theme 任一变化时 +1。
+   * 子组件把它放进 useMemo/回调的依赖里，即可在色板或明暗切换时
+   * 重新调用 readToken 拿到新色值 —— 这是 3D 场景与全局主题联动的唯一通道。
+   */
+  themeVersion: number;
+  /**
+   * 系列色板：与 2D 图表同源（charts 包 readAuraTheme 的 12 色板，
+   * 首色即品牌主锚、随双轴主题联动、经等亮度调校）。
+   * 3D 组件的分类循环 / 色带端点应从这里取色，保持 2D/3D 同一套视觉语言。
+   */
+  seriesColors: string[];
   /**
    * DOM 覆盖层通道：图表组件往场景容器上渲染图例等 React 节点。
    * 传 null 清除。图例属于「图表的一部分」而非「页面的装饰」，
@@ -266,9 +283,26 @@ export function Scene3D({
 
   const [overlay, setOverlay] = useState<React.ReactNode>(null);
 
+  // 主题联动：<html> 的双轴属性任一变化即 bump，消费 readToken 的子组件
+  // 借此重渲染并读到新色值（与 charts 包 useChartTheme 的订阅策略一致）
+  const themeVersion = useThemeVersion();
+  // 系列色板与 2D 图表同源：主题切换（themeVersion）时重读，保证 2D/3D 一套色
+  const seriesColors = useMemo<string[]>(
+    () => readAuraTheme().palette,
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- themeVersion 变化即重读令牌
+    [themeVersion],
+  );
+
   const context = useMemo<SceneContextValue>(
-    () => ({ showTooltip, project, readToken, setOverlay }),
-    [showTooltip, project, readToken],
+    () => ({
+      showTooltip,
+      project,
+      readToken,
+      themeVersion,
+      seriesColors,
+      setOverlay,
+    }),
+    [showTooltip, project, readToken, themeVersion, seriesColors],
   );
 
   return (

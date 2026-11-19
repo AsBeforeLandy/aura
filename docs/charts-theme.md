@@ -8,7 +8,10 @@ toc: content
 
 1. 只要引入了 `@aura-react-comp/ui/style.css`，图表天然与组件库同色；
 2. 宿主修改 `--aura-primary-700`，图表随之变化；
-3. 切换 `data-theme="dark"` 时图表自动切换暗色配色（内部用 `MutationObserver` 监听）。
+3. 切换 `data-mode="dark"`（或历史键 `data-theme="dark"`）时图表自动切换暗色配色，
+   切换 `data-palette`（violet / ocean / sunset）时图表自动跟随新色板 ——
+   内部用 `MutationObserver` 监听 `<html>` 的双轴属性（`data-mode` /
+   `data-palette` / `data-theme`），任一变化即重新读取令牌。
 
 ## 主题从哪里来
 

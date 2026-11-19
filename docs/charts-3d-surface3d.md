@@ -8,19 +8,19 @@ toc: content
 
 ## 代码演示
 
-<code src="./demo/chart-3d-surface.tsx" id="surface-ripple" description="环形波纹曲面：顶点色沿三段色带（天青 → 靛蓝 → 深紫）渐变。可拖转视角。">环形波纹</code>
+<code src="./demo/chart-3d-surface.tsx" id="surface-ripple" description="环形波纹曲面：顶点色沿主色明度三段色带（亮 → 主色 → 深）渐变，随全局主题联动。可拖转视角。">环形波纹</code>
 
 <code src="./demo/chart-3d-surface.tsx" id="surface-hills-wireframe" description="双高斯山丘的线框模式：叠加网格线便于排查曲面结构与网格密度，自动旋转展示。">线框模式</code>
 
 ## API
 
-| 属性          | 说明                         | 类型         | 默认值       |
-| ------------- | ---------------------------- | ------------ | ------------ |
-| values        | 值矩阵（任意 ≥2 的行列尺寸） | `number[][]` | `[]`         |
-| width / depth | 网格宽深                     | `number`     | `240`        |
-| maxHeight     | 最大起伏                     | `number`     | `90`         |
-| colorRange    | 色带（支持多段）             | `string[]`   | 青 → 紫 → 粉 |
-| wireframe     | 叠加线框                     | `boolean`    | `false`      |
+| 属性          | 说明                         | 类型         | 默认值                     |
+| ------------- | ---------------------------- | ------------ | -------------------------- |
+| values        | 值矩阵（任意 ≥2 的行列尺寸） | `number[][]` | `[]`                       |
+| width / depth | 网格宽深                     | `number`     | `240`                      |
+| maxHeight     | 最大起伏                     | `number`     | `90`                       |
+| colorRange    | 色带（支持多段）             | `string[]`   | 主色明度三段（随主题联动） |
+| wireframe     | 叠加线框                     | `boolean`    | `false`                    |
 
 ## 设计说明
 
@@ -30,7 +30,7 @@ toc: content
 
 **多段色带**
 
-`colorRange` 支持 [低, 中, 高] 任意段数，`sampleGradient` 做分段线性插值。三段色带（天青 → 靛蓝 → 深紫）比两端渐变更能突出「中间地带」的层次。
+`colorRange` 支持 [低, 中, 高] 任意段数，`sampleGradient` 做分段线性插值。默认色带是主色的明度三段（亮 → 主色 → 深）：热力图的常规读法是「越亮/越深代表值越高」，单色明度梯度比多色相拼贴更易读，也不会在切换色板后出现色相断裂。需要强调多区间语义时再显式传入多色相色带。
 
 **曲面也有 tooltip**
 

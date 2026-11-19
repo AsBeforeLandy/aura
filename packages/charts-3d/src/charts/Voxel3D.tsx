@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { formatNumber } from '@aura-react-comp/charts';
+import { formatNumber, mixColor } from '@aura-react-comp/charts';
 import { sampleGradient } from './Surface3D';
 import { TextSprite } from './Bar3D';
 import { useScene } from '../core/Scene3D';
@@ -160,7 +160,7 @@ function InstancedVoxels({
 export function Voxel3D({
   data = [],
   voxelSize = 16,
-  colorRange = DEFAULT_RANGE,
+  colorRange,
   legend = true,
   animation = true,
   tooltip = true,
@@ -173,6 +173,22 @@ export function Voxel3D({
     [data, voxelSize],
   );
 
+  // 主锚关联色：默认三档从系列色板首色（品牌主锚，随主题联动）派生
+  // 明度梯度 —— 亮端 mix 白、深端 mix 黑（中性色，任何色相下都不发脏）；
+  // 显式传入的 colorRange 优先。
+  const range = useMemo<string[]>(() => {
+    if (colorRange) return colorRange;
+    const anchor =
+      scene?.seriesColors?.[0] ??
+      scene?.readToken('--aura-primary-700', DEFAULT_RANGE[1]) ??
+      DEFAULT_RANGE[1];
+    return [
+      mixColor(anchor, '#ffffff', 0.25),
+      anchor,
+      mixColor(anchor, '#000000', 0.4),
+    ];
+  }, [scene, colorRange]);
+
   // 图例：色带（min → max）
   React.useEffect(() => {
     if (!scene || !legend || data.length === 0) return undefined;
@@ -180,12 +196,12 @@ export function Voxel3D({
       <ColorBandLegend
         min={model.min}
         max={model.max}
-        colorRange={colorRange}
+        colorRange={range}
         label="数值色带"
       />,
     );
     return () => scene.setOverlay(null);
-  }, [scene, legend, data, model, colorRange]);
+  }, [scene, legend, data, model, range]);
 
   const handleHover = (index: number) => {
     setHoverIndex(index);
@@ -201,7 +217,7 @@ export function Voxel3D({
           {
             key: 'value',
             name: '数值',
-            color: sampleGradient(colorRange, instance.ratio),
+            color: sampleGradient(range, instance.ratio),
             value: datum.value,
             formatted: formatNumber(datum.value),
           },
@@ -272,7 +288,7 @@ export function Voxel3D({
       <InstancedVoxels
         model={model}
         voxelSize={voxelSize}
-        colorRange={colorRange}
+        colorRange={range}
         hoverIndex={hoverIndex}
         animated={animation}
         onHover={handleHover}
