@@ -1,6 +1,57 @@
-/* ===== Aura Design Tokens — Light Theme (Default) ===== */
+/* ===== Aura Design Tokens =====
+ * 主题 = 明暗模式(data-mode: light|dark) × 色板(data-palette: violet|ocean|sunset) 双轴。
+ * 未设置属性时回落到默认主题：light × violet。
+ * 历史选择器 [data-theme="dark"] 保留兼容（等价于 dark × violet）。
+ * 换主色须同步覆盖全部派生令牌（selection-bg / border / shadow-glow / --aura-x-*），
+ * 见 docs/guide/theme.md。 */
+
+/* ===== 基座：中性令牌（不随主题变化）===== */
 :root {
-  /* Primary — Violet */
+  /* Spacing */
+  --aura-spacing-1: 4px;
+  --aura-spacing-2: 8px;
+  --aura-spacing-3: 12px;
+  --aura-spacing-4: 16px;
+  --aura-spacing-5: 20px;
+  --aura-spacing-6: 24px;
+  --aura-spacing-7: 28px;
+  --aura-spacing-8: 32px;
+  --aura-spacing-9: 36px;
+  --aura-spacing-10: 40px;
+  --aura-spacing-11: 44px;
+  --aura-spacing-12: 48px;
+
+  /* Border Radius */
+  --aura-radius-sm: 6px;
+  --aura-radius-md: 10px;
+  --aura-radius-lg: 14px;
+  --aura-radius-xl: 20px;
+  --aura-radius-full: 9999px;
+
+  /* Font Size */
+  --aura-font-size-xs: 12px;
+  --aura-font-size-sm: 13px;
+  --aura-font-size-md: 14px;
+  --aura-font-size-lg: 16px;
+  --aura-font-size-xl: 18px;
+  --aura-font-size-2xl: 20px;
+  --aura-font-size-3xl: 24px;
+
+  /* Duration */
+  --aura-duration-fast: 150ms;
+  --aura-duration-normal: 200ms;
+  --aura-duration-slow: 300ms;
+  --aura-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadows（亮色基准，暗色模式在各主题块内加深） */
+  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Default Theme: Light × Violet ===== */
+:root {
+  /* Primary — Violet（700 槽 = 主视觉锚，Tailwind violet-600） */
   --aura-primary-50: #faf5ff;
   --aura-primary-100: #f3e8ff;
   --aura-primary-200: #e9d5ff;
@@ -56,47 +107,7 @@
    * rgba 全浏览器可用，且换主题只需改这一处。 */
   --aura-selection-bg: rgba(124, 58, 237, 0.22);
 
-  /* Spacing */
-  --aura-spacing-1: 4px;
-  --aura-spacing-2: 8px;
-  --aura-spacing-3: 12px;
-  --aura-spacing-4: 16px;
-  --aura-spacing-5: 20px;
-  --aura-spacing-6: 24px;
-  --aura-spacing-7: 28px;
-  --aura-spacing-8: 32px;
-  --aura-spacing-9: 36px;
-  --aura-spacing-10: 40px;
-  --aura-spacing-11: 44px;
-  --aura-spacing-12: 48px;
-
-  /* Border Radius */
-  --aura-radius-sm: 6px;
-  --aura-radius-md: 10px;
-  --aura-radius-lg: 14px;
-  --aura-radius-xl: 20px;
-  --aura-radius-full: 9999px;
-
-  /* Shadows */
-  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
   --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.3);
-
-  /* Font Size */
-  --aura-font-size-xs: 12px;
-  --aura-font-size-sm: 13px;
-  --aura-font-size-md: 14px;
-  --aura-font-size-lg: 16px;
-  --aura-font-size-xl: 18px;
-  --aura-font-size-2xl: 20px;
-  --aura-font-size-3xl: 24px;
-
-  /* Duration */
-  --aura-duration-fast: 150ms;
-  --aura-duration-normal: 200ms;
-  --aura-duration-slow: 300ms;
-  --aura-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ===== AI 组件（@aura-react-comp/x） ===== */
   --aura-x-bubble-ai-bg: rgba(255, 255, 255, 0.72);
@@ -113,8 +124,9 @@
   --aura-x-focus-ring: 0 0 0 3px rgba(124, 58, 237, 0.16);
 }
 
-/* ===== Dark Theme ===== */
-[data-theme="dark"] {
+/* ===== Dark × Violet ===== */
+[data-theme="dark"],
+[data-mode="dark"][data-palette="violet"] {
   --aura-primary-50: #3b0764;
   --aura-primary-100: #4c1d95;
   --aura-primary-200: #5b21b6;
@@ -180,4 +192,279 @@
   --aura-x-glass-blur: saturate(180%) blur(16px);
   --aura-x-glow: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 12px 32px -8px rgba(139, 92, 246, 0.4);
   --aura-x-focus-ring: 0 0 0 3px rgba(139, 92, 246, 0.28);
+}
+
+/* ===== Light × Ocean =====
+ * 主锚 #2563eb（Tailwind blue-600），中性阶换 Slate 冷灰，语义色零改动。 */
+[data-palette="ocean"] {
+  --aura-primary-50: #eff6ff;
+  --aura-primary-100: #dbeafe;
+  --aura-primary-200: #bfdbfe;
+  --aura-primary-300: #93c5fd;
+  --aura-primary-400: #60a5fa;
+  --aura-primary-500: #3b82f6;
+  --aura-primary-600: #3073f0;
+  --aura-primary-700: #2563eb;
+  --aura-primary-800: #1d4ed8;
+  --aura-primary-900: #1e40af;
+  --aura-primary-950: #172554;
+
+  --aura-gray-50: #f8fafc;
+  --aura-gray-100: #f1f5f9;
+  --aura-gray-200: #e2e8f0;
+  --aura-gray-300: #cbd5e1;
+  --aura-gray-400: #94a3b8;
+  --aura-gray-500: #64748b;
+  --aura-gray-600: #475569;
+  --aura-gray-700: #334155;
+  --aura-gray-800: #1e293b;
+  --aura-gray-900: #0f172a;
+  --aura-gray-950: #020617;
+
+  --aura-success: #10b981;
+  --aura-success-light: #d1fae5;
+  --aura-warning: #f59e0b;
+  --aura-warning-light: #fef3c7;
+  --aura-error: #ef4444;
+  --aura-error-light: #fee2e2;
+  --aura-info: #3b82f6;
+  --aura-info-light: #dbeafe;
+
+  --aura-bg: #ffffff;
+  --aura-bg-secondary: #f8fafc;
+  --aura-bg-tertiary: #f1f5f9;
+
+  --aura-text: #0f172a;
+  --aura-text-secondary: #64748b;
+  --aura-text-tertiary: #94a3b8;
+  --aura-text-inverse: #ffffff;
+
+  --aura-border: #e2e8f0;
+  --aura-border-hover: #cbd5e1;
+
+  --aura-selection-bg: rgba(37, 99, 235, 0.22);
+
+  --aura-shadow-glow: 0 0 20px rgba(37, 99, 235, 0.3);
+
+  /* ===== AI 组件（@aura-react-comp/x） ===== */
+  --aura-x-bubble-ai-bg: rgba(255, 255, 255, 0.72);
+  --aura-x-bubble-user-bg: linear-gradient(135deg, #2563eb 0%, #3073f0 100%);
+  --aura-x-bubble-user-text: #ffffff;
+  --aura-x-bubble-border: rgba(37, 99, 235, 0.22);
+  --aura-x-code-bg: #f6f8fa;
+  --aura-x-stage-bg: #fafafa;
+  --aura-x-accent: #2563eb;
+  --aura-x-accent-soft: rgba(37, 99, 235, 0.08);
+  --aura-x-accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  --aura-x-glass-blur: saturate(180%) blur(14px);
+  --aura-x-glow: 0 0 0 1px rgba(37, 99, 235, 0.16), 0 12px 32px -8px rgba(37, 99, 235, 0.28);
+  --aura-x-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.16);
+}
+
+/* ===== Dark × Ocean =====
+ * 深海军蓝底，主色梯度倒序（亮档做按钮底 + 深字），主色透明派生边框。 */
+[data-mode="dark"][data-palette="ocean"] {
+  --aura-primary-50: #1a2c6e;
+  --aura-primary-100: #1e3a8a;
+  --aura-primary-200: #1e40af;
+  --aura-primary-300: #1d4ed8;
+  --aura-primary-400: #2563eb;
+  --aura-primary-500: #3b82f6;
+  --aura-primary-600: #60a5fa;
+  --aura-primary-700: #93c5fd;
+  --aura-primary-800: #bfdbfe;
+  --aura-primary-900: #dbeafe;
+  --aura-primary-950: #eff6ff;
+
+  --aura-gray-50: #020617;
+  --aura-gray-100: #0f172a;
+  --aura-gray-200: #1e293b;
+  --aura-gray-300: #334155;
+  --aura-gray-400: #475569;
+  --aura-gray-500: #64748b;
+  --aura-gray-600: #94a3b8;
+  --aura-gray-700: #cbd5e1;
+  --aura-gray-800: #e2e8f0;
+  --aura-gray-900: #f1f5f9;
+  --aura-gray-950: #f8fafc;
+
+  --aura-success: #34d399;
+  --aura-success-light: rgba(16, 185, 129, 0.15);
+  --aura-warning: #fbbf24;
+  --aura-warning-light: rgba(245, 158, 11, 0.15);
+  --aura-error: #f87171;
+  --aura-error-light: rgba(239, 68, 68, 0.15);
+  --aura-info: #60a5fa;
+  --aura-info-light: rgba(59, 130, 246, 0.15);
+
+  --aura-bg: #0b1120;
+  --aura-bg-secondary: #131f38;
+  --aura-bg-tertiary: #1c2d52;
+
+  --aura-text: #f1f5f9;
+  --aura-text-secondary: #94a3b8;
+  --aura-text-tertiary: #64748b;
+  --aura-text-inverse: #0f172a;
+
+  --aura-border: rgba(96, 165, 250, 0.2);
+  --aura-border-hover: rgba(96, 165, 250, 0.4);
+
+  --aura-selection-bg: rgba(147, 197, 253, 0.22);
+
+  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --aura-shadow-glow: 0 0 20px rgba(37, 99, 235, 0.4);
+
+  /* ===== AI 组件（@aura-react-comp/x） ===== */
+  --aura-x-bubble-ai-bg: rgba(19, 31, 56, 0.55);
+  --aura-x-bubble-user-bg: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  --aura-x-bubble-user-text: #f1f5f9;
+  --aura-x-bubble-border: rgba(96, 165, 250, 0.35);
+  --aura-x-code-bg: rgba(2, 6, 23, 0.6);
+  --aura-x-stage-bg: #0b1120;
+  --aura-x-accent: #60a5fa;
+  --aura-x-accent-soft: rgba(96, 165, 250, 0.12);
+  --aura-x-accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  --aura-x-glass-blur: saturate(180%) blur(16px);
+  --aura-x-glow: 0 0 0 1px rgba(96, 165, 250, 0.35), 0 12px 32px -8px rgba(96, 165, 250, 0.4);
+  --aura-x-focus-ring: 0 0 0 3px rgba(96, 165, 250, 0.28);
+}
+
+/* ===== Light × Sunset =====
+ * 主锚 #ea580c（Tailwind orange-600），中性阶换 Stone 暖灰；
+ * warning 调深琥珀 #ca8a04、error 调深红 #dc2626 避免与主色撞车。 */
+[data-palette="sunset"] {
+  --aura-primary-50: #fff7ed;
+  --aura-primary-100: #ffedd5;
+  --aura-primary-200: #fed7aa;
+  --aura-primary-300: #fdba74;
+  --aura-primary-400: #fb923c;
+  --aura-primary-500: #f97316;
+  --aura-primary-600: #f26611;
+  --aura-primary-700: #ea580c;
+  --aura-primary-800: #c2410c;
+  --aura-primary-900: #9a3412;
+  --aura-primary-950: #7c2d12;
+
+  --aura-gray-50: #fafaf9;
+  --aura-gray-100: #f5f5f4;
+  --aura-gray-200: #e7e5e4;
+  --aura-gray-300: #d6d3d1;
+  --aura-gray-400: #a8a29e;
+  --aura-gray-500: #78716c;
+  --aura-gray-600: #57534e;
+  --aura-gray-700: #44403c;
+  --aura-gray-800: #292524;
+  --aura-gray-900: #1c1917;
+  --aura-gray-950: #0c0a09;
+
+  --aura-success: #10b981;
+  --aura-success-light: #d1fae5;
+  --aura-warning: #ca8a04;
+  --aura-warning-light: #fef3c7;
+  --aura-error: #dc2626;
+  --aura-error-light: #fee2e2;
+  --aura-info: #3b82f6;
+  --aura-info-light: #dbeafe;
+
+  --aura-bg: #ffffff;
+  --aura-bg-secondary: #fafaf9;
+  --aura-bg-tertiary: #f5f5f4;
+
+  --aura-text: #1c1917;
+  --aura-text-secondary: #78716c;
+  --aura-text-tertiary: #a8a29e;
+  --aura-text-inverse: #ffffff;
+
+  --aura-border: #e7e5e4;
+  --aura-border-hover: #d6d3d1;
+
+  --aura-selection-bg: rgba(234, 88, 12, 0.22);
+
+  --aura-shadow-glow: 0 0 20px rgba(234, 88, 12, 0.3);
+
+  /* ===== AI 组件（@aura-react-comp/x） ===== */
+  --aura-x-bubble-ai-bg: rgba(255, 255, 255, 0.72);
+  --aura-x-bubble-user-bg: linear-gradient(135deg, #ea580c 0%, #f26611 100%);
+  --aura-x-bubble-user-text: #ffffff;
+  --aura-x-bubble-border: rgba(234, 88, 12, 0.22);
+  --aura-x-code-bg: #f6f8fa;
+  --aura-x-stage-bg: #fafafa;
+  --aura-x-accent: #ea580c;
+  --aura-x-accent-soft: rgba(234, 88, 12, 0.08);
+  --aura-x-accent-gradient: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  --aura-x-glass-blur: saturate(180%) blur(14px);
+  --aura-x-glow: 0 0 0 1px rgba(234, 88, 12, 0.16), 0 12px 32px -8px rgba(234, 88, 12, 0.28);
+  --aura-x-focus-ring: 0 0 0 3px rgba(234, 88, 12, 0.16);
+}
+
+/* ===== Dark × Sunset =====
+ * 暖棕黑底，主色梯度倒序，橙色透明派生边框。 */
+[data-mode="dark"][data-palette="sunset"] {
+  --aura-primary-50: #5c200b;
+  --aura-primary-100: #7c2d12;
+  --aura-primary-200: #9a3412;
+  --aura-primary-300: #c2410c;
+  --aura-primary-400: #ea580c;
+  --aura-primary-500: #f97316;
+  --aura-primary-600: #fb923c;
+  --aura-primary-700: #fdba74;
+  --aura-primary-800: #fed7aa;
+  --aura-primary-900: #ffedd5;
+  --aura-primary-950: #fff7ed;
+
+  --aura-gray-50: #0c0a09;
+  --aura-gray-100: #1c1917;
+  --aura-gray-200: #292524;
+  --aura-gray-300: #44403c;
+  --aura-gray-400: #57534e;
+  --aura-gray-500: #78716c;
+  --aura-gray-600: #a8a29e;
+  --aura-gray-700: #d6d3d1;
+  --aura-gray-800: #e7e5e4;
+  --aura-gray-900: #f5f5f4;
+  --aura-gray-950: #fafaf9;
+
+  --aura-success: #34d399;
+  --aura-success-light: rgba(16, 185, 129, 0.15);
+  --aura-warning: #fbbf24;
+  --aura-warning-light: rgba(202, 138, 4, 0.15);
+  --aura-error: #f87171;
+  --aura-error-light: rgba(220, 38, 38, 0.15);
+  --aura-info: #60a5fa;
+  --aura-info-light: rgba(59, 130, 246, 0.15);
+
+  --aura-bg: #191210;
+  --aura-bg-secondary: #241a14;
+  --aura-bg-tertiary: #31241b;
+
+  --aura-text: #f5f5f4;
+  --aura-text-secondary: #a8a29e;
+  --aura-text-tertiary: #78716c;
+  --aura-text-inverse: #1c1917;
+
+  --aura-border: rgba(251, 146, 60, 0.2);
+  --aura-border-hover: rgba(251, 146, 60, 0.4);
+
+  --aura-selection-bg: rgba(253, 186, 116, 0.22);
+
+  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --aura-shadow-glow: 0 0 20px rgba(249, 115, 22, 0.4);
+
+  /* ===== AI 组件（@aura-react-comp/x） ===== */
+  --aura-x-bubble-ai-bg: rgba(36, 26, 20, 0.55);
+  --aura-x-bubble-user-bg: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  --aura-x-bubble-user-text: #f5f5f4;
+  --aura-x-bubble-border: rgba(251, 146, 60, 0.35);
+  --aura-x-code-bg: rgba(12, 10, 9, 0.6);
+  --aura-x-stage-bg: #191210;
+  --aura-x-accent: #fb923c;
+  --aura-x-accent-soft: rgba(251, 146, 60, 0.12);
+  --aura-x-accent-gradient: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  --aura-x-glass-blur: saturate(180%) blur(16px);
+  --aura-x-glow: 0 0 0 1px rgba(251, 146, 60, 0.35), 0 12px 32px -8px rgba(251, 146, 60, 0.4);
+  --aura-x-focus-ring: 0 0 0 3px rgba(251, 146, 60, 0.28);
 }
