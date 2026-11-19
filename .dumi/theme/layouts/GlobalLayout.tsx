@@ -305,7 +305,11 @@ const GlobalLayout: React.FC = () => {
     && (window.location.pathname === '/' || window.location.pathname === '/aura' || window.location.pathname === '/aura/');
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', color || 'light');
+    // data-theme：旧兼容键；data-mode：双轴令牌架构的模式轴（light|dark）。
+    // color 是 dumi 解析后的实际值（auto 已解析），直接作为 data-mode。
+    const mode = color || 'light';
+    document.documentElement.setAttribute('data-theme', mode);
+    document.documentElement.setAttribute('data-mode', mode);
   }, [color]);
 
   return (

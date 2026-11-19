@@ -1,0 +1,155 @@
+// 文档站主题选择器样式 —— 面板直接消费组件令牌（var(--aura-*)），
+// 令牌由 tokens.css 提供，随 data-mode × data-palette 自动换色。
+
+.doc-theme-switch {
+  position: relative;
+  font-size: 0;
+  line-height: 0;
+
+  // 与相邻 switch/select 的分隔线（对齐 dumi 原生按钮几何）
+  [class*='-switch'] + &,
+  [class*='-select'] + & {
+    margin-inline-start: 15px;
+    margin-inline-end: -15px;
+    padding-inline: 15px;
+    border-inline-start: 1px solid var(--aura-border);
+  }
+}
+
+.doc-theme-switch-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 7px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: var(--aura-x-accent-soft);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--aura-x-accent);
+    outline-offset: 1px;
+  }
+}
+
+.doc-theme-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.doc-theme-caret {
+  width: 12px;
+  height: 12px;
+  color: var(--aura-text-tertiary);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .doc-theme-switch.open & {
+    transform: rotate(180deg);
+  }
+}
+
+.doc-theme-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1001;
+  min-width: 176px;
+  padding: 6px;
+  background: var(--aura-bg);
+  border: 1px solid var(--aura-border);
+  border-radius: 12px;
+  box-shadow: var(--aura-shadow-lg);
+  transform-origin: top right;
+  animation: doc-theme-panel-in 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes doc-theme-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.doc-theme-group-title {
+  padding: 7px 10px 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--aura-text-tertiary);
+  letter-spacing: 0.05em;
+}
+
+.doc-theme-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--aura-text-secondary);
+  text-align: left;
+  transition:
+    background 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .doc-theme-icon,
+  .doc-theme-swatch {
+    flex-shrink: 0;
+  }
+
+  .doc-theme-icon {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  .doc-theme-swatch {
+    width: 12px;
+    height: 12px;
+  }
+
+  .doc-theme-check {
+    margin-left: auto;
+    width: 13px;
+    height: 13px;
+    fill: var(--aura-x-accent);
+  }
+
+  &:hover {
+    background: var(--aura-x-accent-soft);
+    color: var(--aura-x-accent);
+  }
+
+  &.active {
+    color: var(--aura-x-accent);
+    font-weight: 500;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--aura-x-accent);
+    outline-offset: -1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-theme-panel {
+    animation: none;
+  }
+}

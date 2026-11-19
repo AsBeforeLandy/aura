@@ -1,67 +1,27 @@
-/* ===== Aura Design Tokens ===== */
+@import '@aura-react-comp/ui/style.css';
+/* 动效令牌：motion 组件源码不自带样式引入（消费者显式引入子路径），
+   文档站在此全局引入，demo 的 --aura-motion-* 才能随主题联动 */
+@import '@aura-react-comp/motion/tokens.css';
+
+/* ===================================================================
+   Aura Docs Shell Tokens — 壳层品牌变量（--doc-accent 系列）
+   文档站壳（导航/侧栏/链接/搜索/进度条）全部消费这些变量，
+   与组件令牌（@aura-react-comp/ui/style.css = tokens.css）双轴同步：
+   data-mode(light|dark) × data-palette(violet|ocean|sunset)。
+   =================================================================== */
+
+/* ===== Light × Violet（默认） ===== */
 :root {
-  --aura-primary-50: #faf5ff;
-  --aura-primary-100: #f3e8ff;
-  --aura-primary-200: #e9d5ff;
-  --aura-primary-300: #d8b4fe;
-  --aura-primary-400: #c084fc;
-  --aura-primary-500: #a855f7;
-  --aura-primary-600: #9333ea;
-  --aura-primary-700: #7c3aed;
-  --aura-primary-800: #6d28d9;
-  --aura-primary-900: #5b21b6;
-  --aura-primary-950: #3b0764;
-  --aura-gray-50: #f9fafb;
-  --aura-gray-100: #f3f4f6;
-  --aura-gray-200: #e5e7eb;
-  --aura-gray-300: #d1d5db;
-  --aura-gray-400: #9ca3af;
-  --aura-gray-500: #6b7280;
-  --aura-gray-600: #4b5563;
-  --aura-gray-700: #374151;
-  --aura-gray-800: #1f2937;
-  --aura-gray-900: #111827;
-  --aura-gray-950: #030712;
-  --aura-success: #10b981;
-  --aura-success-light: #d1fae5;
-  --aura-warning: #f59e0b;
-  --aura-warning-light: #fef3c7;
-  --aura-error: #ef4444;
-  --aura-error-light: #fee2e2;
-  --aura-info: #3b82f6;
-  --aura-info-light: #dbeafe;
-  --aura-bg: #ffffff;
-  --aura-bg-secondary: #f9fafb;
-  --aura-bg-tertiary: #f3f4f6;
-  --aura-text: #111827;
-  --aura-text-secondary: #6b7280;
-  --aura-text-tertiary: #9ca3af;
-  --aura-text-inverse: #ffffff;
-  --aura-border: #e5e7eb;
-  --aura-border-hover: #d1d5db;
-  --aura-radius-sm: 6px;
-  --aura-radius-md: 10px;
-  --aura-radius-lg: 14px;
-  --aura-radius-xl: 20px;
-  --aura-radius-full: 9999px;
-  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.3);
-  --aura-font-size-xs: 12px;
-  --aura-font-size-sm: 13px;
-  --aura-font-size-md: 14px;
-  --aura-font-size-lg: 16px;
-  --aura-font-size-xl: 18px;
-  --aura-font-size-2xl: 20px;
-  --aura-font-size-3xl: 24px;
-  --aura-duration-fast: 150ms;
-  --aura-duration-normal: 200ms;
-  --aura-duration-slow: 300ms;
-  --aura-easing: cubic-bezier(0.4, 0, 0.2, 1);
-  /* ===== 演示墙配色（亮色 = 冷白科技感） ===== */
+  --doc-accent: #7c3aed;
+  --doc-accent-hover: #8b5cf6;
+  --doc-accent-rgb: 124, 58, 237;
+  --doc-accent-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  --doc-sidebar-gradient: linear-gradient(120deg, #7c3aed 0%, #a855f7 40%, #d946ef 80%, #a855f7 100%);
+  --doc-hero-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 25%, #c084fc 50%, #a855f7 75%, #7c3aed 100%);
+
+  /* ===== 演示墙配色（亮色 = 冷白科技感，跟随明暗不跟随色板） ===== */
   --demo-stage-bg: #f5f7fb;
-  --demo-stage-glow-a: rgba(124, 58, 237, 0.08);
+  --demo-stage-glow-a: rgba(var(--doc-accent-rgb), 0.08);
   --demo-stage-glow-b: rgba(6, 182, 212, 0.08);
   --demo-stage-shadow:
     0 18px 50px -28px rgba(15, 23, 42, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -77,60 +37,27 @@
   --demo-num-from: #6d28d9;
   --demo-num-to: #0891b2;
   --demo-dot: rgba(15, 23, 42, 0.15);
-  --demo-dot-active: #7c3aed;
-  --demo-dot-glow: 0 0 10px rgba(124, 58, 237, 0.45);
+  --demo-dot-active: var(--doc-accent);
+  --demo-dot-glow: 0 0 10px rgba(var(--doc-accent-rgb), 0.45);
   --demo-panel-bg: #ffffff;
   --demo-panel-text: #0f172a;
   --demo-panel-muted: rgba(15, 23, 42, 0.55);
 }
 
-[data-theme="dark"] {
-  --aura-primary-50: #3b0764;
-  --aura-primary-100: #4c1d95;
-  --aura-primary-200: #5b21b6;
-  --aura-primary-300: #6d28d9;
-  --aura-primary-400: #7c3aed;
-  --aura-primary-500: #8b5cf6;
-  --aura-primary-600: #a78bfa;
-  --aura-primary-700: #c4b5fd;
-  --aura-primary-800: #ddd6fe;
-  --aura-primary-900: #ede9fe;
-  --aura-primary-950: #faf5ff;
-  --aura-gray-50: #030712;
-  --aura-gray-100: #111827;
-  --aura-gray-200: #1f2937;
-  --aura-gray-300: #374151;
-  --aura-gray-400: #4b5563;
-  --aura-gray-500: #6b7280;
-  --aura-gray-600: #9ca3af;
-  --aura-gray-700: #d1d5db;
-  --aura-gray-800: #e5e7eb;
-  --aura-gray-900: #f3f4f6;
-  --aura-gray-950: #f9fafb;
-  --aura-success: #34d399;
-  --aura-success-light: rgba(16, 185, 129, 0.15);
-  --aura-warning: #fbbf24;
-  --aura-warning-light: rgba(245, 158, 11, 0.15);
-  --aura-error: #f87171;
-  --aura-error-light: rgba(239, 68, 68, 0.15);
-  --aura-info: #60a5fa;
-  --aura-info-light: rgba(59, 130, 246, 0.15);
-  --aura-bg: #0f0c29;
-  --aura-bg-secondary: #1a1a3e;
-  --aura-bg-tertiary: #252550;
-  --aura-text: #f3f4f6;
-  --aura-text-secondary: #9ca3af;
-  --aura-text-tertiary: #6b7280;
-  --aura-text-inverse: #111827;
-  --aura-border: rgba(139, 92, 246, 0.2);
-  --aura-border-hover: rgba(139, 92, 246, 0.4);
-  --aura-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --aura-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
-  --aura-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
-  --aura-shadow-glow: 0 0 20px rgba(124, 58, 237, 0.4);
-  /* ===== 演示墙配色（暗色 = 深空霓虹） ===== */
+/* ===== Dark × Violet（data-theme 为旧兼容键，等价 dark × violet） ===== */
+[data-theme="dark"],
+[data-mode="dark"][data-palette="violet"] {
+  --doc-accent: #a78bfa;
+  --doc-dark-bg: #0f0c29;
+  --doc-accent-hover: #c4b5fd;
+  --doc-accent-rgb: 167, 139, 250;
+  --doc-accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  --doc-sidebar-gradient: linear-gradient(120deg, #a78bfa 0%, #8b5cf6 50%, #a78bfa 100%);
+  --doc-hero-gradient: linear-gradient(135deg, #c4b5fd 0%, #d946ef 25%, #a78bfa 50%, #d946ef 75%, #c4b5fd 100%);
+
+  /* ===== 演示墙配色（暗色 = 深空霓虹，跟随明暗不跟随色板） ===== */
   --demo-stage-bg: #08090d;
-  --demo-stage-glow-a: rgba(124, 58, 237, 0.22);
+  --demo-stage-glow-a: rgba(var(--doc-accent-rgb), 0.22);
   --demo-stage-glow-b: rgba(34, 211, 238, 0.14);
   --demo-stage-shadow:
     0 24px 70px -30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -142,50 +69,92 @@
   --demo-cyan: linear-gradient(135deg, #0891b2 0%, #22d3ee 100%);
   --demo-blue: linear-gradient(135deg, #1d4ed8 0%, #60a5fa 100%);
   --demo-fuchsia: linear-gradient(135deg, #a21caf 0%, #e879f9 100%);
-  --demo-glow: 0 8px 24px -8px rgba(124, 58, 237, 0.45);
+  --demo-glow: 0 8px 24px -8px rgba(var(--doc-accent-rgb), 0.45);
   --demo-num-from: #a855f7;
   --demo-num-to: #22d3ee;
   --demo-dot: rgba(255, 255, 255, 0.18);
-  --demo-dot-active: #a855f7;
-  --demo-dot-glow: 0 0 12px rgba(168, 85, 247, 0.8);
+  --demo-dot-active: var(--doc-accent);
+  --demo-dot-glow: 0 0 12px rgba(var(--doc-accent-rgb), 0.8);
   --demo-panel-bg: #0b0d13;
   --demo-panel-text: #f2f3f7;
   --demo-panel-muted: rgba(255, 255, 255, 0.55);
 }
 
+/* ===== Light × Ocean ===== */
+[data-palette="ocean"] {
+  --doc-accent: #2563eb;
+  --doc-accent-hover: #3b82f6;
+  --doc-accent-rgb: 37, 99, 235;
+  --doc-accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  --doc-sidebar-gradient: linear-gradient(120deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+  --doc-hero-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 25%, #60a5fa 50%, #3b82f6 75%, #2563eb 100%);
+}
+
+/* ===== Dark × Ocean ===== */
+[data-mode="dark"][data-palette="ocean"] {
+  --doc-accent: #60a5fa;
+  --doc-dark-bg: #0b1120;
+  --doc-accent-hover: #93c5fd;
+  --doc-accent-rgb: 96, 165, 250;
+  --doc-accent-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --doc-sidebar-gradient: linear-gradient(120deg, #60a5fa 0%, #3b82f6 50%, #93c5fd 100%);
+  --doc-hero-gradient: linear-gradient(135deg, #93c5fd 0%, #60a5fa 25%, #3b82f6 50%, #60a5fa 75%, #93c5fd 100%);
+}
+
+/* ===== Light × Sunset ===== */
+[data-palette="sunset"] {
+  --doc-accent: #ea580c;
+  --doc-accent-hover: #f97316;
+  --doc-accent-rgb: 234, 88, 12;
+  --doc-accent-gradient: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  --doc-sidebar-gradient: linear-gradient(120deg, #ea580c 0%, #f97316 50%, #fb923c 100%);
+  --doc-hero-gradient: linear-gradient(135deg, #ea580c 0%, #f97316 25%, #fb923c 50%, #f97316 75%, #ea580c 100%);
+}
+
+/* ===== Dark × Sunset ===== */
+[data-mode="dark"][data-palette="sunset"] {
+  --doc-accent: #fb923c;
+  --doc-dark-bg: #191210;
+  --doc-accent-hover: #fdba74;
+  --doc-accent-rgb: 251, 146, 60;
+  --doc-accent-gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  --doc-sidebar-gradient: linear-gradient(120deg, #fb923c 0%, #f97316 50%, #fdba74 100%);
+  --doc-hero-gradient: linear-gradient(135deg, #fdba74 0%, #fb923c 25%, #f97316 50%, #fb923c 75%, #fdba74 100%);
+}
+
 /* ===================================================================
-   Aura Docs Theme — 全局覆盖 dumi 默认蓝色 (#1677ff → #7c3aed)
+   Aura Docs Theme — 全局覆盖 dumi 默认蓝色 (#1677ff → var(--doc-accent))
    =================================================================== */
 
 /* --- 通配：所有含 dumi-default 前缀的链接/文字/背景中出现的蓝色 --- */
 
-/* 亮色主色: #7c3aed / 暗色主色: #a78bfa */
+/* 亮色主色: var(--doc-accent) / 暗色主色: var(--doc-accent) */
 
 /* ===== Navbar 导航栏 ===== */
 .dumi-default-navbar > li > a:hover,
 .dumi-default-navbar > li > .dumi-default-navbar-dropdown > li > a:hover {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 .dumi-default-navbar > li > a.active,
 .dumi-default-navbar > li > a[data-active] {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
   font-weight: 600 !important;
-  border-bottom-color: #7c3aed !important;
+  border-bottom-color: var(--doc-accent) !important;
 }
 
 .dumi-default-navbar > li > a.active::after,
 .dumi-default-navbar > li > a[data-active]::after {
-  background-color: #7c3aed !important;
+  background-color: var(--doc-accent) !important;
 }
 
 .dumi-default-navbar > li > .dumi-default-navbar-dropdown {
-  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
+  box-shadow: 0 4px 16px rgba(var(--doc-accent-rgb), 0.12);
 }
 
 /* ===== Sidebar 侧边栏 ===== */
 .dumi-default-sidebar > dl > dd > a:hover {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 .dumi-default-sidebar > dl > dd > a.active {
   color: #fff !important;
@@ -196,117 +165,117 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 .dumi-default-search-bar input:focus {
-  border-color: #7c3aed !important;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15), 0 0 10px rgba(124, 58, 237, 0.15) !important;
+  border-color: var(--doc-accent) !important;
+  box-shadow: 0 0 0 3px rgba(var(--doc-accent-rgb), 0.15), 0 0 10px rgba(var(--doc-accent-rgb), 0.15) !important;
 }
 
 .dumi-default-search-bar > svg {
-  fill: #7c3aed !important;
+  fill: var(--doc-accent) !important;
 }
 
 .dumi-default-search-result a:hover {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 /* ===== Tabs 标签页 ===== */
 .dumi-default-tabs > button[aria-selected="true"] {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 .dumi-default-tabs > button[aria-selected="true"]::after {
-  background: #7c3aed !important;
+  background: var(--doc-accent) !important;
 }
 
 .dumi-default-tabs-ink-bar {
-  background: #7c3aed !important;
+  background: var(--doc-accent) !important;
 }
 
 .dumi-default-tabs-dropdown > ul > li:hover {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 /* ===== Content Tabs 组件页标签 ===== */
 .dumi-default-content-tabs > li > button:hover {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 .dumi-default-content-tabs > li[data-active]::after {
-  background-color: #7c3aed !important;
+  background-color: var(--doc-accent) !important;
 }
 
 /* ===== Badge 徽标 ===== */
 .dumi-default-badge {
-  color: #7c3aed !important;
-  background: rgba(124, 58, 237, 0.08) !important;
+  color: var(--doc-accent) !important;
+  background: rgba(var(--doc-accent-rgb), 0.08) !important;
 }
 
 /* ===== Previewer 组件预览器 ===== */
 .dumi-default-previewer {
-  border-color: rgba(124, 58, 237, 0.12) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.12) !important;
   border-radius: 12px !important;
 }
 
 .dumi-default-previewer:focus-within {
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08) !important;
-  border-color: rgba(124, 58, 237, 0.3) !important;
+  box-shadow: 0 0 0 3px rgba(var(--doc-accent-rgb), 0.08) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.3) !important;
 }
 
 .dumi-default-previewer > .dumi-default-previewer-actions > button:hover {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 .dumi-default-previewer-demo[data-loading]::before {
-  border-color: #7c3aed transparent !important;
+  border-color: var(--doc-accent) transparent !important;
 }
 
 /* ===== Source Code Editor ===== */
 .dumi-default-source-code-editor > .dumi-default-source-code-editor-actions > button:hover {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 .dumi-default-source-code-editor:focus-within::after {
-  box-shadow: 0 0 0 1px #7c3aed inset !important;
+  box-shadow: 0 0 0 1px var(--doc-accent) inset !important;
 }
 
 /* ===== 文档内容链接 ===== */
 .markdown a {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 .markdown a:hover {
-  color: #8b5cf6 !important;
+  color: var(--doc-accent-hover) !important;
 }
 
 /* ===== 页面底部导航 ===== */
 .dumi-default-content-footer a {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 .dumi-default-content-footer a:hover {
-  color: #8b5cf6 !important;
+  color: var(--doc-accent-hover) !important;
 }
 
 .dumi-default-content-footer svg {
-  fill: #7c3aed !important;
+  fill: var(--doc-accent) !important;
 }
 
 /* ===== 404 页面 ===== */
 .dumi-default-not-found a {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 /* ===== NProgress 进度条 ===== */
 #nprogress .bar {
-  background: #7c3aed !important;
+  background: var(--doc-accent) !important;
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px #7c3aed, 0 0 5px #7c3aed !important;
+  box-shadow: 0 0 10px var(--doc-accent), 0 0 5px var(--doc-accent) !important;
 }
 
 #nprogress .spinner-icon {
-  border-top-color: #7c3aed !important;
-  border-left-color: #7c3aed !important;
+  border-top-color: var(--doc-accent) !important;
+  border-left-color: var(--doc-accent) !important;
 }
 
 /* ===== Hero 首页 ===== */
@@ -319,7 +288,7 @@
 
 .dumi-default-hero-title,
 .dumi-default-hero-title span {
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 25%, #c084fc 50%, #a855f7 75%, #7c3aed 100%) !important;
+  background: var(--doc-hero-gradient) !important;
   background-size: 200% 200% !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
@@ -354,31 +323,31 @@
 }
 
 .dumi-default-hero-actions > a:first-child {
-  background: linear-gradient(135deg, #7c3aed, #a855f7) !important;
+  background: var(--doc-accent-gradient) !important;
   border: none !important;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4) !important;
+  box-shadow: 0 4px 14px rgba(var(--doc-accent-rgb), 0.4) !important;
   color: #fff !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   border-radius: 20px !important;
 }
 
 .dumi-default-hero-actions > a:first-child:hover {
-  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5), 0 0 10px rgba(168, 85, 247, 0.3) !important;
+  box-shadow: 0 8px 25px rgba(var(--doc-accent-rgb), 0.5), 0 0 10px rgba(var(--doc-accent-rgb), 0.3) !important;
   opacity: 1 !important;
   transform: translateY(-4px) scale(1.02);
 }
 
 .dumi-default-hero-actions > a:not(:first-child) {
-  color: #7c3aed !important;
-  border-color: #7c3aed !important;
+  color: var(--doc-accent) !important;
+  border-color: var(--doc-accent) !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   border-radius: 20px !important;
 }
 
 .dumi-default-hero-actions > a:not(:first-child):hover {
-  background: rgba(124, 58, 237, 0.08) !important;
-  border-color: #7c3aed !important;
-  color: #7c3aed !important;
+  background: rgba(var(--doc-accent-rgb), 0.08) !important;
+  border-color: var(--doc-accent) !important;
+  color: var(--doc-accent) !important;
   opacity: 1 !important;
   transform: translateY(-4px);
 }
@@ -419,11 +388,11 @@
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(245, 243, 255, 0.4) 100%) !important;
   backdrop-filter: blur(20px) saturate(140%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
-  border: 1px solid rgba(124, 58, 237, 0.1) !important;
+  border: 1px solid rgba(var(--doc-accent-rgb), 0.1) !important;
   border-radius: 24px !important;
   padding: 36px 32px !important;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  box-shadow: 0 4px 30px rgba(124, 58, 237, 0.02), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 4px 30px rgba(var(--doc-accent-rgb), 0.02), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
@@ -437,7 +406,7 @@
   right: 0 !important;
   width: 150px !important;
   height: 150px !important;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(124, 58, 237, 0.04) 50%, transparent 100%) !important;
+  background: radial-gradient(circle, rgba(var(--doc-accent-rgb), 0.12) 0%, rgba(var(--doc-accent-rgb), 0.04) 50%, transparent 100%) !important;
   filter: blur(20px) !important;
   opacity: 0 !important;
   transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -451,8 +420,8 @@
 
 .dumi-default-features-item:hover {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(245, 243, 255, 0.6) 100%) !important;
-  border-color: rgba(124, 58, 237, 0.35) !important;
-  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.1), 0 0 1px rgba(124, 58, 237, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.35) !important;
+  box-shadow: 0 20px 40px rgba(var(--doc-accent-rgb), 0.1), 0 0 1px rgba(var(--doc-accent-rgb), 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
   transform: translateY(-8px) !important;
 }
 
@@ -473,7 +442,7 @@
 }
 
 .dumi-default-features-item h3 a:hover {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 .dumi-default-features-item i {
@@ -485,19 +454,19 @@
   align-items: center !important;
   justify-content: center !important;
   border-radius: 14px !important;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(168, 85, 247, 0.04) 100%) !important;
-  border: 1px solid rgba(124, 58, 237, 0.12) !important;
+  background: linear-gradient(135deg, rgba(var(--doc-accent-rgb), 0.08) 0%, rgba(var(--doc-accent-rgb), 0.04) 100%) !important;
+  border: 1px solid rgba(var(--doc-accent-rgb), 0.12) !important;
   margin-bottom: 20px !important;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(var(--doc-accent-rgb), 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
   z-index: 1 !important;
 }
 
 .dumi-default-features-item:hover i {
   transform: scale(1.15) rotate(8deg) !important;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.18) 0%, rgba(168, 85, 247, 0.08) 100%) !important;
-  border-color: rgba(124, 58, 237, 0.25) !important;
-  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.08) !important;
+  background: linear-gradient(135deg, rgba(var(--doc-accent-rgb), 0.18) 0%, rgba(var(--doc-accent-rgb), 0.08) 100%) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.25) !important;
+  box-shadow: 0 8px 20px rgba(var(--doc-accent-rgb), 0.08) !important;
 }
 
 .dumi-default-features-item p {
@@ -511,190 +480,190 @@
 
 /* ===== Header 头部导航 ===== */
 .dumi-default-header {
-  border-bottom: 1px solid rgba(124, 58, 237, 0.08) !important;
+  border-bottom: 1px solid rgba(var(--doc-accent-rgb), 0.08) !important;
   background: rgba(255, 255, 255, 0.75) !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
 }
 
 .dumi-default-header-left .dumi-default-logo {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 /* ===== 暗色模式 ===== */
 
 [data-prefers-color="dark"] .dumi-default-hero {
-  background: radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
-              radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
-              #0f0c29 !important;
+  background: radial-gradient(circle at 80% 20%, rgba(var(--doc-accent-rgb), 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(var(--doc-accent-rgb), 0.1) 0%, transparent 50%),
+              var(--doc-dark-bg, #0f0c29) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-features-item {
   background: linear-gradient(135deg, rgba(15, 12, 41, 0.45) 0%, rgba(26, 26, 62, 0.35) 100%) !important;
-  border: 1px solid rgba(167, 139, 250, 0.12) !important;
+  border: 1px solid rgba(var(--doc-accent-rgb), 0.12) !important;
   box-shadow: 0 4px 30px rgba(15, 12, 41, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-features-item::before {
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, rgba(124, 58, 237, 0.06) 50%, transparent 100%) !important;
+  background: radial-gradient(circle, rgba(var(--doc-accent-rgb), 0.2) 0%, rgba(var(--doc-accent-rgb), 0.06) 50%, transparent 100%) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-features-item:hover {
   background: linear-gradient(135deg, rgba(26, 26, 62, 0.6) 0%, rgba(15, 12, 41, 0.5) 100%) !important;
-  border-color: rgba(168, 85, 247, 0.4) !important;
-  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.25), 0 0 15px rgba(124, 58, 237, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.4) !important;
+  box-shadow: 0 20px 40px rgba(var(--doc-accent-rgb), 0.25), 0 0 15px rgba(var(--doc-accent-rgb), 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-features-item i {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.12) 0%, rgba(139, 92, 246, 0.04) 100%) !important;
-  border-color: rgba(167, 139, 250, 0.2) !important;
-  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  background: linear-gradient(135deg, rgba(var(--doc-accent-rgb), 0.12) 0%, rgba(var(--doc-accent-rgb), 0.04) 100%) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.2) !important;
+  box-shadow: 0 4px 12px rgba(var(--doc-accent-rgb), 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-features-item:hover i {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.22) 0%, rgba(139, 92, 246, 0.08) 100%) !important;
-  border-color: rgba(167, 139, 250, 0.35) !important;
-  box-shadow: 0 8px 20px rgba(167, 139, 250, 0.1) !important;
+  background: linear-gradient(135deg, rgba(var(--doc-accent-rgb), 0.22) 0%, rgba(var(--doc-accent-rgb), 0.08) 100%) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.35) !important;
+  box-shadow: 0 8px 20px rgba(var(--doc-accent-rgb), 0.1) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-header {
-  border-bottom-color: rgba(139, 92, 246, 0.15) !important;
+  border-bottom-color: rgba(var(--doc-accent-rgb), 0.15) !important;
   background: rgba(15, 12, 41, 0.75) !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-header-left .dumi-default-logo {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-navbar > li > a:hover,
 [data-prefers-color="dark"] .dumi-default-navbar > li > .dumi-default-navbar-dropdown > li > a:hover {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-navbar > li > a.active,
 [data-prefers-color="dark"] .dumi-default-navbar > li > a[data-active] {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
   font-weight: 600 !important;
-  border-bottom-color: #a78bfa !important;
+  border-bottom-color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-navbar > li > a.active::after,
 [data-prefers-color="dark"] .dumi-default-navbar > li > a[data-active]::after {
-  background-color: #a78bfa !important;
+  background-color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a:hover {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 [data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a.active {
   color: #fff !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-search-bar input:focus {
-  border-color: #a78bfa !important;
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2), 0 0 12px rgba(124, 58, 237, 0.2) !important;
+  border-color: var(--doc-accent) !important;
+  box-shadow: 0 0 0 3px rgba(var(--doc-accent-rgb), 0.2), 0 0 12px rgba(var(--doc-accent-rgb), 0.2) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-search-bar > svg {
-  fill: #a78bfa !important;
+  fill: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-search-result a:hover {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-tabs > button[aria-selected="true"] {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-tabs > button[aria-selected="true"]::after {
-  background: #a78bfa !important;
+  background: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-tabs-ink-bar {
-  background: #a78bfa !important;
+  background: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-tabs-dropdown > ul > li:hover {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-content-tabs > li > button:hover {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-content-tabs > li[data-active]::after {
-  background-color: #a78bfa !important;
+  background-color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-source-code-editor:focus-within::after {
-  box-shadow: 0 0 0 1px #a78bfa inset !important;
+  box-shadow: 0 0 0 1px var(--doc-accent) inset !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-previewer-demo[data-loading]::before {
-  border-color: #a78bfa transparent !important;
+  border-color: var(--doc-accent) transparent !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-badge {
-  color: #a78bfa !important;
-  background: rgba(167, 139, 250, 0.12) !important;
+  color: var(--doc-accent) !important;
+  background: rgba(var(--doc-accent-rgb), 0.12) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-previewer {
-  border-color: rgba(139, 92, 246, 0.15) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.15) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-previewer:focus-within {
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.08) !important;
-  border-color: rgba(167, 139, 250, 0.3) !important;
+  box-shadow: 0 0 0 3px rgba(var(--doc-accent-rgb), 0.08) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.3) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-previewer > .dumi-default-previewer-actions > button:hover {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .markdown a {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .markdown a:hover {
-  color: #c4b5fd !important;
+  color: var(--doc-accent-hover) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-content-footer a {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-content-footer a:hover {
-  color: #c4b5fd !important;
+  color: var(--doc-accent-hover) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-content-footer svg {
-  fill: #a78bfa !important;
+  fill: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-not-found a {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] #nprogress .bar {
-  background: #a78bfa !important;
+  background: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] #nprogress .peg {
-  box-shadow: 0 0 10px #a78bfa, 0 0 5px #a78bfa !important;
+  box-shadow: 0 0 10px var(--doc-accent), 0 0 5px var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] #nprogress .spinner-icon {
-  border-top-color: #a78bfa !important;
-  border-left-color: #a78bfa !important;
+  border-top-color: var(--doc-accent) !important;
+  border-left-color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-hero-title,
 [data-prefers-color="dark"] .dumi-default-hero-title span {
-  background: linear-gradient(135deg, #c4b5fd 0%, #d946ef 25%, #a78bfa 50%, #d946ef 75%, #c4b5fd 100%) !important;
+  background: var(--doc-hero-gradient) !important;
   background-size: 200% 200% !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
@@ -713,31 +682,31 @@
 }
 
 [data-prefers-color="dark"] .dumi-default-hero-actions > a:first-child {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
-  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4) !important;
+  background: var(--doc-accent-gradient) !important;
+  box-shadow: 0 4px 14px rgba(var(--doc-accent-rgb), 0.4) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-hero-actions > a:not(:first-child) {
-  color: #a78bfa !important;
-  border-color: #a78bfa !important;
+  color: var(--doc-accent) !important;
+  border-color: var(--doc-accent) !important;
 }
 
 
 /* ===== 页脚样式增强 ===== */
 .dumi-default-footer {
-  border-top: 1px solid rgba(124, 58, 237, 0.08) !important;
+  border-top: 1px solid rgba(var(--doc-accent-rgb), 0.08) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-footer {
-  border-top-color: rgba(139, 92, 246, 0.12) !important;
+  border-top-color: rgba(var(--doc-accent-rgb), 0.12) !important;
 }
 
 .dumi-default-footer a {
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-footer a {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 /* ===================================================================
@@ -752,7 +721,7 @@ body {
 }
 
 [data-prefers-color="dark"] body {
-  background: #0f0c29 !important;
+  background: var(--doc-dark-bg, #0f0c29) !important;
 }
 
 /* 全局滚动条优化 */
@@ -775,11 +744,11 @@ body {
 }
 
 [data-prefers-color="dark"] ::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.3);
+  background: rgba(var(--doc-accent-rgb), 0.3);
 }
 
 [data-prefers-color="dark"] ::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.5);
+  background: rgba(var(--doc-accent-rgb), 0.5);
 }
 
 html {
@@ -788,21 +757,21 @@ html {
 
 /* 选中文本主题色 */
 ::selection {
-  background: rgba(124, 58, 237, 0.2) !important;
+  background: rgba(var(--doc-accent-rgb), 0.2) !important;
   color: inherit !important;
 }
 
 ::-moz-selection {
-  background: rgba(124, 58, 237, 0.2) !important;
+  background: rgba(var(--doc-accent-rgb), 0.2) !important;
   color: inherit !important;
 }
 
 [data-prefers-color="dark"] ::selection {
-  background: rgba(167, 139, 250, 0.3) !important;
+  background: rgba(var(--doc-accent-rgb), 0.3) !important;
 }
 
 [data-prefers-color="dark"] ::-moz-selection {
-  background: rgba(167, 139, 250, 0.3) !important;
+  background: rgba(var(--doc-accent-rgb), 0.3) !important;
 }
 
 /* ===== 2a. 内容区整体布局 ===== */
@@ -817,11 +786,11 @@ html {
 }
 
 [data-prefers-color="dark"] .dumi-default-header-content {
-  background: #0f0c29 !important;
+  background: var(--doc-dark-bg, #0f0c29) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-doc-layout > main {
-  background: #0f0c29 !important;
+  background: var(--doc-dark-bg, #0f0c29) !important;
 }
 
 /* 页面标题区域 */
@@ -916,8 +885,8 @@ html {
 }
 
 .dumi-default-previewer-actions > button:hover {
-  color: #7c3aed !important;
-  background: rgba(124, 58, 237, 0.06) !important;
+  color: var(--doc-accent) !important;
+  background: rgba(var(--doc-accent-rgb), 0.06) !important;
 }
 
 /* 源码展开区（仅限 previewer 内部；页顶独立代码块不受影响）：
@@ -976,7 +945,7 @@ html {
 .markdown table tbody td:first-child {
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace !important;
   font-size: 13px !important;
-  color: #7c3aed !important;
+  color: var(--doc-accent) !important;
   font-weight: 500 !important;
   white-space: nowrap !important;
 }
@@ -995,7 +964,7 @@ html {
   border-radius: 4px !important;
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace !important;
   font-size: 12px !important;
-  color: #9333ea !important;
+  color: var(--doc-accent) !important;
 }
 
 /* ===== 2d. 侧边栏样式优化 ===== */
@@ -1030,8 +999,8 @@ html {
 
 /* 侧边栏链接 hover */
 .dumi-default-sidebar > dl > dd > a:hover {
-  color: #7c3aed !important;
-  background: rgba(124, 58, 237, 0.05) !important;
+  color: var(--doc-accent) !important;
+  background: rgba(var(--doc-accent-rgb), 0.05) !important;
   padding-left: 20px !important;
 }
 
@@ -1039,7 +1008,7 @@ html {
 .dumi-default-sidebar > dl > dd > a.active {
   color: #fff !important;
   font-weight: 500 !important;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(168, 85, 247, 0.8)) !important;
+  background: linear-gradient(135deg, rgba(var(--doc-accent-rgb), 0.95), rgba(var(--doc-accent-rgb), 0.8)) !important;
   border-left-color: transparent !important;
 }
 
@@ -1050,14 +1019,14 @@ html {
 
 /* TOC 激活：主题紫竖线 + 紫字（替代 dumi 默认蓝 #1677ff），其余几何交给 dumi 默认 */
 .dumi-default-toc > li > a.active {
-  border-inline-start-color: #7c3aed !important;
-  color: #7c3aed !important;
+  border-inline-start-color: var(--doc-accent) !important;
+  color: var(--doc-accent) !important;
 }
 
 /* 暗色同步 */
 [data-prefers-color="dark"] .dumi-default-toc > li > a.active {
-  border-inline-start-color: #a78bfa !important;
-  color: #a78bfa !important;
+  border-inline-start-color: var(--doc-accent) !important;
+  color: var(--doc-accent) !important;
 }
 
 /* ===== 2f. 暗色模式适配 ===== */
@@ -1073,7 +1042,7 @@ html {
 
 [data-prefers-color="dark"] .markdown > h2 {
   color: var(--aura-gray-50) !important;
-  border-bottom-color: rgba(139, 92, 246, 0.15) !important;
+  border-bottom-color: rgba(var(--doc-accent-rgb), 0.15) !important;
 }
 
 [data-prefers-color="dark"] .markdown > h3 {
@@ -1086,7 +1055,7 @@ html {
 
 /* 暗色 — Demo 预览器 */
 [data-prefers-color="dark"] .dumi-default-previewer {
-  border-color: rgba(139, 92, 246, 0.12) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.12) !important;
   background: var(--aura-bg-secondary) !important;
 }
 
@@ -1096,54 +1065,54 @@ html {
 
 [data-prefers-color="dark"] .dumi-default-previewer-desc {
   background: rgba(15, 12, 41, 0.6) !important;
-  border-top-color: rgba(139, 92, 246, 0.12) !important;
+  border-top-color: rgba(var(--doc-accent-rgb), 0.12) !important;
   color: var(--aura-gray-400) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-previewer-actions {
   background: rgba(15, 12, 41, 0.6) !important;
-  border-top-color: rgba(139, 92, 246, 0.12) !important;
+  border-top-color: rgba(var(--doc-accent-rgb), 0.12) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-previewer-actions > button:hover {
-  color: #a78bfa !important;
-  background: rgba(167, 139, 250, 0.1) !important;
+  color: var(--doc-accent) !important;
+  background: rgba(var(--doc-accent-rgb), 0.1) !important;
 }
 
 /* 暗色源码区几何与亮色共用（圆角/裁剪不随模式变化），无需单独规则 */
 
 /* 暗色 — API 表格 */
 [data-prefers-color="dark"] .markdown table {
-  border-color: rgba(139, 92, 246, 0.12) !important;
+  border-color: rgba(var(--doc-accent-rgb), 0.12) !important;
 }
 
 [data-prefers-color="dark"] .markdown table thead th {
   background: var(--aura-bg-tertiary) !important;
   color: var(--aura-gray-200) !important;
-  border-bottom-color: rgba(139, 92, 246, 0.15) !important;
+  border-bottom-color: rgba(var(--doc-accent-rgb), 0.15) !important;
 }
 
 [data-prefers-color="dark"] .markdown table tbody td {
-  border-bottom-color: rgba(139, 92, 246, 0.08) !important;
+  border-bottom-color: rgba(var(--doc-accent-rgb), 0.08) !important;
   color: var(--aura-gray-400) !important;
 }
 
 [data-prefers-color="dark"] .markdown table tbody tr:hover {
-  background: rgba(139, 92, 246, 0.06) !important;
+  background: rgba(var(--doc-accent-rgb), 0.06) !important;
 }
 
 [data-prefers-color="dark"] .markdown table tbody td:first-child {
-  color: #a78bfa !important;
+  color: var(--doc-accent) !important;
 }
 
 [data-prefers-color="dark"] .markdown table code {
-  background: rgba(139, 92, 246, 0.12) !important;
-  color: #c4b5fd !important;
+  background: rgba(var(--doc-accent-rgb), 0.12) !important;
+  color: var(--doc-accent-hover) !important;
 }
 
 /* 暗色 — 侧边栏 */
 [data-prefers-color="dark"] .dumi-default-sidebar {
-  border-right-color: rgba(139, 92, 246, 0.1) !important;
+  border-right-color: rgba(var(--doc-accent-rgb), 0.1) !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-sidebar > dl > dt {
@@ -1158,14 +1127,14 @@ html {
 }
 
 [data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a:hover {
-  color: #a78bfa !important;
-  background: rgba(167, 139, 250, 0.08) !important;
+  color: var(--doc-accent) !important;
+  background: rgba(var(--doc-accent-rgb), 0.08) !important;
   padding-left: 20px !important;
 }
 
 [data-prefers-color="dark"] .dumi-default-sidebar > dl > dd > a.active {
   color: #fff !important;
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.95), rgba(139, 92, 246, 0.8)) !important;
+  background: linear-gradient(135deg, rgba(var(--doc-accent-rgb), 0.95), rgba(var(--doc-accent-rgb), 0.8)) !important;
   border-left-color: transparent !important;
 }
 
@@ -1180,7 +1149,7 @@ html {
   min-width: 240px !important;
   overflow-y: auto !important;
   scrollbar-width: thin; /* Firefox：细滚动条，悬停才明显 */
-  scrollbar-color: rgba(124, 58, 237, 0.25) transparent;
+  scrollbar-color: rgba(var(--doc-accent-rgb), 0.25) transparent;
 }
 
 .dumi-default-sidebar::-webkit-scrollbar {
@@ -1189,11 +1158,11 @@ html {
 
 .dumi-default-sidebar::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(124, 58, 237, 0.18);
+  background: rgba(var(--doc-accent-rgb), 0.18);
 }
 
 .dumi-default-sidebar:hover::-webkit-scrollbar-thumb {
-  background: rgba(124, 58, 237, 0.35);
+  background: rgba(var(--doc-accent-rgb), 0.35);
 }
 
 .dumi-default-sidebar::-webkit-scrollbar-track {
@@ -1217,7 +1186,7 @@ html {
   height: 1px;
   margin: 6px 2px 10px;
   border-radius: 1px;
-  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.32), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--doc-accent-rgb), 0.32), transparent);
 }
 
 /* 第一个分组与顶部贴近些；标题下方同样保留分隔线，保持节奏一致 */
@@ -1249,11 +1218,11 @@ html {
 
 /* 暗色同步 */
 [data-prefers-color='dark'] .dumi-default-sidebar {
-  scrollbar-color: rgba(167, 139, 250, 0.3) transparent;
+  scrollbar-color: rgba(var(--doc-accent-rgb), 0.3) transparent;
 }
 
 [data-prefers-color='dark'] .dumi-default-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(167, 139, 250, 0.28);
+  background: rgba(var(--doc-accent-rgb), 0.28);
 }
 
 [data-prefers-color='dark'] .dumi-default-sidebar > dl > dt {
@@ -1318,11 +1287,11 @@ html {
 
 /* 激活：极光渐变胶囊（品牌紫 → 品红 → 亮紫，缓慢流动） */
 .dumi-default-sidebar > dl > dd > a.active {
-  background: linear-gradient(120deg, #7c3aed 0%, #a855f7 40%, #d946ef 80%, #a855f7 100%) !important;
+  background: var(--doc-sidebar-gradient) !important;
   background-size: 200% 200% !important;
   color: #fff !important;
   font-weight: 500 !important;
-  box-shadow: 0 4px 14px -4px rgba(124, 58, 237, 0.55) !important;
+  box-shadow: 0 4px 14px -4px rgba(var(--doc-accent-rgb), 0.55) !important;
   animation: aura-x-sidebar-aurora 6s ease infinite !important;
 }
 
@@ -1345,7 +1314,7 @@ html {
 
   .dumi-default-sidebar > dl > dd > a.active {
     animation: none !important;
-    background: linear-gradient(120deg, #7c3aed 0%, #a855f7 50%, #d946ef 100%) !important;
+    background: var(--doc-sidebar-gradient) !important;
   }
 }
 
