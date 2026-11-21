@@ -239,6 +239,51 @@ const editorSidebar = [
 // group.title / group.order。
 
 export default defineConfig({
+  // 首屏主题恢复脚本：必须在 HTML 解析期同步执行（React 渲染的 <script> 不会
+  // 被浏览器执行），先于 loading / React mount 恢复 data-palette / data-mode，
+  // 并注入 loading 专属的 --loader-* 色值 —— 避免「紫色 loading 闪一下再变」。
+  headScripts: [
+    {
+      content: `(function () {
+  try {
+    var root = document.documentElement;
+    var palette = localStorage.getItem('aura-docs-palette');
+    if (palette !== 'ocean' && palette !== 'sunset') palette = 'violet';
+    var saved = localStorage.getItem('dumi:prefers-color');
+    var mode = saved;
+    if (mode !== 'dark' && mode !== 'light') {
+      mode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
+    }
+    root.setAttribute('data-palette', palette);
+    root.setAttribute('data-mode', mode);
+    root.setAttribute('data-theme', mode);
+    root.setAttribute('data-prefers-color', saved || mode);
+
+    // loading 专属色板数据（与 tokens.css 各主题块同源；cyan 为装饰固定色）
+    var DATA = {
+      violet: ['#7c3aed', '#a855f7', '#c4b5fd', '#a78bfa'],
+      ocean: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'],
+      sunset: ['#ea580c', '#f97316', '#fb923c', '#fdba74'],
+    };
+    var d = DATA[palette];
+    var i = mode === 'dark' ? 2 : 0;
+    var accent = d[i];
+    function rgba(hex, a) {
+      var n = parseInt(hex.slice(1), 16);
+      return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+    }
+    root.style.setProperty('--loader-accent', accent);
+    root.style.setProperty('--loader-accent-2', d[i + 1]);
+    root.style.setProperty('--loader-cyan', '#22d3ee');
+    root.style.setProperty('--loader-glow', rgba(accent, 0.45));
+    root.style.setProperty('--loader-bg', mode === 'dark' ? '#0b0d12' : '#ffffff');
+  } catch (e) { /* localStorage 不可用时保持默认主题 */ }
+})();`,
+      async: false,
+    },
+  ],
   resolve: {
     docDirs: ['docs'],
     atomDirs: [
