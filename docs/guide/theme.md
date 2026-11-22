@@ -99,47 +99,58 @@ Aura 使用 CSS Variables 作为 Design Token 的载体，支持灵活的主题�
 
 ## ThemeProvider
 
-使用 `ThemeProvider` 进行主题管理（当前版本仅管理 `light | dark` 模式，即
-默认 Violet 色板；多色板切换 API 将随主题切换功能一并提供，此前可先用
-`document.documentElement.setAttribute` 直接控制 `data-mode` / `data-palette`）：
+使用 `ThemeProvider` 管理 **模式 × 色板** 双轴主题。它会同步把状态写到
+`<html>` 的 `data-mode` / `data-theme`（兼容旧选择器）/ `data-palette` 属性：
 
 ```tsx | pure
-import { ThemeProvider, useTheme } from '@aura-react-comp/ui';
+import { ThemeProvider } from '@aura-react-comp/ui';
 
-// 受控模式
+// 受控：mode 与 palette 都由外部状态驱动
 const App = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [palette, setPalette] = useState<'violet' | 'ocean' | 'sunset'>(
+    'violet',
+  );
 
   return (
-    <ThemeProvider theme={theme} onChange={setTheme}>
+    <ThemeProvider mode={mode} palette={palette}>
       <Content />
     </ThemeProvider>
   );
 };
 
-// 非受控模式
+// 非受控：只给初始值
 const App = () => (
-  <ThemeProvider defaultTheme="light">
+  <ThemeProvider defaultMode="light" defaultPalette="ocean">
     <Content />
   </ThemeProvider>
 );
 ```
 
-在组件内通过 `useTheme` 获取当前主题：
+在组件内通过 `useTheme` 读写当前主题（新轴名 `mode` / `palette`；
+`theme` / `setTheme` / `toggleTheme` 为兼容别名）：
 
 ```tsx | pure
 import { useTheme } from '@aura-react-comp/ui';
 
 const MyComponent = () => {
-  const { theme, setTheme } = useTheme();
+  const { mode, palette, setMode, setPalette, toggleMode } = useTheme();
 
   return (
-    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-      当前主题：{theme}
-    </button>
+    <>
+      <button onClick={toggleMode}>当前模式：{mode}</button>
+      <select onChange={(e) => setPalette(e.target.value as 'violet')}>
+        <option value="violet">紫罗兰</option>
+        <option value="ocean">海洋蓝</option>
+        <option value="sunset">落日橙</option>
+      </select>
+    </>
   );
 };
 ```
+
+旧代码里的 `theme` prop / `theme` 字段继续有效（与 `mode` 同轴，同时
+传入时 `mode` 优先）。
 
 ## 自定义令牌
 
