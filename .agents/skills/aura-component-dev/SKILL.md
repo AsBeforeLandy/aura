@@ -1,6 +1,6 @@
 ---
 name: aura-component-dev
-description: Aura 组件库本仓库的组件开发规范流程。在 aura 仓库内新建组件、修改或扩展现有组件（packages/ui、packages/business、packages/x）、补组件测试 / 文档 / demo、把组件接入包导出时必须使用。当用户提到"新增 / 实现 / 仿写某组件"、"给某组件加 prop"、"补测试、写文档、加 demo"、"按 Aura 规范"、"通过 pnpm verify"时触发——它把仓库门禁（lint / typecheck / coverage / size / smoke）背后的规范编排成可执行流程，确保新组件代码一次通过验证。
+description: Aura 组件库本仓库的组件开发规范流程。在 aura 仓库内新建组件、修改或扩展现有组件（packages/design、packages/business、packages/x）、补组件测试 / 文档 / demo、把组件接入包导出时必须使用。当用户提到"新增 / 实现 / 仿写某组件"、"给某组件加 prop"、"补测试、写文档、加 demo"、"按 Aura 规范"、"通过 pnpm verify"时触发——它把仓库门禁（lint / typecheck / coverage / size / smoke）背后的规范编排成可执行流程，确保新组件代码一次通过验证。
 ---
 
 # Aura 组件开发规范流程
@@ -27,8 +27,8 @@ description: Aura 组件库本仓库的组件开发规范流程。在 aura 仓�
 
 | 包                          | 定位                         | 依赖约束                                                                                                                                                                        | 参照组件                                                                |
 | --------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `@aura-react-comp/ui`       | 通用 UI 原子组件             | 只依赖 `@aura-react-comp/shared`、`@aura-react-comp/icons`；**不得引入 antd**                                                                                                   | 表单类看 `input`/`select`，反馈类看 `alert`，数据展示类看 `badge`/`tag` |
-| `@aura-react-comp/business` | 基于 antd 二次封装的业务组件 | 可用 antd（peer）+ `@aura-react-comp/ui` + `@aura-react-comp/shared`                                                                                                            | `modal-form`、`search-form`、`pro-table`                                |
+| `@aura-react-comp/design`   | 通用 UI 原子组件             | 只依赖 `@aura-react-comp/shared`、`@aura-react-comp/icons`；**不得引入 antd**                                                                                                   | 表单类看 `input`/`select`，反馈类看 `alert`，数据展示类看 `badge`/`tag` |
+| `@aura-react-comp/business` | 基于 antd 二次封装的业务组件 | 可用 antd（peer）+ `@aura-react-comp/design` + `@aura-react-comp/shared`                                                                                                        | `modal-form`、`search-form`、`pro-table`                                |
 | `@aura-react-comp/x`        | AI 对话场景组件              | 运行时依赖 `@aura-react-comp/shared`（内容渲染类组件另有 `react-markdown` / `prism-react-renderer`）；antd / mermaid 为 peer，按需引入（参照 `sender` 用 antd 的 Button/Input） | `bubble`、`sender`、`markdown-content`                                  |
 
 规则：
@@ -68,13 +68,13 @@ packages/<pkg>/src/<kebab-case-name>/
 ## Step 4 样式 index.less
 
 - **只用设计令牌**：颜色、圆角、间距一律 `var(--aura-*)`；**禁止硬编码色值**（hex / rgb / rgba）、禁止 `!important`、禁止 `color-mix` 临时派生。
-- 可用令牌清单看 `packages/ui/src/theme/tokens.css`（单一事实来源）：`primary-50~950`、`gray-*`、`success/warning/error/info`（含 `-light`）、`text/bg/border`、`spacing-1~12`、`radius-sm~xl/full`、`font-size-xs~3xl`、`shadow-*`、`duration-*`、`easing`；x 包专属令牌带 `--aura-x-` 前缀。
+- 可用令牌清单看 `packages/design/src/theme/tokens.css`（单一事实来源）：`primary-50~950`、`gray-*`、`success/warning/error/info`（含 `-light`）、`text/bg/border`、`spacing-1~12`、`radius-sm~xl/full`、`font-size-xs~3xl`、`shadow-*`、`duration-*`、`easing`；x 包专属令牌带 `--aura-x-` 前缀。
 - **令牌不够用时在 `tokens.css` 新增**（亮 / 暗两套值，如 `--aura-selection-bg`），不要在组件里用透明度 / `color-mix` 现场派生——那会把浏览器特性下限从 Chrome 84 抬到 111。
 - 根类名与修饰类命名**分包看齐参照组件**：
   - ui / business：根类 `.aura-<组件名>`（`prefixCls('<组件名>')`），修饰类单横线连写（`aura-badge-dot-small`、`aura-xxx-disabled`）；
   - x：根类 `.aura-x-<组件名>`（`prefixCls('x-<组件名>')`），修饰符用标准 BEM 双横线（`x-sender--disabled`、`x-bubble--filled`），元素连写（`x-sender-header`）。
 - 动画 keyframes 命名 `aura-<组件名>-<语义>`；**duration 令牌（150/200/300ms）只用于 transition**，循环动画（`infinite`）的时长用字面值是既有惯例（badge `0.3s`/`0.4s`）；keyframes 只动 `opacity` / `transform` / `background-position` 这类可合成属性。
-- 暗色模式差异写在 `[data-theme="dark"] { ... }` 块内（全部走令牌、暗色无差异时可以不写该块）；`.less` 不写 fallback，令牌由 `@aura-react-comp/ui/style.css` 提供。
+- 暗色模式差异写在 `[data-theme="dark"] { ... }` 块内（全部走令牌、暗色无差异时可以不写该块）；`.less` 不写 fallback，令牌由 `@aura-react-comp/design/style.css` 提供。
 - x 包注意：构建后脚本会把全部 less 合并成 `esm/style.css`，源码中照常 `import './index.less'` 即可，不要引入其他样式引入方式。
 
 ## Step 5 测试 index.test.tsx
@@ -82,7 +82,7 @@ packages/<pkg>/src/<kebab-case-name>/
 - **三类用例缺一不可**：正常（默认渲染 / 受控往返）、边界（空值 / 极值 / disabled / 阈值）、异常（非法输入 / 回调报错）。
 - **断言 DOM 行为，不 mock 渲染层**；只有网络层（如上传）才 mock。定位优先用 `getByText` / `getByRole`，类名断言只用于样式分支。
 - **覆盖率是全局硬门禁**（语句 80 / 分支 84 / 函数 65 / 行 80，全仓一起算）：新组件分支覆盖不足会拖垮全局并挂掉 `pnpm verify`。demo/ 目录不计入覆盖率，**不要**把逻辑写进 demo 来"绕过"测试。
-- ui 包的视觉组件在 `packages/ui/src/a11y.test.tsx` 追加 axe 基线用例（`await axe(container)` + `toHaveNoViolations`）。
+- ui 包的视觉组件在 `packages/design/src/a11y.test.tsx` 追加 axe 基线用例（`await axe(container)` + `toHaveNoViolations`）。
 - `tests/setup.ts` 已补齐 `matchMedia` / `ResizeObserver` 等 jsdom 缺口，测试文件无需自己 mock。
 - **键盘支持靠语义元素满足**：用原生 `<button>` / `<input>` 时 Enter / Space 激活是免费的，不要写 `fireEvent.keyDown` 的"键盘激活"用例——fireEvent 不模拟原生激活行为，仓库也没有 user-event；键盘测试只对自管理 tabindex 的复合组件（menu / tabs）才有意义。
 

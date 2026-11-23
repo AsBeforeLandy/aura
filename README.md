@@ -43,20 +43,20 @@
 
 ```bash
 # pnpm（推荐）
-pnpm add @aura-react-comp/ui
+pnpm add @aura-react-comp/design
 
 # yarn
-yarn add @aura-react-comp/ui
+yarn add @aura-react-comp/design
 
 # npm
-npm install @aura-react-comp/ui
+npm install @aura-react-comp/design
 ```
 
 ## 使用
 
 ```tsx
-import { Button, Space } from '@aura-react-comp/ui';
-import '@aura-react-comp/ui/style.css';
+import { Button, Space } from '@aura-react-comp/design';
+import '@aura-react-comp/design/style.css';
 
 const App = () => (
   <Space>
@@ -66,14 +66,14 @@ const App = () => (
 );
 ```
 
-> `@aura-react-comp/ui/style.css` 导出的是主题令牌（`--aura-*` CSS 变量）。引入 `@aura-react-comp/ui` 时其入口已自动引入该文件，
-> 这一行仅在你需要手动控制样式加载顺序时才需显式书写。请勿使用 `@aura-react-comp/ui/src/...` 或
-> `@aura-react-comp/ui/dist/...` 之类的路径——发布包只包含 `esm/` 产物。
+> `@aura-react-comp/design/style.css` 导出的是主题令牌（`--aura-*` CSS 变量）。引入 `@aura-react-comp/design` 时其入口已自动引入该文件，
+> 这一行仅在你需要手动控制样式加载顺序时才需显式书写。请勿使用 `@aura-react-comp/design/src/...` 或
+> `@aura-react-comp/design/dist/...` 之类的路径——发布包只包含 `esm/` 产物。
 
 ### 主题切换
 
 ```tsx
-import { ThemeProvider, useTheme } from '@aura-react-comp/ui';
+import { ThemeProvider, useTheme } from '@aura-react-comp/design';
 
 const App = () => (
   <ThemeProvider defaultTheme="light">
@@ -102,7 +102,7 @@ const App = () => (
 ```
 aura/
 ├── packages/
-│   ├── ui/        # @aura-react-comp/ui — UI 组件库
+│   ├── ui/        # @aura-react-comp/design — UI 组件库
 │   ├── charts/    # @aura-react-comp/charts — 图表库（18 个图表）
 │   ├── editor/    # @aura-react-comp/editor — 富文本编辑器（Tiptap 封装）
 │   ├── business/  # @aura-react-comp/business — 业务组件库（基于 antd 封装）

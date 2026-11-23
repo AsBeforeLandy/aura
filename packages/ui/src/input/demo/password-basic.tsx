@@ -1,8 +1,0 @@
-import React from 'react';
-import { Input } from '@aura-react-comp/ui';
-
-const Demo: React.FC = () => (
-  <Input.Password placeholder="请输入密码" />
-);
-
-export default Demo;

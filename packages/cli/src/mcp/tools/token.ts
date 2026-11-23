@@ -7,7 +7,7 @@ import { getWorkspacePath } from '../../utils/paths.js';
  * 获取 Design Token 列表（只输出 :root 下的亮色值）
  */
 function getDesignTokens(): string {
-  const uiSourceDir = getWorkspacePath('packages/ui/src');
+  const uiSourceDir = getWorkspacePath('packages/design/src');
   const tokenPath = path.join(uiSourceDir, 'theme', 'tokens.css');
 
   if (!fs.existsSync(tokenPath)) {
@@ -76,10 +76,15 @@ function getDesignTokens(): string {
 }
 
 export function registerTokenTool(server: McpServer): void {
-  server.tool('aura_token', '获取 Design Token 列表（CSS Variables）', {}, async () => {
-    const result = getDesignTokens();
-    return {
-      content: [{ type: 'text', text: result }],
-    };
-  });
+  server.tool(
+    'aura_token',
+    '获取 Design Token 列表（CSS Variables）',
+    {},
+    async () => {
+      const result = getDesignTokens();
+      return {
+        content: [{ type: 'text', text: result }],
+      };
+    },
+  );
 }

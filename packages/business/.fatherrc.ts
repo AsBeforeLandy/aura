@@ -4,7 +4,7 @@ import { defineConfig } from 'father';
  * 注意：这里刻意**不配置 `esm.alias`**。
  *
  * father 的 bundless 模式会把被 alias 命中的裸包名改写成仓库内的相对路径
- * （例如 `@aura-react-comp/shared` → `../../../shared/src`、`@aura-react-comp/ui` → `../ui/src`），
+ * （例如 `@aura-react-comp/shared` → `../../../shared/src`、`@aura-react-comp/design` → `../design/src`），
  * 这些路径在发布后的 node_modules 中并不存在，会导致产物对下游完全不可用。
  *
  * 本包通过 pnpm workspace 已能在开发期解析 `@aura-react-comp/*`，声明文件生成所需的

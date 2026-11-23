@@ -7,17 +7,17 @@
 ### 破坏性变更
 
 - **npm 包名全部更换**：`@aura/*` → `@aura-react-comp/*`
-  （例：`@aura/ui` → `@aura-react-comp/ui`，`@aura/x` → `@aura-react-comp/x`）。
+  （例：`@aura/ui` → `@aura-react-comp/design`，`@aura/x` → `@aura-react-comp/x`）。
   原因是 npm 要求 scope 必须与组织名完全一致，而 `aura` 组织名已被占用。
   迁移**只针对包标识符**——样式类名、CSS 变量（`--aura-*`）、CLI 的 bin 名与品牌名
   Aura 均未变动，组件 API 与样式接口完全兼容。
   升级方式：替换依赖名与 `import` 路径即可。
 
   ```diff
-  - import { Button } from '@aura-react-comp/ui';
-  - import '@aura-react-comp/ui/style.css';
-  + import { Button } from '@aura-react-comp/ui';
-  + import '@aura-react-comp/ui/style.css';
+  - import { Button } from '@aura-react-comp/design';
+  - import '@aura-react-comp/design/style.css';
+  + import { Button } from '@aura-react-comp/design';
+  + import '@aura-react-comp/design/style.css';
   ```
 
 ### 新增
@@ -122,7 +122,7 @@
 
 ### 新增
 
-- `@aura-react-comp/business` 业务组件包（链接共享 `@aura-react-comp/ui`，防止 CSS 变量缺失）
+- `@aura-react-comp/business` 业务组件包（链接共享 `@aura-react-comp/design`，防止 CSS 变量缺失）
 - **ProTable** / **SearchForm** 业务组件与文档、测试
 - CI：GitHub Pages 部署迁移至 GitHub Actions
 

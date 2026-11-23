@@ -24,7 +24,7 @@
 
 - **不要手改 `packages/*/package.json` 的 `version`**，也不要手写 `CHANGELOG.md` ——
   这两件事都由 `changeset version` 统一产出，手改会与 changeset 记录脱节。
-- 内部依赖（`@aura-react-comp/ui` 依赖 `@aura-react-comp/shared` 等）的版本范围由
+- 内部依赖（`@aura-react-comp/design` 依赖 `@aura-react-comp/shared` 等）的版本范围由
   `updateInternalDependencies: "patch"` 自动联动，不需要手动改。
 - 首批 6 个包（shared / request / icons / ui / business / x）**不设 `fixed` 组**，
   允许各自独立演进。

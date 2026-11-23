@@ -103,7 +103,7 @@ Aura 使用 CSS Variables 作为 Design Token 的载体，支持灵活的主题�
 `<html>` 的 `data-mode` / `data-theme`（兼容旧选择器）/ `data-palette` 属性：
 
 ```tsx | pure
-import { ThemeProvider } from '@aura-react-comp/ui';
+import { ThemeProvider } from '@aura-react-comp/design';
 
 // 受控：mode 与 palette 都由外部状态驱动
 const App = () => {
@@ -131,7 +131,7 @@ const App = () => (
 `theme` / `setTheme` / `toggleTheme` 为兼容别名）：
 
 ```tsx | pure
-import { useTheme } from '@aura-react-comp/ui';
+import { useTheme } from '@aura-react-comp/design';
 
 const MyComponent = () => {
   const { mode, palette, setMode, setPalette, toggleMode } = useTheme();

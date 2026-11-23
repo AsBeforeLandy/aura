@@ -1,6 +1,6 @@
 # Aura 组件五件套模板
 
-五个文件的骨架均提炼自仓库现有组件（`packages/ui/src/badge`、`packages/business/src/modal-form`、`packages/x/src/bubble`），直接复制到新组件目录后替换占位符即可。占位符约定：`Xxx` = 组件名（PascalCase），`xxx` = 目录名 / 类名片段（kebab-case）。
+五个文件的骨架均提炼自仓库现有组件（`packages/design/src/badge`、`packages/business/src/modal-form`、`packages/x/src/bubble`），直接复制到新组件目录后替换占位符即可。占位符约定：`Xxx` = 组件名（PascalCase），`xxx` = 目录名 / 类名片段（kebab-case）。
 
 新建组件时按 Step 1 选定的包决定差异点（见每节开头的「包差异」）。
 
@@ -133,7 +133,7 @@ Xxx.displayName = 'Xxx';
 }
 ```
 
-禁止事项：硬编码色值（hex/rgb/rgba）、`!important`、`color-mix`、令牌 fallback。需要新令牌（如「主色 + 22% 透明度」）时，去 `packages/ui/src/theme/tokens.css` 定义亮 / 暗两套值，组件只消费令牌。
+禁止事项：硬编码色值（hex/rgb/rgba）、`!important`、`color-mix`、令牌 fallback。需要新令牌（如「主色 + 22% 透明度」）时，去 `packages/design/src/theme/tokens.css` 定义亮 / 暗两套值，组件只消费令牌。
 
 **命名分包**（与仓库现状一致）：
 
@@ -206,7 +206,7 @@ describe('Xxx', () => {
 
 - 三类用例（正常 / 边界 / 异常）一个都不能少——覆盖率是全仓硬门禁。
 - `vi.fn()` 测回调；断言 classList / DOM 结构这类行为，不 mock 渲染层。
-- ui 包视觉组件再到 `packages/ui/src/a11y.test.tsx` 追加 axe 用例：
+- ui 包视觉组件再到 `packages/design/src/a11y.test.tsx` 追加 axe 用例：
 
 ```tsx
 it('Xxx', async () => {
@@ -218,7 +218,7 @@ it('Xxx', async () => {
 
 ```tsx
 import React from 'react';
-import { Xxx } from '@aura-react-comp/ui'; // business 包写 '@aura-react-comp/business'，x 包写 '@aura-react-comp/x'
+import { Xxx } from '@aura-react-comp/design'; // business 包写 '@aura-react-comp/business'，x 包写 '@aura-react-comp/x'
 
 /** 基础用法。 */
 export default () => <Xxx title="标题" />;
@@ -247,7 +247,7 @@ toc: content
 一句话描述。
 
 ```tsx | pure
-import { Xxx } from '@aura-react-comp/ui';
+import { Xxx } from '@aura-react-comp/design';
 ```
 ````
 
@@ -279,7 +279,7 @@ import { Xxx } from '@aura-react-comp/ui';
 
 | 包 | 写法 | 可用值 |
 | --- | --- | --- |
-| `@aura-react-comp/ui` | 平铺 `group: 数据展示` | `通用` / `布局` / `导航` / `表单` / `表单高级` / `数据展示` / `反馈` |
+| `@aura-react-comp/design` | 平铺 `group: 数据展示` | `通用` / `布局` / `导航` / `表单` / `表单高级` / `数据展示` / `反馈` |
 | `@aura-react-comp/business` | 平铺 `group: 业务` | `业务` |
 | `@aura-react-comp/x` | 嵌套 `group: { title: 交互, order: 402 }` | `主题桥接` / `数据流` / `交互` / `会话` / `引导` / `推理` |
 

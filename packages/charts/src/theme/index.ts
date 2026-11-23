@@ -5,7 +5,7 @@
  *
  * 实现策略：
  *   1. 不写死色值 —— 主题从 Aura 的 CSS 变量（`--aura-primary-600` 等）实时读取，
- *      因此只要宿主项目引了 `@aura-react-comp/ui/style.css`，图表天然同色；
+ *      因此只要宿主项目引了 `@aura-react-comp/design/style.css`，图表天然同色；
  *   2. 读取发生在运行时（getComputedStyle），所以 `data-theme="dark"` 切换后
  *      图表会跟着变，无需额外配置；
  *   3. 提供 createChartTheme 做逐字段深合并，允许只覆盖一两个字段

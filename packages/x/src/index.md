@@ -14,7 +14,7 @@ toc: content
 
 `@aura-react-comp/x` 是 Aura 生态的 AI 对话组件库（对标 Ant Design X 的 Aura 实现）。`XProvider`
 是它的主题桥接层：把 Aura 设计令牌映射到 antd 的主题系统，使 AI 对话组件与
-`@aura-react-comp/ui`、`@aura-react-comp/business` 保持一致的紫罗兰视觉语言。
+`@aura-react-comp/design`、`@aura-react-comp/business` 保持一致的紫罗兰视觉语言。
 
 ## 完整对话页
 
@@ -77,7 +77,7 @@ toc: content
 2. **Mermaid 的类型不硬依赖 mermaid 包**——`MermaidConfig` 是宽松签名，
    这样未安装 mermaid 的消费方也能正常 `import`。
 3. **Notification 是系统通知**（`window.Notification`），不是页面内消息条；
-   页面内提示请用 `@aura-react-comp/ui` 的 `Notification` / `Message`。
+   页面内提示请用 `@aura-react-comp/design` 的 `Notification` / `Message`。
 
 > 运行时（antdx 的 `XRequest` / `XStream` / `useXAgent`）在本库由
 > [`useXStream`](/x-components/use-x-stream) 与 [`useXChat`](/x-components/use-x-chat) 承担：
@@ -127,16 +127,16 @@ export default () => (
 ## 注意事项
 
 - `XProvider` 只负责 antd 主题桥接；Aura 自研组件的 CSS 变量（`--aura-*`）由应用层
-  引入 `@aura-react-comp/ui/style.css` 并通过 `data-theme` 作用域切换，两者互不冲突。
+  引入 `@aura-react-comp/design/style.css` 并通过 `data-theme` 作用域切换，两者互不冲突。
 - `buildXThemeConfig` 作为命名导出暴露，便于在非组件场景（如 Storybook 装饰器、测试）
   复用同一份主题配置。
 
 ## 样式引入
 
-本包的交互控件复用 `@aura-react-comp/ui` 的 `Button` / `Textarea` 等基础组件，
+本包的交互控件复用 `@aura-react-comp/design` 的 `Button` / `Textarea` 等基础组件，
 因此**需要同时引入两套样式**（顺序不可颠倒）：
 
 ```ts
-import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/design/style.css';
 import '@aura-react-comp/x/style.css';
 ```

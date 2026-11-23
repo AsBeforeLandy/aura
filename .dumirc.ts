@@ -161,7 +161,7 @@ function collectSidebarGroups(atoms: { dir: string; prefix: string }[]) {
 }
 
 const componentSidebar = collectSidebarGroups([
-  { dir: 'packages/ui/src', prefix: '/components' },
+  { dir: 'packages/design/src', prefix: '/components' },
   { dir: 'packages/icons/src', prefix: '/components' },
 ]);
 
@@ -287,7 +287,7 @@ export default defineConfig({
   resolve: {
     docDirs: ['docs'],
     atomDirs: [
-      { type: 'components', dir: 'packages/ui/src' },
+      { type: 'components', dir: 'packages/design/src' },
       { type: 'components', dir: 'packages/icons/src' },
       { type: 'business', dir: 'packages/business/src' },
       // dumi 会对 type 做英文复数化：'x-component' → 路由前缀 /x-components
@@ -305,7 +305,7 @@ export default defineConfig({
       // 'editor-component' → /editor-components
       { type: 'editor-component', dir: 'packages/editor/src' },
     ],
-    entryFile: './packages/ui/src/index.ts',
+    entryFile: './packages/design/src/index.ts',
     codeBlockMode: 'active',
     forceKebabCaseRouting: true,
   },
@@ -335,15 +335,15 @@ export default defineConfig({
     });
   },
   alias: {
-    // 必须排在 `@aura-react-comp/ui` 之前：webpack 的 alias 为前缀匹配、按声明顺序命中，
-    // 若被 `@aura-react-comp/ui` 先命中会解析成 packages/ui/src/style.css（不存在）。
-    // 该子路径同时由 @aura-react-comp/ui 的 package.json#exports 对外暴露。
-    '@aura-react-comp/ui/style.css': path.resolve(
+    // 必须排在 `@aura-react-comp/design` 之前：webpack 的 alias 为前缀匹配、按声明顺序命中，
+    // 若被 `@aura-react-comp/design` 先命中会解析成 packages/design/src/style.css（不存在）。
+    // 该子路径同时由 @aura-react-comp/design 的 package.json#exports 对外暴露。
+    '@aura-react-comp/design/style.css': path.resolve(
       __dirname,
-      'packages/ui/src/theme/tokens.css',
+      'packages/design/src/theme/tokens.css',
     ),
     '@aura-react-comp/icons': path.resolve(__dirname, 'packages/icons/src'),
-    '@aura-react-comp/ui': path.resolve(__dirname, 'packages/ui/src'),
+    '@aura-react-comp/design': path.resolve(__dirname, 'packages/design/src'),
     '@aura-react-comp/business': path.resolve(
       __dirname,
       'packages/business/src',

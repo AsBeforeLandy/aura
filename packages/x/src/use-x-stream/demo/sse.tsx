@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useXStream } from '@aura-react-comp/x';
-import { Button } from '@aura-react-comp/ui';
+import { Button } from '@aura-react-comp/design';
 
 /**
  * 模拟一条 SSE 响应（真实场景这段由服务端返回）。

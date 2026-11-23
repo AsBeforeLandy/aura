@@ -37,7 +37,7 @@ import { BusinessProvider } from '@aura-react-comp/business';
 
 ```tsx | pure
 import { BusinessProvider } from '@aura-react-comp/business';
-import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/design/style.css';
 
 const App = () => (
   <BusinessProvider>
@@ -56,13 +56,13 @@ const App = () => (
 
 ## 样式引入
 
-本包所有 `.less` 直接使用 `var(--aura-*)` 且不设 fallback，令牌缺失时颜色、圆角、字号、间距会整体失效。令牌由 `@aura-react-comp/ui` 提供，已作为本包依赖声明。
+本包所有 `.less` 直接使用 `var(--aura-*)` 且不设 fallback，令牌缺失时颜色、圆角、字号、间距会整体失效。令牌由 `@aura-react-comp/design` 提供，已作为本包依赖声明。
 
-- 引入 `@aura-react-comp/ui` 时，其入口**已自动引入**主题令牌，无需额外操作；
+- 引入 `@aura-react-comp/design` 时，其入口**已自动引入**主题令牌，无需额外操作；
 - 若只使用 `@aura-react-comp/business`，请显式引入一次：
 
 ```tsx | pure
-import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/design/style.css';
 ```
 
 ## API

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
-import { Button } from '@aura-react-comp/ui';
+import { Button } from '@aura-react-comp/design';
 import { CodeHighlighter } from '../code-highlighter';
 import './index.less';
 

@@ -3,7 +3,7 @@
 > 基于 React 18 + TypeScript + CSS Variables，支持亮/暗双模式主题
 
 ## 快速开始
-npm install @aura-react-comp/ui
+npm install @aura-react-comp/design
 
 ## 组件列表
 - Button: 按钮 (variant: default/primary/dashed/text/link, size: sm/md/lg)
@@ -45,7 +45,7 @@ npm install @aura-react-comp/ui
 
 ## 业务组件（@aura-react-comp/business）
 
-基于 antd v6 二次封装的 B 端业务组件（依赖 @aura-react-comp/ui 与 @aura-react-comp/shared）。
+基于 antd v6 二次封装的 B 端业务组件（依赖 @aura-react-comp/design 与 @aura-react-comp/shared）。
 使用前以 `BusinessProvider` 包裹（暗色 / 主色 / 紧凑桥接），文档路由前缀 `/businesses`。
 
 - ProTable: 高级表格

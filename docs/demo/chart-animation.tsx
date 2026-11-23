@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { LineChart } from '@aura-react-comp/charts';
 import type { EasingName } from '@aura-react-comp/charts';
-import { Button, Select, Slider } from '@aura-react-comp/ui';
+import { Button, Select, Slider } from '@aura-react-comp/design';
 
 const BASE = [
   { month: '1月', orders: 1240, refunds: 280 },

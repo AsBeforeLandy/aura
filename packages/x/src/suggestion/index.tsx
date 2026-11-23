@@ -1,6 +1,6 @@
 import React from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
-import { Button } from '@aura-react-comp/ui';
+import { Button } from '@aura-react-comp/design';
 import './index.less';
 
 export interface SuggestionItem {

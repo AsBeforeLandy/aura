@@ -1,57 +1,94 @@
 // @ts-nocheck - demo 文件由 dumi 编译，跨包引用不受 father rootDir 限制
 import React, { useState, useMemo } from 'react';
 import * as Icons from '@aura-react-comp/icons';
-import { Tabs, TabItem, Input, Flex } from '@aura-react-comp/ui';
+import { Tabs, TabItem, Input, Flex } from '@aura-react-comp/design';
 import './icon-list.less';
 
 const iconCategories: { title: string; icons: string[] }[] = [
   {
     title: '方向性图标',
     icons: [
-      'ChevronLeft', 'ChevronRight', 'ChevronDown', 'ChevronUp',
-      'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
-      'DoubleLeft', 'DoubleRight',
+      'ChevronLeft',
+      'ChevronRight',
+      'ChevronDown',
+      'ChevronUp',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'DoubleLeft',
+      'DoubleRight',
     ],
   },
   {
     title: '提示建议性',
     icons: [
-      'CheckCircleOutline', 'CheckCircleFilled', 'CheckCircleTwoTone',
-      'CloseCircleOutline', 'CloseCircleFilled', 'CloseCircleTwoTone',
-      'WarningTriangleOutline', 'WarningTriangleFilled', 'WarningTriangleTwoTone',
-      'InfoCircleOutline', 'InfoCircleFilled', 'InfoCircleTwoTone',
-      'QuestionCircleOutline', 'QuestionCircleTwoTone',
+      'CheckCircleOutline',
+      'CheckCircleFilled',
+      'CheckCircleTwoTone',
+      'CloseCircleOutline',
+      'CloseCircleFilled',
+      'CloseCircleTwoTone',
+      'WarningTriangleOutline',
+      'WarningTriangleFilled',
+      'WarningTriangleTwoTone',
+      'InfoCircleOutline',
+      'InfoCircleFilled',
+      'InfoCircleTwoTone',
+      'QuestionCircleOutline',
+      'QuestionCircleTwoTone',
     ],
   },
   {
     title: '编辑类',
     icons: [
-      'Edit', 'Delete', 'Copy', 'Plus', 'Minus', 'Close',
-      'Search', 'Filter', 'Refresh', 'Download', 'ThumbUp', 'ThumbDown',
-      'Upload', 'CloudUpload', 'Uploading',
-      'EyeOpen', 'EyeClosed',
+      'Edit',
+      'Delete',
+      'Copy',
+      'Plus',
+      'Minus',
+      'Close',
+      'Search',
+      'Filter',
+      'Refresh',
+      'Download',
+      'ThumbUp',
+      'ThumbDown',
+      'Upload',
+      'CloudUpload',
+      'Uploading',
+      'EyeOpen',
+      'EyeClosed',
     ],
   },
   {
     title: '数据类',
-    icons: [
-      'File', 'Folder', 'FolderOpen', 'PicturePlaceholder',
-    ],
+    icons: ['File', 'Folder', 'FolderOpen', 'PicturePlaceholder'],
   },
   {
     title: '品牌和标识',
-    icons: [
-      'StarFilled', 'StarEmpty', 'StarHalf',
-    ],
+    icons: ['StarFilled', 'StarEmpty', 'StarHalf'],
   },
   {
     title: '网站通用',
     icons: [
-      'Home', 'User', 'Settings', 'Mail', 'Phone',
-      'Calendar', 'Clock', 'Bell', 'BellOff',
-      'Lock', 'Link', 'Menu',
-      'MoreHorizontal', 'MoreVertical', 'CheckOutline',
-      'Loading', 'SpinIcon',
+      'Home',
+      'User',
+      'Settings',
+      'Mail',
+      'Phone',
+      'Calendar',
+      'Clock',
+      'Bell',
+      'BellOff',
+      'Lock',
+      'Link',
+      'Menu',
+      'MoreHorizontal',
+      'MoreVertical',
+      'CheckOutline',
+      'Loading',
+      'SpinIcon',
     ],
   },
 ];
@@ -70,8 +107,6 @@ function getStyleType(name: string): string {
   return 'outline';
 }
 
-
-
 export default function IconList() {
   const [search, setSearch] = useState('');
   const [style, setStyle] = useState('all');
@@ -82,10 +117,8 @@ export default function IconList() {
       .map((cat) => {
         const filtered = cat.icons.filter((name) => {
           const matchSearch =
-            !search ||
-            name.toLowerCase().includes(search.toLowerCase());
-          const matchStyle =
-            style === 'all' || getStyleType(name) === style;
+            !search || name.toLowerCase().includes(search.toLowerCase());
+          const matchStyle = style === 'all' || getStyleType(name) === style;
           return matchSearch && matchStyle;
         });
         return { ...cat, icons: filtered };
@@ -102,26 +135,33 @@ export default function IconList() {
   };
 
   const renderIcon = (name: string) => {
-    const IconComp = (Icons as Record<string, React.ComponentType<{ size?: number }>>)[name];
+    const IconComp = (
+      Icons as Record<string, React.ComponentType<{ size?: number }>>
+    )[name];
     if (!IconComp) return null;
     return <IconComp size={24} />;
   };
 
-  const totalCount = filteredCategories.reduce((sum, c) => sum + c.icons.length, 0);
+  const totalCount = filteredCategories.reduce(
+    (sum, c) => sum + c.icons.length,
+    0,
+  );
 
   return (
     <div>
       <div className="aura-icon-toolbar">
         <Tabs activeKey={style} onChange={setStyle} variant="pill">
-        {styleOptions.map((opt) => (
+          {styleOptions.map((opt) => (
             <TabItem key={opt.value} tabKey={opt.value} title={opt.label} />
-        ))}
+          ))}
         </Tabs>
         <div className="aura-icon-search-wrapper">
           <Input
             placeholder="在此搜索图标，点击图标可复制代码"
             value={search}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearch(e.target.value)
+            }
             size="sm"
             allowClear
           />

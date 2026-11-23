@@ -13,7 +13,7 @@ const ITEMS: SourcesItem[] = [
     key: 'tokens',
     title: 'Aura 主题令牌定义',
     url: 'https://github.com/AsBeforeLandy/aura',
-    description: 'packages/ui/src/theme/tokens.css',
+    description: 'packages/design/src/theme/tokens.css',
   },
   {
     key: 'internal',

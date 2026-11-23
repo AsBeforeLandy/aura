@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useXChat, type XMessage } from '@aura-react-comp/x';
-import { Button } from '@aura-react-comp/ui';
+import { Button } from '@aura-react-comp/design';
 
 /** mock 传输：逐字吐出，模拟流式响应（真实场景替换为 fetch / useXStream） */
 async function mockRequest(

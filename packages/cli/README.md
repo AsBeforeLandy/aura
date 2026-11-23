@@ -22,14 +22,14 @@ node packages/cli/dist/index.js --help
 
 ## 能力
 
-| 命令 / 模块  | 说明                                                        |
-| ------------ | ----------------------------------------------------------- |
-| MCP Server   | 以 MCP 协议向 AI IDE 暴露 Aura 组件库的元数据               |
-| `token` 工具 | 读取并解析 `@aura-react-comp/ui` 的主题令牌（`tokens.css`） |
-| `doc`        | 查询组件文档                                                |
-| `skill`      | 安装 / 管理 Aura Skill 文件                                 |
+| 命令 / 模块  | 说明                                                            |
+| ------------ | --------------------------------------------------------------- |
+| MCP Server   | 以 MCP 协议向 AI IDE 暴露 Aura 组件库的元数据                   |
+| `token` 工具 | 读取并解析 `@aura-react-comp/design` 的主题令牌（`tokens.css`） |
+| `doc`        | 查询组件文档                                                    |
+| `skill`      | 安装 / 管理 Aura Skill 文件                                     |
 
-`token` 工具当前从 `packages/ui/src/theme/tokens.css` 读取令牌，因此运行环境需能访问**仓库源码**，而非已发布的 `esm/` 产物。
+`token` 工具当前从 `packages/design/src/theme/tokens.css` 读取令牌，因此运行环境需能访问**仓库源码**，而非已发布的 `esm/` 产物。
 
 ## 依赖
 

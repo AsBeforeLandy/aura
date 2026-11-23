@@ -21,17 +21,17 @@ toc: content
 
 ```bash [pnpm]
 # pnpm（推荐）
-pnpm add @aura-react-comp/ui
+pnpm add @aura-react-comp/design
 ```
 
 ```bash [yarn]
 # yarn
-yarn add @aura-react-comp/ui
+yarn add @aura-react-comp/design
 ```
 
 ```bash [npm]
 # npm
-npm install @aura-react-comp/ui
+npm install @aura-react-comp/design
 ```
 
 :::
@@ -68,7 +68,7 @@ npm install @aura-react-comp/request
 
 | 包名                       | 描述                                   | 依赖                      |
 | -------------------------- | -------------------------------------- | ------------------------- |
-| `@aura-react-comp/ui`      | UI 组件库，包含 34+ 组件               | -                         |
+| `@aura-react-comp/design`  | UI 组件库，包含 34+ 组件               | -                         |
 | `@aura-react-comp/shared`  | 工具函数集（classNames、prefixCls 等） | -                         |
 | `@aura-react-comp/request` | 基于原生 Fetch 的 HTTP 请求封装        | `@aura-react-comp/shared` |
 
@@ -77,7 +77,7 @@ npm install @aura-react-comp/request
 使用组件时，需要引入全局样式文件：
 
 ```tsx | pure
-import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/design/style.css';
 ```
 
 > 如果框架支持按需加载（如 Vite、Next.js），CSS 文件会被自动 tree-shaking，无需担心打包体积。

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar } from '@aura-react-comp/ui';
+import { Avatar } from '@aura-react-comp/design';
 import { Actions, Bubble } from '@aura-react-comp/x';
 
 export default () => {

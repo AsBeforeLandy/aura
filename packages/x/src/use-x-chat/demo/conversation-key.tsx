@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useXChat } from '@aura-react-comp/x';
-import { Button } from '@aura-react-comp/ui';
+import { Button } from '@aura-react-comp/design';
 import type { XMessage } from '@aura-react-comp/x';
 
 /** 模拟远端：按会话返回历史（异步），体现 conversationKey 的初始化语义 */

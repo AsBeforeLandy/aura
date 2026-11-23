@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNotification } from '@aura-react-comp/x';
-import { Button } from '@aura-react-comp/ui';
+import { Button } from '@aura-react-comp/design';
 
 export default () => {
   const [{ permission }, { open, close, requestPermission }] =

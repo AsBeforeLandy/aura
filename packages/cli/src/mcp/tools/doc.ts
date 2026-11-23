@@ -9,7 +9,7 @@ function getPublicDir(): string {
 }
 
 function getUiSourceDir(): string {
-  return getWorkspacePath('packages/ui/src');
+  return getWorkspacePath('packages/design/src');
 }
 
 /**
@@ -20,7 +20,8 @@ function extractFromLlmsFull(componentName: string): string | null {
   if (!fs.existsSync(filePath)) return null;
 
   const content = fs.readFileSync(filePath, 'utf-8');
-  const nameCap = componentName.charAt(0).toUpperCase() + componentName.slice(1);
+  const nameCap =
+    componentName.charAt(0).toUpperCase() + componentName.slice(1);
   const regex = new RegExp(`## ${nameCap}[\\s\\S]*?(?=\\n## [A-Z]|$)`, 'm');
   const match = content.match(regex);
   return match ? match[0].trim() : null;
@@ -45,7 +46,9 @@ function extractFromSource(componentName: string): string {
 
   const demoPath = path.join(componentDir, 'demo', 'basic.tsx');
   if (fs.existsSync(demoPath)) {
-    parts.push(`\n## Demo\n\n\`\`\`tsx\n${fs.readFileSync(demoPath, 'utf-8')}\n\`\`\``);
+    parts.push(
+      `\n## Demo\n\n\`\`\`tsx\n${fs.readFileSync(demoPath, 'utf-8')}\n\`\`\``,
+    );
   }
 
   if (parts.length === 0) {

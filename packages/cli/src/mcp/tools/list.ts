@@ -8,7 +8,7 @@ function getPublicDir(): string {
 }
 
 function getUiSourceDir(): string {
-  return getWorkspacePath('packages/ui/src');
+  return getWorkspacePath('packages/design/src');
 }
 
 /**
@@ -21,14 +21,14 @@ function readLlmsList(): string | null {
 }
 
 /**
- * 从 packages/ui/src/index.ts 提取组件列表（fallback）
+ * 从 packages/design/src/index.ts 提取组件列表（fallback）
  */
 function getComponentListFromSource(): string {
   const uiSourceDir = getUiSourceDir();
   const indexPath = path.join(uiSourceDir, 'index.ts');
 
   if (!fs.existsSync(indexPath)) {
-    return '未找到 packages/ui/src/index.ts';
+    return '未找到 packages/design/src/index.ts';
   }
 
   const content = fs.readFileSync(indexPath, 'utf-8');
@@ -47,19 +47,24 @@ function getComponentListFromSource(): string {
 }
 
 export function registerListTool(server: McpServer): void {
-  server.tool('aura_list', '列出所有 Aura 组件。优先从 llms.txt 读取，回退到源码解析。', {}, async () => {
-    // 优先使用 llms.txt
-    const llmsResult = readLlmsList();
-    if (llmsResult) {
-      return {
-        content: [{ type: 'text' as const, text: llmsResult }],
-      };
-    }
+  server.tool(
+    'aura_list',
+    '列出所有 Aura 组件。优先从 llms.txt 读取，回退到源码解析。',
+    {},
+    async () => {
+      // 优先使用 llms.txt
+      const llmsResult = readLlmsList();
+      if (llmsResult) {
+        return {
+          content: [{ type: 'text' as const, text: llmsResult }],
+        };
+      }
 
-    // fallback 到源码提取
-    const result = getComponentListFromSource();
-    return {
-      content: [{ type: 'text' as const, text: result }],
-    };
-  });
+      // fallback 到源码提取
+      const result = getComponentListFromSource();
+      return {
+        content: [{ type: 'text' as const, text: result }],
+      };
+    },
+  );
 }

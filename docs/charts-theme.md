@@ -6,7 +6,7 @@ toc: content
 
 图表主题**不是**一份写死的色值表，而是运行时从 Aura 的 CSS 变量读取的结果。这意味着：
 
-1. 只要引入了 `@aura-react-comp/ui/style.css`，图表天然与组件库同色；
+1. 只要引入了 `@aura-react-comp/design/style.css`，图表天然与组件库同色；
 2. 宿主修改 `--aura-primary-700`，图表随之变化；
 3. 切换 `data-mode="dark"`（或历史键 `data-theme="dark"`）时图表自动切换暗色配色，
    切换 `data-palette`（violet / ocean / sunset）时图表自动跟随新色板 ——

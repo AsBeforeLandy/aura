@@ -8,7 +8,7 @@ description: Use when generating complete pages using Aura components - provides
 ## 登录页
 
 ```tsx
-import { Form, Input, Button, Card, Flex } from '@aura-react-comp/ui';
+import { Form, Input, Button, Card, Flex } from '@aura-react-comp/design';
 
 function LoginPage() {
   return (
@@ -50,7 +50,14 @@ function LoginPage() {
 ## 仪表盘页
 
 ```tsx
-import { Card, Flex, Badge, Tag, Spin, Breadcrumb } from '@aura-react-comp/ui';
+import {
+  Card,
+  Flex,
+  Badge,
+  Tag,
+  Spin,
+  Breadcrumb,
+} from '@aura-react-comp/design';
 
 function DashboardPage() {
   return (
@@ -97,7 +104,7 @@ import {
   Card,
   Tag,
   Empty,
-} from '@aura-react-comp/ui';
+} from '@aura-react-comp/design';
 
 function ListPage() {
   return (

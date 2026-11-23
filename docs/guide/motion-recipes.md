@@ -7,7 +7,7 @@ toc: content
 # 动效场景配方
 
 把 [`@aura-react-comp/motion`](/motion-components) 与
-`@aura-react-comp/x`（AI 对话）、`@aura-react-comp/ui` / `business`（B 端）
+`@aura-react-comp/x`（AI 对话）、`@aura-react-comp/design` / `business`（B 端）
 组合成开箱即用的场景。所有配方都遵循同一条纪律：**令牌驱动 + reduced-motion 自动降级**，
 复制到你的项目即可运行。
 
@@ -200,7 +200,7 @@ Reveal 因此每次都能完整播放（`index` 逐项错峰）。
 ```tsx | pure
 import { ModalForm } from '@aura-react-comp/business';
 import { Reveal } from '@aura-react-comp/motion';
-import { Input, Select } from '@aura-react-comp/ui';
+import { Input, Select } from '@aura-react-comp/design';
 
 export function CreateUserModal({
   open,

@@ -25,7 +25,7 @@ pnpm add @aura-react-comp/charts
 图表读取组件库的 CSS 变量，请同时引入两份样式：
 
 ```ts
-import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/design/style.css';
 import '@aura-react-comp/charts/style.css';
 ```
 

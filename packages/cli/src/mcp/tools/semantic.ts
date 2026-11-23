@@ -9,7 +9,7 @@ function getPublicDir(): string {
 }
 
 function getUiSourceDir(): string {
-  return getWorkspacePath('packages/ui/src');
+  return getWorkspacePath('packages/design/src');
 }
 
 /**
@@ -20,12 +20,10 @@ function extractFromLlmsSemantic(componentName: string): string | null {
   if (!fs.existsSync(filePath)) return null;
 
   const content = fs.readFileSync(filePath, 'utf-8');
-  const nameCap = componentName.charAt(0).toUpperCase() + componentName.slice(1);
+  const nameCap =
+    componentName.charAt(0).toUpperCase() + componentName.slice(1);
 
-  const regex = new RegExp(
-    `## ${nameCap}[\\s\\S]*?(?=\\n## [A-Z]|$)`,
-    'm',
-  );
+  const regex = new RegExp(`## ${nameCap}[\\s\\S]*?(?=\\n## [A-Z]|$)`, 'm');
   const match = content.match(regex);
   return match ? match[0].trim() : null;
 }
@@ -75,7 +73,10 @@ function extractFromLess(componentName: string): string {
     const line = `.aura-${cls}`;
     let desc = '';
     for (const [suffix, d] of Object.entries(CLASS_SEMANTIC_MAP)) {
-      if (cls.endsWith(suffix)) { desc = d; break; }
+      if (cls.endsWith(suffix)) {
+        desc = d;
+        break;
+      }
     }
     lines.push(desc ? `  ${line} — ${desc}` : `  ${line}`);
   }

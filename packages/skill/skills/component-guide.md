@@ -23,7 +23,7 @@ description: Use when building UI with Aura component library - provides compone
 Aura 使用复合组件模式：
 
 ```tsx
-import { Menu } from '@aura-react-comp/ui';
+import { Menu } from '@aura-react-comp/design';
 
 <Menu>
   <Menu.Item itemKey="a" title="首页">
@@ -51,7 +51,7 @@ import { Menu } from '@aura-react-comp/ui';
 使用 ThemeProvider：
 
 ```tsx
-import { ThemeProvider } from '@aura-react-comp/ui';
+import { ThemeProvider } from '@aura-react-comp/design';
 
 <ThemeProvider defaultTheme="light">
   <App />
@@ -104,7 +104,7 @@ size: sm | md | lg
 ### Message（静态方法）
 
 ```tsx
-import { message } from '@aura-react-comp/ui';
+import { message } from '@aura-react-comp/design';
 message.success('操作成功');
 message.error('操作失败');
 ```
@@ -112,6 +112,6 @@ message.error('操作失败');
 ### Notification（静态方法）
 
 ```tsx
-import { notification } from '@aura-react-comp/ui';
+import { notification } from '@aura-react-comp/design';
 notification.success({ title: '成功', content: '操作完成' });
 ```

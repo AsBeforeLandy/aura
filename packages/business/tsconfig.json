@@ -12,7 +12,7 @@
     "paths": {
       "@aura-react-comp/business": ["./src/index.ts"],
       "@aura-react-comp/shared": ["../shared/src/index.ts"],
-      "@aura-react-comp/ui": ["../ui/src/index.ts"],
+      "@aura-react-comp/design": ["../design/src/index.ts"],
       "@aura-react-comp/icons": ["../icons/src/index.ts"]
     }
   },

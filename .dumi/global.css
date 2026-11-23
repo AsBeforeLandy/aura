@@ -1,4 +1,4 @@
-@import '@aura-react-comp/ui/style.css';
+@import '@aura-react-comp/design/style.css';
 /* 动效令牌：motion 组件源码不自带样式引入（消费者显式引入子路径），
    文档站在此全局引入，demo 的 --aura-motion-* 才能随主题联动 */
 @import '@aura-react-comp/motion/tokens.css';
@@ -6,7 +6,7 @@
 /* ===================================================================
    Aura Docs Shell Tokens — 壳层品牌变量（--doc-accent 系列）
    文档站壳（导航/侧栏/链接/搜索/进度条）全部消费这些变量，
-   与组件令牌（@aura-react-comp/ui/style.css = tokens.css）双轴同步：
+   与组件令牌（@aura-react-comp/design/style.css = tokens.css）双轴同步：
    data-mode(light|dark) × data-palette(violet|ocean|sunset)。
    =================================================================== */
 

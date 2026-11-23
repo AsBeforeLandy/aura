@@ -102,7 +102,7 @@ function useRuntimeThemeColors(): RuntimeAuraColors {
  * XProvider — AI 组件主题桥接
  *
  * 将 Aura 设计令牌映射到 antd 的主题系统，为 AI 对话组件（Bubble / Sender 等）
- * 提供与 @aura-react-comp/ui、@aura-react-comp/business 一致的视觉语言。
+ * 提供与 @aura-react-comp/design、@aura-react-comp/business 一致的视觉语言。
  *
  * antd v6 默认使用 CSS Variables，因此可与 Aura 的 CSS 变量主题体系共存。
  *

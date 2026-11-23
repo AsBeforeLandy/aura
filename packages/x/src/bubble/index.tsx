@@ -9,7 +9,7 @@ export interface BubbleProps {
   content?: string;
   /** 自定义内容渲染扩展点（如传 MarkdownContent） */
   contentRender?: (content: string) => React.ReactNode;
-  /** 头像（放任意节点，如 @aura-react-comp/ui 的 Avatar） */
+  /** 头像（放任意节点，如 @aura-react-comp/design 的 Avatar） */
   avatar?: React.ReactNode;
   /** 气泡上方的说明区（如消息来源、时间） */
   header?: React.ReactNode;
@@ -45,10 +45,19 @@ export const BubbleBase: React.FC<BubbleProps> = ({
   );
 
   return (
-    <div className={rootClass} data-role={role} style={style} aria-busy={loading || undefined}>
-      {avatar ? <div className={prefixCls('x-bubble-avatar')}>{avatar}</div> : null}
+    <div
+      className={rootClass}
+      data-role={role}
+      style={style}
+      aria-busy={loading || undefined}
+    >
+      {avatar ? (
+        <div className={prefixCls('x-bubble-avatar')}>{avatar}</div>
+      ) : null}
       <div className={prefixCls('x-bubble-main')}>
-        {header ? <div className={prefixCls('x-bubble-header')}>{header}</div> : null}
+        {header ? (
+          <div className={prefixCls('x-bubble-header')}>{header}</div>
+        ) : null}
         <div
           className={classNames(
             prefixCls('x-bubble-content'),
@@ -67,7 +76,9 @@ export const BubbleBase: React.FC<BubbleProps> = ({
             <span className={prefixCls('x-bubble-text')}>{content}</span>
           )}
         </div>
-        {footer ? <div className={prefixCls('x-bubble-footer')}>{footer}</div> : null}
+        {footer ? (
+          <div className={prefixCls('x-bubble-footer')}>{footer}</div>
+        ) : null}
       </div>
     </div>
   );
@@ -122,6 +133,8 @@ export const BubbleList: React.FC<BubbleListProps> = ({
 BubbleList.displayName = 'BubbleList';
 
 /** Bubble（含 Bubble.List 复合导出，与 antd X 的用法对齐） */
-export const Bubble = Object.assign(BubbleBase, { List: BubbleList }) as React.FC<BubbleProps> & {
+export const Bubble = Object.assign(BubbleBase, {
+  List: BubbleList,
+}) as React.FC<BubbleProps> & {
   List: typeof BubbleList;
 };

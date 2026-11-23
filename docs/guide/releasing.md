@@ -22,7 +22,7 @@ Aura 用 [changesets](https://github.com/changesets/changesets) 管理版本：
 @aura-react-comp/shared
   ├─ @aura-react-comp/request
   ├─ @aura-react-comp/icons
-  └─ @aura-react-comp/ui            ← 依赖 icons / shared
+  └─ @aura-react-comp/design            ← 依赖 icons / shared
        └─ @aura-react-comp/business ← 依赖 ui / shared
 @aura-react-comp/x                  ← 依赖 shared
 ```
@@ -34,10 +34,10 @@ Aura 用 [changesets](https://github.com/changesets/changesets) 管理版本：
 
 ## 二、dist-tag 约定
 
-| npm tag  | 用途                             | 安装方式                         |
-| -------- | -------------------------------- | -------------------------------- |
-| `latest` | 正式版（默认）                   | `npm i @aura-react-comp/ui`      |
-| `beta`   | 预发布版（不稳定，API 可能变动） | `npm i @aura-react-comp/ui@beta` |
+| npm tag  | 用途                             | 安装方式                             |
+| -------- | -------------------------------- | ------------------------------------ |
+| `latest` | 正式版（默认）                   | `npm i @aura-react-comp/design`      |
+| `beta`   | 预发布版（不稳定，API 可能变动） | `npm i @aura-react-comp/design@beta` |
 
 `latest` 始终指向最新的**正式版**——beta 不会影响普通用户的安装结果。
 

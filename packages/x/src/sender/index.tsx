@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Textarea } from '@aura-react-comp/ui';
+import { Button, Textarea } from '@aura-react-comp/design';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
 import './index.less';
 

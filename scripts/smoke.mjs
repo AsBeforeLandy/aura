@@ -13,7 +13,7 @@
  *   4. 产出的 JS 中不存在逃出包目录的相对路径（father alias 泄漏检测）
  *   5. 产出的 JS 中所有裸包名依赖都已在 dependencies / peerDependencies 中声明
  *   6. 相对引用的资源文件真实存在
- *   7. 主题令牌 tokens.css 存在于 @aura-react-comp/ui 产物中
+ *   7. 主题令牌 tokens.css 存在于 @aura-react-comp/design 产物中
  *
  * 用法：pnpm smoke（应在 build:lib 之后执行）
  */
@@ -246,13 +246,13 @@ for (const pkg of LIB_PACKAGES) {
 
 // 7) 主题令牌：business 的样式全部依赖这些变量
 group('主题令牌');
-check('@aura-react-comp/ui 产物包含 theme/tokens.css', () => {
+check('@aura-react-comp/design 产物包含 theme/tokens.css', () => {
   const tokens = join(ROOT, 'packages', 'ui', 'esm', 'theme', 'tokens.css');
   assert(existsSync(tokens), `未找到 ${relative(ROOT, tokens)}`);
   const css = readFileSync(tokens, 'utf-8');
   assert(css.includes(':root'), 'tokens.css 中未找到 :root 块');
 });
-check('@aura-react-comp/ui 对外暴露 ./style.css 子路径', () => {
+check('@aura-react-comp/design 对外暴露 ./style.css 子路径', () => {
   const pkgJson = JSON.parse(
     readFileSync(join(ROOT, 'packages', 'ui', 'package.json'), 'utf-8'),
   );
@@ -261,22 +261,22 @@ check('@aura-react-comp/ui 对外暴露 ./style.css 子路径', () => {
     'package.json#exports 缺少 "./style.css"，消费者无法引入主题令牌',
   );
 });
-check('@aura-react-comp/business 声明了对 @aura-react-comp/ui 的依赖', () => {
+check('@aura-react-comp/business 声明了对 @aura-react-comp/design 的依赖', () => {
   const pkgJson = JSON.parse(
     readFileSync(join(ROOT, 'packages', 'business', 'package.json'), 'utf-8'),
   );
   const deps = { ...pkgJson.dependencies, ...pkgJson.peerDependencies };
   assert(
-    deps['@aura-react-comp/ui'],
-    'business 的 .less 使用 var(--aura-*)，但未声明 @aura-react-comp/ui 依赖',
+    deps['@aura-react-comp/design'],
+    'business 的 .less 使用 var(--aura-*)，但未声明 @aura-react-comp/design 依赖',
   );
 });
 
 console.log('');
 
 // 8) 文档中引用的包内子路径必须真实存在于该包的 exports 中。
-//    历史上 README / 文档站多处教用户 `import '@aura-react-comp/ui/src/theme/tokens.css'`
-//    或 `'@aura-react-comp/ui/dist/index.css'`，而这些路径在发布包中并不存在，
+//    历史上 README / 文档站多处教用户 `import '@aura-react-comp/design/src/theme/tokens.css'`
+//    或 `'@aura-react-comp/design/dist/index.css'`，而这些路径在发布包中并不存在，
 //    使用者照抄必然报 Module not found。
 group('文档引用的包内路径');
 check('文档中引用的 @aura-react-comp/* 子路径都已由 exports 暴露', () => {
@@ -313,7 +313,7 @@ check('文档中引用的 @aura-react-comp/* 子路径都已由 exports 暴露',
       re.lastIndex = 0;
       while ((m = re.exec(line)) !== null) {
         const [, pkg, sub] = m;
-        // 跳过反例说明（形如 `@aura-react-comp/ui/src/...`）与不存在的包名
+        // 跳过反例说明（形如 `@aura-react-comp/design/src/...`）与不存在的包名
         if (sub.includes('...') || !existsSync(join(ROOT, 'packages', pkg))) continue;
         const key = `./${sub.replace(/\/+$/, '')}`;
         if (!keysOf(pkg).includes(key)) {

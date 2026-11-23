@@ -8,7 +8,7 @@ import {
   Welcome,
   useXChat,
 } from '@aura-react-comp/x';
-import { Button, Input } from '@aura-react-comp/ui';
+import { Button, Input } from '@aura-react-comp/design';
 import type {
   BubbleListItem,
   ConversationItem,

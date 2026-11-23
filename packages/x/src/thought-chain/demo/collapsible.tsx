@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ThoughtChain } from '@aura-react-comp/x';
-import { Button } from '@aura-react-comp/ui';
+import { Button } from '@aura-react-comp/design';
 import type { ThoughtChainItem, ThoughtChainStatus } from '@aura-react-comp/x';
 
 const STEPS = [

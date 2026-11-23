@@ -9,7 +9,7 @@ function getPublicDir(): string {
 }
 
 function getUiSourceDir(): string {
-  return getWorkspacePath('packages/ui/src');
+  return getWorkspacePath('packages/design/src');
 }
 
 /**
@@ -22,11 +22,9 @@ function extractFromLlmsFull(componentName: string): string | null {
   const content = fs.readFileSync(filePath, 'utf-8');
 
   // 匹配 ## ComponentName 或 ## component-name 开始到下一个 ## 或文件尾
-  const nameCap = componentName.charAt(0).toUpperCase() + componentName.slice(1);
-  const regex = new RegExp(
-    `## ${nameCap}[\\s\\S]*?(?=\\n## [A-Z]|$)`,
-    'm',
-  );
+  const nameCap =
+    componentName.charAt(0).toUpperCase() + componentName.slice(1);
+  const regex = new RegExp(`## ${nameCap}[\\s\\S]*?(?=\\n## [A-Z]|$)`, 'm');
   const match = content.match(regex);
   return match ? match[0].trim() : null;
 }

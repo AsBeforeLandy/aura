@@ -19,7 +19,7 @@ pnpm add @aura-react-comp/editor
 ```
 
 ```ts
-import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/design/style.css';
 import '@aura-react-comp/editor/style.css';
 ```
 

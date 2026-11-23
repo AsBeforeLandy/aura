@@ -36,16 +36,22 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // 需排在 `@aura-react-comp/ui` 之前（别名按顺序匹配），与 .dumirc.ts 保持一致
-      '@aura-react-comp/ui/style.css': path.resolve(
+      // 需排在 `@aura-react-comp/design` 之前（别名按顺序匹配），与 .dumirc.ts 保持一致
+      '@aura-react-comp/design/style.css': path.resolve(
         __dirname,
-        'packages/ui/src/theme/tokens.css',
+        'packages/design/src/theme/tokens.css',
       ),
       '@aura-react-comp/shared': path.resolve(__dirname, 'packages/shared/src'),
-      '@aura-react-comp/ui': path.resolve(__dirname, 'packages/ui/src'),
-      '@aura-react-comp/business': path.resolve(__dirname, 'packages/business/src'),
+      '@aura-react-comp/design': path.resolve(__dirname, 'packages/design/src'),
+      '@aura-react-comp/business': path.resolve(
+        __dirname,
+        'packages/business/src',
+      ),
       '@aura-react-comp/x': path.resolve(__dirname, 'packages/x/src'),
-      '@aura-react-comp/request': path.resolve(__dirname, 'packages/request/src'),
+      '@aura-react-comp/request': path.resolve(
+        __dirname,
+        'packages/request/src',
+      ),
       '@aura-react-comp/icons': path.resolve(__dirname, 'packages/icons/src'),
       '@aura-react-comp/charts': path.resolve(__dirname, 'packages/charts/src'),
       '@aura-react-comp/editor': path.resolve(__dirname, 'packages/editor/src'),

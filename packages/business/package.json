@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@aura-react-comp/shared": "workspace:*",
-    "@aura-react-comp/ui": "workspace:*",
+    "@aura-react-comp/design": "workspace:*",
     "pdfjs-dist": "6.3.289"
   },
   "devDependencies": {

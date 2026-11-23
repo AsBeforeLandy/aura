@@ -4,7 +4,7 @@
     "outDir": "./lib",
     "rootDir": "./src",
     "paths": {
-      "@aura-react-comp/ui": ["../ui/src/index.ts"],
+      "@aura-react-comp/design": ["../design/src/index.ts"],
       "@aura-react-comp/icons": ["./src/index.ts"]
     }
   },

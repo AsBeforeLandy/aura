@@ -58,7 +58,7 @@
     },
     {
       "name": "ui (全量 esm)",
-      "path": "packages/ui/esm/**/*.js",
+      "path": "packages/design/esm/**/*.js",
       "limit": "95 kB"
     },
     {

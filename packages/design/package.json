@@ -1,0 +1,59 @@
+{
+  "name": "@aura-react-comp/design",
+  "version": "0.1.1",
+  "description": "Aura 组件库",
+  "keywords": [
+    "aura",
+    "react",
+    "ui",
+    "component-library",
+    "design-system"
+  ],
+  "homepage": "https://asbeforelandy.github.io/aura/",
+  "bugs": {
+    "url": "https://github.com/AsBeforeLandy/aura/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsBeforeLandy/aura.git",
+    "directory": "packages/design"
+  },
+  "author": "Aura Team",
+  "license": "MIT",
+  "type": "module",
+  "main": "esm/index.js",
+  "module": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "files": [
+    "esm"
+  ],
+  "sideEffects": [
+    "**/*.less",
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./esm/index.d.ts",
+      "import": "./esm/index.js",
+      "default": "./esm/index.js"
+    },
+    "./style.css": "./esm/theme/tokens.css",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "father build",
+    "dev": "father dev"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@aura-react-comp/icons": "workspace:*",
+    "@aura-react-comp/shared": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

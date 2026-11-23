@@ -51,7 +51,8 @@ export type UseNotificationResult = [
 /** 懒取原生构造函数：模块加载期不触碰 `window`，SSR 与 jsdom 都安全 */
 function getNative(): typeof Notification | undefined {
   if (typeof window === 'undefined') return undefined;
-  return (window as Window & { Notification?: typeof Notification }).Notification;
+  return (window as Window & { Notification?: typeof Notification })
+    .Notification;
 }
 
 /** 未授权 / 环境不支持时的统一返回值（antdx 同样以 `denied` 兜底） */
@@ -95,8 +96,10 @@ function requestPermission(): Promise<XNotificationPermission> {
 
 const isWrapped = (
   args: XNotificationOpenArgs,
-): args is { openConfig: XNotificationConfig; closeConfig?: (string | undefined)[] } =>
-  'openConfig' in args;
+): args is {
+  openConfig: XNotificationConfig;
+  closeConfig?: (string | undefined)[];
+} => 'openConfig' in args;
 
 function open(args: XNotificationOpenArgs): void {
   const Native = getNative();
@@ -114,15 +117,8 @@ function open(args: XNotificationOpenArgs): void {
     closeByTags(closeConfig.filter((tag): tag is string => Boolean(tag)));
   }
 
-  const {
-    title,
-    duration,
-    onClick,
-    onClose,
-    onError,
-    onShow,
-    ...rest
-  } = openConfig;
+  const { title, duration, onClick, onClose, onError, onShow, ...rest } =
+    openConfig;
 
   let instance: Notification;
   try {
@@ -158,7 +154,7 @@ function open(args: XNotificationOpenArgs): void {
  * XNotification — 浏览器**系统通知**的命令式 API（对标 antdx 的 `notification`）。
  *
  * 注意这是「页面外的系统级通知」，走 `window.Notification`，受操作系统与浏览器
- * 通知权限管控——**不是**页面内的消息条。页面内的提示请用 `@aura-react-comp/ui` 的
+ * 通知权限管控——**不是**页面内的消息条。页面内的提示请用 `@aura-react-comp/design` 的
  * `Notification` / `Message`。
  */
 export const XNotification: XNotificationApi = {
@@ -178,7 +174,8 @@ export const XNotification: XNotificationApi = {
  * 以避免服务端渲染与水合结果不一致。
  */
 export function useNotification(): UseNotificationResult {
-  const [permission, setPermission] = useState<XNotificationPermission>('denied');
+  const [permission, setPermission] =
+    useState<XNotificationPermission>('denied');
 
   useEffect(() => {
     setPermission(currentPermission());

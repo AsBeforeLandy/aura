@@ -38,7 +38,7 @@ packages/<pkg>/src/<组件名>/
 | 只用设计令牌       | 颜色、圆角、间距一律 `var(--aura-*)`，**禁止硬编码色值**（hex / rgb / rgba）                                                                                                                                               |
 | 派生色收敛到令牌层 | 需要「主色 + 透明度」这类派生色时，**必须**在 `tokens.css` 中新增令牌（亮 / 暗两套值，如 `--aura-selection-bg`），组件样式直接消费令牌；**不要**在组件里用 `color-mix` 临时派生——那会把浏览器特性下限从 Chrome 84 抬到 111 |
 | 禁止 `!important`  | 优先级问题通过选择器结构解决                                                                                                                                                                                               |
-| 令牌缺失即失效     | `.less` 不设 fallback，主题令牌由 `@aura-react-comp/ui/style.css` 提供（依赖链已声明）                                                                                                                                     |
+| 令牌缺失即失效     | `.less` 不设 fallback，主题令牌由 `@aura-react-comp/design/style.css` 提供（依赖链已声明）                                                                                                                                 |
 
 > 现状实测：`@aura-react-comp/business` 硬编码色值 **0** 处、`!important` **0** 处，
 > 且不依赖 `color-mix` 等较新特性（浏览器下限见「安装 → 浏览器兼容性」）。
@@ -95,7 +95,7 @@ packages/<pkg>/src/<组件名>/
 | --------------------------- | -------- | ----- | ----- | ---- |
 | `@aura-react-comp/shared`   | 1.42 kB  | 4 kB  | 64.5% | ✅   |
 | `@aura-react-comp/icons`    | 8.96 kB  | 22 kB | 59.3% | ✅   |
-| `@aura-react-comp/ui`       | 43.8 kB  | 95 kB | 53.9% | ✅   |
+| `@aura-react-comp/design`   | 43.8 kB  | 95 kB | 53.9% | ✅   |
 | `@aura-react-comp/business` | 22.49 kB | 36 kB | 37.5% | ✅   |
 
 > 规则：**新增功能超过预算余量的一半时，先优化再合入**。阈值在根 `package.json` 的 `size-limit` 配置中，CI 会强制校验。
@@ -169,5 +169,5 @@ CI（ci.yml）  →  同一条链路
 > `pnpm verify`；
 > ② **格式走「增量收敛」**：`lint-staged` 会在提交时只格式化**暂存**的
 > `.json/.less/.md/.yml/.yaml`，仓库因此逐步归零；全仓尚未收敛
-> （`packages/ui` 一个包就有 245 个文件不符合），所以 `format:check`
+> （`packages/design` 一个包就有 245 个文件不符合），所以 `format:check`
 > **暂不挂在门禁上**，角色是收敛进度探针。归零后的处理见工具链页。

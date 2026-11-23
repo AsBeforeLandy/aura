@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const UI_SRC = path.resolve(__dirname, '../../../ui/src');
+const UI_SRC = path.resolve(__dirname, '../../../design/src');
 
 /**
  * 显示指定组件的文档信息

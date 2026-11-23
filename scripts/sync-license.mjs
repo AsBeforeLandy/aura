@@ -3,7 +3,7 @@
  * 把仓库根的 LICENSE 同步到每个**待发布**的包目录。
  *
  * 为什么需要它：npm 的 tarball 只会包含「包目录内」的文件，仓库根的 LICENSE
- * 不会自动继承到 `packages/ui/LICENSE`。而 LICENSE 属于 npm 的「总是包含」名单
+ * 不会自动继承到 `packages/design/LICENSE`。而 LICENSE 属于 npm 的「总是包含」名单
  * （package.json / README / LICENSE），所以只要文件存在就会随包发布，
  * 无需在 `files` 白名单里重复声明。
  *

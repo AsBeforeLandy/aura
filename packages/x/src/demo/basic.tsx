@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Bubble, Sender, XProvider } from '@aura-react-comp/x';
-import { Button } from '@aura-react-comp/ui';
+import { Button } from '@aura-react-comp/design';
 
 const COLORS = [
   { label: '紫罗兰（默认）', value: '#7c3aed' },

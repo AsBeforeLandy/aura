@@ -17,12 +17,12 @@ pnpm add @aura-react-comp/x antd react react-dom
 ## 样式引入（重要）
 
 ```tsx
-import '@aura-react-comp/ui/style.css'; // Aura 基础设计令牌（--aura-*）
+import '@aura-react-comp/design/style.css'; // Aura 基础设计令牌（--aura-*）
 import '@aura-react-comp/x/style.css'; // AI 组件样式
 ```
 
 本包的 `.less` 直接使用 `var(--aura-*)` 且**不设 fallback**，基础令牌未加载时
-颜色、圆角、字号、间距会整体失效。基础令牌由 `@aura-react-comp/ui` 提供
+颜色、圆角、字号、间距会整体失效。基础令牌由 `@aura-react-comp/design` 提供
 （已随本包依赖自动安装），因此需引入它的 `style.css` 一次。
 
 品牌相关变量（渐变 / 光晕 / 软底色，`--aura-x-*`）由 `XProvider` 在运行期
@@ -32,7 +32,7 @@ import '@aura-react-comp/x/style.css'; // AI 组件样式
 
 ```tsx
 import { XProvider, Bubble, Sender, useXChat } from '@aura-react-comp/x';
-import '@aura-react-comp/ui/style.css';
+import '@aura-react-comp/design/style.css';
 import '@aura-react-comp/x/style.css';
 
 const App = () => {

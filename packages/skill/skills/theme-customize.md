@@ -49,7 +49,7 @@ Aura 使用 CSS Variables 作为 Design Token，所有样式通过 `var(--aura-x
 暗色模式通过 `[data-theme="dark"]` 选择器切换。使用 ThemeProvider：
 
 ```tsx
-import { ThemeProvider, useTheme } from '@aura-react-comp/ui';
+import { ThemeProvider, useTheme } from '@aura-react-comp/design';
 
 function App() {
   return (

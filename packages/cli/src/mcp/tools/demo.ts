@@ -8,7 +8,7 @@ import { getWorkspacePath } from '../../utils/paths.js';
  * 获取组件的示例代码
  */
 function getComponentDemo(componentName: string): string {
-  const uiSourceDir = getWorkspacePath('packages/ui/src');
+  const uiSourceDir = getWorkspacePath('packages/design/src');
   const demoPath = path.join(uiSourceDir, componentName, 'demo', 'basic.tsx');
 
   if (!fs.existsSync(demoPath)) {
