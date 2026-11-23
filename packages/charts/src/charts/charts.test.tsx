@@ -157,6 +157,26 @@ describe('PieChart', () => {
     expect(document.querySelectorAll('path').length).toBe(3);
   });
 
+  it('环图中心默认显示总计', () => {
+    render(<PieChart data={pieData} animation={false} label={false} />);
+    expect(screen.getByText('总计')).toBeTruthy();
+  });
+
+  // centerContent 接管中心区域：内置「总计」文本不再渲染，
+  // 否则 SVG 内置文本与 HTML 自定义内容会叠在同一个圆心
+  it('centerContent 接管中心内容', () => {
+    render(
+      <PieChart
+        data={pieData}
+        animation={false}
+        label={false}
+        centerContent={<div>自定义中心</div>}
+      />,
+    );
+    expect(screen.getByText('自定义中心')).toBeTruthy();
+    expect(screen.queryByText('总计')).toBeNull();
+  });
+
   it('总计为 0 时显示空状态', () => {
     render(
       <PieChart

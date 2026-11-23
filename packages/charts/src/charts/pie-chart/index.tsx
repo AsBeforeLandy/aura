@@ -150,6 +150,10 @@ export function PieChart({
     };
   }, [size.width, size.height, label, innerRadius]);
 
+  /** 是否由调用方接管中心区域（布尔化参与依赖，避免 ReactNode 引用每次渲染都击穿 memo） */
+  const hasCenterContent =
+    centerContent !== undefined && centerContent !== null;
+
   const scene = useMemo<SceneNode[]>(() => {
     if (!slices.length || geometry.outer <= 0) return [];
     const nodes: SceneNode[] = [];
@@ -239,7 +243,9 @@ export function PieChart({
       }
     }
 
-    if (geometry.inner > 0) {
+    // centerContent 由调用方完全接管中心区域：此时不再渲染内置的
+    // 「总计」文本，否则两层内容（SVG 内置 + HTML 自定义）会叠在圆心
+    if (geometry.inner > 0 && !hasCenterContent) {
       const active = activeIndex !== null ? slices[activeIndex] : null;
       nodes.push({
         kind: 'text',
@@ -281,6 +287,7 @@ export function PieChart({
     theme,
     animatedTotal,
     animConfig.stagger,
+    hasCenterContent,
   ]);
 
   /** 指针 → 扇区索引 */
