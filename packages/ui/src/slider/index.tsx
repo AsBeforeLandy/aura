@@ -76,12 +76,12 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     ref,
   ) => {
     // 内部维护的值（非受控模式）
-    const [internalValue, setInternalValue] = useState<number | [number, number]>(
-      () => {
-        if (defaultValue !== undefined) return defaultValue;
-        return range ? [min, max] : min;
-      },
-    );
+    const [internalValue, setInternalValue] = useState<
+      number | [number, number]
+    >(() => {
+      if (defaultValue !== undefined) return defaultValue;
+      return range ? [min, max] : min;
+    });
 
     // 当前生效的值
     const currentValue =
@@ -141,17 +141,28 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         if (range) {
           const [start, end] = currentValue as [number, number];
           if (handle === 'start') {
-            const target = delta === 'min' ? min : delta === 'max' ? end : start + delta;
-            const newStart = clamp(alignToStep(clamp(target, min, end), min, step), min, end);
+            const target =
+              delta === 'min' ? min : delta === 'max' ? end : start + delta;
+            const newStart = clamp(
+              alignToStep(clamp(target, min, end), min, step),
+              min,
+              end,
+            );
             next = [newStart, end];
           } else {
-            const target = delta === 'min' ? start : delta === 'max' ? max : end + delta;
-            const newEnd = clamp(alignToStep(clamp(target, start, max), min, step), start, max);
+            const target =
+              delta === 'min' ? start : delta === 'max' ? max : end + delta;
+            const newEnd = clamp(
+              alignToStep(clamp(target, start, max), min, step),
+              start,
+              max,
+            );
             next = [start, newEnd];
           }
         } else {
           const base = currentValue as number;
-          const target = delta === 'min' ? min : delta === 'max' ? max : base + delta;
+          const target =
+            delta === 'min' ? min : delta === 'max' ? max : base + delta;
           next = alignToStep(clamp(target, min, max), min, step);
         }
         updateValue(next);
@@ -160,8 +171,8 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [currentValue, range, min, max, step, updateValue, onChangeComplete],
     );
 
-    const makeHandleKeyDown = (handle: 'start' | 'end') =>
-      (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const makeHandleKeyDown =
+      (handle: 'start' | 'end') => (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (disabled) return;
         const deltas: Record<string, number | 'min' | 'max'> = {
           ArrowLeft: -step,
@@ -203,7 +214,15 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         }
         onChangeComplete?.(newValue);
       },
-      [disabled, dragging, getValueFromPosition, currentValue, range, updateValue, onChangeComplete],
+      [
+        disabled,
+        dragging,
+        getValueFromPosition,
+        currentValue,
+        range,
+        updateValue,
+        onChangeComplete,
+      ],
     );
 
     // 拖拽移动和松开事件（Pointer Events 覆盖鼠标与触摸）
@@ -240,12 +259,19 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         document.removeEventListener('pointerup', handlePointerUp);
         document.removeEventListener('pointercancel', handlePointerUp);
       };
-    }, [dragging, getValueFromPosition, currentValue, range, updateValue, onChangeComplete]);
+    }, [
+      dragging,
+      getValueFromPosition,
+      currentValue,
+      range,
+      updateValue,
+      onChangeComplete,
+    ]);
 
     // 获取当前展示值
-    const startValue = range
-      ? (currentValue as [number, number])[0]
-      : (currentValue as number);
+    // 单值模式选段从轨道起点（min）铺到当前值；range 模式铺在两把手之间。
+    // 此前单值的 startValue 误取 currentValue，width 恒为 0（选段不可见）。
+    const startValue = range ? (currentValue as [number, number])[0] : min;
     const endValue = range
       ? (currentValue as [number, number])[1]
       : (currentValue as number);

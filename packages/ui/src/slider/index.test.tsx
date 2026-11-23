@@ -42,6 +42,41 @@ describe('Slider', () => {
     expect(selected).not.toBeNull();
   });
 
+  // 单值模式选段回归：选段应从轨道起点（min）铺到当前值。
+  // 曾因 startValue 误取 currentValue 导致 width 恒为 0（选段不可见）。
+  it('should fill selected track from track start in single mode', () => {
+    const { container } = render(<Slider min={0} max={100} value={75} />);
+    const selected = container.querySelector(
+      '.aura-slider-track-selected',
+    ) as HTMLElement | null;
+    expect(selected).not.toBeNull();
+    expect(selected!.style.left).toBe('0%');
+    expect(selected!.style.width).toBe('75%');
+  });
+
+  it('should fill selected track with offset when min > 0', () => {
+    const { container } = render(<Slider min={120} max={1600} value={620} />);
+    const selected = container.querySelector(
+      '.aura-slider-track-selected',
+    ) as HTMLElement | null;
+    // (620 - 120) / (1600 - 120) ≈ 33.78%
+    expect(selected!.style.left).toBe('0%');
+    expect(Number.parseFloat(selected!.style.width)).toBeGreaterThan(33);
+    expect(Number.parseFloat(selected!.style.width)).toBeLessThan(34);
+  });
+
+  // range 模式选段铺在两把手之间
+  it('should fill selected track between two handles in range mode', () => {
+    const { container } = render(
+      <Slider min={0} max={100} range defaultValue={[20, 60]} />,
+    );
+    const selected = container.querySelector(
+      '.aura-slider-track-selected',
+    ) as HTMLElement | null;
+    expect(selected!.style.left).toBe('20%');
+    expect(selected!.style.width).toBe('40%');
+  });
+
   // 禁用状态
   it('should apply disabled class', () => {
     const { container } = render(<Slider disabled />);
@@ -73,9 +108,7 @@ describe('Slider', () => {
     const { container } = render(<Slider range defaultValue={[20, 80]} />);
     const handles = container.querySelectorAll('.aura-slider-handle');
     expect(handles.length).toBe(2);
-    expect(
-      container.querySelector('.aura-slider-handle-start'),
-    ).not.toBeNull();
+    expect(container.querySelector('.aura-slider-handle-start')).not.toBeNull();
     expect(container.querySelector('.aura-slider-handle-end')).not.toBeNull();
   });
 
@@ -260,10 +293,9 @@ describe('Slider', () => {
     fireEvent.keyDown(handle, { key: 'ArrowRight' });
     expect(onChangeComplete).toHaveBeenLastCalledWith(51);
 
-    fireEvent.click(
-      container.querySelector('.aura-slider-track')!,
-      { clientX: 200 },
-    );
+    fireEvent.click(container.querySelector('.aura-slider-track')!, {
+      clientX: 200,
+    });
     expect(onChangeComplete).toHaveBeenCalledTimes(2);
   });
 
