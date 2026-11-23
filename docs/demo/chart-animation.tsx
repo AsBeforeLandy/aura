@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LineChart } from '@aura-react-comp/charts';
 import type { EasingName } from '@aura-react-comp/charts';
+import { Button, Select, Slider } from '@aura-react-comp/ui';
 
 const BASE = [
   { month: '1月', orders: 1240, refunds: 280 },
@@ -42,6 +43,13 @@ const Demo: React.FC = () => {
     );
   };
 
+  const labelStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    fontSize: 12,
+  };
+
   return (
     <div style={{ display: 'grid', gap: 12 }}>
       <div
@@ -50,59 +58,59 @@ const Demo: React.FC = () => {
           flexWrap: 'wrap',
           gap: 16,
           alignItems: 'center',
-          fontSize: 12,
         }}
       >
-        <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <label style={labelStyle}>
           时长
-          <input
-            type="range"
+          <Slider
             min={120}
             max={1600}
             step={20}
             value={duration}
-            onChange={(event) => setDuration(Number(event.target.value))}
+            onChange={(value) => setDuration(value as number)}
+            style={{ width: 120 }}
           />
           <span style={{ width: 48, fontVariantNumeric: 'tabular-nums' }}>
             {duration}ms
           </span>
         </label>
 
-        <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <label style={labelStyle}>
           错峰
-          <input
-            type="range"
+          <Slider
             min={0}
             max={0.9}
             step={0.05}
             value={stagger}
-            onChange={(event) => setStagger(Number(event.target.value))}
+            onChange={(value) => setStagger(value as number)}
+            style={{ width: 120 }}
           />
           <span style={{ width: 32, fontVariantNumeric: 'tabular-nums' }}>
             {stagger}
           </span>
         </label>
 
-        <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <label style={labelStyle}>
           缓动
-          <select
+          <Select
+            size="sm"
+            style={{ minWidth: 148 }}
+            options={EASINGS.map((item) => ({ label: item, value: item }))}
             value={easing}
-            onChange={(event) => setEasing(event.target.value as EasingName)}
-          >
-            {EASINGS.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => setEasing(String(value) as EasingName)}
+          />
         </label>
 
-        <button type="button" onClick={() => setSeed((value) => value + 1)}>
+        <Button
+          variant="default"
+          size="sm"
+          onClick={() => setSeed((value) => value + 1)}
+        >
           重播入场
-        </button>
-        <button type="button" onClick={shuffle}>
+        </Button>
+        <Button variant="default" size="sm" onClick={shuffle}>
           换一组数据
-        </button>
+        </Button>
       </div>
 
       <LineChart
