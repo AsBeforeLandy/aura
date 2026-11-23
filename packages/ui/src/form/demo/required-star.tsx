@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Space } from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => (
-  <Form layout="horizontal" colon>
+  <Form layout="horizontal">
     <Form.Item name="name" label="姓名" required>
       <Input placeholder="必填星号（无 rules 验证）" />
     </Form.Item>
@@ -12,7 +12,7 @@ const Demo: React.FC = () => (
     <Form.Item name="email" label="邮箱" required>
       <Input placeholder="必填星号（无 rules 验证）" />
     </Form.Item>
-    <Form.Item>
+    <Form.Item label=" " colon={false}>
       <Button type="submit" variant="primary">
         提交
       </Button>

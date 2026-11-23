@@ -12,7 +12,7 @@ const Demo: React.FC = () => (
     <Form.Item name="desc" label="详细描述" labelWidth={120}>
       <Textarea placeholder="多行文本" rows={3} />
     </Form.Item>
-    <Form.Item labelWidth={120}>
+    <Form.Item labelWidth={120} label=" " colon={false}>
       <Space>
         <Button type="submit" variant="primary">
           保存

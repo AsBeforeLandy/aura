@@ -12,7 +12,7 @@ const Demo: React.FC = () => (
     <Form.Item name="email" label="邮箱">
       <Input placeholder="可编辑" />
     </Form.Item>
-    <Form.Item>
+    <Form.Item label=" " colon={false}>
       <Space>
         <Button type="submit" variant="primary">
           提交

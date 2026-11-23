@@ -44,7 +44,7 @@ const Demo: React.FC = () => {
       >
         <Input placeholder="example@domain.com" />
       </Form.Item>
-      <Form.Item>
+      <Form.Item label=" " colon={false}>
         <Button type="submit" variant="primary">
           提交验证
         </Button>

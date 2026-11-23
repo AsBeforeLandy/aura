@@ -36,13 +36,15 @@ export default () => {
         >
           <Input placeholder="请输入邮箱" />
         </Form.Item>
+        <Form.Item label=" " colon={false}>
+          <Space>
+            <Button variant="primary" onClick={handleSubmit}>
+              提交
+            </Button>
+            <Button onClick={handleFill}>编辑回填</Button>
+          </Space>
+        </Form.Item>
       </Form>
-      <Space>
-        <Button onClick={handleFill}>回填表单</Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          外部提交（校验）
-        </Button>
-      </Space>
     </div>
   );
 };

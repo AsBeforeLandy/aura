@@ -22,7 +22,7 @@ const Demo: React.FC = () => {
           placeholder="请选择"
         />
       </Form.Item>
-      <Form.Item>
+      <Form.Item label=" " colon={false}>
         <Button type="submit" variant="primary">
           搜索
         </Button>

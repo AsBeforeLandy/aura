@@ -7,7 +7,7 @@ const Demo: React.FC = () => (
       <Form.Item name="name-sm" label="姓名">
         <Input placeholder="小尺寸 (sm)" />
       </Form.Item>
-      <Form.Item>
+      <Form.Item label=" " colon={false}>
         <Button type="submit" variant="primary">
           提交
         </Button>
@@ -18,7 +18,7 @@ const Demo: React.FC = () => (
       <Form.Item name="name-md" label="姓名">
         <Input placeholder="中尺寸 (md)" />
       </Form.Item>
-      <Form.Item>
+      <Form.Item label=" " colon={false}>
         <Button type="submit" variant="primary">
           提交
         </Button>
@@ -29,7 +29,7 @@ const Demo: React.FC = () => (
       <Form.Item name="name-lg" label="姓名">
         <Input placeholder="大尺寸 (lg)" />
       </Form.Item>
-      <Form.Item>
+      <Form.Item label=" " colon={false}>
         <Button type="submit" variant="primary">
           提交
         </Button>

@@ -15,7 +15,7 @@ const Demo: React.FC = () => (
       <Form.Item name="remark" label="备注" labelAlign="right">
         <Input placeholder="此项标签右对齐（覆盖 Form 级别）" />
       </Form.Item>
-      <Form.Item>
+      <Form.Item label=" " colon={false}>
         <Button type="submit" variant="primary">
           提交
         </Button>
