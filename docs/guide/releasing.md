@@ -11,20 +11,28 @@ Aura 用 [changesets](https://github.com/changesets/changesets) 管理版本：
 **变动以 changeset 提交，版本号由 changesets 推导**。发布可以分为两条路——
 **本地直接发布**（最快，适合首次与救火）和 **CI 自动发布**（适合日常）。
 
-链路设计与 [aura-vue](https://asbeforelandy.github.io/aura-vue/guide/release) 保持一致，
-那套流程已实战验证。
+发布链路设计遵循三条原则：**门禁前置**——`pnpm verify` 全绿才允许发布；
+**changesets 单一真相**——版本号与 CHANGELOG 只由 changeset 推导，从不手改；
+**双通道同一产物**——本地直接发布与 CI 自动发布走同一条 `build:lib` 构建链，
+产物完全一致。整套流程已在 npm 实战验证：全新包首发、多包批量更新、
+Trusted Publisher 免长寿命凭证发布均已跑通。
 
 ## 一、发布拓扑
 
-一期发布 **6 个包**，pnpm 的递归发布会按工作区依赖图**拓扑排序**，叶子包在前：
+当前共 **10 个发布包**，pnpm 的递归发布会按工作区依赖图**拓扑排序**，叶子包在前：
 
 ```
-@aura-react-comp/shared
-  ├─ @aura-react-comp/request
-  ├─ @aura-react-comp/icons
-  └─ @aura-react-comp/design            ← 依赖 icons / shared
-       └─ @aura-react-comp/business ← 依赖 ui / shared
-@aura-react-comp/x                  ← 依赖 shared
+@aura-react-comp/shared  ─┐
+@aura-react-comp/icons   ─┤
+@aura-react-comp/motion  ─┘  零内部依赖（叶子包）
+  │
+  ├─ @aura-react-comp/request         ← 依赖 shared
+  ├─ @aura-react-comp/design          ← 依赖 icons / shared
+  │     ├─ @aura-react-comp/business  ← 依赖 design / shared
+  │     └─ @aura-react-comp/x         ← 依赖 design / shared
+  ├─ @aura-react-comp/charts          ← 依赖 shared
+  │     └─ @aura-react-comp/charts-3d ← 依赖 charts
+  └─ @aura-react-comp/editor          ← 依赖 shared
 ```
 
 `@aura-react-comp/cli` 与 `@aura-react-comp/skill` 是 `private`，不参与发布。
@@ -73,7 +81,11 @@ pnpm -r publish --dry-run --no-git-checks  # 只看打包结果，不写入 regi
 每个包的 tarball 应只含 `esm/`、`README.md`、`package.json`、`LICENSE`。
 若出现 `src/` 或测试文件，说明 `files` 白名单被改动过。
 
-### 2. 首次发布（6 个包尚未在 npm 上）
+`build:lib` 会在构建后自动为组件包的 ESM 产物注入 `'use client'` 指令
+（SSR / RSC 适配，详见[常见问题](/guide/faq)），预演与正式发布产物一致，
+无需手工处理。
+
+### 2. 新包首次发布（npm 上尚不存在）
 
 全新包名无法绑定 Trusted Publisher（npm 要求包**先存在**），所以第一次必须
 由维护者用 token 发。用 pnpm 原生发布——它按拓扑序发、自动解析 `workspace:*`，
@@ -87,16 +99,19 @@ pnpm -r publish --no-git-checks
 
 ```bash
 pnpm --filter @aura-react-comp/shared publish --no-git-checks
-npm view @aura-react-comp/shared version      # 应回显 0.1.0
+npm view @aura-react-comp/shared version      # 应回显最新版本
 ```
 
-确认无误后再发其余 5 个：
+确认无误后再发其余包：
 
 ```bash
 pnpm -r --filter '!@aura-react-comp/shared' publish --no-git-checks
 ```
 
 发完请**删除该 token**（npmjs.com → Access Tokens）。
+
+> 包在 npm 上出现后，第一时间到 npm 包页 **Settings → Trusted Publisher**
+> 绑定 CI 发布身份（见下文 CI 自动发布），之后的更新不再依赖这个 token。
 
 ### 3. 日常发布
 
@@ -124,10 +139,13 @@ changesets 会检查 git 状态。
 
 ### 两条认证路径
 
-| 路径                 | 配置                                                                                 | 适用                                  |
-| -------------------- | ------------------------------------------------------------------------------------ | ------------------------------------- |
-| **token**（当前）    | 仓库 Secrets 配 `NPM_TOKEN`                                                          | 首次发布后立刻可用；无需额外操作      |
-| **OIDC**（可选升级） | 在 npm 上为每个包绑定 Trusted Publisher 后，**删掉** workflow 里的 `NODE_AUTH_TOKEN` | 更安全：无长寿命凭证、自动 provenance |
+| 路径              | 配置                                                              | 适用                                    |
+| ----------------- | ----------------------------------------------------------------- | --------------------------------------- |
+| **OIDC**（当前）  | 各包在 npm 上绑定 Trusted Publisher，workflow 不持有任何 npm 凭证 | 日常发布：无长寿命凭证、自动 provenance |
+| **token**（备用） | 仓库 Secrets 配 `NPM_TOKEN`，或本地 `~/.npmrc` 写 Granular token  | 新包首发、OIDC 故障时的救火             |
+
+token 路径下未配置 `NPM_TOKEN` secret 时整体跳过发布，链路仍然跑得通、CI
+不会红。
 
 绑定 Trusted Publisher 时各字段填：
 
@@ -138,11 +156,8 @@ changesets 会检查 git 状态。
 | Workflow filename    | `release.yml`（**只写文件名**，须含 `.yml`，大小写敏感） |
 | Allowed actions      | **npm publish**                                          |
 
-> **一个包同时只能绑定一个 Trusted Publisher**，6 个包要各绑一次，没有捷径。
-> `id-token: write` 权限已经就位，切 OIDC 时无需再改权限。
->
-> 另需注意：npm 计划从 **2027 年 1 月**起取消 bypass-2FA token 的直接发布能力，
-> 所以 OIDC 不是可选的优化，而是有明确时间表的迁移。
+> **一个包同时只能绑定一个 Trusted Publisher**，每个包要各绑一次——新包
+> 首次发布后立即绑定。`id-token: write` 权限已经就位，无需再改权限。
 
 ## 五、Beta 发布（pre 模式）
 
@@ -189,17 +204,19 @@ pnpm -r publish --dry-run # 只看打包结果
 
 ## 七、失败排查
 
-| 症状                                      | 多半的原因                                             | 处理                                    |
-| ----------------------------------------- | ------------------------------------------------------ | --------------------------------------- |
-| 403 Forbidden，无 2FA 字样                | scope 与 npm 组织名不一致，或账号无该组织发布权限      | `npm whoami`；确认包名 scope 等于组织名 |
-| 403 且提到 `bypass 2fa enabled`           | token 未勾选 Bypass 2FA                                | 重建 token                              |
-| 402 Payment Required                      | 缺 `access: public`，npm 试图按私有包发布              | 检查各包 `publishConfig.access`         |
-| 401 `ENEEDAUTH`                           | workflow 缺 `registry-url`，或本地未登录               | 补 `registry-url` / `npm whoami`        |
-| 404 Not Found (PUT)                       | scope 与组织名不匹配；或 OIDC 的 workflow 文件名不匹配 | 逐字核对                                |
-| E422                                      | `package.json#repository.url` 与 GitHub 仓库不一致     | 核对 `repository` 字段                  |
-| `Cannot publish with uncommitted changes` | 本地发布前工作区是脏的                                 | 先提交，再 `pnpm release`               |
-| 版本已存在                                | changesets 不会重复发布已存在的版本                    | 先加 changeset 提升版本                 |
-| `ERR_PNPM_OUTDATED_LOCKFILE`              | 改了 `package.json` 但未更新 lockfile                  | `pnpm install --ignore-scripts` 并提交  |
+| 症状                                         | 多半的原因                                             | 处理                                                      |
+| -------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------- |
+| 403 Forbidden，无 2FA 字样                   | scope 与 npm 组织名不一致，或账号无该组织发布权限      | `npm whoami`；确认包名 scope 等于组织名                   |
+| 403 且提到 `bypass 2fa enabled`              | token 未勾选 Bypass 2FA                                | 重建 token                                                |
+| 402 Payment Required                         | 缺 `access: public`，npm 试图按私有包发布              | 检查各包 `publishConfig.access`                           |
+| 401 `ENEEDAUTH`                              | workflow 缺 `registry-url`，或本地未登录               | 补 `registry-url` / `npm whoami`                          |
+| 404 Not Found (PUT)                          | scope 与组织名不匹配；或 OIDC 的 workflow 文件名不匹配 | 逐字核对                                                  |
+| E422                                         | `package.json#repository.url` 与 GitHub 仓库不一致     | 核对 `repository` 字段                                    |
+| `Cannot publish with uncommitted changes`    | 本地发布前工作区是脏的                                 | 先提交，再 `pnpm release`                                 |
+| 版本已存在                                   | changesets 不会重复发布已存在的版本                    | 先加 changeset 提升版本                                   |
+| `ERR_PNPM_OUTDATED_LOCKFILE`                 | 改了 `package.json` 但未更新 lockfile                  | `pnpm install --ignore-scripts` 并提交                    |
+| `changesets publish` 返回 403（token 有效）  | npm 新政策限制 Bypass-2FA token 的部分端点             | 改用 pnpm 原生发布补发：`pnpm -r publish --no-git-checks` |
+| `ERR_PNPM_CANNOT_RESOLVE_WORKSPACE_PROTOCOL` | lockfile 未随新版本更新，`workspace:*` 解析不到        | `pnpm install --ignore-scripts` 更新 lock 后重试          |
 
 ## 八、二期包
 
