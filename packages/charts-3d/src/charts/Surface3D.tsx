@@ -120,8 +120,8 @@ export function Surface3D({
   const scene = useScene();
 
   // 主锚关联色：曲面热力默认用系列色板首色（品牌主锚，随主题联动）的
-  // 明度渐变（低 → 中 → 高），符合热力图惯例且切色板不违和；
-  // 显式传入的 colorRange 优先。
+  // 明度渐变（低 → 中 → 高），符合热力图惯例；3D 光照下深端轻压
+  // （mix 黑 0.25）避免整面发闷。显式传入的 colorRange 优先。
   const range = useMemo<string[]>(() => {
     if (colorRange) return colorRange;
     const anchor =
@@ -129,9 +129,9 @@ export function Surface3D({
       scene?.readToken('--aura-primary-600', '#7E54DE') ??
       '#7E54DE';
     return [
-      mixColor(anchor, '#ffffff', 0.45),
+      mixColor(anchor, '#ffffff', 0.5),
       anchor,
-      mixColor(anchor, '#000000', 0.42),
+      mixColor(anchor, '#000000', 0.25),
     ];
   }, [scene, colorRange]);
   // 与 buildSurfaceGeometryData 内部同一套 min/max，保证 tooltip 色带一致

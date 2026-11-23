@@ -173,9 +173,11 @@ function AnimatedBar({
       <meshStandardMaterial
         color={
           isHover
-            ? mixColor(bar.color, '#ffffff', 0.35)
+            ? mixColor(bar.color, '#ffffff', 0.45)
             : hasHover
-              ? mixColor(bar.color, '#0f172a', 0.45)
+              ? // 非悬停柱用白雾淡出（退后），不再压深蓝黑 —— 压暗在
+                // 3D 光照下会整片发黑发重
+                mixColor(bar.color, '#ffffff', 0.3)
               : bar.color
         }
         roughness={0.45}
@@ -316,7 +318,8 @@ export function Bar3D({
   } | null>(null);
 
   // 主锚关联色：默认色带从系列色板首色（品牌主锚，随主题联动）派生
-  // 明度梯度 —— 亮端 mix 白、深端 mix 黑（中性色，任何色相下都不发脏）；
+  // 明度梯度 —— 3D 材质自带光照衰减，基准色要比 2D 更亮才不吃重：
+  // 亮端 mix 白 0.42、深端只 mix 黑 0.22，保持色相明快。
   // 显式传入的 colorRange 优先。
   const range = useMemo<[string, string]>(() => {
     if (colorRange) return colorRange;
@@ -325,8 +328,8 @@ export function Bar3D({
       scene?.readToken('--aura-primary-700', DEFAULT_RANGE[0]) ??
       DEFAULT_RANGE[0];
     return [
-      mixColor(anchor, '#ffffff', 0.3),
-      mixColor(anchor, '#000000', 0.42),
+      mixColor(anchor, '#ffffff', 0.42),
+      mixColor(anchor, '#000000', 0.22),
     ];
   }, [scene, colorRange]);
 

@@ -174,7 +174,7 @@ export function Voxel3D({
   );
 
   // 主锚关联色：默认三档从系列色板首色（品牌主锚，随主题联动）派生
-  // 明度梯度 —— 亮端 mix 白、深端 mix 黑（中性色，任何色相下都不发脏）；
+  // 明度梯度 —— 3D 材质自带光照衰减，深端只轻压（mix 黑 0.2）保持明快；
   // 显式传入的 colorRange 优先。
   const range = useMemo<string[]>(() => {
     if (colorRange) return colorRange;
@@ -183,9 +183,9 @@ export function Voxel3D({
       scene?.readToken('--aura-primary-700', DEFAULT_RANGE[1]) ??
       DEFAULT_RANGE[1];
     return [
-      mixColor(anchor, '#ffffff', 0.25),
+      mixColor(anchor, '#ffffff', 0.35),
       anchor,
-      mixColor(anchor, '#000000', 0.4),
+      mixColor(anchor, '#000000', 0.2),
     ];
   }, [scene, colorRange]);
 
