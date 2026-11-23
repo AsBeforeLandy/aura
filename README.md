@@ -26,7 +26,7 @@
 - **⚡ React 18** — `forwardRef`、Compound Component 等 React 最新特性
 - **♿ 无障碍** — 支持 `aria-*` 属性、键盘导航
 - **🤖 AI 友好** — 内置 MCP Server，AI 助手可直接查询组件 API
-- **🧱 业务组件** — `@aura-react-comp/business` 基于企业级 UI 框架二次封装，覆盖中后台列表页、查询区、弹窗表单等高频场景
+- **🧱 业务组件** — `@aura-react-comp/business` 基于 antd 二次封装，覆盖中后台列表页、查询区、弹窗表单等高频场景
 - **📊 图表库** — `@aura-react-comp/charts` 提供 18 个图表，自研 SVG / Canvas 双渲染内核，不依赖任何第三方图表引擎
 - **✍️ 富文本编辑器** — `@aura-react-comp/editor` 基于 Tiptap / ProseMirror 封装，功能开关同时作用于扩展注册与工具栏
 
@@ -93,7 +93,7 @@ const App = () => (
 | **导航**     | Menu、Breadcrumb、Pagination、Steps、Dropdown                                                                                                                                                                                                  |
 | **表单高级** | Slider、Rate、Upload、Form                                                                                                                                                                                                                     |
 | **布局**     | Layout、Flex、Scrollbar                                                                                                                                                                                                                        |
-| **业务**     | PageContainer、SearchForm、ProTable、ModalForm（基于企业级 UI 框架）                                                                                                                                                                           |
+| **业务**     | PageContainer、SearchForm、ProTable、ModalForm（基于 antd）                                                                                                                                                                                    |
 | **图表**     | LineChart、BarChart、AreaChart、PieChart、FunnelChart、WaterfallChart、ComboChart、ScatterChart、RadarChart、HeatmapChart、CandlestickChart、TreemapChart、TreeChart、SankeyChart、GraphChart、GaugeChart、RingProgress、Sparkline（共 18 个） |
 | **编辑器**   | Editor、Toolbar                                                                                                                                                                                                                                |
 
@@ -105,7 +105,7 @@ aura/
 │   ├── ui/        # @aura-react-comp/design — UI 组件库
 │   ├── charts/    # @aura-react-comp/charts — 图表库（18 个图表）
 │   ├── editor/    # @aura-react-comp/editor — 富文本编辑器（Tiptap 封装）
-│   ├── business/  # @aura-react-comp/business — 业务组件库（基于企业级 UI 框架封装）
+│   ├── business/  # @aura-react-comp/business — 业务组件库（基于 antd 封装）
 │   ├── x/         # @aura-react-comp/x — AI 对话组件库（对标 Ant Design X）
 │   ├── motion/    # @aura-react-comp/motion — 动效组件库（30 组件，令牌驱动）
 │   ├── icons/     # @aura-react-comp/icons — 图标库

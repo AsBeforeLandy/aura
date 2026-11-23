@@ -3,7 +3,7 @@ title: SearchForm
 subtitle: 查询表单
 group: 业务
 category: Components
-description: 可折叠的高级查询区，基于企业级 UI 框架 Form 驱动的搜索条件收集。
+description: 可折叠的高级查询区，基于 antd Form 驱动的搜索条件收集。
 order: 2
 demo:
   cols: 1

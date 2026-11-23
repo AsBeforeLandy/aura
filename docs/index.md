@@ -31,7 +31,7 @@ features:
 | 包名                                                                                   | 说明                                                       | 规模                |
 | -------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------- |
 | [`@aura-react-comp/design`](https://www.npmjs.com/package/@aura-react-comp/design)     | 基础组件库：36 个通用组件，Form 对齐主流表单方案全常用能力 | 36 组件 · 700+ 测试 |
-| [`@aura-react-comp/business`](https://www.npmjs.com/package/@aura-react-comp/business) | B 端业务组件：基于企业级 UI 框架的 Admin 场景封装          | 10 个业务组件       |
+| [`@aura-react-comp/business`](https://www.npmjs.com/package/@aura-react-comp/business) | B 端业务组件：基于 antd 的 Admin 场景封装                  | 10 个业务组件       |
 | [`@aura-react-comp/x`](https://www.npmjs.com/package/@aura-react-comp/x)               | AI 对话组件库：Bubble / Sender / ThoughtChain 等对话场景   | 20 个组件           |
 | [`@aura-react-comp/motion`](https://www.npmjs.com/package/@aura-react-comp/motion)     | 动效库：Motion 驱动的入场、转场、微交互动效                | 31 个动效组件       |
 | [`@aura-react-comp/charts`](https://www.npmjs.com/package/@aura-react-comp/charts)     | 图表组件：跟随主题令牌的响应式图表                         | ECharts 封装        |

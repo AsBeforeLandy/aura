@@ -7,7 +7,7 @@ toc: content
 
 # 业务组件
 
-`@aura-react-comp/business` 是基于主流企业级 UI 框架 v6 二次封装的业务组件层，专注 B 端中后台（OA / ERP / 管理后台）高频场景，把「查、翻、展、填」这类重复劳动收敛成开箱即用的组件。
+`@aura-react-comp/business` 是基于 antd v6 二次封装的业务组件层，专注 B 端中后台（OA / ERP / 管理后台）高频场景，把「查、翻、展、填」这类重复劳动收敛成开箱即用的组件。
 
 <code src="./demo/showcase.tsx" description="3 个场景自动轮播：高级表格 / 查询表单 / 页面骨架。">业务组件演示墙</code>
 

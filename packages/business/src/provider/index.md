@@ -12,7 +12,7 @@ toc: content
 
 # BusinessProvider 业务主题桥接
 
-将 Aura 的设计令牌映射到 底层框架的主题系统，让基于企业级 UI 框架二次封装的业务组件与 Aura 自研组件呈现同一套视觉语言；主色与语义色默认运行时读取全局令牌，随 `data-mode` × `data-palette` 双轴主题自动切换。
+将 Aura 的设计令牌映射到 底层框架的主题系统，让基于 antd 二次封装的业务组件与 Aura 自研组件呈现同一套视觉语言；主色与语义色默认运行时读取全局令牌，随 `data-mode` × `data-palette` 双轴主题自动切换。
 
 ```tsx | pure
 import { BusinessProvider } from '@aura-react-comp/business';
