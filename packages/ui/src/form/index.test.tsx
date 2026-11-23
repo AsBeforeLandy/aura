@@ -1,5 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, fireEvent, screen, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  fireEvent,
+  screen,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import React from 'react';
 import { Form } from './index';
 
@@ -39,7 +45,11 @@ describe('Form', () => {
     const onFinishFailed = vi.fn();
     render(
       <FormComponent onFinish={onFinish} onFinishFailed={onFinishFailed}>
-        <FormComponent.Item name="email" label="邮箱" rules={[{ required: true, message: '请输入邮箱' }]}>
+        <FormComponent.Item
+          name="email"
+          label="邮箱"
+          rules={[{ required: true, message: '请输入邮箱' }]}
+        >
           <input value="" onChange={() => {}} />
         </FormComponent.Item>
         <button type="submit">提交</button>
@@ -272,7 +282,10 @@ describe('Form', () => {
     const [form] = Form.useForm();
     render(
       <Form form={form}>
-        <Form.Item name="username" rules={[{ required: true, message: '必填' }]}>
+        <Form.Item
+          name="username"
+          rules={[{ required: true, message: '必填' }]}
+        >
           <input data-testid="username" />
         </Form.Item>
       </Form>,
@@ -307,7 +320,10 @@ describe('Form', () => {
     const [form] = Form.useForm();
     render(
       <Form form={form} initialValues={{ username: '初始' }}>
-        <Form.Item name="username" rules={[{ required: true, message: '必填' }]}>
+        <Form.Item
+          name="username"
+          rules={[{ required: true, message: '必填' }]}
+        >
           <input data-testid="username" />
         </Form.Item>
       </Form>,
@@ -346,5 +362,356 @@ describe('Form', () => {
     const values = await form.validateFields();
     expect(values).toEqual({ username: 'landy' });
     expect(onFinish).not.toHaveBeenCalled(); // validateFields 不触发 onFinish，提交仍由表单触发
+  });
+});
+
+/* ===== 新增能力：嵌套路径 / onValuesChange / dependencies / useWatch 等 ===== */
+
+describe('Form 新能力（antd 对齐）', () => {
+  const Item = Form.Item as unknown as React.FC<any>;
+
+  it('嵌套点路径：name="user.name" 读写嵌套值', async () => {
+    const [form] = (Form as any).useForm();
+    render(
+      <FormComponent form={form}>
+        <Item name="user.name" label="姓名">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    act(() => {
+      form.setFieldValue('user.name', 'landy');
+    });
+    expect(form.getFieldValue('user.name')).toBe('landy');
+    expect(form.getFieldsValue()).toEqual({ user: { name: 'landy' } });
+    form.resetFields();
+    expect(form.getFieldValue('user.name')).toBeUndefined();
+  });
+
+  it('onValuesChange 在字段值变化时触发', () => {
+    const onValuesChange = vi.fn();
+    render(
+      <FormComponent onValuesChange={onValuesChange}>
+        <Item name="name">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    fireEvent.change(document.querySelector('input')!, {
+      target: { value: 'x' },
+    });
+    expect(onValuesChange).toHaveBeenCalled();
+    const call = onValuesChange.mock.calls[0][0];
+    expect(call).toEqual({ name: 'name', value: 'x' });
+  });
+
+  it('dependencies：依赖字段变化时重新校验自身', async () => {
+    const onFinish = vi.fn();
+    const { container } = render(
+      <FormComponent onFinish={onFinish}>
+        <Item name="password" label="密码">
+          <input />
+        </Item>
+        <Item
+          name="confirm"
+          label="确认密码"
+          dependencies={['password']}
+          rules={[
+            {
+              validator: (rule: any, value: unknown) => {
+                const pwd = container.querySelectorAll('input')[0].value;
+                if (value !== pwd)
+                  return Promise.reject(new Error('两次密码不一致'));
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    const inputs = container.querySelectorAll('input');
+    // 先都填一致
+    fireEvent.change(inputs[0], { target: { value: '123' } });
+    fireEvent.change(inputs[1], { target: { value: '123' } });
+    // 改密码后 confirm 应被重校验并报错
+    fireEvent.change(inputs[0], { target: { value: '456' } });
+    await waitFor(() => {
+      expect(container.textContent).toContain('两次密码不一致');
+    });
+  });
+
+  it('help 覆盖校验错误，extra 独立展示', () => {
+    const { container } = render(
+      <FormComponent>
+        <Item
+          name="nick"
+          label="昵称"
+          help="自定义帮助"
+          extra="不超过 10 个字符"
+          rules={[{ required: true, message: '必填' }]}
+        >
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    expect(container.textContent).toContain('自定义帮助');
+    expect(container.textContent).toContain('不超过 10 个字符');
+    expect(container.textContent).not.toContain('必填');
+  });
+
+  it('validateStatus 手动指定状态类', () => {
+    const { container } = render(
+      <FormComponent>
+        <Item name="s" label="状态" validateStatus="warning" help="warn">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    expect(
+      container
+        .querySelector('.aura-form-item')!
+        .classList.contains('aura-form-item-warning'),
+    ).toBe(true);
+  });
+
+  it('normalize：输入值写入前规范化（去空格转大写）', () => {
+    const { container } = render(
+      <FormComponent>
+        <Item
+          name="code"
+          label="编码"
+          normalize={(v: unknown) => String(v).trim().toUpperCase()}
+        >
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    fireEvent.change(container.querySelector('input')!, {
+      target: { value: '  abc  ' },
+    });
+    const input = container.querySelector('input') as HTMLInputElement;
+    expect(input.value).toBe('ABC');
+  });
+
+  it('getValueFromEvent：自定义从事件取值', () => {
+    const [form] = (Form as any).useForm();
+    const { container } = render(
+      <FormComponent form={form}>
+        <Item
+          name="len"
+          label="长度"
+          getValueFromEvent={(e: any) => e.target.value.length}
+        >
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    fireEvent.change(container.querySelector('input')!, {
+      target: { value: 'hello' },
+    });
+    expect(form.getFieldValue('len')).toBe(5);
+  });
+
+  it('validateTrigger="onBlur"：blur 时才校验', async () => {
+    const { container } = render(
+      <FormComponent>
+        <Item
+          name="email"
+          label="邮箱"
+          validateTrigger="onBlur"
+          rules={[{ required: true, message: '邮箱必填' }]}
+        >
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    // change 不触发校验
+    fireEvent.change(container.querySelector('input')!, {
+      target: { value: '' },
+    });
+    expect(container.textContent).not.toContain('邮箱必填');
+    // blur 触发
+    fireEvent.blur(container.querySelector('input')!);
+    await waitFor(() => {
+      expect(container.textContent).toContain('邮箱必填');
+    });
+  });
+
+  it('Form.useWatch 订阅字段值', () => {
+    const WatchConsumer = React.forwardRef<{ value: unknown }, any>(
+      (props, ref) => {
+        React.useImperativeHandle(ref, () => props as any);
+        return null;
+      },
+    );
+    let watched: unknown;
+    const Inner: React.FC<any> = (props) => {
+      watched = (Form as any).useWatch('keyword');
+      void props;
+      return null;
+    };
+    render(
+      <FormComponent initialValues={{ keyword: '初始' }}>
+        <Item name="keyword">
+          <input />
+        </Item>
+        <Inner />
+        <WatchConsumer ref={undefined} value={watched} />
+      </FormComponent>,
+    );
+    // 初值
+    expect(watched).toBe('初始');
+    // 值变化后 watch 跟随
+    fireEvent.change(document.querySelector('input')!, {
+      target: { value: '更新' },
+    });
+    expect(watched).toBe('更新');
+    void WatchConsumer;
+  });
+
+  it('shouldUpdate：无 name 的函数 children 跟随值变化', () => {
+    const { container } = render(
+      <FormComponent>
+        <Item name="a">
+          <input />
+        </Item>
+        <Item shouldUpdate>
+          {(_prev: any, next: any) => (
+            <span data-testid="mirror">{String(next.a ?? '空')}</span>
+          )}
+        </Item>
+      </FormComponent>,
+    );
+    expect(container.querySelector('[data-testid=mirror]')!.textContent).toBe(
+      '空',
+    );
+    fireEvent.change(container.querySelector('input')!, {
+      target: { value: 'hi' },
+    });
+    expect(container.querySelector('[data-testid=mirror]')!.textContent).toBe(
+      'hi',
+    );
+  });
+
+  it('preserve=false：字段卸载后丢弃值', () => {
+    const [form] = (Form as any).useForm();
+    const { rerender } = render(
+      <FormComponent form={form} initialValues={{ temp: 'x' }}>
+        <Item name="temp" preserve={false}>
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    expect(form.getFieldValue('temp')).toBe('x');
+    rerender(
+      <FormComponent form={form}>
+        <div />
+      </FormComponent>,
+    );
+    expect(form.getFieldValue('temp')).toBeUndefined();
+  });
+
+  it('scrollToFirstError：提交失败时错误项存在', async () => {
+    const onFinishFailed = vi.fn();
+    const { container } = render(
+      <FormComponent onFinishFailed={onFinishFailed} scrollToFirstError>
+        <Item name="req" rules={[{ required: true, message: '必填' }]}>
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(onFinishFailed).toHaveBeenCalled();
+    });
+    expect(container.querySelector('.aura-form-item-error')).not.toBeNull();
+  });
+
+  it('List.move 支持调整顺序', () => {
+    const List = (Form as any).List as any;
+    const [form] = (Form as any).useForm();
+    const { container } = render(
+      <FormComponent
+        form={form}
+        initialValues={{ rows: [{ v: 'a' }, { v: 'b' }, { v: 'c' }] }}
+      >
+        <List name="rows">
+          {(fields: any[], op: any) => (
+            <div>
+              {fields.map((f) => (
+                <Item key={f.key} name={`rows.${f.name}.v`}>
+                  <input />
+                </Item>
+              ))}
+              <button type="button" onClick={() => op.move(2, 0)}>
+                move
+              </button>
+            </div>
+          )}
+        </List>
+      </FormComponent>,
+    );
+    const inputs = container.querySelectorAll('input');
+    expect(inputs[0].value).toBe('a');
+    fireEvent.click(screen.getByText('move'));
+    const after = container.querySelectorAll('input');
+    expect(after[0].value).toBe('c');
+    expect(after[1].value).toBe('a');
+    expect(after[2].value).toBe('b');
+    expect(form.getFieldValue('rows')).toEqual([
+      { v: 'c' },
+      { v: 'a' },
+      { v: 'b' },
+    ]);
+  });
+
+  it('内置 type 校验：email / number', async () => {
+    const onFinishFailed = vi.fn();
+    const { container } = render(
+      <FormComponent
+        initialValues={{ mail: 'not-an-email', age: 'abc' }}
+        onFinishFailed={onFinishFailed}
+      >
+        <Item
+          name="mail"
+          rules={[{ type: 'email', message: '邮箱格式不正确' }]}
+        >
+          <input />
+        </Item>
+        <Item name="age" rules={[{ type: 'number', message: '必须是数字' }]}>
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('邮箱格式不正确');
+      expect(container.textContent).toContain('必须是数字');
+    });
+  });
+
+  it('min/max：数字类型按数值比较', async () => {
+    const onFinish = vi.fn();
+    render(
+      <FormComponent onFinish={onFinish} initialValues={{ score: 150 }}>
+        <Item name="score" rules={[{ max: 100, message: '不能超过 100' }]}>
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect((container) => expect(container)).toBeDefined();
+    });
+    await new Promise((r) => setTimeout(r, 0));
+    // 数字 150 > max 100 应报错（不是按字符串长度）
+    expect(screen.getByText('不能超过 100')).toBeDefined();
+    void onFinish;
   });
 });

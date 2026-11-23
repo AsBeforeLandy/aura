@@ -7,25 +7,22 @@ import React, {
   useMemo,
   useRef,
   useEffect,
+  useSyncExternalStore,
 } from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import {
+  FormStore,
+  type FormError,
+  type FieldMeta,
+  type Values,
+} from './formStore';
+import type { RuleType } from './rules';
 import './index.less';
 
+export type { FormError, RuleType };
+export { FormStore } from './formStore';
+
 /* ===== 类型定义 ===== */
-
-export interface FormError {
-  name: string;
-  errors: string[];
-}
-
-export interface RuleType {
-  required?: boolean;
-  message?: string;
-  pattern?: RegExp;
-  min?: number;
-  max?: number;
-  validator?: (value: unknown) => boolean | Promise<boolean>;
-}
 
 export interface FormListFieldData {
   key: number;
@@ -33,96 +30,130 @@ export interface FormListFieldData {
 }
 
 export interface FormListOperation {
-  add: (defaultValue?: Record<string, unknown>) => void;
-  remove: (index: number) => void;
+  add: (defaultValue?: Record<string, unknown>, insertIndex?: number) => void;
+  remove: (index: number | number[]) => void;
+  move: (from: number, to: number) => void;
 }
 
-/* ===== FormInstance（命令式实例） ===== */
-
-/** Form 内部引擎：由 Form 在挂载时注入，FormInstance 的方法委托给它 */
-interface FormEngine {
-  getValues(): Record<string, unknown>;
-  setFieldValue(name: string, value: unknown): void;
-  setFieldsValue(values: Record<string, unknown>): void;
-  validateFields(names?: string[]): Promise<Record<string, unknown>>;
-  reset(): void;
-}
-
+/** FormStore 的命令式门面（antd FormInstance 的常用子集） */
 export interface FormInstance {
-  /** 获取全部字段值（浅拷贝） */
-  getFieldsValue(): Record<string, unknown>;
-  /** 获取单个字段值 */
+  getFieldsValue(): Values;
   getFieldValue(name: string): unknown;
-  /** 设置单个字段值 */
   setFieldValue(name: string, value: unknown): void;
-  /** 批量合并字段值（编辑表单回填） */
-  setFieldsValue(values: Record<string, unknown>): void;
-  /**
-   * 校验全部或指定字段：通过时 resolve 全部字段值，
-   * 失败时 reject `FormError[]`
-   */
-  validateFields(names?: string | string[]): Promise<Record<string, unknown>>;
-  /** 重置为 initialValues 并清空校验错误 */
+  setFieldsValue(values: Values): void;
+  validateFields(names?: string | string[]): Promise<Values>;
   resetFields(): void;
+  getFieldError(name: string): string[];
+  getFieldsError(): Record<string, string[]>;
+  /** 直接设置字段的错误 / touched / value */
+  setFields(
+    updates: Record<
+      string,
+      { errors?: string[] | null; touched?: boolean; value?: unknown }
+    >,
+  ): void;
+  isFieldTouched(name: string): boolean;
+  isFieldsTouched(names?: string[]): boolean;
+  /** 滚动到指定字段的表单项 */
+  scrollToField(name: string): void;
 }
 
-/** FormInstance → 引用槽注册表：Form 借此把引擎挂到实例上，不污染公开接口 */
-const engineRegistry = new WeakMap<FormInstance, { current: FormEngine | null }>();
+/** FormInstance → store 注册表 */
+const instanceStore = new WeakMap<FormInstance, FormStore>();
+
+const noopSubscribe = () => () => {};
 
 /**
- * 创建 FormInstance。传给 `<Form form={form}>` 后即可在表单外部命令式
- * 读写与校验（编辑回填、外部提交按钮、跨组件联动等场景）。
- * 对外通过 `Form.useForm()` 使用（返回数组，与 antd 用法一致）。
- *
- * 实现说明：刻意不使用 React hooks——与 antd 一致，允许在组件外
- * （工具函数、测试、类组件）调用，仅要求把返回值传给 <Form form={...}>。
+ * 创建 FormInstance（antd 用法一致：`const [form] = Form.useForm()`）。
+ * 不依赖 React hooks —— 允许在组件外调用，仅要求传给 `<Form form={...}>`。
  */
-function useForm(): FormInstance {
-  const engineRef: { current: FormEngine | null } = { current: null };
+function useForm(): [FormInstance] {
+  return [createFormInstance()];
+}
+
+function createFormInstance(): FormInstance {
+  const store = new FormStore();
   const instance: FormInstance = {
-    getFieldsValue: () => engineRef.current?.getValues() ?? {},
-    getFieldValue: (name) => engineRef.current?.getValues()[name],
-    setFieldValue: (name, value) => engineRef.current?.setFieldValue(name, value),
-    setFieldsValue: (values) => engineRef.current?.setFieldsValue(values),
+    getFieldsValue: () => store.getFieldsValue(),
+    getFieldValue: (name) => store.getValue(name),
+    setFieldValue: (name, value) => store.setFieldValue(name, value),
+    setFieldsValue: (values) => store.setFieldsValue(values),
     validateFields: async (names) => {
-      const engine = engineRef.current;
-      if (!engine) return {};
-      return engine.validateFields(
-        names === undefined ? undefined : Array.isArray(names) ? names : [names],
-      );
+      const targets =
+        names === undefined
+          ? undefined
+          : Array.isArray(names)
+            ? names
+            : [names];
+      return store.validateFields(targets);
     },
-    resetFields: () => engineRef.current?.reset(),
+    resetFields: () => store.resetFields(),
+    getFieldError: (name) => store.getFieldError(name),
+    getFieldsError: () => store.getFieldsError(),
+    setFields: (updates) => store.setFields(updates),
+    isFieldTouched: (name) => store.isFieldTouched(name),
+    isFieldsTouched: (names) => store.isFieldsTouched(names),
+    scrollToField: (name) => scrollToFormItem(name),
   };
-  engineRegistry.set(instance, engineRef);
+  instanceStore.set(instance, store);
   return instance;
 }
 
-interface FormContextValue {
-  values: Record<string, unknown>;
-  errors: Record<string, string[]>;
-  setFieldValue: (name: string, value: unknown) => void;
-  validateField: (name: string) => Promise<string[]>;
-  registerField: (name: string, rules?: RuleType[]) => void;
-  layout: 'horizontal' | 'vertical' | 'inline';
-  disabled: boolean;
-  colon: boolean;
-  size: 'sm' | 'md' | 'lg';
-  labelAlign: 'left' | 'right';
+function scrollToFormItem(name: string) {
+  requestAnimationFrame(() => {
+    const items = document.querySelectorAll<HTMLElement>(
+      `.${prefixCls('form-item')}[data-field-name="${name}"]`,
+    );
+    items[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 }
 
 /* ===== Context ===== */
 
+type Layout = 'horizontal' | 'vertical' | 'inline';
+type Size = 'sm' | 'md' | 'lg';
+type RequiredMark = boolean | 'optional';
+
+interface FormContextValue {
+  store: FormStore;
+  layout: Layout;
+  disabled: boolean;
+  colon: boolean;
+  size: Size;
+  labelAlign: 'left' | 'right';
+  requiredMark: RequiredMark;
+}
+
 const FormContext = createContext<FormContextValue | null>(null);
 
 function useFormContext() {
-  const ctx = useContext(FormContext);
-  return ctx;
+  return useContext(FormContext);
+}
+
+/* ===== Form.useWatch ===== */
+
+/**
+ * 订阅某个字段的值（联动渲染）。form 缺省时使用最近 Form 上下文。
+ * 注意：watch 的值应为原始类型（string/number/boolean），对象类型
+ * 每次快照都是新引用，会导致渲染循环。
+ */
+function useWatch(path: string, form?: FormInstance): unknown {
+  const ctx = useFormContext();
+  const store = (form ? instanceStore.get(form) : undefined) ?? ctx?.store;
+
+  const subscribe = useCallback(
+    (listener: () => void) => store?.subscribe(listener) ?? noopSubscribe(),
+    [store],
+  );
+  const getSnapshot = useCallback(() => store?.getValue(path), [store, path]);
+
+  return useSyncExternalStore(subscribe, getSnapshot, () => undefined);
 }
 
 /* ===== Form.Item ===== */
 
 export interface FormItemProps {
-  /** 字段名称 */
+  /** 字段名称，支持嵌套点路径（'user.name'） */
   name?: string;
   /** 标签文本 */
   label?: React.ReactNode;
@@ -134,19 +165,52 @@ export interface FormItemProps {
   rules?: RuleType[];
   /** 是否必填（仅显示星号，实际验证由 rules 控制） */
   required?: boolean;
+  /** 依赖字段：任一依赖的值变化时重新校验自身（如「确认密码」依赖「密码」） */
+  dependencies?: string[];
+  /** 触发校验的事件
+   *  @default 'onChange'
+   */
+  validateTrigger?: string | string[];
+  /** 自定义帮助文案（设置后覆盖校验错误信息） */
+  help?: React.ReactNode;
+  /** 额外说明，展示在控件下方 */
+  extra?: React.ReactNode;
+  /** 手动指定校验状态，优先级高于自动推导 */
+  validateStatus?: 'success' | 'warning' | 'error' | 'validating';
+  /** 输入值规范化：在写入 store 前调用 */
+  normalize?: (
+    value: unknown,
+    prevValue: unknown,
+    allValues: Values,
+  ) => unknown;
+  /** 从 onChange 事件中取值（默认自动识别 DOM 事件与裸值） */
+  getValueFromEvent?: (...args: unknown[]) => unknown;
+  /** 字段级初始值 */
+  initialValue?: unknown;
+  /** 字段卸载后是否保留值
+   *  @default true
+   */
+  preserve?: boolean;
+  /** 是否隐藏字段（保持注册与校验，仅不渲染） */
+  hidden?: boolean;
   /** 是否禁用 */
   disabled?: boolean;
   /** 无样式模式，不渲染 Form.Item 的标签、布局和错误信息 */
   noStyle?: boolean;
-  /** 自定义值属性名，例如 Switch/Checkbox 使用 'checked'，默认自动检测 */
-  valuePropName?: string;
+  /**
+   * 无 name 时控制函数 children 的更新时机：
+   * true = 任意值变化都重新渲染；false = 仅挂载时渲染一次
+   */
+  shouldUpdate?: boolean;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
   style?: React.CSSProperties;
-  /** 子元素 */
+  /** 子元素；无 name 且为函数时按 shouldUpdate 联动渲染 */
   children?: React.ReactNode;
 }
+
+const VALIDATING_DELAY = 150;
 
 const FormItem: React.FC<FormItemProps> = ({
   name,
@@ -155,61 +219,159 @@ const FormItem: React.FC<FormItemProps> = ({
   labelWidth,
   rules,
   required,
+  dependencies,
+  validateTrigger = 'onChange',
+  help,
+  extra,
+  validateStatus,
+  normalize,
+  getValueFromEvent,
+  initialValue,
+  preserve = true,
+  hidden = false,
   disabled: itemDisabled,
   noStyle = false,
+  shouldUpdate,
   valuePropName,
   className,
   style,
   children,
 }) => {
   const ctx = useFormContext();
-  const [localErrors, setLocalErrors] = useState<string[]>([]);
+  const store = ctx?.store;
+  // 字段级订阅：store 任何变更都触发本 Item 重渲染（正确性优先）
+  const snapshot = useSyncExternalStore(
+    store?.subscribe ?? noopSubscribe,
+    store?.getSnapshot ?? (() => 0),
+    () => 0,
+  );
+  void snapshot;
+
+  const [validating, setValidating] = useState(false);
+  const prevDepsRef = useRef<string>('');
+
+  const triggers = useMemo(
+    () =>
+      (Array.isArray(validateTrigger)
+        ? validateTrigger
+        : [validateTrigger]
+      ).map((t) => t.toLowerCase()),
+    [validateTrigger],
+  );
+
+  // 注册字段元信息（含 Item 级 initialValue 播种）；卸载时按 preserve 处理
+  useEffect(() => {
+    if (!name || !store) return undefined;
+    store.registerField(name, {
+      rules,
+      validateTrigger: Array.isArray(validateTrigger)
+        ? validateTrigger.join(',')
+        : validateTrigger,
+      valuePropName,
+      getValueFromEvent,
+      normalize,
+      initialValue,
+      preserve,
+      hidden,
+      dependencies,
+    });
+    return () => store.unregisterField(name);
+    // meta 全部来自 props，仅在显式变化时重新注册
+  }, [
+    name,
+    store,
+    rules,
+    validateTrigger,
+    valuePropName,
+    getValueFromEvent,
+    normalize,
+    initialValue,
+    preserve,
+    hidden,
+    dependencies,
+  ]);
 
   const isRequired = required ?? rules?.some((r) => r.required) ?? false;
-  const fieldErrors = name && ctx ? (ctx.errors[name] ?? localErrors) : localErrors;
+  const storeErrors = name && store ? store.getFieldError(name) : [];
   const isDisabled = itemDisabled ?? ctx?.disabled ?? false;
   const colon = ctx?.colon ?? false;
   const labelAlign = itemLabelAlign ?? ctx?.labelAlign ?? 'right';
+  const requiredMark = ctx?.requiredMark ?? true;
 
-  // 挂载时注册字段 rules 到 Form
+  const isTouched = name && store ? store.isFieldTouched(name) : false;
+  void isTouched;
+
+  // dependencies：依赖字段值变化时重校验自身
+  const depsKey = useMemo(() => {
+    if (!dependencies || !store) return '';
+    return dependencies.map((dep) => String(store.getValue(dep))).join('|');
+    // snapshot 作为依赖：store 变更时重新计算
+  }, [dependencies, store, snapshot]);
+
   useEffect(() => {
-    if (name && ctx && rules && rules.length > 0) {
-      ctx.registerField(name, rules);
+    if (!dependencies || !name || !store || prevDepsRef.current === '') {
+      prevDepsRef.current = depsKey;
+      return;
     }
-  }, [name, ctx, rules]);
+    if (prevDepsRef.current !== depsKey) {
+      prevDepsRef.current = depsKey;
+      void store.validateField(name);
+    }
+  }, [depsKey, dependencies, name, store]);
 
-  const handleChange = useCallback(
-    async (e: unknown) => {
-      if (!name || !ctx) return;
-      
-      let value: unknown = e;
-      if (e && typeof e === 'object' && 'target' in e && e.target) {
-        // 事件来自被克隆的子组件，此处只能按 DOM 事件的公共形态取值
+  /** 从 onChange 参数中取值（默认识别 DOM 事件与裸值） */
+  const extractValue = useCallback(
+    (args: unknown[]): unknown => {
+      if (getValueFromEvent) return getValueFromEvent(...args);
+      const e = args[0];
+      if (
+        e &&
+        typeof e === 'object' &&
+        'target' in e &&
+        (e as { target?: unknown }).target
+      ) {
         const target = e.target as HTMLInputElement;
         if (target.type === 'checkbox' || target.type === 'radio') {
-          value = target.type === 'checkbox' ? target.checked : target.value;
-        } else {
-          value = target.value;
+          return target.type === 'checkbox' ? target.checked : target.value;
         }
+        return target.value;
       }
-      
-      ctx.setFieldValue(name, value);
+      return e;
+    },
+    [getValueFromEvent],
+  );
 
-      // 实时验证
-      if (rules && rules.length > 0) {
-        const errors = await validateRules(rules, value);
-        setLocalErrors(errors);
+  /** 值变更统一入口：写值 → markTouched → 按触发时机校验 */
+  const handleValueChange = useCallback(
+    async (rawValue: unknown) => {
+      if (!name || !store) return;
+      store.markTouched(name);
+      store.setFieldValue(name, rawValue);
+      if (rules && rules.length > 0 && triggers.includes('onchange')) {
+        setValidating(true);
+        await store.validateField(name);
+        setValidating(false);
       }
     },
-    [name, ctx, rules],
+    [name, store, rules, triggers],
   );
+
+  // 状态推导：validateStatus 手动指定 > 校验错误 > validating
+  const fieldErrors = help !== undefined ? [] : storeErrors;
+  const status: 'success' | 'warning' | 'error' | 'validating' | undefined =
+    validateStatus ??
+    (validating ? 'validating' : fieldErrors.length > 0 ? 'error' : undefined);
 
   const itemCls = classNames(
     prefixCls('form-item'),
     prefixCls(`form-item-${ctx?.layout ?? 'vertical'}`),
-    fieldErrors.length > 0 && prefixCls('form-item-error'),
+    !hidden && status === 'error' && prefixCls('form-item-error'),
+    !hidden && status === 'success' && prefixCls('form-item-success'),
+    !hidden && status === 'warning' && prefixCls('form-item-warning'),
+    !hidden && status === 'validating' && prefixCls('form-item-validating'),
     isRequired && prefixCls('form-item-required'),
     isDisabled && prefixCls('form-item-disabled'),
+    hidden && prefixCls('form-item-hidden'),
     className,
   );
 
@@ -219,60 +381,144 @@ const FormItem: React.FC<FormItemProps> = ({
     labelStyle.flexShrink = 0;
   }
 
-  /** 克隆子元素注入 value/checked、onChange、disabled */
+  /** 克隆子元素注入受控 props 与 id */
   const renderChildren = () => {
     if (React.isValidElement(children)) {
       const child = children as React.ReactElement<Record<string, unknown>>;
       const childProps = child.props;
-      // 子组件可能是组件（函数 / 类，取 displayName 或 name）或宿主元素（字符串标签名）
       const childType = child.type as
-        | { displayName?: string; name?: string }
-        | string;
+        { displayName?: string; name?: string } | string;
       const displayName =
         typeof childType === 'string'
           ? childType
           : childType?.displayName || childType?.name || '';
-      
-      const isSwitchOrCheckbox = 
-        displayName === 'Switch' || 
-        displayName === 'Checkbox' || 
-        (typeof childType === 'string' && childType === 'input' && childProps.type === 'checkbox');
-        
-      const propName = valuePropName ?? (isSwitchOrCheckbox ? 'checked' : 'value');
 
-      if (!name || !ctx) {
+      const isSwitchOrCheckbox =
+        displayName === 'Switch' ||
+        displayName === 'Checkbox' ||
+        (typeof childType === 'string' &&
+          childType === 'input' &&
+          childProps.type === 'checkbox');
+
+      const propName =
+        valuePropName ?? (isSwitchOrCheckbox ? 'checked' : 'value');
+
+      const disabledProps = isDisabled ? { disabled: true } : {};
+      const sizeProps =
+        ctx?.size && childProps.size === undefined ? { size: ctx.size } : {};
+      const idProps = name ? { id: name } : {};
+
+      // 无 name：不接管值，仅注入全局配置
+      if (!name || !store) {
         return React.cloneElement(child, {
-          ...(isDisabled ? { disabled: true } : {}),
-          ...(ctx?.size && childProps.size === undefined ? { size: ctx.size } : {}),
+          ...disabledProps,
+          ...sizeProps,
         });
       }
 
-      const value = ctx.values[name] ?? (isSwitchOrCheckbox ? false : '');
+      const value = store.getValue(name) ?? (isSwitchOrCheckbox ? false : '');
+
+      const injectOnChange = triggers.includes('onchange');
+      const injectOnBlur = triggers.includes('onblur');
 
       return React.cloneElement(child, {
+        ...idProps,
         [propName]: value,
-        onChange: (e: unknown) => {
-          handleChange(e);
-          const childOnChange = childProps.onChange as
-            | ((ev: unknown) => void)
-            | undefined;
-          childOnChange?.(e);
-        },
-        ...(isDisabled ? { disabled: true } : {}),
-        ...(ctx.size && childProps.size === undefined ? { size: ctx.size } : {}),
+        ...(injectOnChange
+          ? {
+              onChange: (...args: unknown[]) => {
+                void handleValueChange(extractValue(args));
+                const childOnChange = childProps.onChange as
+                  ((...ev: unknown[]) => void) | undefined;
+                childOnChange?.(...args);
+              },
+            }
+          : {}),
+        ...(injectOnBlur
+          ? {
+              onBlur: (...args: unknown[]) => {
+                if (name && store) {
+                  store.markTouched(name);
+                  if (rules && rules.length > 0) void store.validateField(name);
+                }
+                const childOnBlur = childProps.onBlur as
+                  ((...ev: unknown[]) => void) | undefined;
+                childOnBlur?.(...args);
+              },
+            }
+          : {}),
+        ...disabledProps,
+        ...sizeProps,
       });
     }
 
     return children;
   };
 
+  // 无 name 且 children 为函数：shouldUpdate 联动渲染（antd 模式）
+  const prevValuesRef = useRef<Values>({});
+  useEffect(() => {
+    if (!store) return;
+    prevValuesRef.current = store.getFieldsValue();
+    // 每次渲染后更新快照（重渲染由 useSyncExternalStore 驱动）
+  });
+
+  const shouldUpdateRender = () => {
+    if (!store || typeof children !== 'function') return children;
+    return (children as (prev: Values, next: Values) => React.ReactNode)(
+      prevValuesRef.current,
+      store.getFieldsValue(),
+    );
+  };
+
+  const showHelp = help !== undefined ? help : null;
+  const showErrors = help === undefined && fieldErrors.length > 0;
+
+  // 无 name：不参与字段逻辑，但仍渲染布局与 label（shouldUpdate 函数 children 或纯注入）
+  if (!name) {
+    const content =
+      typeof children === 'function' ? shouldUpdateRender() : renderChildren();
+    if (noStyle) return <>{content}</>;
+    return (
+      <div className={itemCls} style={style}>
+        {label && (
+          <label
+            className={classNames(
+              prefixCls('form-item-label'),
+              labelAlign === 'left' && prefixCls('form-item-label-left'),
+            )}
+            style={labelStyle}
+          >
+            {isRequired && (
+              <span className={prefixCls('form-item-required-star')}>*</span>
+            )}
+            {label}
+            {colon && <span className={prefixCls('form-item-colon')}>:</span>}
+          </label>
+        )}
+        <div className={prefixCls('form-item-control')}>
+          <div className={prefixCls('form-item-input')}>{content}</div>
+        </div>
+      </div>
+    );
+  }
+
   // noStyle 模式：只注入 value/onChange/disabled，不渲染外层结构和标签
   if (noStyle) {
     return <>{renderChildren()}</>;
   }
 
+  // 星号语义：requiredMark=false 不显示；'optional' 时非必填项标注「可选」
+  const showStar = isRequired && requiredMark !== false;
+  const showOptionalMark = requiredMark === 'optional' && !isRequired;
+
   return (
-    <div className={itemCls} style={style}>
+    <div
+      className={itemCls}
+      style={style}
+      data-field-name={name}
+      hidden={hidden}
+    >
       {label && (
         <label
           className={classNames(
@@ -282,14 +528,21 @@ const FormItem: React.FC<FormItemProps> = ({
           htmlFor={name}
           style={labelStyle}
         >
-          {isRequired && <span className={prefixCls('form-item-required-star')}>*</span>}
+          {showStar && (
+            <span className={prefixCls('form-item-required-star')}>*</span>
+          )}
           {label}
           {colon && <span className={prefixCls('form-item-colon')}>:</span>}
+          {showOptionalMark && (
+            <span className={prefixCls('form-item-optional')}>(可选)</span>
+          )}
         </label>
       )}
       <div className={prefixCls('form-item-control')}>
         <div className={prefixCls('form-item-input')}>{renderChildren()}</div>
-        {fieldErrors.length > 0 && (
+        {showHelp !== null ? (
+          <div className={prefixCls('form-item-help')}>{showHelp}</div>
+        ) : showErrors ? (
           <div className={prefixCls('form-item-errors')} role="alert">
             {fieldErrors.map((error, index) => (
               <div key={index} className={prefixCls('form-item-error-text')}>
@@ -297,7 +550,8 @@ const FormItem: React.FC<FormItemProps> = ({
               </div>
             ))}
           </div>
-        )}
+        ) : null}
+        {extra && <div className={prefixCls('form-item-extra')}>{extra}</div>}
       </div>
     </div>
   );
@@ -313,7 +567,10 @@ export interface FormListProps {
   /** 紧凑模式，相邻输入框无圆角看起来一体 */
   compact?: boolean;
   /** 渲染函数 */
-  children: (fields: FormListFieldData[], operations: FormListOperation) => React.ReactNode;
+  children: (
+    fields: FormListFieldData[],
+    operations: FormListOperation,
+  ) => React.ReactNode;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -322,45 +579,96 @@ export interface FormListProps {
 
 let listKeyCounter = 0;
 
-const FormList: React.FC<FormListProps> = ({ name, compact, children, className, style }) => {
+const FormList: React.FC<FormListProps> = ({
+  name,
+  compact,
+  children,
+  className,
+  style,
+}) => {
   const ctx = useFormContext();
-  const [keys, setKeys] = useState<number[]>([]);
+  const store = ctx?.store;
+  // keys 与 values 数组同长度：同步惰性初始化（Form 已在 render 阶段
+  // 播种 initialValues，此处一定读得到）
+  const [keys, setKeys] = useState<number[]>(() => {
+    const val = store?.getValue(name);
+    const arr = Array.isArray(val) ? val : [];
+    return arr.map(() => ++listKeyCounter);
+  });
 
   const getArray = useCallback((): unknown[] => {
-    if (!ctx) return [];
-    const val = ctx.values[name];
+    if (!store) return [];
+    const val = store.getValue(name);
     return Array.isArray(val) ? val : [];
-  }, [ctx, name]);
+  }, [store, name]);
 
-  // 初始化 keys 与 values
-  useEffect(() => {
-    const arr = getArray();
-    if (arr.length > 0 && keys.length === 0) {
-      setKeys(arr.map(() => ++listKeyCounter));
-    }
-    // 刻意只在挂载时初始化一次：这里读到的 getArray / keys.length 只作初始快照，
-    // 一旦加入依赖，每次表单值变化都会重跑并可能重置 keys。
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- 见上
-  }, []);
+  const setArray = useCallback(
+    (next: unknown[]) => {
+      store?.setFieldValue(name, next);
+    },
+    [store, name],
+  );
 
-  const add = useCallback((defaultValue?: Record<string, unknown>) => {
-    const newKey = ++listKeyCounter;
-    setKeys((prev) => [...prev, newKey]);
-    if (ctx) {
-      const arr = getArray();
-      ctx.setFieldValue(name, [...arr, defaultValue ?? {}]);
-    }
-  }, [ctx, name, getArray]);
+  const add = useCallback(
+    (defaultValue?: Record<string, unknown>, insertIndex?: number) => {
+      const newKey = ++listKeyCounter;
+      setKeys((prev) => {
+        const next = [...prev];
+        if (insertIndex === undefined || insertIndex >= prev.length) {
+          next.push(newKey);
+        } else {
+          next.splice(Math.max(0, insertIndex), 0, newKey);
+        }
+        return next;
+      });
+      if (store) {
+        const arr = getArray();
+        const next = [...arr];
+        const item = defaultValue ?? {};
+        if (insertIndex === undefined || insertIndex >= arr.length) {
+          next.push(item);
+        } else {
+          next.splice(Math.max(0, insertIndex), 0, item);
+        }
+        setArray(next);
+      }
+    },
+    [store, name, getArray, setArray],
+  );
 
-  const remove = useCallback((index: number) => {
-    setKeys((prev) => prev.filter((_, i) => i !== index));
-    if (ctx) {
-      const arr = getArray();
-      ctx.setFieldValue(name, arr.filter((_, i) => i !== index));
-    }
-  }, [ctx, name, getArray]);
+  const remove = useCallback(
+    (index: number | number[]) => {
+      const indices = new Set(Array.isArray(index) ? index : [index]);
+      setKeys((prev) => prev.filter((_, i) => !indices.has(i)));
+      if (store) {
+        setArray(getArray().filter((_, i) => !indices.has(i)));
+      }
+    },
+    [store, name, getArray, setArray],
+  );
 
-  const fields: FormListFieldData[] = keys.map((key, index) => ({ key, name: index }));
+  const move = useCallback(
+    (from: number, to: number) => {
+      setKeys((prev) => {
+        const next = [...prev];
+        const [moved] = next.splice(from, 1);
+        if (moved !== undefined) next.splice(to, 0, moved);
+        return next;
+      });
+      if (store) {
+        const arr = [...getArray()];
+        const [moved] = arr.splice(from, 1);
+        if (moved !== undefined) arr.splice(to, 0, moved);
+        setArray(arr);
+      }
+    },
+    [store, name, getArray, setArray],
+  );
+
+  const fields: FormListFieldData[] = keys.map((key, index) => ({
+    key,
+    name: index,
+  }));
 
   const listCls = classNames(
     prefixCls('form-list'),
@@ -370,57 +678,12 @@ const FormList: React.FC<FormListProps> = ({ name, compact, children, className,
 
   return (
     <div className={listCls} style={style}>
-      {children(fields, { add, remove })}
+      {children(fields, { add, remove, move })}
     </div>
   );
 };
 
 FormList.displayName = 'Form.List';
-
-/* ===== 验证工具 ===== */
-
-async function validateRules(
-  rules: RuleType[],
-  value: unknown,
-): Promise<string[]> {
-  const errors: string[] = [];
-  const strValue = String(value ?? '');
-
-  for (const rule of rules) {
-    if (rule.required && (value === undefined || value === null || value === '')) {
-      errors.push(rule.message ?? '此字段为必填项');
-      continue;
-    }
-
-    if (rule.min !== undefined && strValue.length < rule.min) {
-      errors.push(rule.message ?? `最少输入 ${rule.min} 个字符`);
-      continue;
-    }
-
-    if (rule.max !== undefined && strValue.length > rule.max) {
-      errors.push(rule.message ?? `最多输入 ${rule.max} 个字符`);
-      continue;
-    }
-
-    if (rule.pattern && !rule.pattern.test(strValue)) {
-      errors.push(rule.message ?? '格式不正确');
-      continue;
-    }
-
-    if (rule.validator) {
-      try {
-        const result = await rule.validator(value);
-        if (!result) {
-          errors.push(rule.message ?? '验证失败');
-        }
-      } catch {
-        errors.push(rule.message ?? '验证失败');
-      }
-    }
-  }
-
-  return errors;
-}
 
 /* ===== Form 主组件 ===== */
 
@@ -428,13 +691,26 @@ export interface FormProps {
   /** 布局方式
    *  @default 'vertical'
    */
-  layout?: 'horizontal' | 'vertical' | 'inline';
+  layout?: Layout;
   /** 初始值 */
-  initialValues?: Record<string, unknown>;
+  initialValues?: Values;
   /** 提交成功回调 */
-  onFinish?: (values: Record<string, unknown>) => void;
+  onFinish?: (values: Values) => void;
   /** 提交失败回调 */
   onFinishFailed?: (errors: FormError[]) => void;
+  /** 任意字段值变化回调（联动与持久化的钩子） */
+  onValuesChange?: (
+    changed: { name: string; value: unknown },
+    allValues: Values,
+  ) => void;
+  /** 提交失败时是否滚动到第一个错误字段
+   *  @default false
+   */
+  scrollToFirstError?: boolean;
+  /** 必填标记：true 显示星号（默认）；false 不显示；'optional' 在非必填项标注「可选」
+   *  @default true
+   */
+  requiredMark?: RequiredMark;
   /** 标签对齐方式
    *  @default 'right'
    */
@@ -448,7 +724,7 @@ export interface FormProps {
   /** 表单尺寸
    *  @default 'md'
    */
-  size?: 'sm' | 'md' | 'lg';
+  size?: Size;
   /** 命令式实例（由 `Form.useForm()` 创建），用于编辑回填、外部提交等场景 */
   form?: FormInstance;
   /** 自定义类名 */
@@ -466,6 +742,9 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
       initialValues = {},
       onFinish,
       onFinishFailed,
+      onValuesChange,
+      scrollToFirstError = false,
+      requiredMark = true,
       labelAlign = 'right',
       colon = false,
       disabled = false,
@@ -477,131 +756,81 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
     },
     ref,
   ) => {
-    const [values, setValues] = useState<Record<string, unknown>>({ ...initialValues });
-    const [errors, setErrors] = useState<Record<string, string[]>>({});
+    // 有 form prop 用外部实例；否则内部自建（惰性，避免每次渲染新建）
+    const internalStoreRef = useRef<FormStore | null>(null);
+    if (!form && !internalStoreRef.current) {
+      internalStoreRef.current = new FormStore();
+    }
+    const store =
+      (form ? instanceStore.get(form) : undefined) ?? internalStoreRef.current!;
 
-    // valuesRef 是字段值的唯一事实来源：命令式 API 与渲染状态都从它出发，
-    // 保证 setFieldsValue 后同步读取（validateFields / getFieldValue）拿到最新值
-    const valuesRef = useRef<Record<string, unknown>>({ ...initialValues });
-    const initialValuesRef = useRef(initialValues);
-    const rulesMapRef = useRef<Record<string, RuleType[]>>({});
+    // initialValues 同步播种（render 阶段，早于所有子组件渲染——
+    // List 等子组件在 render/effect 里都要能读到初始值）。
+    // 版本号为 0 表示尚未发生任何变更，保证只播种一次。
+    if (store.getSnapshot() === 0 && Object.keys(initialValues).length > 0) {
+      store.setInitialValues(initialValues);
+      store.setFieldsValue(initialValues, { silent: true });
+    }
 
-    /** 统一的字段值变更入口：先写 ref（同步可读），再同步渲染状态 */
-    const applyValues = useCallback(
-      (updater: (prev: Record<string, unknown>) => Record<string, unknown>) => {
-        valuesRef.current = updater(valuesRef.current);
-        setValues(valuesRef.current);
-      },
-      [],
-    );
+    // 引擎快照：任何值/错误变更都会驱动 Form 子树重渲染
+    useSyncExternalStore(store.subscribe, store.getSnapshot, () => 0);
 
-    const setFieldValue = useCallback(
-      (name: string, value: unknown) => {
-        applyValues((prev) => ({ ...prev, [name]: value }));
-      },
-      [applyValues],
-    );
+    // 回调经 ref 透传，handleSubmit 始终调用最新版本
+    const onFinishRef = useRef(onFinish);
+    const onFinishFailedRef = useRef(onFinishFailed);
+    onFinishRef.current = onFinish;
+    onFinishFailedRef.current = onFinishFailed;
 
-    const validateField = useCallback(
-      async (name: string): Promise<string[]> => {
-        const rules = rulesMapRef.current[name] ?? [];
-        if (rules.length === 0) return [];
-        const fieldErrors = await validateRules(rules, valuesRef.current[name]);
-        setErrors((prev) => ({ ...prev, [name]: fieldErrors }));
-        return fieldErrors;
-      },
-      [],
-    );
-
-    const engine = useMemo<FormEngine>(
-      () => ({
-        getValues: () => ({ ...valuesRef.current }),
-        setFieldValue: (name, value) =>
-          applyValues((prev) => ({ ...prev, [name]: value })),
-        setFieldsValue: (vals) =>
-          applyValues((prev) => ({ ...prev, ...vals })),
-        validateFields: async (names) => {
-          const fieldNames = names ?? Object.keys(rulesMapRef.current);
-          const allErrors: FormError[] = [];
-          const newErrors: Record<string, string[]> = {};
-          for (const name of fieldNames) {
-            const rules = rulesMapRef.current[name];
-            if (rules && rules.length > 0) {
-              const fieldErrors = await validateRules(
-                rules,
-                valuesRef.current[name],
-              );
-              if (fieldErrors.length > 0) {
-                newErrors[name] = fieldErrors;
-                allErrors.push({ name, errors: fieldErrors });
-              }
-            }
-          }
-          // 对「本次校验过的字段」做替换式更新：通过的字段清除旧错误（与整表提交语义一致）
-          setErrors((prev) => {
-            const next = { ...prev };
-            for (const name of fieldNames) {
-              if (newErrors[name]) next[name] = newErrors[name];
-              else delete next[name];
-            }
-            return next;
-          });
-          if (allErrors.length > 0) {
-            throw allErrors;
-          }
-          return { ...valuesRef.current };
-        },
-        reset: () => {
-          valuesRef.current = { ...initialValuesRef.current };
-          setValues(valuesRef.current);
-          setErrors({});
-        },
-      }),
-      [applyValues],
-    );
-
-    // 把引擎挂到外部传入的 FormInstance 上（卸载时解绑）
+    // 引擎只挂 onValuesChange（提交回调由 handleSubmit 显式调用）
     useEffect(() => {
-      if (!form) return;
-      const slot = engineRegistry.get(form);
-      if (!slot) return;
-      slot.current = engine;
-      return () => {
-        slot.current = null;
-      };
-    }, [form, engine]);
+      store.setOptions({ onValuesChange });
+    }, [store, onValuesChange]);
+
+    useEffect(() => {
+      store.setInitialValues(initialValues);
+      // initialValues 首次播种（后续变更不再覆盖用户输入，与 antd 一致）
+      if (Object.keys(initialValues).length > 0) {
+        const current = store.getFieldsValue();
+        if (Object.keys(current).length === 0) {
+          store.setFieldsValue(initialValues);
+        }
+      }
+      // 仅挂载时播种
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- 见上
+    }, [store]);
 
     const handleSubmit = useCallback(
       async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-          const result = await engine.validateFields();
-          onFinish?.(result);
-        } catch (allErrors) {
-          onFinishFailed?.(allErrors as FormError[]);
+          const values = await store.validateFields();
+          onFinishRef.current?.(values);
+        } catch (errors) {
+          onFinishFailedRef.current?.(errors as FormError[]);
+          if (scrollToFirstError) {
+            requestAnimationFrame(() => {
+              document
+                .querySelector(`.${prefixCls('form-item-error')}`)
+                ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+          }
         }
       },
-      [engine, onFinish, onFinishFailed],
+      [store, scrollToFirstError],
     );
 
-    const registerField = useCallback((name: string, rules?: RuleType[]) => {
-      if (rules && rules.length > 0) {
-        rulesMapRef.current[name] = rules;
-      }
-    }, []);
-
-    const ctxValue: FormContextValue = {
-      values,
-      errors,
-      setFieldValue,
-      validateField,
-      registerField,
-      layout,
-      disabled,
-      colon,
-      size,
-      labelAlign,
-    };
+    const ctxValue: FormContextValue = useMemo(
+      () => ({
+        store,
+        layout,
+        disabled,
+        colon,
+        size,
+        labelAlign,
+        requiredMark,
+      }),
+      [store, layout, disabled, colon, size, labelAlign, requiredMark],
+    );
 
     const formCls = classNames(
       prefixCls('form'),
@@ -612,7 +841,13 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
 
     return (
       <FormContext.Provider value={ctxValue}>
-        <form ref={ref} className={formCls} style={style} onSubmit={handleSubmit} noValidate>
+        <form
+          ref={ref}
+          className={formCls}
+          style={style}
+          onSubmit={handleSubmit}
+          noValidate
+        >
           {children}
         </form>
       </FormContext.Provider>
@@ -624,20 +859,22 @@ FormBase.displayName = 'Form';
 
 /* ===== 复合组件 ===== */
 
-interface FormComponent
-  extends React.ForwardRefExoticComponent<
-    FormProps & React.RefAttributes<HTMLFormElement>
-  > {
+interface FormComponent extends React.ForwardRefExoticComponent<
+  FormProps & React.RefAttributes<HTMLFormElement>
+> {
   Item: typeof FormItem;
   List: typeof FormList;
   /** 创建 FormInstance（与 antd 用法一致：`const [form] = Form.useForm()`） */
   useForm: () => [FormInstance];
+  /** 订阅字段值（联动渲染） */
+  useWatch: typeof useWatch;
 }
 
 const Form = FormBase as unknown as FormComponent;
 Form.Item = FormItem;
 Form.List = FormList;
-Form.useForm = () => [useForm()];
+Form.useForm = () => useForm();
+Form.useWatch = useWatch;
 
-export { Form, FormItem, FormList };
+export { Form, FormItem, FormList, useWatch };
 export default Form;

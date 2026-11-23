@@ -147,6 +147,51 @@
       }
     }
 
+    /* ===== 成功 / 警告 / 校验中状态 ===== */
+    &-success {
+      .aura-form-item-label {
+        color: var(--aura-success);
+      }
+    }
+
+    &-warning {
+      .aura-form-item-label {
+        color: var(--aura-warning);
+      }
+    }
+
+    &-validating {
+      .aura-form-item-label {
+        color: var(--aura-primary-600);
+      }
+    }
+
+    /* ===== 帮助文案（覆盖错误信息位） ===== */
+    &-help {
+      font-size: var(--aura-font-size-xs);
+      color: var(--aura-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ===== 额外说明（永远在错误/帮助下方） ===== */
+    &-extra {
+      font-size: var(--aura-font-size-xs);
+      color: var(--aura-text-tertiary);
+      line-height: 1.5;
+    }
+
+    /* ===== 可选标注（requiredMark='optional'） ===== */
+    &-optional {
+      margin-left: var(--aura-spacing-1);
+      color: var(--aura-text-tertiary);
+      font-weight: 400;
+    }
+
+    /* ===== 隐藏字段（保持注册，仅不渲染） ===== */
+    &-hidden {
+      display: none;
+    }
+
     /* ===== 禁用状态 ===== */
     &-disabled {
       opacity: 0.6;
