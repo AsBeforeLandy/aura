@@ -143,6 +143,10 @@
       padding: var(--aura-spacing-1);
       border-radius: var(--aura-radius-full);
       display: inline-flex;
+      /* 根容器是纵向 flex，nav 默认被 stretch 拉满整行；
+         pill 背景改由标签内容撑开 */
+      align-self: flex-start;
+      max-width: 100%;
     }
 
     .aura-tabs-tab {
