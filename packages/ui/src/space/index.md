@@ -42,6 +42,6 @@ import { Space } from '@aura-react-comp/ui';
 | direction | 排列方向                       | `'horizontal' \| 'vertical'`                 | `'horizontal'` |
 | size      | 间距大小                       | `'sm' \| 'md' \| 'lg' \| number`             | `'md'`         |
 | wrap      | 是否自动换行（仅水平方向有效） | `boolean`                                    | `false`        |
-| align     | 对齐方式                       | `'start' \| 'center' \| 'end' \| 'baseline'` | -              |
+| align     | 对齐方式                       | `'start' \| 'center' \| 'end' \| 'baseline'` | `'start'`      |
 
 继承 `HTMLAttributes<HTMLDivElement>`。

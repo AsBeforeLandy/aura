@@ -17,7 +17,9 @@ describe('Space', () => {
 
   it('should render with base class', () => {
     const { container } = render(<Space>Content</Space>);
-    expect(container.querySelector('div')!.classList.contains('aura-space')).toBe(true);
+    expect(
+      container.querySelector('div')!.classList.contains('aura-space'),
+    ).toBe(true);
   });
 
   it('should render horizontal by default', () => {
@@ -35,12 +37,28 @@ describe('Space', () => {
 
   it('should apply wrap class', () => {
     const { container } = render(<Space wrap>X</Space>);
-    expect(container.querySelector('div')!.classList.contains('aura-space-wrap')).toBe(true);
+    expect(
+      container.querySelector('div')!.classList.contains('aura-space-wrap'),
+    ).toBe(true);
   });
 
   it('should apply align class', () => {
     const { container } = render(<Space align="baseline">X</Space>);
-    expect(container.querySelector('div')!.classList.contains('aura-space-align-baseline')).toBe(true);
+    expect(
+      container
+        .querySelector('div')!
+        .classList.contains('aura-space-align-baseline'),
+    ).toBe(true);
+  });
+
+  // align 默认 start：不传时也挂 align-start 类
+  it('should default align to start', () => {
+    const { container } = render(<Space>X</Space>);
+    expect(
+      container
+        .querySelector('div')!
+        .classList.contains('aura-space-align-start'),
+    ).toBe(true);
   });
 
   it('should set gap from preset size sm', () => {
@@ -65,7 +83,9 @@ describe('Space', () => {
 
   it('should merge className', () => {
     const { container } = render(<Space className="custom">X</Space>);
-    expect(container.querySelector('div')!.classList.contains('custom')).toBe(true);
+    expect(container.querySelector('div')!.classList.contains('custom')).toBe(
+      true,
+    );
   });
 
   it('should merge style', () => {

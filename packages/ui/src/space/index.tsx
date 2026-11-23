@@ -13,7 +13,9 @@ export interface SpaceProps extends HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg' | number;
   /** 是否自动换行（仅水平方向有效） */
   wrap?: boolean;
-  /** 对齐方式 */
+  /** 对齐方式
+   *  @default 'start'
+   */
   align?: 'start' | 'center' | 'end' | 'baseline';
 }
 
@@ -29,7 +31,7 @@ export const Space = forwardRef<HTMLDivElement, SpaceProps>(
       direction = 'horizontal',
       size = 'md',
       wrap = false,
-      align,
+      align = 'start',
       className,
       style,
       children,
