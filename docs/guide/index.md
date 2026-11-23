@@ -11,7 +11,7 @@ Aura 是一套基于 React 18 + TypeScript 的现代化组件库，采用 Monore
 - **React 18** — 使用 `forwardRef`、Compound Component 等 React 最新特性
 - **TypeScript** — 完整的类型定义，所有 Props 均有详细的 JSDoc 注释
 - **双模式主题** — 亮色柔和 + 暗色光晕，CSS Variables 驱动，支持运行时切换
-- **34+ 组件** — 覆盖通用、表单、数据展示、反馈、导航、布局六大分类
+- **36 个组件** — 覆盖通用、表单、数据展示、反馈、导航、布局六大分类；Form 引擎对齐 antd 全常用能力（嵌套路径、校验规则全集、动态列表、字段联动）
 - **BEM 命名** — `aura-btn`、`aura-btn-primary`，样式可预测、可覆盖
 - **无障碍** — 支持 `aria-*` 属性、键盘导航
 - **AI 友好** — 内置 MCP Server，AI 助手可直接查询组件 API
@@ -23,7 +23,7 @@ Aura 采用 pnpm workspaces 管理 Monorepo，将不同职责拆分为独立包�
 ```
 aura/
 ├── packages/
-│   ├── ui/        # @aura-react-comp/design — UI 组件库
+│   ├── design/    # @aura-react-comp/design — UI 组件库
 │   ├── shared/    # @aura-react-comp/shared — 工具函数（classNames、prefixCls 等）
 │   ├── request/   # @aura-react-comp/request — HTTP 请求封装
 │   ├── cli/       # @aura-react-comp/cli — MCP Server 与 CLI 工具

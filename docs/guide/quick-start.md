@@ -16,6 +16,22 @@ pnpm add @aura-react-comp/design
 pnpm add react@^18 react-dom@^18
 ```
 
+```bash [npm]
+# 安装组件库
+npm install @aura-react-comp/design
+
+# 安装 peer dependencies（如果尚未安装）
+npm install react@^18 react-dom@^18
+```
+
+```bash [yarn]
+# 安装组件库
+yarn add @aura-react-comp/design
+
+# 安装 peer dependencies（如果尚未安装）
+yarn add react@^18 react-dom@^18
+```
+
 ```bash [yarn]
 # 安装组件库
 yarn add @aura-react-comp/design

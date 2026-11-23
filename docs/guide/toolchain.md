@@ -187,7 +187,7 @@ business                      ← 依赖 shared + ui，最深，最后执行
 - **产物不昂贵**：father 是 bundless 转译，6 个库包全量构建是几十秒级的轻活；
 - **没有跨包产物依赖**：各包 `tsconfig.json` 的 `paths` 全部指向
   `../<包名>/src/index.ts`（**源码**），而 father bundless 又把裸包名保持为外部导入、
-  不打包跨包代码——也就是说构建 `business` 时**根本不会去读 `ui/esm`**。
+  不打包跨包代码——也就是说构建 `business` 时**根本不会去读 `design/esm`**。
   所以拓扑顺序只影响观感，不影响正确性（`--no-sort` 也能构建成功），
   缓存的命中空间也因此很小；
 - **触发频次低**：单人维护、一天几次 push。
