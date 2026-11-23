@@ -1,6 +1,6 @@
 {
   "name": "@aura-react-comp/charts-3d",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Aura 3D 图表库 — 基于 three.js 与 React Three Fiber 的 3D 数据可视化，与 charts 共享设计令牌与提示框",
   "keywords": [
     "aura",
