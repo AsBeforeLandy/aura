@@ -19,8 +19,9 @@ export interface RuleType {
   len?: number;
   /** 正则校验 */
   pattern?: RegExp;
-  /** 内置格式：string（默认，任意非空）/ email / url / number / integer / boolean / array / date */
+  /** 内置格式：object（配合 fields）/ string（默认，任意非空）/ email / url / number / integer / boolean / array / date */
   type?:
+    | 'object'
     | 'string'
     | 'email'
     | 'url'
@@ -29,6 +30,12 @@ export interface RuleType {
     | 'boolean'
     | 'array'
     | 'date';
+  /**
+   * 对象子字段 schema（配合 type='object'）：对 value 的每个子字段
+   * 应用各自规则。子字段错误会写入嵌套路径（如 `address.city`），
+   * 嵌套的 noStyle Form.Item 可直接消费展示。
+   */
+  fields?: Record<string, RuleType>;
   /** 值必须在此列表内 */
   enum?: unknown[];
   /** 空白字符串也视为空（配合 required，如密码框） */

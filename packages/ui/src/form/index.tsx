@@ -188,6 +188,8 @@ export interface FormItemProps {
   labelAlign?: 'left' | 'right';
   /** 标签宽度，仅在 horizontal 模式下生效 */
   labelWidth?: number | string;
+  /** 是否显示冒号，覆盖 Form 级别（空占位 label 时传 false 隐藏） */
+  colon?: boolean;
   /** 验证规则 */
   rules?: RuleType[];
   /** 是否必填（仅显示星号，实际验证由 rules 控制） */
@@ -250,6 +252,7 @@ const FormItem: React.FC<FormItemProps> = ({
   label,
   labelAlign: itemLabelAlign,
   labelWidth,
+  colon: itemColon,
   rules,
   required,
   dependencies,
@@ -372,7 +375,7 @@ const FormItem: React.FC<FormItemProps> = ({
   const isRequired = required ?? rules?.some((r) => r.required) ?? false;
   const storeErrors = name && store ? store.getFieldError(name) : [];
   const isDisabled = itemDisabled ?? ctx?.disabled ?? false;
-  const colon = ctx?.colon ?? false;
+  const colon = itemColon ?? ctx?.colon ?? false;
   const labelAlign = itemLabelAlign ?? ctx?.labelAlign ?? 'right';
   const requiredMark = ctx?.requiredMark ?? true;
 

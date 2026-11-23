@@ -121,6 +121,8 @@ export class FormStore {
   private values: Values = {};
   private errors: Record<string, string[]> = {};
   private warnings: Record<string, string[]> = {};
+  /** fields 子字段错误的路径集合（按父字段分组，用于生命周期清理） */
+  private childErrorPaths = new Map<string, Set<string>>();
   private touchedSet = new Set<string>();
   private fields = new Map<string, FieldMeta>();
   private listeners = new Set<() => void>();
@@ -307,20 +309,58 @@ export class FormStore {
     const vars = { ...(meta?.messageVariables ?? {}), ...(variables ?? {}) };
     const { errors: fieldErrors, warnings: fieldWarnings } =
       await validateRules(rules, this.getValue(path), vars);
+
+    // fields 子字段 schema：子错误写入嵌套路径（供嵌套 noStyle Item 消
+    // 费），父字段错误追加「子字段名: 消息」摘要
+    const value = this.getValue(path);
+    const prevChildPaths = this.childErrorPaths.get(path) ?? new Set<string>();
+    const newChildPaths = new Set<string>();
+    const summaryLines: string[] = [];
+    for (const rule of rules) {
+      if (
+        rule.fields &&
+        (rule.type === 'object' ||
+          (value !== null &&
+            typeof value === 'object' &&
+            !Array.isArray(value)))
+      ) {
+        const obj = (value ?? {}) as Record<string, unknown>;
+        for (const [key, subRule] of Object.entries(rule.fields)) {
+          const subPath = `${path}.${key}`;
+          const subResult = await validateRules([subRule], obj[key], vars);
+          if (subResult.errors.length > 0) {
+            this.errors[subPath] = subResult.errors;
+            newChildPaths.add(subPath);
+            summaryLines.push(`${key}: ${subResult.errors[0]}`);
+          }
+        }
+      }
+    }
+    // 清理本轮不再报错的旧子路径
+    for (const old of prevChildPaths) {
+      if (!newChildPaths.has(old)) delete this.errors[old];
+    }
+    if (newChildPaths.size > 0) this.childErrorPaths.set(path, newChildPaths);
+    else this.childErrorPaths.delete(path);
+
+    const summary =
+      summaryLines.length > 0 ? [...fieldErrors, ...summaryLines] : fieldErrors;
     const prevErrors = this.errors[path];
     const prevWarnings = this.warnings[path];
-    if (fieldErrors.length > 0) this.errors[path] = fieldErrors;
+    if (summary.length > 0) this.errors[path] = summary;
     else delete this.errors[path];
     if (fieldWarnings.length > 0) this.warnings[path] = fieldWarnings;
     else delete this.warnings[path];
     // 单字段校验同样要通知（onChange/onBlur 实时校验的错误需要渲染）
     if (
-      JSON.stringify(prevErrors) !== JSON.stringify(fieldErrors) ||
-      JSON.stringify(prevWarnings) !== JSON.stringify(fieldWarnings)
+      JSON.stringify(prevErrors) !== JSON.stringify(summary) ||
+      JSON.stringify(prevWarnings) !== JSON.stringify(fieldWarnings) ||
+      [...newChildPaths].some((p) => prevChildPaths.has(p)) ||
+      newChildPaths.size !== prevChildPaths.size
     ) {
       this.notify();
     }
-    return fieldErrors;
+    return summary;
   }
 
   async validateFields(paths?: string[]): Promise<Values> {
@@ -368,6 +408,7 @@ export class FormStore {
     this.values = deepClone(this.initialValues);
     this.errors = {};
     this.warnings = {};
+    this.childErrorPaths.clear();
     this.touchedSet.clear();
     this.notify();
   }

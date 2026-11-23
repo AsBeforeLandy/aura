@@ -62,18 +62,20 @@ const Demo: React.FC = () => (
               </button>
             </div>
           ))}
-          <button
-            type="button"
-            className="aura-form-list-add"
-            onClick={() => add()}
-          >
-            + 添加用户
-          </button>
+          <Form.Item label=" " colon={false}>
+            <button
+              type="button"
+              className="aura-form-list-add"
+              onClick={() => add()}
+            >
+              + 添加用户
+            </button>
+          </Form.Item>
         </>
       )}
     </Form.List>
 
-    <Form.Item>
+    <Form.Item label=" ">
       <Space>
         <Button type="submit" variant="primary">
           提交

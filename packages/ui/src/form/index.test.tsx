@@ -965,3 +965,104 @@ describe('Form 二期能力', () => {
     expect(form.getFieldValue('x')).toBe(1);
   });
 });
+
+describe('Form fields（对象子字段 schema）', () => {
+  const Item = Form.Item as unknown as React.FC<any>;
+
+  it('type=object + fields：子字段错误写入嵌套路径并汇总展示', async () => {
+    const onFinishFailed = vi.fn();
+    const [form] = (Form as any).useForm();
+    const { container } = render(
+      <FormComponent
+        form={form}
+        initialValues={{ address: { city: '', street: '' } }}
+        onFinishFailed={onFinishFailed}
+      >
+        <Item
+          name="address"
+          label="地址"
+          rules={[
+            {
+              type: 'object',
+              fields: {
+                city: { required: true, message: '请输入城市' },
+                street: { required: true, message: '请输入街道' },
+              },
+            },
+          ]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      // 父字段汇总展示子字段错误
+      expect(container.textContent).toContain('city: 请输入城市');
+      expect(container.textContent).toContain('street: 请输入街道');
+      // 子字段错误写入嵌套路径
+      expect(form.getFieldError('address.city')).toEqual(['请输入城市']);
+      expect(form.getFieldError('address.street')).toEqual(['请输入街道']);
+      expect(onFinishFailed).toHaveBeenCalled();
+    });
+  });
+
+  it('嵌套 noStyle Item 消费子字段错误', async () => {
+    const [form] = (Form as any).useForm();
+    const { container } = render(
+      <FormComponent form={form} initialValues={{ address: { city: '' } }}>
+        <Item label="地址">
+          <Item
+            name="address.city"
+            noStyle
+            rules={[{ required: true, message: '请输入城市' }]}
+          >
+            <input placeholder="城市" />
+          </Item>
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('请输入城市');
+    });
+  });
+
+  it('子字段修复后错误自动清除', async () => {
+    const [form] = (Form as any).useForm();
+    const { container } = render(
+      <FormComponent form={form} initialValues={{ address: { city: '' } }}>
+        <Item
+          name="address"
+          label="地址"
+          rules={[
+            {
+              type: 'object',
+              fields: { city: { required: true, message: '请输入城市' } },
+            },
+          ]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('city: 请输入城市');
+    });
+    // 修复子字段值
+    act(() => {
+      form.setFieldValue('address.city', '杭州');
+    });
+    act(() => {
+      void form.validateFields();
+    });
+    await waitFor(() => {
+      expect(form.getFieldError('address.city')).toEqual([]);
+      expect(container.textContent).not.toContain('city: 请输入城市');
+    });
+  });
+});

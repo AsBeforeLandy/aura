@@ -39,6 +39,33 @@ import { Form } from '@aura-react-comp/ui';
 <code src="./demo/item-disabled.tsx" description="在 Form.Item 上设置 `disabled` 仅禁用单个表单项。">单项禁用</code>
 <code src="./demo/form-list.tsx" description="通过 `Form.List` 实现动态增减表单项，适合批量录入场景。">动态表单</code>
 <code src="./demo/form-instance.tsx" description="`Form.useForm()` 创建实例：`setFieldsValue` 编辑回填、`validateFields` 外部提交。">命令式实例</code>
+<code src="./demo/dependencies.tsx" description="`dependencies` 声明依赖：密码变化时确认密码自动重校验。">字段依赖</code>
+<code src="./demo/use-watch.tsx" description="`Form.useWatch` 订阅字段值做联动渲染。">值联动渲染</code>
+<code src="./demo/required-mark.tsx" description="`requiredMark='optional'`：非必填项标注「可选」。">可选标注</code>
+
+## 表单布局规范
+
+- **horizontal 布局下，操作按钮（提交 / 取消 / 添加行等）必须与输入框列对齐**：
+  用 `<Form.Item label=" ">` 空占位对齐——label 占位宽度自动与其他行一致：
+
+  ```tsx | pure
+  <Form layout="horizontal" labelWidth={96}>
+    <Form.Item name="name" label="姓名">
+      <Input />
+    </Form.Item>
+    <Form.Item label=" ">
+      <Button type="submit" variant="primary">
+        提交
+      </Button>
+    </Form.Item>
+  </Form>
+  ```
+
+- **vertical / inline 布局**下按钮直接作为普通 Form.Item 放置，无需占位。
+- **Form.List 的添加按钮**同样用 `<Form.Item label=" ">` 包裹，保证与
+  列表行的输入框列对齐。
+- 栅格场景用 `labelCol / wrapperCol` 代替 `labelWidth`，按钮区的
+  `wrapperCol.offset` 与 labelCol.span 保持一致。
 
 ## API
 
@@ -145,16 +172,22 @@ const form = Form.useFormInstance();
 
 ### RuleType
 
-| 属性       | 说明                                             | 类型                                                                                  | 默认值   |
-| ---------- | ------------------------------------------------ | ------------------------------------------------------------------------------------- | -------- |
-| required   | 是否必填                                         | `boolean`                                                                             | -        |
-| message    | 错误提示信息                                     | `string`                                                                              | 内置提示 |
-| min        | 最小值（number 按数值比较，string/Array 按长度） | `number`                                                                              | -        |
-| max        | 最大值（同上）                                   | `number`                                                                              | -        |
-| pattern    | 正则校验                                         | `RegExp`                                                                              | -        |
-| type       | 内置格式校验                                     | `'email' \| 'url' \| 'number' \| 'integer'`                                           | -        |
-| whitespace | 空白字符串也视为空（配合 required）              | `boolean`                                                                             | -        |
-| validator  | 自定义验证函数（antd 双签名兼容）                | `(value) => boolean \| Promise<boolean>` 或 `(rule, value) => Promise<void \| Error>` | -        |
+| 属性         | 说明                                                          | 类型                                                                                                  | 默认值   |
+| ------------ | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | -------- |
+| required     | 是否必填                                                      | `boolean`                                                                                             | -        |
+| message      | 错误提示信息（支持 `{{label}}` 占位符与函数形态）             | `string \| ((rule) => string)`                                                                        | 内置提示 |
+| min          | 最小值（number 按数值比较，string/Array 按长度）              | `number`                                                                                              | -        |
+| max          | 最大值（同上）                                                | `number`                                                                                              | -        |
+| len          | 精确长度（string/Array）或精确数值（number）                  | `number`                                                                                              | -        |
+| pattern      | 正则校验                                                      | `RegExp`                                                                                              | -        |
+| type         | 内置格式校验                                                  | `'object' \| 'string' \| 'email' \| 'url' \| 'number' \| 'integer' \| 'boolean' \| 'array' \| 'date'` | -        |
+| enum         | 值必须在列表内                                                | `unknown[]`                                                                                           | -        |
+| whitespace   | 空白字符串也视为空（配合 required）                           | `boolean`                                                                                             | -        |
+| transform    | 校验前转换值（不影响表单值）                                  | `(value: unknown) => unknown`                                                                         | -        |
+| warningOnly  | 仅警告：不阻止提交，警告样式展示                              | `boolean`                                                                                             | `false`  |
+| defaultField | 数组元素级规则（对每个元素应用）                              | `RuleType`                                                                                            | -        |
+| fields       | 对象子字段 schema（配合 `type='object'`，子错误写入嵌套路径） | `Record<string, RuleType>`                                                                            | -        |
+| validator    | 自定义验证函数（antd 双签名兼容）                             | `(value) => boolean \| Promise<boolean>` 或 `(rule, value) => Promise<void \| Error>`                 | -        |
 
 ### Form.List
 
