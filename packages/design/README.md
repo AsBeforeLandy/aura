@@ -10,7 +10,14 @@ Aura 自研组件库：基于 React 18 的现代化、AI 友好组件库，采�
 ## 安装
 
 ```bash
+# pnpm（推荐，本仓库开发使用）
 pnpm add @aura-react-comp/design
+
+# npm
+npm install @aura-react-comp/design
+
+# yarn
+yarn add @aura-react-comp/design
 ```
 
 `react` / `react-dom` 为 peerDependencies，需由使用方提供（>=18）。
