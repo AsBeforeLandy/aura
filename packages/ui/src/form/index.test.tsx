@@ -11,6 +11,22 @@ import { Form } from './index';
 
 const FormComponent = Form as unknown as React.FC<any> & { Item: any };
 
+/** 组件内创建 form 的测试 helper（useForm 已 hook 化，组件外调用会抛错） */
+function renderWithForm(
+  renderForm: (form: any) => React.ReactElement,
+): ReturnType<typeof render> & { form: any } {
+  const holder: { current: any } = { current: null };
+  const Holder: React.FC<{ children: (form: any) => React.ReactElement }> = ({
+    children,
+  }) => {
+    const [form] = (Form as any).useForm();
+    holder.current = form;
+    return children(form);
+  };
+  const result = render(<Holder>{(form) => renderForm(form)}</Holder>);
+  return { ...result, form: holder.current };
+}
+
 describe('Form', () => {
   it('应该正确渲染 Form 和 FormItem', () => {
     const { getByText } = render(
@@ -229,14 +245,15 @@ describe('Form', () => {
 
   // ===== Form.useForm / FormInstance =====
   it('setFieldsValue 应该回填字段值（编辑表单场景）', () => {
-    const [form] = Form.useForm();
-    render(
-      <Form form={form} initialValues={{ username: '' }}>
-        <Form.Item name="username" label="用户名">
-          <input data-testid="username" />
-        </Form.Item>
-      </Form>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <Form form={form} initialValues={{ username: '' }}>
+          <Form.Item name="username" label="用户名">
+            <input data-testid="username" />
+          </Form.Item>
+        </Form>
+      );
+    });
     const input = screen.getByTestId('username') as HTMLInputElement;
 
     act(() => {
@@ -248,14 +265,15 @@ describe('Form', () => {
   });
 
   it('getFieldValue 在 setFieldsValue 后应同步可读最新值', () => {
-    const [form] = Form.useForm();
-    render(
-      <Form form={form}>
-        <Form.Item name="age">
-          <input data-testid="age" />
-        </Form.Item>
-      </Form>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <Form form={form}>
+          <Form.Item name="age">
+            <input data-testid="age" />
+          </Form.Item>
+        </Form>
+      );
+    });
     act(() => {
       form.setFieldValue('age', 18);
     });
@@ -263,14 +281,15 @@ describe('Form', () => {
   });
 
   it('validateFields 通过时应 resolve 全部字段值', async () => {
-    const [form] = Form.useForm();
-    render(
-      <Form form={form}>
-        <Form.Item name="username" rules={[{ required: true }]}>
-          <input data-testid="username" />
-        </Form.Item>
-      </Form>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <Form form={form}>
+          <Form.Item name="username" rules={[{ required: true }]}>
+            <input data-testid="username" />
+          </Form.Item>
+        </Form>
+      );
+    });
     fireEvent.change(screen.getByTestId('username'), {
       target: { value: 'landy' },
     });
@@ -279,17 +298,18 @@ describe('Form', () => {
   });
 
   it('validateFields 失败时应 reject FormError[]', async () => {
-    const [form] = Form.useForm();
-    render(
-      <Form form={form}>
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: '必填' }]}
-        >
-          <input data-testid="username" />
-        </Form.Item>
-      </Form>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <Form form={form}>
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: '必填' }]}
+          >
+            <input data-testid="username" />
+          </Form.Item>
+        </Form>
+      );
+    });
 
     await expect(form.validateFields()).rejects.toEqual([
       { name: 'username', errors: ['必填'] },
@@ -297,17 +317,18 @@ describe('Form', () => {
   });
 
   it('validateFields 支持只校验指定字段', async () => {
-    const [form] = Form.useForm();
-    render(
-      <Form form={form}>
-        <Form.Item name="a" rules={[{ required: true }]}>
-          <input data-testid="field-a" />
-        </Form.Item>
-        <Form.Item name="b" rules={[{ required: true }]}>
-          <input data-testid="field-b" />
-        </Form.Item>
-      </Form>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <Form form={form}>
+          <Form.Item name="a" rules={[{ required: true }]}>
+            <input data-testid="field-a" />
+          </Form.Item>
+          <Form.Item name="b" rules={[{ required: true }]}>
+            <input data-testid="field-b" />
+          </Form.Item>
+        </Form>
+      );
+    });
     fireEvent.change(screen.getByTestId('field-a'), {
       target: { value: 'ok' },
     });
@@ -317,17 +338,18 @@ describe('Form', () => {
   });
 
   it('resetFields 应该恢复 initialValues 并清空错误', async () => {
-    const [form] = Form.useForm();
-    render(
-      <Form form={form} initialValues={{ username: '初始' }}>
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: '必填' }]}
-        >
-          <input data-testid="username" />
-        </Form.Item>
-      </Form>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <Form form={form} initialValues={{ username: '初始' }}>
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: '必填' }]}
+          >
+            <input data-testid="username" />
+          </Form.Item>
+        </Form>
+      );
+    });
     const input = screen.getByTestId('username') as HTMLInputElement;
 
     // 先制造错误状态：置空后校验失败
@@ -346,15 +368,16 @@ describe('Form', () => {
   });
 
   it('外部提交按钮可以通过实例触发完整校验流程', async () => {
-    const [form] = Form.useForm();
     const onFinish = vi.fn();
-    render(
-      <Form form={form} onFinish={onFinish}>
-        <Form.Item name="username" rules={[{ required: true }]}>
-          <input data-testid="username" />
-        </Form.Item>
-      </Form>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <Form form={form} onFinish={onFinish}>
+          <Form.Item name="username" rules={[{ required: true }]}>
+            <input data-testid="username" />
+          </Form.Item>
+        </Form>
+      );
+    });
     fireEvent.change(screen.getByTestId('username'), {
       target: { value: 'landy' },
     });
@@ -371,14 +394,15 @@ describe('Form 新能力（antd 对齐）', () => {
   const Item = Form.Item as unknown as React.FC<any>;
 
   it('嵌套点路径：name="user.name" 读写嵌套值', async () => {
-    const [form] = (Form as any).useForm();
-    render(
-      <FormComponent form={form}>
-        <Item name="user.name" label="姓名">
-          <input />
-        </Item>
-      </FormComponent>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <FormComponent form={form}>
+          <Item name="user.name" label="姓名">
+            <input />
+          </Item>
+        </FormComponent>
+      );
+    });
     act(() => {
       form.setFieldValue('user.name', 'landy');
     });
@@ -497,18 +521,19 @@ describe('Form 新能力（antd 对齐）', () => {
   });
 
   it('getValueFromEvent：自定义从事件取值', () => {
-    const [form] = (Form as any).useForm();
-    const { container } = render(
-      <FormComponent form={form}>
-        <Item
-          name="len"
-          label="长度"
-          getValueFromEvent={(e: any) => e.target.value.length}
-        >
-          <input />
-        </Item>
-      </FormComponent>,
-    );
+    const { container, form } = renderWithForm((form: any) => {
+      return (
+        <FormComponent form={form}>
+          <Item
+            name="len"
+            label="长度"
+            getValueFromEvent={(e: any) => e.target.value.length}
+          >
+            <input />
+          </Item>
+        </FormComponent>
+      );
+    });
     fireEvent.change(container.querySelector('input')!, {
       target: { value: 'hello' },
     });
@@ -597,14 +622,15 @@ describe('Form 新能力（antd 对齐）', () => {
   });
 
   it('preserve=false：字段卸载后丢弃值', () => {
-    const [form] = (Form as any).useForm();
-    const { rerender } = render(
-      <FormComponent form={form} initialValues={{ temp: 'x' }}>
-        <Item name="temp" preserve={false}>
-          <input />
-        </Item>
-      </FormComponent>,
-    );
+    const { rerender, form } = renderWithForm((form: any) => {
+      return (
+        <FormComponent form={form} initialValues={{ temp: 'x' }}>
+          <Item name="temp" preserve={false}>
+            <input />
+          </Item>
+        </FormComponent>
+      );
+    });
     expect(form.getFieldValue('temp')).toBe('x');
     rerender(
       <FormComponent form={form}>
@@ -633,28 +659,29 @@ describe('Form 新能力（antd 对齐）', () => {
 
   it('List.move 支持调整顺序', () => {
     const List = (Form as any).List as any;
-    const [form] = (Form as any).useForm();
-    const { container } = render(
-      <FormComponent
-        form={form}
-        initialValues={{ rows: [{ v: 'a' }, { v: 'b' }, { v: 'c' }] }}
-      >
-        <List name="rows">
-          {(fields: any[], op: any) => (
-            <div>
-              {fields.map((f) => (
-                <Item key={f.key} name={`rows.${f.name}.v`}>
-                  <input />
-                </Item>
-              ))}
-              <button type="button" onClick={() => op.move(2, 0)}>
-                move
-              </button>
-            </div>
-          )}
-        </List>
-      </FormComponent>,
-    );
+    const { container, form } = renderWithForm((form: any) => {
+      return (
+        <FormComponent
+          form={form}
+          initialValues={{ rows: [{ v: 'a' }, { v: 'b' }, { v: 'c' }] }}
+        >
+          <List name="rows">
+            {(fields: any[], op: any) => (
+              <div>
+                {fields.map((f) => (
+                  <Item key={f.key} name={`rows.${f.name}.v`}>
+                    <input />
+                  </Item>
+                ))}
+                <button type="button" onClick={() => op.move(2, 0)}>
+                  move
+                </button>
+              </div>
+            )}
+          </List>
+        </FormComponent>
+      );
+    });
     const inputs = container.querySelectorAll('input');
     expect(inputs[0].value).toBe('a');
     fireEvent.click(screen.getByText('move'));
@@ -952,12 +979,13 @@ describe('Form 二期能力', () => {
       captured.form = (Form as any).useFormInstance();
       return null;
     };
-    const [form] = (Form as any).useForm();
-    render(
-      <FormComponent form={form}>
-        <Inner />
-      </FormComponent>,
-    );
+    const { form } = renderWithForm((form: any) => {
+      return (
+        <FormComponent form={form}>
+          <Inner />
+        </FormComponent>
+      );
+    });
     expect(captured.form).toBe(form);
     act(() => {
       captured.form.setFieldValue('x', 1);
@@ -971,31 +999,32 @@ describe('Form fields（对象子字段 schema）', () => {
 
   it('type=object + fields：子字段错误写入嵌套路径并汇总展示', async () => {
     const onFinishFailed = vi.fn();
-    const [form] = (Form as any).useForm();
-    const { container } = render(
-      <FormComponent
-        form={form}
-        initialValues={{ address: { city: '', street: '' } }}
-        onFinishFailed={onFinishFailed}
-      >
-        <Item
-          name="address"
-          label="地址"
-          rules={[
-            {
-              type: 'object',
-              fields: {
-                city: { required: true, message: '请输入城市' },
-                street: { required: true, message: '请输入街道' },
-              },
-            },
-          ]}
+    const { container, form } = renderWithForm((form: any) => {
+      return (
+        <FormComponent
+          form={form}
+          initialValues={{ address: { city: '', street: '' } }}
+          onFinishFailed={onFinishFailed}
         >
-          <input />
-        </Item>
-        <button type="submit">提交</button>
-      </FormComponent>,
-    );
+          <Item
+            name="address"
+            label="地址"
+            rules={[
+              {
+                type: 'object',
+                fields: {
+                  city: { required: true, message: '请输入城市' },
+                  street: { required: true, message: '请输入街道' },
+                },
+              },
+            ]}
+          >
+            <input />
+          </Item>
+          <button type="submit">提交</button>
+        </FormComponent>
+      );
+    });
     fireEvent.click(screen.getByText('提交'));
     await waitFor(() => {
       // 父字段汇总展示子字段错误
@@ -1009,21 +1038,22 @@ describe('Form fields（对象子字段 schema）', () => {
   });
 
   it('嵌套 noStyle Item 消费子字段错误', async () => {
-    const [form] = (Form as any).useForm();
-    const { container } = render(
-      <FormComponent form={form} initialValues={{ address: { city: '' } }}>
-        <Item label="地址">
-          <Item
-            name="address.city"
-            noStyle
-            rules={[{ required: true, message: '请输入城市' }]}
-          >
-            <input placeholder="城市" />
+    const { container } = renderWithForm((form: any) => {
+      return (
+        <FormComponent form={form} initialValues={{ address: { city: '' } }}>
+          <Item label="地址">
+            <Item
+              name="address.city"
+              noStyle
+              rules={[{ required: true, message: '请输入城市' }]}
+            >
+              <input placeholder="城市" />
+            </Item>
           </Item>
-        </Item>
-        <button type="submit">提交</button>
-      </FormComponent>,
-    );
+          <button type="submit">提交</button>
+        </FormComponent>
+      );
+    });
     fireEvent.click(screen.getByText('提交'));
     await waitFor(() => {
       expect(container.textContent).toContain('请输入城市');
@@ -1031,24 +1061,25 @@ describe('Form fields（对象子字段 schema）', () => {
   });
 
   it('子字段修复后错误自动清除', async () => {
-    const [form] = (Form as any).useForm();
-    const { container } = render(
-      <FormComponent form={form} initialValues={{ address: { city: '' } }}>
-        <Item
-          name="address"
-          label="地址"
-          rules={[
-            {
-              type: 'object',
-              fields: { city: { required: true, message: '请输入城市' } },
-            },
-          ]}
-        >
-          <input />
-        </Item>
-        <button type="submit">提交</button>
-      </FormComponent>,
-    );
+    const { container, form } = renderWithForm((form: any) => {
+      return (
+        <FormComponent form={form} initialValues={{ address: { city: '' } }}>
+          <Item
+            name="address"
+            label="地址"
+            rules={[
+              {
+                type: 'object',
+                fields: { city: { required: true, message: '请输入城市' } },
+              },
+            ]}
+          >
+            <input />
+          </Item>
+          <button type="submit">提交</button>
+        </FormComponent>
+      );
+    });
     fireEvent.click(screen.getByText('提交'));
     await waitFor(() => {
       expect(container.textContent).toContain('city: 请输入城市');

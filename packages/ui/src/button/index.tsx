@@ -1,5 +1,11 @@
-import React, { forwardRef, ButtonHTMLAttributes, AnchorHTMLAttributes } from 'react';
+import React, {
+  forwardRef,
+  useContext,
+  ButtonHTMLAttributes,
+  AnchorHTMLAttributes,
+} from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { FormDisabledContext } from '../form/disabledContext';
 import './index.less';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -34,7 +40,7 @@ export const Button = forwardRef<ButtonElement, ButtonProps>(
     {
       variant = 'default',
       size = 'md',
-      disabled = false,
+      disabled: buttonDisabled,
       loading = false,
       icon,
       block = false,
@@ -48,6 +54,9 @@ export const Button = forwardRef<ButtonElement, ButtonProps>(
     },
     ref,
   ) => {
+    // Form 的 disabled 通过上下文级联（对齐 antd：<Form disabled> 内的按钮自动禁用）
+    const formDisabled = useContext(FormDisabledContext);
+    const disabled = buttonDisabled ?? formDisabled ?? false;
     const blocked = disabled || loading;
 
     const cls = classNames(

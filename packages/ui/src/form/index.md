@@ -26,9 +26,10 @@ import { Form } from '@aura-react-comp/ui';
 
 ## 代码演示
 
+<code src="./demo/inline-layout.tsx" description="行内布局。所有表单项水平排列，适合搜索、筛选等场景。">行内表单</code>
+
 <code src="./demo/vertical-layout.tsx" description="垂直布局（默认）。标签在输入框上方。">垂直布局</code>
 <code src="./demo/horizontal-layout.tsx" description="水平布局。标签和输入框在同一行，标签默认右对齐。">水平布局</code>
-<code src="./demo/inline-layout.tsx" description="行内布局。所有表单项水平排列，适合搜索、筛选等场景。">行内表单</code>
 <code src="./demo/size.tsx" description="提供 `sm`、`md`、`lg` 三种表单尺寸。">表单尺寸</code>
 <code src="./demo/label-align.tsx" description="Form 级别设置 `labelAlign`，Form.Item 可覆盖。">标签对齐</code>
 <code src="./demo/label-width.tsx" description="水平布局下通过 `labelWidth` 控制标签宽度。">标签宽度</code>

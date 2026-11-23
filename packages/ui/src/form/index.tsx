@@ -10,6 +10,7 @@ import React, {
   useSyncExternalStore,
 } from 'react';
 import { classNames, prefixCls } from '@aura-react-comp/shared';
+import { FormDisabledContext } from './disabledContext';
 import {
   FormStore,
   type FormError,
@@ -65,38 +66,55 @@ const noopSubscribe = () => () => {};
 
 /**
  * 创建 FormInstance（antd 用法一致：`const [form] = Form.useForm()`）。
- * 不依赖 React hooks —— 允许在组件外调用，仅要求传给 `<Form form={...}>`。
+ * 组件内调用时通过 useRef 缓存，实例跨渲染稳定（useWatch / demo 场景
+ * 依赖此语义）；FormStore 引擎本身不依赖 React，在组件外调用同样可用
+ * （每次调用创建独立实例）。
  */
 function useForm(): [FormInstance] {
-  return [createFormInstance()];
+  const instanceRef = useRef<FormInstance | null>(null);
+  if (instanceRef.current === null) {
+    instanceRef.current = createFormInstance();
+  }
+  return [instanceRef.current];
 }
 
 function createFormInstance(storeArg?: FormStore): FormInstance {
-  const store = storeArg ?? new FormStore();
-  const instance: FormInstance = {
-    getFieldsValue: () => store.getFieldsValue(),
-    getFieldValue: (name) => store.getValue(name),
-    setFieldValue: (name, value) => store.setFieldValue(name, value),
-    setFieldsValue: (values) => store.setFieldsValue(values),
-    validateFields: async (names) => {
-      const targets =
-        names === undefined
-          ? undefined
-          : Array.isArray(names)
-            ? names
-            : [names];
-      return store.validateFields(targets);
-    },
-    resetFields: () => store.resetFields(),
-    getFieldError: (name) => store.getFieldError(name),
-    getFieldsError: () => store.getFieldsError(),
-    setFields: (updates) => store.setFields(updates),
-    isFieldTouched: (name) => store.isFieldTouched(name),
-    isFieldsTouched: (names) => store.isFieldsTouched(names),
-    scrollToField: (name) => scrollToFormItem(name),
+  const instance = {} as FormInstance;
+  // 方法经 instanceStore 动态取 store：实例创建时尚未挂接（组件外调用
+  // 的场景），FormBase 挂载时的 fallback 绑定负责建立关联——
+  // 之后所有方法都读写绑定后的 store，实例跨渲染稳定
+  instanceStore.set(instance, storeArg ?? new FormStore());
+  instance.getFieldsValue = () => boundStore(instance).getFieldsValue();
+  instance.getFieldValue = (name) => boundStore(instance).getValue(name);
+  instance.setFieldValue = (name, value) =>
+    boundStore(instance).setFieldValue(name, value);
+  instance.setFieldsValue = (values) =>
+    boundStore(instance).setFieldsValue(values);
+  instance.validateFields = async (names) => {
+    const targets =
+      names === undefined ? undefined : Array.isArray(names) ? names : [names];
+    return boundStore(instance).validateFields(targets);
   };
-  instanceStore.set(instance, store);
+  instance.resetFields = () => boundStore(instance).resetFields();
+  instance.getFieldError = (name) => boundStore(instance).getFieldError(name);
+  instance.getFieldsError = () => boundStore(instance).getFieldsError();
+  instance.setFields = (updates) => boundStore(instance).setFields(updates);
+  instance.isFieldTouched = (name) => boundStore(instance).isFieldTouched(name);
+  instance.isFieldsTouched = (names) =>
+    boundStore(instance).isFieldsTouched(names);
+  instance.scrollToField = (name) => scrollToFormItem(name);
   return instance;
+}
+
+/** 实例当前绑定的引擎（WeakMap 动态解析，支持挂载期 fallback 绑定） */
+function boundStore(instance: FormInstance): FormStore {
+  const store = instanceStore.get(instance);
+  if (!store) {
+    const created = new FormStore();
+    instanceStore.set(instance, created);
+    return created;
+  }
+  return store;
 }
 
 function scrollToFormItem(name: string) {
@@ -1166,17 +1184,19 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
     );
 
     return (
-      <FormContext.Provider value={ctxValue}>
-        <form
-          ref={ref}
-          className={formCls}
-          style={style}
-          onSubmit={handleSubmit}
-          noValidate
-        >
-          {children}
-        </form>
-      </FormContext.Provider>
+      <FormDisabledContext.Provider value={disabled}>
+        <FormContext.Provider value={ctxValue}>
+          <form
+            ref={ref}
+            className={formCls}
+            style={style}
+            onSubmit={handleSubmit}
+            noValidate
+          >
+            {children}
+          </form>
+        </FormContext.Provider>
+      </FormDisabledContext.Provider>
     );
   },
 );
