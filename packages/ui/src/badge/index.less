@@ -40,9 +40,79 @@
   border-radius: 50%;
 }
 
-/* 数字变化缩放动画（独立模式：纯 scale，无定位位移） */
-.aura-badge-dot-animate {
-  animation: aura-badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* ===== 数字翻滚 =====
+   徽标容器（背景）保持不动，只有内部数字层垂直滚动：
+   增大（up）新数字从下方滚入、旧数字向上滚出；
+   减小（down）新数字从上方滚入、旧数字向下滚出。
+   双层数字用 grid 堆叠取最大宽度，roll 容器裁剪溢出。 */
+.aura-badge-roll {
+  display: inline-grid;
+  overflow: hidden;
+
+  > .aura-badge-roll-item {
+    grid-area: 1 / 1;
+    display: inline-block;
+  }
+}
+
+.aura-badge-roll-up > .aura-badge-roll-item:first-child {
+  animation: aura-badge-roll-out-up 0.35s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.aura-badge-roll-up > .aura-badge-roll-item:last-child {
+  animation: aura-badge-roll-in-up 0.35s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.aura-badge-roll-down > .aura-badge-roll-item:first-child {
+  animation: aura-badge-roll-out-down 0.35s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.aura-badge-roll-down > .aura-badge-roll-item:last-child {
+  animation: aura-badge-roll-in-down 0.35s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+@keyframes aura-badge-roll-in-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes aura-badge-roll-out-up {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes aura-badge-roll-in-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes aura-badge-roll-out-down {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }
 
 /* ===== 变体颜色 ===== */
@@ -84,11 +154,6 @@
     box-shadow: 0 0 0 2px var(--aura-bg);
     animation: aura-badge-enter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
-
-  /* 数字变化：sup 用带锚点位移的缩放 */
-  sup.aura-badge-dot-animate {
-    animation: aura-badge-scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
 }
 
 /* ===== 独立模式（无子元素） ===== */
@@ -105,10 +170,6 @@
     box-shadow: none;
     animation: aura-badge-standalone-enter 0.3s
       cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  }
-
-  .aura-badge-dot-animate {
-    animation: aura-badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 }
 
@@ -132,32 +193,6 @@
   }
   to {
     opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* 数字变化缩放动画（包裹模式：带右上角锚点位移） */
-@keyframes aura-badge-scale {
-  0% {
-    transform: translate(50%, -50%) scale(0.6);
-  }
-  50% {
-    transform: translate(50%, -50%) scale(1.15);
-  }
-  100% {
-    transform: translate(50%, -50%) scale(1);
-  }
-}
-
-/* 数字变化缩放动画（独立模式：原位缩放） */
-@keyframes aura-badge-pop {
-  0% {
-    transform: scale(0.6);
-  }
-  50% {
-    transform: scale(1.15);
-  }
-  100% {
     transform: scale(1);
   }
 }

@@ -46,15 +46,20 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
     },
     ref,
   ) => {
-    // 用于数字变化时的缩放动画（status 模式不使用，但 hooks 不能条件调用）
-    const [animating, setAnimating] = useState(false);
+    // 数字翻滚动画：count 变化时记录旧值与方向（增大 up / 减小 down），
+    // 徽标容器与背景保持不动，只有内部数字层做垂直翻滚
+    const [roll, setRoll] = useState<{
+      from: number;
+      dir: 'up' | 'down';
+    } | null>(null);
     const prevCountRef = useRef(count);
 
     useEffect(() => {
       if (prevCountRef.current !== count) {
-        setAnimating(true);
+        const dir = count > prevCountRef.current ? 'up' : 'down';
+        setRoll({ from: prevCountRef.current, dir });
         prevCountRef.current = count;
-        const timer = setTimeout(() => setAnimating(false), 400);
+        const timer = setTimeout(() => setRoll(null), 400);
         return () => clearTimeout(timer);
       }
     }, [count]);
@@ -84,12 +89,38 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       count > overflowCount ? `${overflowCount}+` : String(count);
     const showBadge = count !== 0 || showZero;
 
+    // 翻滚层的旧值展示（沿用同一溢出规则）
+    const displayFrom =
+      roll && roll.from > overflowCount
+        ? `${overflowCount}+`
+        : roll
+          ? String(roll.from)
+          : '';
+
     const badgeCls = classNames(
       prefixCls('badge-dot'),
       variant !== 'default' && prefixCls(`badge-dot-${variant}`),
       dot && prefixCls('badge-dot-small'),
-      animating && prefixCls('badge-dot-animate'),
     );
+
+    /** 数字层：翻滚动画进行中输出双层滚动结构，否则静态数字 */
+    const renderCount = () => {
+      if (roll) {
+        return (
+          <span
+            key={count}
+            className={classNames(
+              prefixCls('badge-roll'),
+              prefixCls(`badge-roll-${roll.dir}`),
+            )}
+          >
+            <span className={prefixCls('badge-roll-item')}>{displayFrom}</span>
+            <span className={prefixCls('badge-roll-item')}>{displayCount}</span>
+          </span>
+        );
+      }
+      return <span className={prefixCls('badge-text')}>{displayCount}</span>;
+    };
 
     // 无子元素：独立显示
     if (children === undefined) {
@@ -98,9 +129,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
         <span ref={ref} className={wrapperCls} style={style}>
           {dot && showBadge && <span className={badgeCls} />}
           {!dot && showBadge && (
-            <span className={badgeCls}>
-              <span className={prefixCls('badge-text')}>{displayCount}</span>
-            </span>
+            <span className={badgeCls}>{renderCount()}</span>
           )}
         </span>
       );
@@ -113,11 +142,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       <span ref={ref} className={wrapperCls} style={style}>
         {children}
         {dot && showBadge && <sup className={badgeCls} />}
-        {!dot && showBadge && (
-          <sup className={badgeCls}>
-            <span className={prefixCls('badge-text')}>{displayCount}</span>
-          </sup>
-        )}
+        {!dot && showBadge && <sup className={badgeCls}>{renderCount()}</sup>}
       </span>
     );
   },

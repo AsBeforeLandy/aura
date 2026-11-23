@@ -1,7 +1,14 @@
-import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, act } from '@testing-library/react';
 import React from 'react';
 import { Badge } from './index';
+
+/** count 受控包裹：模拟外部状态变化触发翻滚 */
+const RollProbe: React.FC<{ count: number }> = ({ count }) => (
+  <Badge count={count}>
+    <span>inbox</span>
+  </Badge>
+);
 
 describe('Badge', () => {
   it('should render standalone badge with count', () => {
@@ -109,7 +116,13 @@ describe('Badge', () => {
   });
 
   it('status 五种状态应映射对应类名', () => {
-    const statuses = ['success', 'processing', 'error', 'warning', 'default'] as const;
+    const statuses = [
+      'success',
+      'processing',
+      'error',
+      'warning',
+      'default',
+    ] as const;
     statuses.forEach((status) => {
       const { container, unmount } = render(<Badge status={status} />);
       expect(
@@ -129,5 +142,46 @@ describe('Badge', () => {
   it('status 模式无 text 时只渲染圆点', () => {
     const { container } = render(<Badge status="error" />);
     expect(container.querySelector('.aura-badge-status-text')).toBeNull();
+  });
+
+  // ---- 数字翻滚动画 ----
+  it('数字增大时渲染向上翻滚的双层数字', () => {
+    const { container, rerender } = render(<RollProbe count={13} />);
+    expect(container.querySelector('.aura-badge-roll')).toBeNull();
+
+    rerender(<RollProbe count={14} />);
+    const roll = container.querySelector('.aura-badge-roll');
+    expect(roll).not.toBeNull();
+    expect(roll!.classList.contains('aura-badge-roll-up')).toBe(true);
+    // 双层：旧值 13 + 新值 14
+    const items = container.querySelectorAll('.aura-badge-roll-item');
+    expect(items).toHaveLength(2);
+    expect(items[0].textContent).toBe('13');
+    expect(items[1].textContent).toBe('14');
+  });
+
+  it('数字减小时渲染向下翻滚的双层数字', () => {
+    const { container, rerender } = render(<RollProbe count={13} />);
+    rerender(<RollProbe count={12} />);
+    const roll = container.querySelector('.aura-badge-roll');
+    expect(roll!.classList.contains('aura-badge-roll-down')).toBe(true);
+    const items = container.querySelectorAll('.aura-badge-roll-item');
+    expect(items[0].textContent).toBe('13');
+    expect(items[1].textContent).toBe('12');
+  });
+
+  it('翻滚结束后回落到静态数字层', async () => {
+    vi.useFakeTimers();
+    const { container, rerender } = render(<RollProbe count={5} />);
+    rerender(<RollProbe count={6} />);
+    expect(container.querySelector('.aura-badge-roll')).not.toBeNull();
+
+    // 400ms 后 roll 状态清空，回到静态 text
+    act(() => {
+      vi.advanceTimersByTime(450);
+    });
+    expect(container.querySelector('.aura-badge-roll')).toBeNull();
+    expect(container.querySelector('.aura-badge-text')!.textContent).toBe('6');
+    vi.useRealTimers();
   });
 });
