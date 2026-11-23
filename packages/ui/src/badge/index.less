@@ -1,75 +1,93 @@
+/* ===== Badge 组件样式 ===== */
+
+/* 基础徽标（形状 / 字体 / 底色）—— 对 <sup>（包裹定位）与
+   <span>（独立模式）同样生效。此前主样式挂在 sup&-dot（编译为
+   sup.aura-badge-dot）上，独立模式的 span 完全匹配不到，
+   导致无圆角无白字、深色文字挤在红底上。 */
+.aura-badge-dot {
+  box-sizing: border-box;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--aura-font-size-xs);
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1;
+  /* 彩色实底（error/success/warning/info）上的文字恒白：
+     不用 --aura-text-inverse，它在暗色模式下会翻成深灰 */
+  color: #fff;
+  background: var(--aura-error);
+  border-radius: var(--aura-radius-full);
+  white-space: nowrap;
+  transition:
+    transform var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1),
+    background var(--aura-duration-normal) var(--aura-easing);
+
+  .aura-badge-text {
+    display: inline-block;
+  }
+}
+
+/* 小圆点模式 */
+.aura-badge-dot-small {
+  min-width: unset;
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+/* 数字变化缩放动画（独立模式：纯 scale，无定位位移） */
+.aura-badge-dot-animate {
+  animation: aura-badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ===== 变体颜色 ===== */
+.aura-badge-dot-default {
+  background: var(--aura-gray-400);
+}
+
+.aura-badge-dot-success {
+  background: var(--aura-success);
+}
+
+.aura-badge-dot-warning {
+  background: var(--aura-warning);
+}
+
+.aura-badge-dot-error {
+  background: var(--aura-error);
+}
+
+.aura-badge-dot-info {
+  background: var(--aura-info);
+}
+
+/* ===== 包裹模式：徽标定位在子元素右上角 ===== */
 .aura-badge {
   position: relative;
   display: inline-flex;
   vertical-align: middle;
   line-height: 1;
 
-  sup&-dot {
+  sup.aura-badge-dot {
     position: absolute;
     top: 0;
     right: 0;
+    /* 右上角锚点位移只存在于 sup 定位层；
+       独立模式的 span 不带这组 transform */
     transform: translate(50%, -50%);
     z-index: 1;
-    box-sizing: border-box;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 6px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--aura-font-size-xs);
-    font-family: inherit;
-    font-weight: 600;
-    line-height: 1;
-    color: var(--aura-text-inverse);
-    background: var(--aura-error);
-    border-radius: var(--aura-radius-full);
-    white-space: nowrap;
-    animation: aura-badge-enter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     box-shadow: 0 0 0 2px var(--aura-bg);
-    transition:
-      transform var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1),
-      background var(--aura-duration-normal) var(--aura-easing);
-
-    // 文字
-    .aura-badge-text {
-      display: inline-block;
-    }
+    animation: aura-badge-enter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
-  // 小圆点模式
-  sup&-dot-small {
-    min-width: unset;
-    width: 6px;
-    height: 6px;
-    padding: 0;
-    border-radius: 50%;
-  }
-
-  // 数字变化动画
-  sup&-dot-animate {
+  /* 数字变化：sup 用带锚点位移的缩放 */
+  sup.aura-badge-dot-animate {
     animation: aura-badge-scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  // ===== 变体颜色 =====
-  sup&-dot-default {
-    background: var(--aura-gray-400);
-  }
-
-  sup&-dot-success {
-    background: var(--aura-success);
-  }
-
-  sup&-dot-warning {
-    background: var(--aura-warning);
-  }
-
-  sup&-dot-error {
-    background: var(--aura-error);
-  }
-
-  sup&-dot-info {
-    background: var(--aura-info);
   }
 }
 
@@ -84,42 +102,17 @@
     top: auto;
     right: auto;
     transform: none;
-    animation: aura-badge-enter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    transition:
-      transform var(--aura-duration-normal) cubic-bezier(0.34, 1.56, 0.64, 1),
-      background var(--aura-duration-normal) var(--aura-easing);
-  }
-
-  .aura-badge-dot-small {
-    min-width: unset;
-    width: 6px;
-    height: 6px;
-    padding: 0;
-    border-radius: 50%;
+    box-shadow: none;
+    animation: aura-badge-standalone-enter 0.3s
+      cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
   .aura-badge-dot-animate {
-    animation: aura-badge-scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .aura-badge-dot-default {
-    background: var(--aura-gray-400);
-  }
-  .aura-badge-dot-success {
-    background: var(--aura-success);
-  }
-  .aura-badge-dot-warning {
-    background: var(--aura-warning);
-  }
-  .aura-badge-dot-error {
-    background: var(--aura-error);
-  }
-  .aura-badge-dot-info {
-    background: var(--aura-info);
+    animation: aura-badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 }
 
-// 入场动画
+/* 入场动画（包裹模式：带右上角锚点位移） */
 @keyframes aura-badge-enter {
   from {
     opacity: 0;
@@ -131,7 +124,19 @@
   }
 }
 
-// 数字变化缩放动画
+/* 入场动画（独立模式：原位弹出，无位移） */
+@keyframes aura-badge-standalone-enter {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 数字变化缩放动画（包裹模式：带右上角锚点位移） */
 @keyframes aura-badge-scale {
   0% {
     transform: translate(50%, -50%) scale(0.6);
@@ -144,10 +149,22 @@
   }
 }
 
+/* 数字变化缩放动画（独立模式：原位缩放） */
+@keyframes aura-badge-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 // 暗色模式
 [data-theme='dark'] {
-  .aura-badge-dot,
-  .aura-badge-standalone .aura-badge-dot {
+  .aura-badge sup.aura-badge-dot {
     box-shadow: 0 0 0 2px var(--aura-bg);
   }
 }
