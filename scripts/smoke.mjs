@@ -14,6 +14,9 @@
  *   5. 产出的 JS 中所有裸包名依赖都已在 dependencies / peerDependencies 中声明
  *   6. 相对引用的资源文件真实存在
  *   7. 主题令牌 tokens.css 存在于 @aura-react-comp/design 产物中
+ *   8. 组件包（peerDependencies 含 react）的每个 ESM JS 产物
+ *      首个非空非注释行是 'use client' 指令（RSC 环境可直用）；
+ *      shared / request 等纯工具包不检查
  *
  * 用法：pnpm smoke（应在 build:lib 之后执行）
  */
@@ -49,6 +52,28 @@ if (LIB_PACKAGES.length === 0) {
   console.error('smoke — 未推导出任何待校验的库包，请检查 packages/ 目录');
   process.exit(1);
 }
+
+/**
+ * 需要内置 'use client' 指令的组件包：**自动派生**，判据与
+ * scripts/add-use-client.mjs 完全一致——peerDependencies 含 react。
+ * shared / request 等纯函数工具包无 react peer，保持可被
+ * Server Component 直接调用，不做此检查。
+ */
+const CLIENT_PACKAGES = readdirSync(join(ROOT, 'packages'), {
+  withFileTypes: true,
+})
+  .filter((entry) => entry.isDirectory())
+  .filter((entry) => {
+    const pkgJsonPath = join(ROOT, 'packages', entry.name, 'package.json');
+    if (!existsSync(pkgJsonPath)) return false;
+    const { peerDependencies } = JSON.parse(readFileSync(pkgJsonPath, 'utf-8'));
+    return Boolean(peerDependencies?.react);
+  })
+  .map((entry) => entry.name);
+
+/** 'use client' 指令：允许单双引号、分号可省略 */
+const USE_CLIENT_DIRECTIVE = /^\s*['"]use client['"];?$/;
+
 /** 允许出现在产物中但无需在 dependencies 声明的内置模块前缀 */
 const BUILTIN = /^(node:|react$|react-dom$|react\/jsx-runtime$|antd$|antd\/|@ant-design\/)/;
 
@@ -242,6 +267,28 @@ for (const pkg of LIB_PACKAGES) {
         .join('\n         ')}`,
     );
   });
+
+  // 组件包的每个 JS 产物必须自带 'use client' 指令（scripts/add-use-client.mjs
+  // 在 build:lib 中注入），否则 Next.js App Router 等 RSC 环境无法直接渲染。
+  if (CLIENT_PACKAGES.includes(pkg)) {
+    check('每个 JS 产物首行是 use client 指令', () => {
+      const offenders = [];
+      for (const file of jsFiles) {
+        const firstLine = readFileSync(file, 'utf-8')
+          .split('\n')
+          .find((line) => line.trim() !== '' && !line.trim().startsWith('//'));
+        if (!firstLine || !USE_CLIENT_DIRECTIVE.test(firstLine.trim())) {
+          offenders.push(relative(ROOT, file));
+        }
+      }
+      assert(
+        offenders.length === 0,
+        `以下 ${offenders.length} 个产物缺少 'use client' 指令：\n         ${offenders
+          .slice(0, 5)
+          .join('\n         ')}`,
+      );
+    });
+  }
 }
 
 // 7) 主题令牌：business 的样式全部依赖这些变量

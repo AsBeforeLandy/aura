@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "dumi dev",
     "build": "dumi build",
-    "build:lib": "pnpm -r build && node scripts/postbuild-dts.mjs && node scripts/sync-license.mjs",
+    "build:lib": "pnpm -r build && node scripts/postbuild-dts.mjs && node scripts/add-use-client.mjs && node scripts/sync-license.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
