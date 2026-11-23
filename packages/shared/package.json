@@ -1,6 +1,6 @@
 {
   "name": "@aura-react-comp/shared",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Aura 共享工具函数",
   "keywords": [
     "aura",

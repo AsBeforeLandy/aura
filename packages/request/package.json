@@ -1,6 +1,6 @@
 {
   "name": "@aura-react-comp/request",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "基于原生 Fetch 的 HTTP 请求封装",
   "keywords": [
     "aura",
