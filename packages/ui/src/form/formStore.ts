@@ -28,6 +28,8 @@ export interface FieldMeta {
   dependencies?: string[];
   /** message 占位符变量（message 里 {{key}} 会被替换） */
   messageVariables?: Record<string, string>;
+  /** 规则按顺序校验，遇错即停 */
+  validateFirst?: boolean;
   /** 字段 label（自动注入为 messageVariables.label） */
   label?: unknown;
 }
@@ -308,7 +310,9 @@ export class FormStore {
     }
     const vars = { ...(meta?.messageVariables ?? {}), ...(variables ?? {}) };
     const { errors: fieldErrors, warnings: fieldWarnings } =
-      await validateRules(rules, this.getValue(path), vars);
+      await validateRules(rules, this.getValue(path), vars, {
+        validateFirst: meta?.validateFirst,
+      });
 
     // fields 子字段 schema：子错误写入嵌套路径（供嵌套 noStyle Item 消
     // 费），父字段错误追加「子字段名: 消息」摘要
@@ -650,14 +654,21 @@ export async function validateRules(
   rules: RuleType[],
   value: unknown,
   variables: Record<string, string> = {},
+  options?: { validateFirst?: boolean },
 ): Promise<ValidationResult> {
   const errors: string[] = [];
   const warnings: string[] = [];
   for (const rule of rules) {
     const error = await validateSingleRule(rule, value, variables);
     if (error) {
-      if (rule.warningOnly) warnings.push(error);
-      else errors.push(error);
+      if (rule.warningOnly) {
+        warnings.push(error);
+        // validateFirst 只对错误规则短路，警告规则继续跑
+        continue;
+      }
+      // validateFirst：遇错误即停
+      if (options?.validateFirst) return { errors: [error], warnings };
+      errors.push(error);
     }
   }
   return { errors, warnings };

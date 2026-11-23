@@ -30,7 +30,7 @@ const Demo: React.FC = () => {
       <Form.Item name="remark" label="备注">
         <Textarea placeholder="请输入备注信息" rows={3} />
       </Form.Item>
-      <Form.Item label=" ">
+      <Form.Item label=" " colon={false}>
         <Space>
           <Button type="submit" variant="primary">
             保存

@@ -71,20 +71,20 @@ import { Form } from '@aura-react-comp/ui';
 
 ### FormProps
 
-| 属性               | 说明                                                          | 类型                                            | 默认值       |
-| ------------------ | ------------------------------------------------------------- | ----------------------------------------------- | ------------ |
-| layout             | 布局方式                                                      | `'vertical' \| 'horizontal' \| 'inline'`        | `'vertical'` |
-| initialValues      | 初始值                                                        | `Record<string, unknown>`                       | -            |
-| onFinish           | 提交成功回调                                                  | `(values: Record<string, unknown>) => void`     | -            |
-| onFinishFailed     | 提交失败回调                                                  | `(errors: FormError[]) => void`                 | -            |
-| onValuesChange     | 任意字段值变化回调（联动与持久化钩子）                        | `(changed: { name, value }, allValues) => void` | -            |
-| scrollToFirstError | 提交失败时滚动到第一个错误字段                                | `boolean`                                       | `false`      |
-| requiredMark       | 必填标记：`false` 不显示；`'optional'` 在非必填项标注「可选」 | `boolean \| 'optional'`                         | `true`       |
-| labelAlign         | 标签对齐方式                                                  | `'left' \| 'right'`                             | `'right'`    |
-| colon              | 标签后是否显示冒号                                            | `boolean`                                       | `false`      |
-| disabled           | 是否禁用所有表单项                                            | `boolean`                                       | `false`      |
-| size               | 表单尺寸                                                      | `'sm' \| 'md' \| 'lg'`                          | `'md'`       |
-| form               | 命令式实例（由 `Form.useForm()` 创建）                        | `FormInstance`                                  | -            |
+| 属性               | 说明                                                                                 | 类型                                            | 默认值         |
+| ------------------ | ------------------------------------------------------------------------------------ | ----------------------------------------------- | -------------- |
+| layout             | 布局方式                                                                             | `'horizontal' \| 'vertical' \| 'inline'`        | `'horizontal'` |
+| initialValues      | 初始值                                                                               | `Record<string, unknown>`                       | -              |
+| onFinish           | 提交成功回调                                                                         | `(values: Record<string, unknown>) => void`     | -              |
+| onFinishFailed     | 提交失败回调                                                                         | `(errors: FormError[]) => void`                 | -              |
+| onValuesChange     | 任意字段值变化回调（联动与持久化钩子）                                               | `(changed: { name, value }, allValues) => void` | -              |
+| scrollToFirstError | 提交失败时滚动到第一个错误字段                                                       | `boolean`                                       | `false`        |
+| requiredMark       | 必填标记：`false` 不显示；`'optional'` 在非必填项标注「可选」                        | `boolean \| 'optional'`                         | `true`         |
+| labelAlign         | 标签对齐方式                                                                         | `'left' \| 'right'`                             | `'right'`      |
+| colon              | 标签后是否显示冒号（缺省按布局推导：horizontal / inline 为 true，vertical 为 false） | `boolean`                                       | 按布局推导     |
+| disabled           | 是否禁用所有表单项                                                                   | `boolean`                                       | `false`        |
+| size               | 表单尺寸                                                                             | `'sm' \| 'md' \| 'lg'`                          | `'md'`         |
+| form               | 命令式实例（由 `Form.useForm()` 创建）                                               | `FormInstance`                                  | -              |
 
 > `name` 支持**嵌套点路径**（如 `user.name`），值按路径写入嵌套对象。
 
@@ -114,27 +114,32 @@ import { Form } from '@aura-react-comp/ui';
 
 ### FormItemProps
 
-| 属性              | 说明                                                   | 类型                                                | 默认值       |
-| ----------------- | ------------------------------------------------------ | --------------------------------------------------- | ------------ |
-| name              | 字段名称（支持嵌套点路径 `user.name`）                 | `string`                                            | -            |
-| label             | 标签文本                                               | `ReactNode`                                         | -            |
-| labelAlign        | 标签对齐，覆盖 Form 级别                               | `'left' \| 'right'`                                 | -            |
-| labelWidth        | 标签宽度（仅 horizontal 模式）                         | `number \| string`                                  | -            |
-| rules             | 验证规则                                               | `RuleType[]`                                        | -            |
-| required          | 是否必填（仅显示星号）                                 | `boolean`                                           | `false`      |
-| dependencies      | 依赖字段路径：任一依赖变化时重新校验自身（如确认密码） | `string[]`                                          | -            |
-| validateTrigger   | 触发校验的事件                                         | `string \| string[]`                                | `'onChange'` |
-| help              | 自定义帮助文案（设置后覆盖校验错误信息）               | `ReactNode`                                         | -            |
-| extra             | 额外说明，展示在控件下方                               | `ReactNode`                                         | -            |
-| validateStatus    | 手动指定校验状态（优先级高于自动推导）                 | `'success' \| 'warning' \| 'error' \| 'validating'` | -            |
-| normalize         | 输入值规范化（写入 store 前调用）                      | `(value, prevValue, allValues) => unknown`          | -            |
-| getValueFromEvent | 从 onChange 事件中取值                                 | `(...args) => unknown`                              | -            |
-| initialValue      | 字段级初始值                                           | `unknown`                                           | -            |
-| preserve          | 字段卸载后是否保留值                                   | `boolean`                                           | `true`       |
-| hidden            | 隐藏字段（保持注册与校验，仅不渲染）                   | `boolean`                                           | `false`      |
-| disabled          | 是否禁用该项                                           | `boolean`                                           | `false`      |
-| noStyle           | 不占用布局（无 label、无边距），仅做数据收集与校验     | `boolean`                                           | `false`      |
-| valuePropName     | 子元素接收值的属性名（如 Checkbox 用 `checked`）       | `string`                                            | `'value'`    |
+| 属性              | 说明                                                    | 类型                                                | 默认值       |
+| ----------------- | ------------------------------------------------------- | --------------------------------------------------- | ------------ |
+| name              | 字段名称（支持嵌套点路径 `user.name`）                  | `string`                                            | -            |
+| label             | 标签文本                                                | `ReactNode`                                         | -            |
+| labelAlign        | 标签对齐，覆盖 Form 级别                                | `'left' \| 'right'`                                 | -            |
+| labelWidth        | 标签宽度（仅 horizontal 模式）                          | `number \| string`                                  | -            |
+| rules             | 验证规则                                                | `RuleType[]`                                        | -            |
+| required          | 是否必填（仅显示星号）                                  | `boolean`                                           | `false`      |
+| colon             | 是否显示冒号，覆盖 Form 推导（空占位 label 时传 false） | `boolean`                                           | 按布局推导   |
+| dependencies      | 依赖字段路径：任一依赖变化时重新校验自身（如确认密码）  | `string[]`                                          | -            |
+| validateTrigger   | 触发校验的事件                                          | `string \| string[]`                                | `'onChange'` |
+| help              | 自定义帮助文案（设置后覆盖校验错误信息）                | `ReactNode`                                         | -            |
+| extra             | 额外说明，展示在控件下方                                | `ReactNode`                                         | -            |
+| htmlFor           | label 的 for 属性，缺省用 name                          | `string`                                            | -            |
+| layout            | 布局方式，覆盖 Form 级别                                | `'horizontal' \| 'vertical' \| 'inline'`            | -            |
+| tooltip           | label 的提示信息（问号图标，悬浮展示）                  | `ReactNode`                                         | -            |
+| validateFirst     | 规则按顺序校验，遇错即停                                | `boolean`                                           | `false`      |
+| validateStatus    | 手动指定校验状态（优先级高于自动推导）                  | `'success' \| 'warning' \| 'error' \| 'validating'` | -            |
+| normalize         | 输入值规范化（写入 store 前调用）                       | `(value, prevValue, allValues) => unknown`          | -            |
+| getValueFromEvent | 从 onChange 事件中取值                                  | `(...args) => unknown`                              | -            |
+| initialValue      | 字段级初始值                                            | `unknown`                                           | -            |
+| preserve          | 字段卸载后是否保留值                                    | `boolean`                                           | `true`       |
+| hidden            | 隐藏字段（保持注册与校验，仅不渲染）                    | `boolean`                                           | `false`      |
+| disabled          | 是否禁用该项                                            | `boolean`                                           | `false`      |
+| noStyle           | 不占用布局（无 label、无边距），仅做数据收集与校验      | `boolean`                                           | `false`      |
+| valuePropName     | 子元素接收值的属性名（如 Checkbox 用 `checked`）        | `string`                                            | `'value'`    |
 
 ### Form.useWatch
 
@@ -153,6 +158,30 @@ const keyword = Form.useWatch('keyword', form);
 
 ```tsx | pure
 const form = Form.useFormInstance();
+```
+
+### Form.Provider
+
+多表单协调容器：内部所有**带 `name`** 的 Form 提交成功后会触发 `onFormFinish`：
+
+```tsx | pure
+<Form.Provider
+  onFormFinish={(name, { values, forms }) => {
+    console.log(name, values);
+  }}
+>
+  <Form name="login">...</Form>
+  <Form name="signup">...</Form>
+</Form.Provider>
+```
+
+### Form.ErrorList
+
+字段错误列表，常配合 noStyle / 自定义控件展示一组字段错误：
+
+```tsx | pure
+const errors = form.getFieldError('city');
+<Form.ErrorList errors={errors} />;
 ```
 
 ### noStyle 错误冒泡

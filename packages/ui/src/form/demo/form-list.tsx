@@ -75,7 +75,7 @@ const Demo: React.FC = () => (
       )}
     </Form.List>
 
-    <Form.Item label=" ">
+    <Form.Item label=" " colon={false}>
       <Space>
         <Button type="submit" variant="primary">
           提交

@@ -190,6 +190,14 @@ export interface FormItemProps {
   labelWidth?: number | string;
   /** 是否显示冒号，覆盖 Form 级别（空占位 label 时传 false 隐藏） */
   colon?: boolean;
+  /** 布局方式，覆盖 Form 级别 */
+  layout?: Layout;
+  /** label 的提示信息（问号图标，悬浮展示） */
+  tooltip?: React.ReactNode;
+  /** label 的 for 属性，缺省用 name */
+  htmlFor?: string;
+  /** 验证规则按顺序校验，遇错即停 */
+  validateFirst?: boolean;
   /** 验证规则 */
   rules?: RuleType[];
   /** 是否必填（仅显示星号，实际验证由 rules 控制） */
@@ -253,6 +261,10 @@ const FormItem: React.FC<FormItemProps> = ({
   labelAlign: itemLabelAlign,
   labelWidth,
   colon: itemColon,
+  layout: itemLayout,
+  tooltip,
+  htmlFor: htmlForProp,
+  validateFirst,
   rules,
   required,
   dependencies,
@@ -318,6 +330,7 @@ const FormItem: React.FC<FormItemProps> = ({
         ...(name ? { name } : {}),
         ...messageVariables,
       },
+      validateFirst,
       label,
     });
     return () => store.unregisterField(name);
@@ -335,6 +348,7 @@ const FormItem: React.FC<FormItemProps> = ({
     hidden,
     dependencies,
     messageVariables,
+    validateFirst,
     label,
   ]);
 
@@ -462,9 +476,11 @@ const FormItem: React.FC<FormItemProps> = ({
           ? 'warning'
           : undefined);
 
+  const effectiveLayout = itemLayout ?? ctx?.layout ?? 'vertical';
+
   const itemCls = classNames(
     prefixCls('form-item'),
-    prefixCls(`form-item-${ctx?.layout ?? 'vertical'}`),
+    prefixCls(`form-item-${effectiveLayout}`),
     !hidden && status === 'error' && prefixCls('form-item-error'),
     !hidden && status === 'success' && prefixCls('form-item-success'),
     !hidden && status === 'warning' && prefixCls('form-item-warning'),
@@ -616,6 +632,14 @@ const FormItem: React.FC<FormItemProps> = ({
                 <span className={prefixCls('form-item-required-star')}>*</span>
               )}
               {label}
+              {tooltip && (
+                <span
+                  className={prefixCls('form-item-tooltip')}
+                  title={typeof tooltip === 'string' ? tooltip : undefined}
+                >
+                  ?
+                </span>
+              )}
               {colon && <span className={prefixCls('form-item-colon')}>:</span>}
             </label>
           )}
@@ -670,7 +694,7 @@ const FormItem: React.FC<FormItemProps> = ({
               prefixCls('form-item-label'),
               labelAlign === 'left' && prefixCls('form-item-label-left'),
             )}
-            htmlFor={name}
+            htmlFor={htmlForProp ?? name}
             style={labelStyle}
           >
             {showStar && (
@@ -678,6 +702,14 @@ const FormItem: React.FC<FormItemProps> = ({
             )}
             {label}
             {colon && <span className={prefixCls('form-item-colon')}>:</span>}
+            {tooltip && (
+              <span
+                className={prefixCls('form-item-tooltip')}
+                title={typeof tooltip === 'string' ? tooltip : undefined}
+              >
+                ?
+              </span>
+            )}
             {showOptionalMark && (
               <span className={prefixCls('form-item-optional')}>(可选)</span>
             )}
@@ -839,6 +871,104 @@ const FormList: React.FC<FormListProps> = ({
 
 FormList.displayName = 'Form.List';
 
+/* ===== Form.ErrorList ===== */
+
+export interface ErrorListProps {
+  /** 错误信息列表 */
+  errors?: string[];
+  /** 警告信息列表 */
+  warnings?: string[];
+  /** 自定义类名 */
+  className?: string;
+  /** 自定义样式 */
+  style?: React.CSSProperties;
+}
+
+/** 错误列表：常配合 noStyle / 自定义控件展示一组字段错误（antd 同名能力） */
+const ErrorList: React.FC<ErrorListProps> = ({
+  errors = [],
+  warnings = [],
+  className,
+  style,
+}) => (
+  <div
+    className={classNames(prefixCls('form-errorlist'), className)}
+    style={style}
+    role="alert"
+  >
+    {errors.map((error, index) => (
+      <div key={index} className={prefixCls('form-item-error-text')}>
+        {error}
+      </div>
+    ))}
+    {warnings.map((warning, index) => (
+      <div key={index} className={prefixCls('form-item-warning-text')}>
+        {warning}
+      </div>
+    ))}
+  </div>
+);
+
+ErrorList.displayName = 'Form.ErrorList';
+
+/* ===== Form.Provider ===== */
+
+export interface FormProviderProps {
+  /**
+   * 任意有 name 的 Form 提交成功后触发（多表单协调）：
+   * info.forms 为 Provider 下按 name 注册的全部实例
+   */
+  onFormFinish?: (
+    name: string,
+    info: { values: Values; forms: Record<string, FormInstance> },
+  ) => void;
+  children?: React.ReactNode;
+}
+
+export interface FormProviderContextValue {
+  registerForm: (name: string, form: FormInstance) => () => void;
+  notifyFormFinish: (name: string, values: Values) => void;
+}
+
+const FormProviderContext = createContext<FormProviderContextValue | null>(
+  null,
+);
+
+const FormProvider: React.FC<FormProviderProps> = ({
+  onFormFinish,
+  children,
+}) => {
+  const formsRef = useRef<Map<string, FormInstance>>(new Map());
+  const onFormFinishRef = useRef(onFormFinish);
+  onFormFinishRef.current = onFormFinish;
+
+  const value = useMemo<FormProviderContextValue>(
+    () => ({
+      registerForm: (name, form) => {
+        formsRef.current.set(name, form);
+        return () => formsRef.current.delete(name);
+      },
+      notifyFormFinish: (name, values) => {
+        if (!onFormFinishRef.current) return;
+        const forms: Record<string, FormInstance> = {};
+        formsRef.current.forEach((instance, key) => {
+          forms[key] = instance;
+        });
+        onFormFinishRef.current(name, { values, forms });
+      },
+    }),
+    [],
+  );
+
+  return (
+    <FormProviderContext.Provider value={value}>
+      {children}
+    </FormProviderContext.Provider>
+  );
+};
+
+FormProvider.displayName = 'Form.Provider';
+
 /* ===== Form 主组件 ===== */
 
 export interface FormProps {
@@ -873,9 +1003,7 @@ export interface FormProps {
    *  @default 'right'
    */
   labelAlign?: 'left' | 'right';
-  /** 是否在标签后显示冒号
-   *  @default false
-   */
+  /** 是否在标签后显示冒号。缺省时按布局推导：horizontal / inline 为 true，vertical 为 false */
   colon?: boolean;
   /** 是否禁用所有表单项 */
   disabled?: boolean;
@@ -885,6 +1013,8 @@ export interface FormProps {
   size?: Size;
   /** 命令式实例（由 `Form.useForm()` 创建），用于编辑回填、外部提交等场景 */
   form?: FormInstance;
+  /** 表单名称（配合 Form.Provider 的 onFormFinish 做多表单协调） */
+  name?: string;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -896,7 +1026,7 @@ export interface FormProps {
 const FormBase = forwardRef<HTMLFormElement, FormProps>(
   (
     {
-      layout = 'vertical',
+      layout = 'horizontal',
       initialValues = {},
       onFinish,
       onFinishFailed,
@@ -906,10 +1036,11 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
       labelCol,
       wrapperCol,
       labelAlign = 'right',
-      colon = false,
+      colon: colonProp,
       disabled = false,
       size = 'md',
       form,
+      name: formName,
       className,
       style,
       children,
@@ -966,12 +1097,23 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps -- 见上
     }, [store]);
 
+    // Provider 注册：有 name 时把自己挂到最近的 Form.Provider
+    const providerCtx = useContext(FormProviderContext);
+    useEffect(() => {
+      if (!formName || !providerCtx) return undefined;
+      const selfInstance = instance ?? createFormInstance(store);
+      return providerCtx.registerForm(formName, selfInstance);
+      // instance 变化时重新注册
+    }, [formName, providerCtx, instance, store]);
+
     const handleSubmit = useCallback(
       async (e: React.FormEvent) => {
         e.preventDefault();
         try {
           const values = await store.validateFields();
           onFinishRef.current?.(values);
+          // 多表单协调：Provider 的 onFormFinish
+          providerCtx?.notifyFormFinish(formName ?? '', values);
         } catch (errors) {
           onFinishFailedRef.current?.(errors as FormError[]);
           if (scrollToFirstError) {
@@ -983,8 +1125,11 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
           }
         }
       },
-      [store, scrollToFirstError],
+      [store, scrollToFirstError, providerCtx, formName],
     );
+
+    // colon 缺省按布局推导：horizontal / inline 为 true，vertical 为 false
+    const derivedColon = colonProp ?? (layout === 'vertical' ? false : true);
 
     const ctxValue: FormContextValue = useMemo(
       () => ({
@@ -994,7 +1139,7 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
         wrapperCol,
         layout,
         disabled,
-        colon,
+        colon: derivedColon,
         size,
         labelAlign,
         requiredMark,
@@ -1006,7 +1151,7 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
         wrapperCol,
         layout,
         disabled,
-        colon,
+        derivedColon,
         size,
         labelAlign,
         requiredMark,
@@ -1051,6 +1196,10 @@ interface FormComponent extends React.ForwardRefExoticComponent<
   useWatch: typeof useWatch;
   /** 获取最近 Form 的命令式实例 */
   useFormInstance: typeof useFormInstance;
+  /** 多表单协调容器 */
+  Provider: typeof FormProvider;
+  /** 字段错误列表（noStyle 场景） */
+  ErrorList: typeof ErrorList;
 }
 
 const Form = FormBase as unknown as FormComponent;
@@ -1059,6 +1208,16 @@ Form.List = FormList;
 Form.useForm = () => useForm();
 Form.useWatch = useWatch;
 Form.useFormInstance = useFormInstance;
+Form.Provider = FormProvider;
+Form.ErrorList = ErrorList;
 
-export { Form, FormItem, FormList, useWatch, useFormInstance };
+export {
+  Form,
+  FormItem,
+  FormList,
+  useWatch,
+  useFormInstance,
+  FormProvider,
+  ErrorList,
+};
 export default Form;

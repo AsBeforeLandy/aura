@@ -1066,3 +1066,157 @@ describe('Form fields（对象子字段 schema）', () => {
     });
   });
 });
+
+/* ===== 三期：layout/colon 默认值、tooltip、ErrorList、Provider、validateFirst ===== */
+
+describe('Form 三期', () => {
+  const Item = Form.Item as unknown as React.FC<any>;
+  const FList = (Form as any).List as any;
+  const ErrorList = (Form as any).ErrorList as any;
+  const FProvider = (Form as any).Provider as any;
+
+  it('layout 默认 horizontal，colon 推导为 true（标签带冒号）', () => {
+    const { container } = render(
+      <FormComponent>
+        <Item name="n" label="名称">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    expect(
+      container
+        .querySelector('form')!
+        .classList.contains('aura-form-horizontal'),
+    ).toBe(true);
+    // horizontal 默认 colon=true → 标签渲染冒号
+    expect(container.querySelector('.aura-form-item-colon')).not.toBeNull();
+  });
+
+  it('vertical 布局 colon 推导为 false', () => {
+    const { container } = render(
+      <FormComponent layout="vertical">
+        <Item name="n" label="名称">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    expect(container.querySelector('.aura-form-item-colon')).toBeNull();
+  });
+
+  it('Item 级 colon 覆盖 Form 推导', () => {
+    const { container } = render(
+      <FormComponent>
+        <Item name="a" label="甲" colon={false}>
+          <input />
+        </Item>
+        <Item name="b" label="乙">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    const items = container.querySelectorAll('.aura-form-item');
+    expect(items[0].querySelector('.aura-form-item-colon')).toBeNull();
+    expect(items[1].querySelector('.aura-form-item-colon')).not.toBeNull();
+  });
+
+  it('Item 级 layout 覆盖 Form 级别', () => {
+    const { container } = render(
+      <FormComponent layout="horizontal">
+        <Item name="a" label="甲" layout="vertical">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    expect(
+      container
+        .querySelector('.aura-form-item')!
+        .classList.contains('aura-form-item-vertical'),
+    ).toBe(true);
+  });
+
+  it('tooltip 渲染问号图标', () => {
+    const { container } = render(
+      <FormComponent>
+        <Item name="a" label="甲" tooltip="这是提示">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    expect(
+      container.querySelector('.aura-form-item-tooltip')!.textContent,
+    ).toBe('?');
+  });
+
+  it('htmlFor 覆盖 label 的 for 属性', () => {
+    const { container } = render(
+      <FormComponent>
+        <Item name="a" label="甲" htmlFor="custom-id">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    expect(
+      container.querySelector('.aura-form-item-label')!.getAttribute('for'),
+    ).toBe('custom-id');
+  });
+
+  it('validateFirst：遇错即停（只显示第一条错误）', async () => {
+    const { container } = render(
+      <FormComponent initialValues={{ v: 'x' }}>
+        <Item
+          name="v"
+          validateFirst
+          rules={[
+            { min: 2, message: '至少 2 个字符' },
+            { pattern: /^\d+$/, message: '必须是数字' },
+          ]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('至少 2 个字符');
+      // validateFirst：后续规则不再执行
+      expect(container.textContent).not.toContain('必须是数字');
+    });
+  });
+
+  it('Form.ErrorList 渲染错误与警告', () => {
+    const { container } = render(
+      <ErrorList errors={['错误一']} warnings={['警告一']} />,
+    );
+    expect(container.textContent).toContain('错误一');
+    expect(container.textContent).toContain('警告一');
+    expect(
+      container.querySelector('.aura-form-item-error-text'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('.aura-form-item-warning-text'),
+    ).not.toBeNull();
+  });
+
+  it('Form.Provider：有 name 的表单提交触发 onFormFinish', async () => {
+    const onFormFinish = vi.fn();
+    const { container } = render(
+      <FProvider onFormFinish={onFormFinish}>
+        <FormComponent name="login" initialValues={{ user: 'a' }}>
+          <Item name="user">
+            <input />
+          </Item>
+          <button type="submit">提交</button>
+        </FormComponent>
+      </FProvider>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(onFormFinish).toHaveBeenCalledWith(
+        'login',
+        expect.objectContaining({ values: { user: 'a' } }),
+      );
+    });
+    void container;
+  });
+});
