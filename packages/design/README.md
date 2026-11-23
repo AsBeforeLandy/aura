@@ -1,6 +1,11 @@
 # @aura-react-comp/design
 
+[![npm](https://img.shields.io/npm/v/@aura-react-comp/design)](https://www.npmjs.com/package/@aura-react-comp/design)
+[![Docs](https://img.shields.io/badge/docs-asbeforelandy.github.io/aura-7c3aed)](https://asbeforelandy.github.io/aura/)
+
 Aura 自研组件库：基于 React 18 的现代化、AI 友好组件库，采用 CSS Variables 主题体系。
+
+**[在线文档与示例 →](https://asbeforelandy.github.io/aura/)**
 
 ## 安装
 
@@ -56,7 +61,7 @@ import { ThemeProvider, useTheme } from '@aura-react-comp/design';
 | 数据展示 | Tag、Badge、Avatar、Tooltip、Card、Collapse、Tabs、Empty |
 | 反馈     | Alert、Spin、Message、Notification、Result、Popconfirm   |
 
-完整 API 与在线示例见文档站。
+完整 API 与在线示例见 [文档站](https://asbeforelandy.github.io/aura/)。
 
 ## 说明
 
