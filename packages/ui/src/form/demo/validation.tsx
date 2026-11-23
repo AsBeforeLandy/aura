@@ -11,10 +11,7 @@ const Demo: React.FC = () => {
   };
 
   return (
-    <Form
-      onFinish={handleFinish}
-      onFinishFailed={handleFinishFailed}
-    >
+    <Form onFinish={handleFinish} onFinishFailed={handleFinishFailed}>
       <Form.Item
         name="username"
         label="用户名"
@@ -48,7 +45,9 @@ const Demo: React.FC = () => {
         <Input placeholder="example@domain.com" />
       </Form.Item>
       <Form.Item>
-        <Button type="submit" variant="primary">提交验证</Button>
+        <Button type="submit" variant="primary">
+          提交验证
+        </Button>
       </Form.Item>
     </Form>
   );

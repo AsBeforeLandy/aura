@@ -1,5 +1,13 @@
 import React from 'react';
-import { Form, Input, Button, Space, Select, Switch, message } from '@aura-react-comp/ui';
+import {
+  Form,
+  Input,
+  Button,
+  Space,
+  Select,
+  Switch,
+  message,
+} from '@aura-react-comp/ui';
 
 const Demo: React.FC = () => {
   const handleFinish = (values: Record<string, unknown>) => {
@@ -59,17 +67,15 @@ const Demo: React.FC = () => {
         />
       </Form.Item>
 
-      <Form.Item
-        name="subscribe"
-        label="订阅周报"
-        valuePropName="checked"
-      >
+      <Form.Item name="subscribe" label="订阅周报" valuePropName="checked">
         <Switch />
       </Form.Item>
 
       <Form.Item style={{ marginTop: '24px' }}>
         <Space>
-          <Button type="submit" variant="primary">提交</Button>
+          <Button type="submit" variant="primary">
+            提交
+          </Button>
           <Button type="reset">重置</Button>
         </Space>
       </Form.Item>

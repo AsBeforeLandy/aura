@@ -23,7 +23,9 @@ const Demo: React.FC = () => {
         />
       </Form.Item>
       <Form.Item>
-        <Button type="submit" variant="primary">搜索</Button>
+        <Button type="submit" variant="primary">
+          搜索
+        </Button>
       </Form.Item>
     </Form>
   );

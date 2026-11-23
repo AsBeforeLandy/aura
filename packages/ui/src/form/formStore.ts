@@ -9,6 +9,7 @@
  */
 
 import type { RuleType } from './rules';
+import { resolveMessage } from './rules';
 
 export interface FieldMeta {
   rules?: RuleType[];
@@ -25,6 +26,10 @@ export interface FieldMeta {
   hidden?: boolean;
   /** 触发自身重校验的依赖字段路径 */
   dependencies?: string[];
+  /** message 占位符变量（message 里 {{key}} 会被替换） */
+  messageVariables?: Record<string, string>;
+  /** 字段 label（自动注入为 messageVariables.label） */
+  label?: unknown;
 }
 
 export interface FormError {
@@ -115,6 +120,7 @@ export interface StoreOptions {
 export class FormStore {
   private values: Values = {};
   private errors: Record<string, string[]> = {};
+  private warnings: Record<string, string[]> = {};
   private touchedSet = new Set<string>();
   private fields = new Map<string, FieldMeta>();
   private listeners = new Set<() => void>();
@@ -151,6 +157,10 @@ export class FormStore {
 
   getFieldError(path: string): string[] {
     return this.errors[path] ?? [];
+  }
+
+  getFieldWarning(path: string): string[] {
+    return this.warnings[path] ?? [];
   }
 
   getFieldsError(): Record<string, string[]> {
@@ -280,22 +290,34 @@ export class FormStore {
 
   /* --- 校验 --- */
 
-  async validateField(path: string): Promise<string[]> {
+  async validateField(
+    path: string,
+    variables?: Record<string, string>,
+  ): Promise<string[]> {
     const meta = this.fields.get(path);
     const rules = meta?.rules ?? [];
     if (rules.length === 0) {
-      if (this.errors[path]) {
+      if (this.errors[path] || this.warnings[path]) {
         delete this.errors[path];
+        delete this.warnings[path];
         this.notify();
       }
       return [];
     }
-    const fieldErrors = await validateRules(rules, this.getValue(path));
-    const prev = this.errors[path];
+    const vars = { ...(meta?.messageVariables ?? {}), ...(variables ?? {}) };
+    const { errors: fieldErrors, warnings: fieldWarnings } =
+      await validateRules(rules, this.getValue(path), vars);
+    const prevErrors = this.errors[path];
+    const prevWarnings = this.warnings[path];
     if (fieldErrors.length > 0) this.errors[path] = fieldErrors;
     else delete this.errors[path];
+    if (fieldWarnings.length > 0) this.warnings[path] = fieldWarnings;
+    else delete this.warnings[path];
     // 单字段校验同样要通知（onChange/onBlur 实时校验的错误需要渲染）
-    if (JSON.stringify(prev) !== JSON.stringify(fieldErrors)) {
+    if (
+      JSON.stringify(prevErrors) !== JSON.stringify(fieldErrors) ||
+      JSON.stringify(prevWarnings) !== JSON.stringify(fieldWarnings)
+    ) {
       this.notify();
     }
     return fieldErrors;
@@ -345,6 +367,7 @@ export class FormStore {
   resetFields(): void {
     this.values = deepClone(this.initialValues);
     this.errors = {};
+    this.warnings = {};
     this.touchedSet.clear();
     this.notify();
   }
@@ -380,12 +403,24 @@ const BUILTIN_PATTERNS: Record<string, RegExp> = {
   integer: /^-?\d+$/,
 };
 
+/** 渲染 message 中的 {{key}} 占位符 */
+function interpolateMessage(
+  message: string,
+  variables: Record<string, string> = {},
+): string {
+  return message.replace(/\{\{(\w+)\}\}/g, (raw, key: string) =>
+    variables[key] !== undefined ? variables[key] : raw,
+  );
+}
+
 /** 单条规则校验；返回错误消息，通过返回 null */
 async function validateSingleRule(
   rule: RuleType,
   value: unknown,
+  variables: Record<string, string> = {},
 ): Promise<string | null> {
-  const label = rule.message;
+  // transform：校验前转换值（不影响表单值）
+  const target = rule.transform ? rule.transform(value) : value;
 
   // 自定义校验器：兼容两种签名（value) / (rule, value)，返回 bool / void / throw
   if (rule.validator) {
@@ -394,75 +429,195 @@ async function validateSingleRule(
         rule.validator.length >= 2
           ? await (rule.validator as (r: RuleType, v: unknown) => unknown)(
               rule,
-              value,
+              target,
             )
-          : await rule.validator(value);
+          : await (rule.validator as (v: unknown) => unknown)(target);
       if (result === false || result instanceof Error) {
-        return result instanceof Error ? result.message : (label ?? '验证失败');
+        const raw =
+          result instanceof Error
+            ? result.message
+            : resolveMessage(rule, '验证失败');
+        return interpolateMessage(raw, variables);
       }
       return null;
     } catch (error) {
-      return error instanceof Error ? error.message : (label ?? '验证失败');
+      const raw =
+        error instanceof Error
+          ? error.message
+          : resolveMessage(rule, '验证失败');
+      return interpolateMessage(raw, variables);
     }
   }
 
   // required：undefined / null / 空串 / 空数组 视为空；whitespace 时空白串也算空
   const isBlank =
-    value === undefined ||
-    value === null ||
-    value === '' ||
-    (Array.isArray(value) && value.length === 0) ||
-    (rule.whitespace && typeof value === 'string' && value.trim() === '');
+    target === undefined ||
+    target === null ||
+    target === '' ||
+    (Array.isArray(target) && target.length === 0) ||
+    (rule.whitespace && typeof target === 'string' && target.trim() === '');
   if (rule.required && isBlank) {
-    return label ?? '此字段为必填项';
+    return interpolateMessage(
+      resolveMessage(rule, '此字段为必填项'),
+      variables,
+    );
   }
 
   // 空值跳过后续规则（required 已处理空值报错）
   if (isBlank) return null;
 
+  // len：精确长度（string/Array）或精确数值（number）
+  if (rule.len !== undefined) {
+    if (typeof target === 'number') {
+      if (target !== rule.len) {
+        return interpolateMessage(
+          resolveMessage(rule, `应为 ${rule.len}`),
+          variables,
+        );
+      }
+    } else if (typeof target === 'string' || Array.isArray(target)) {
+      if (target.length !== rule.len) {
+        return interpolateMessage(
+          resolveMessage(rule, `长度应为 ${rule.len} 个字符`),
+          variables,
+        );
+      }
+    }
+  }
+
   // min / max：数字用数值比较，字符串/数组用长度
   if (rule.min !== undefined || rule.max !== undefined) {
-    if (typeof value === 'number') {
-      if (rule.min !== undefined && value < rule.min) {
-        return label ?? `最小值应为 ${rule.min}`;
+    if (typeof target === 'number') {
+      if (rule.min !== undefined && target < rule.min) {
+        return interpolateMessage(
+          resolveMessage(rule, `最小值应为 ${rule.min}`),
+          variables,
+        );
       }
-      if (rule.max !== undefined && value > rule.max) {
-        return label ?? `最大值应为 ${rule.max}`;
+      if (rule.max !== undefined && target > rule.max) {
+        return interpolateMessage(
+          resolveMessage(rule, `最大值应为 ${rule.max}`),
+          variables,
+        );
       }
-    } else if (typeof value === 'string' || Array.isArray(value)) {
-      const length = value.length;
+    } else if (typeof target === 'string' || Array.isArray(target)) {
+      const length = target.length;
       if (rule.min !== undefined && length < rule.min) {
-        return label ?? `最少输入 ${rule.min} 个字符`;
+        return interpolateMessage(
+          resolveMessage(rule, `最少输入 ${rule.min} 个字符`),
+          variables,
+        );
       }
       if (rule.max !== undefined && length > rule.max) {
-        return label ?? `最多输入 ${rule.max} 个字符`;
+        return interpolateMessage(
+          resolveMessage(rule, `最多输入 ${rule.max} 个字符`),
+          variables,
+        );
       }
+    }
+  }
+
+  // enum：值必须在列表内（数组要求全部在列表内）
+  if (rule.enum) {
+    const inList = Array.isArray(target)
+      ? target.every((item) => rule.enum!.includes(item))
+      : rule.enum.includes(target);
+    if (!inList) {
+      return interpolateMessage(
+        resolveMessage(
+          rule,
+          `值必须是 ${rule.enum.map(String).join(' / ')} 之一`,
+        ),
+        variables,
+      );
     }
   }
 
   // 内置类型校验
   if (rule.type && BUILTIN_PATTERNS[rule.type]) {
-    if (!BUILTIN_PATTERNS[rule.type].test(String(value))) {
-      return label ?? `格式不正确（${rule.type}）`;
+    if (!BUILTIN_PATTERNS[rule.type].test(String(target))) {
+      return interpolateMessage(
+        resolveMessage(rule, `格式不正确（${rule.type}）`),
+        variables,
+      );
+    }
+  } else if (rule.type === 'boolean') {
+    if (typeof target !== 'boolean') {
+      return interpolateMessage(
+        resolveMessage(rule, '必须是布尔值'),
+        variables,
+      );
+    }
+  } else if (rule.type === 'array') {
+    if (!Array.isArray(target)) {
+      return interpolateMessage(resolveMessage(rule, '必须是数组'), variables);
+    }
+  } else if (rule.type === 'date') {
+    if (
+      (typeof target !== 'string' && !(target instanceof Date)) ||
+      Number.isNaN(new Date(target as string | Date).getTime())
+    ) {
+      return interpolateMessage(
+        resolveMessage(rule, '必须是有效日期'),
+        variables,
+      );
+    }
+  } else if (rule.type === 'string') {
+    if (typeof target !== 'string') {
+      return interpolateMessage(
+        resolveMessage(rule, '必须是字符串'),
+        variables,
+      );
     }
   }
 
   // 正则
-  if (rule.pattern && !rule.pattern.test(String(value))) {
-    return label ?? '格式不正确';
+  if (rule.pattern && !rule.pattern.test(String(target))) {
+    return interpolateMessage(resolveMessage(rule, '格式不正确'), variables);
+  }
+
+  // defaultField：数组元素级规则（逐元素应用，命中即报）
+  if (rule.defaultField && Array.isArray(target)) {
+    for (let i = 0; i < target.length; i += 1) {
+      const elementResult = await validateRules(
+        [rule.defaultField],
+        target[i],
+        variables,
+      );
+      if (elementResult.errors.length > 0) {
+        return interpolateMessage(
+          resolveMessage(
+            rule,
+            `第 ${i + 1} 项不合法：${elementResult.errors[0]}`,
+          ),
+          variables,
+        );
+      }
+    }
   }
 
   return null;
 }
 
+/** 校验结果：错误（阻止提交）与警告（不阻止）分离 */
+export interface ValidationResult {
+  errors: string[];
+  warnings: string[];
+}
+
 export async function validateRules(
   rules: RuleType[],
   value: unknown,
-): Promise<string[]> {
+  variables: Record<string, string> = {},
+): Promise<ValidationResult> {
   const errors: string[] = [];
+  const warnings: string[] = [];
   for (const rule of rules) {
-    const error = await validateSingleRule(rule, value);
-    if (error) errors.push(error);
+    const error = await validateSingleRule(rule, value, variables);
+    if (error) {
+      if (rule.warningOnly) warnings.push(error);
+      else errors.push(error);
+    }
   }
-  return errors;
+  return { errors, warnings };
 }

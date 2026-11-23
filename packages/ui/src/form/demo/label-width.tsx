@@ -14,7 +14,9 @@ const Demo: React.FC = () => (
     </Form.Item>
     <Form.Item labelWidth={120}>
       <Space>
-        <Button type="submit" variant="primary">保存</Button>
+        <Button type="submit" variant="primary">
+          保存
+        </Button>
         <Button>取消</Button>
       </Space>
     </Form.Item>

@@ -13,7 +13,9 @@ const Demo: React.FC = () => (
       <Input placeholder="必填星号（无 rules 验证）" />
     </Form.Item>
     <Form.Item>
-      <Button type="submit" variant="primary">提交</Button>
+      <Button type="submit" variant="primary">
+        提交
+      </Button>
     </Form.Item>
   </Form>
 );

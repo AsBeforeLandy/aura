@@ -707,11 +707,261 @@ describe('Form 新能力（antd 对齐）', () => {
     );
     fireEvent.click(screen.getByText('提交'));
     await waitFor(() => {
-      expect((container) => expect(container)).toBeDefined();
+      // 数字 150 > max 100 应报错（不是按字符串长度）
+      expect(screen.getByText('不能超过 100')).toBeDefined();
     });
-    await new Promise((r) => setTimeout(r, 0));
-    // 数字 150 > max 100 应报错（不是按字符串长度）
-    expect(screen.getByText('不能超过 100')).toBeDefined();
     void onFinish;
+  });
+});
+
+/* ===== 二期能力：warningOnly / messageVariables / 冒泡 / 规则全集 ===== */
+
+describe('Form 二期能力', () => {
+  const Item = Form.Item as unknown as React.FC<any>;
+  const List = (Form as any).List as any;
+
+  it('warningOnly：警告不阻止提交且以 warning 状态展示', async () => {
+    const onFinish = vi.fn();
+    const onFinishFailed = vi.fn();
+    const { container } = render(
+      <FormComponent
+        initialValues={{ tag: 'x' }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+      >
+        <Item
+          name="tag"
+          label="标签"
+          rules={[{ warningOnly: true, min: 3, message: '建议至少 3 个字符' }]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      // 警告不阻止提交
+      expect(onFinish).toHaveBeenCalled();
+      expect(onFinishFailed).not.toHaveBeenCalled();
+      // 警告文案展示且状态为 warning
+      expect(container.textContent).toContain('建议至少 3 个字符');
+      expect(
+        container
+          .querySelector('.aura-form-item')!
+          .classList.contains('aura-form-item-warning'),
+      ).toBe(true);
+    });
+  });
+
+  it('enum：值必须在列表内', async () => {
+    const { container } = render(
+      <FormComponent initialValues={{ role: 'guest' }}>
+        <Item
+          name="role"
+          rules={[{ enum: ['admin', 'user'], message: '角色不合法' }]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('角色不合法');
+    });
+  });
+
+  it('len：精确长度', async () => {
+    const { container } = render(
+      <FormComponent initialValues={{ code: 'abc' }}>
+        <Item name="code" rules={[{ len: 4, message: '长度应为 4' }]}>
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('长度应为 4');
+    });
+  });
+
+  it('transform：校验前转换（trim 后非空）', async () => {
+    const onFinish = vi.fn();
+    const { container } = render(
+      <FormComponent onFinish={onFinish}>
+        <Item
+          name="note"
+          rules={[
+            {
+              required: true,
+              whitespace: true,
+              message: '不能为空',
+              transform: (v: unknown) => String(v ?? '').trim(),
+            },
+          ]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    // 值是空格串，trim 后仍为空 → required 报错
+    fireEvent.change(container.querySelector('input')!, {
+      target: { value: '   ' },
+    });
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('不能为空');
+    });
+    void onFinish;
+  });
+
+  it('type=boolean/array/date 校验', async () => {
+    const { container } = render(
+      <FormComponent
+        initialValues={{ flag: 'yes', tags: 'not-array', day: '2026-13-99' }}
+      >
+        <Item name="flag" rules={[{ type: 'boolean', message: '须为布尔' }]}>
+          <input />
+        </Item>
+        <Item name="tags" rules={[{ type: 'array', message: '须为数组' }]}>
+          <input />
+        </Item>
+        <Item name="day" rules={[{ type: 'date', message: '日期无效' }]}>
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('须为布尔');
+      expect(container.textContent).toContain('须为数组');
+      expect(container.textContent).toContain('日期无效');
+    });
+  });
+
+  it('defaultField：数组元素级校验', async () => {
+    const { container } = render(
+      <FormComponent initialValues={{ scores: [90, 500] }}>
+        <Item
+          name="scores"
+          rules={[
+            {
+              defaultField: { max: 100, message: '分数不能超过 100' },
+            },
+          ]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('第 2 项不合法');
+    });
+  });
+
+  it('messageVariables：{{label}} 占位符替换', async () => {
+    const { container } = render(
+      <FormComponent initialValues={{}}>
+        <Item
+          name="city"
+          label="城市"
+          messageVariables={{ label: '所在城市' }}
+          rules={[{ required: true, message: '请输入{{label}}' }]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('请输入所在城市');
+    });
+  });
+
+  it('message 函数形态：动态文案', async () => {
+    const { container } = render(
+      <FormComponent initialValues={{ n: 'x' }}>
+        <Item
+          name="n"
+          rules={[{ len: 5, message: (rule: any) => `长度应为 ${rule.len}` }]}
+        >
+          <input />
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('长度应为 5');
+    });
+  });
+
+  it('noStyle：校验错误冒泡到最近的「有样式」Item', async () => {
+    const { container } = render(
+      <FormComponent>
+        <Item label="地址" shouldUpdate>
+          {() => (
+            <div>
+              <Item
+                name="city"
+                noStyle
+                rules={[{ required: true, message: '城市必填' }]}
+              >
+                <input />
+              </Item>
+            </div>
+          )}
+        </Item>
+        <button type="submit">提交</button>
+      </FormComponent>,
+    );
+    fireEvent.click(screen.getByText('提交'));
+    await waitFor(() => {
+      expect(container.textContent).toContain('城市必填');
+      // 有样式 Item 获得错误状态类
+      expect(container.querySelector('.aura-form-item-error')).not.toBeNull();
+    });
+  });
+
+  it('labelCol/wrapperCol：horizontal 下按栅格设置宽度', () => {
+    const { container } = render(
+      <FormComponent
+        layout="horizontal"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+      >
+        <Item name="g" label="栅格">
+          <input />
+        </Item>
+      </FormComponent>,
+    );
+    const label = container.querySelector<HTMLElement>('.aura-form-item-label');
+    expect(label?.style.width).toBe('33.33333333333333%');
+  });
+
+  it('Form.useFormInstance 获取最近实例', () => {
+    const captured: any = {};
+    const Inner: React.FC = () => {
+      captured.form = (Form as any).useFormInstance();
+      return null;
+    };
+    const [form] = (Form as any).useForm();
+    render(
+      <FormComponent form={form}>
+        <Inner />
+      </FormComponent>,
+    );
+    expect(captured.form).toBe(form);
+    act(() => {
+      captured.form.setFieldValue('x', 1);
+    });
+    expect(form.getFieldValue('x')).toBe(1);
   });
 });

@@ -71,8 +71,8 @@ function useForm(): [FormInstance] {
   return [createFormInstance()];
 }
 
-function createFormInstance(): FormInstance {
-  const store = new FormStore();
+function createFormInstance(storeArg?: FormStore): FormInstance {
+  const store = storeArg ?? new FormStore();
   const instance: FormInstance = {
     getFieldsValue: () => store.getFieldsValue(),
     getFieldValue: (name) => store.getValue(name),
@@ -104,7 +104,8 @@ function scrollToFormItem(name: string) {
     const items = document.querySelectorAll<HTMLElement>(
       `.${prefixCls('form-item')}[data-field-name="${name}"]`,
     );
-    items[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // jsdom 等测试环境没有 scrollIntoView
+    items[0]?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
   });
 }
 
@@ -114,8 +115,25 @@ type Layout = 'horizontal' | 'vertical' | 'inline';
 type Size = 'sm' | 'md' | 'lg';
 type RequiredMark = boolean | 'optional';
 
+export interface ColConfig {
+  /** 占用栏数（共 24 栏） */
+  span?: number;
+  /** 左侧空出的栏数 */
+  offset?: number;
+}
+
+interface ItemReportContextValue {
+  /** noStyle 字段错误冒泡：向最近的「有样式」Item 注册后代字段 */
+  registerDescendant: (path: string) => () => void;
+}
+
+const ItemReportContext = createContext<ItemReportContextValue | null>(null);
+
 interface FormContextValue {
   store: FormStore;
+  instance?: FormInstance;
+  labelCol?: ColConfig;
+  wrapperCol?: ColConfig;
   layout: Layout;
   disabled: boolean;
   colon: boolean;
@@ -150,6 +168,15 @@ function useWatch(path: string, form?: FormInstance): unknown {
   return useSyncExternalStore(subscribe, getSnapshot, () => undefined);
 }
 
+/** 获取最近 Form 的命令式实例（必须在 <Form> 内使用） */
+function useFormInstance(): FormInstance {
+  const ctx = useFormContext();
+  if (!ctx?.instance) {
+    throw new Error('Form.useFormInstance 必须在 <Form> 内使用');
+  }
+  return ctx.instance;
+}
+
 /* ===== Form.Item ===== */
 
 export interface FormItemProps {
@@ -177,6 +204,12 @@ export interface FormItemProps {
   extra?: React.ReactNode;
   /** 手动指定校验状态，优先级高于自动推导 */
   validateStatus?: 'success' | 'warning' | 'error' | 'validating';
+  /** message 占位符变量（message 里 {{key}} 会被替换；label 自动注入） */
+  messageVariables?: Record<string, string>;
+  /** 标签栅格（horizontal 模式，共 24 栏），覆盖 Form 级别 */
+  labelCol?: ColConfig;
+  /** 控件区栅格（horizontal 模式），覆盖 Form 级别 */
+  wrapperCol?: ColConfig;
   /** 输入值规范化：在写入 store 前调用 */
   normalize?: (
     value: unknown,
@@ -187,6 +220,8 @@ export interface FormItemProps {
   getValueFromEvent?: (...args: unknown[]) => unknown;
   /** 字段级初始值 */
   initialValue?: unknown;
+  /** 子元素接收值的属性名（如 Switch/Checkbox 用 `checked`） */
+  valuePropName?: string;
   /** 字段卸载后是否保留值
    *  @default true
    */
@@ -210,8 +245,6 @@ export interface FormItemProps {
   children?: React.ReactNode;
 }
 
-const VALIDATING_DELAY = 150;
-
 const FormItem: React.FC<FormItemProps> = ({
   name,
   label,
@@ -224,6 +257,9 @@ const FormItem: React.FC<FormItemProps> = ({
   help,
   extra,
   validateStatus,
+  messageVariables,
+  labelCol: itemLabelCol,
+  wrapperCol: itemWrapperCol,
   normalize,
   getValueFromEvent,
   initialValue,
@@ -274,6 +310,12 @@ const FormItem: React.FC<FormItemProps> = ({
       preserve,
       hidden,
       dependencies,
+      messageVariables: {
+        ...(typeof label === 'string' ? { label } : {}),
+        ...(name ? { name } : {}),
+        ...messageVariables,
+      },
+      label,
     });
     return () => store.unregisterField(name);
     // meta 全部来自 props，仅在显式变化时重新注册
@@ -289,7 +331,43 @@ const FormItem: React.FC<FormItemProps> = ({
     preserve,
     hidden,
     dependencies,
+    messageVariables,
+    label,
   ]);
+
+  // ---- noStyle 错误冒泡 ----
+  // noStyle 字段向最近的「有样式」Item 注册自己；有样式 Item 渲染时
+  // 汇总后代字段的错误与警告
+  const reportCtx = useContext(ItemReportContext);
+  const [descendants, setDescendants] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    if (noStyle && name && reportCtx) {
+      return reportCtx.registerDescendant(name);
+    }
+    return undefined;
+  }, [noStyle, name, reportCtx]);
+
+  const registerDescendant = useCallback((path: string) => {
+    setDescendants((prev) => {
+      if (prev.has(path)) return prev;
+      const next = new Set(prev);
+      next.add(path);
+      return next;
+    });
+    return () => {
+      setDescendants((prev) => {
+        const next = new Set(prev);
+        next.delete(path);
+        return next;
+      });
+    };
+  }, []);
+
+  // Provider value 必须在所有 early return 之前计算（hooks 规则）
+  const reportValue = useMemo(
+    () => ({ registerDescendant }),
+    [registerDescendant],
+  );
 
   const isRequired = required ?? rules?.some((r) => r.required) ?? false;
   const storeErrors = name && store ? store.getFieldError(name) : [];
@@ -306,6 +384,7 @@ const FormItem: React.FC<FormItemProps> = ({
     if (!dependencies || !store) return '';
     return dependencies.map((dep) => String(store.getValue(dep))).join('|');
     // snapshot 作为依赖：store 变更时重新计算
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- snapshot 是变更触发器
   }, [dependencies, store, snapshot]);
 
   useEffect(() => {
@@ -356,11 +435,29 @@ const FormItem: React.FC<FormItemProps> = ({
     [name, store, rules, triggers],
   );
 
-  // 状态推导：validateStatus 手动指定 > 校验错误 > validating
-  const fieldErrors = help !== undefined ? [] : storeErrors;
+  // 状态推导：validateStatus 手动指定 > 校验错误 > 后代冒泡 > 警告 > validating
+  const fieldWarnings =
+    help !== undefined ? [] : name && store ? store.getFieldWarning(name) : [];
+  const descendantErrors =
+    help === undefined
+      ? [...descendants].flatMap((path) => store?.getFieldError(path) ?? [])
+      : [];
+  const descendantWarnings =
+    help === undefined
+      ? [...descendants].flatMap((path) => store?.getFieldWarning(path) ?? [])
+      : [];
+  const fieldErrors =
+    help !== undefined ? [] : [...storeErrors, ...descendantErrors];
+  const allWarnings = [...fieldWarnings, ...descendantWarnings];
   const status: 'success' | 'warning' | 'error' | 'validating' | undefined =
     validateStatus ??
-    (validating ? 'validating' : fieldErrors.length > 0 ? 'error' : undefined);
+    (validating
+      ? 'validating'
+      : fieldErrors.length > 0
+        ? 'error'
+        : allWarnings.length > 0
+          ? 'warning'
+          : undefined);
 
   const itemCls = classNames(
     prefixCls('form-item'),
@@ -376,9 +473,21 @@ const FormItem: React.FC<FormItemProps> = ({
   );
 
   const labelStyle: React.CSSProperties = {};
+  const col = itemLabelCol ?? ctx?.labelCol;
+  const wrapper = itemWrapperCol ?? ctx?.wrapperCol;
   if (labelWidth !== undefined && ctx?.layout === 'horizontal') {
     labelStyle.width = labelWidth;
     labelStyle.flexShrink = 0;
+  } else if (col?.span !== undefined && ctx?.layout === 'horizontal') {
+    labelStyle.width = `${(col.span / 24) * 100}%`;
+    labelStyle.flexShrink = 0;
+    if (col.offset) {
+      labelStyle.marginLeft = `${(col.offset / 24) * 100}%`;
+    }
+  }
+  const controlStyle: React.CSSProperties = {};
+  if (wrapper?.offset && ctx?.layout === 'horizontal') {
+    controlStyle.marginLeft = `${(wrapper.offset / 24) * 100}%`;
   }
 
   /** 克隆子元素注入受控 props 与 id */
@@ -463,8 +572,18 @@ const FormItem: React.FC<FormItemProps> = ({
     // 每次渲染后更新快照（重渲染由 useSyncExternalStore 驱动）
   });
 
+  const frozenChildrenRef = useRef<React.ReactNode>(null);
   const shouldUpdateRender = () => {
     if (!store || typeof children !== 'function') return children;
+    // shouldUpdate === false：冻结首帧渲染结果，不跟随值变化
+    if (shouldUpdate === false) {
+      if (frozenChildrenRef.current === null) {
+        frozenChildrenRef.current = (
+          children as (prev: Values, next: Values) => React.ReactNode
+        )(store.getFieldsValue(), store.getFieldsValue());
+      }
+      return frozenChildrenRef.current;
+    }
     return (children as (prev: Values, next: Values) => React.ReactNode)(
       prevValuesRef.current,
       store.getFieldsValue(),
@@ -480,26 +599,48 @@ const FormItem: React.FC<FormItemProps> = ({
       typeof children === 'function' ? shouldUpdateRender() : renderChildren();
     if (noStyle) return <>{content}</>;
     return (
-      <div className={itemCls} style={style}>
-        {label && (
-          <label
-            className={classNames(
-              prefixCls('form-item-label'),
-              labelAlign === 'left' && prefixCls('form-item-label-left'),
-            )}
-            style={labelStyle}
-          >
-            {isRequired && (
-              <span className={prefixCls('form-item-required-star')}>*</span>
-            )}
-            {label}
-            {colon && <span className={prefixCls('form-item-colon')}>:</span>}
-          </label>
-        )}
-        <div className={prefixCls('form-item-control')}>
-          <div className={prefixCls('form-item-input')}>{content}</div>
+      <ItemReportContext.Provider value={reportValue}>
+        <div className={itemCls} style={style}>
+          {label && (
+            <label
+              className={classNames(
+                prefixCls('form-item-label'),
+                labelAlign === 'left' && prefixCls('form-item-label-left'),
+              )}
+              style={labelStyle}
+            >
+              {isRequired && (
+                <span className={prefixCls('form-item-required-star')}>*</span>
+              )}
+              {label}
+              {colon && <span className={prefixCls('form-item-colon')}>:</span>}
+            </label>
+          )}
+          <div className={prefixCls('form-item-control')}>
+            <div className={prefixCls('form-item-input')}>{content}</div>
+            {showErrors || allWarnings.length > 0 ? (
+              <div className={prefixCls('form-item-errors')} role="alert">
+                {fieldErrors.map((error, index) => (
+                  <div
+                    key={index}
+                    className={prefixCls('form-item-error-text')}
+                  >
+                    {error}
+                  </div>
+                ))}
+                {allWarnings.map((warning, index) => (
+                  <div
+                    key={index}
+                    className={prefixCls('form-item-warning-text')}
+                  >
+                    {warning}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
-      </div>
+      </ItemReportContext.Provider>
     );
   }
 
@@ -513,47 +654,57 @@ const FormItem: React.FC<FormItemProps> = ({
   const showOptionalMark = requiredMark === 'optional' && !isRequired;
 
   return (
-    <div
-      className={itemCls}
-      style={style}
-      data-field-name={name}
-      hidden={hidden}
-    >
-      {label && (
-        <label
-          className={classNames(
-            prefixCls('form-item-label'),
-            labelAlign === 'left' && prefixCls('form-item-label-left'),
-          )}
-          htmlFor={name}
-          style={labelStyle}
-        >
-          {showStar && (
-            <span className={prefixCls('form-item-required-star')}>*</span>
-          )}
-          {label}
-          {colon && <span className={prefixCls('form-item-colon')}>:</span>}
-          {showOptionalMark && (
-            <span className={prefixCls('form-item-optional')}>(可选)</span>
-          )}
-        </label>
-      )}
-      <div className={prefixCls('form-item-control')}>
-        <div className={prefixCls('form-item-input')}>{renderChildren()}</div>
-        {showHelp !== null ? (
-          <div className={prefixCls('form-item-help')}>{showHelp}</div>
-        ) : showErrors ? (
-          <div className={prefixCls('form-item-errors')} role="alert">
-            {fieldErrors.map((error, index) => (
-              <div key={index} className={prefixCls('form-item-error-text')}>
-                {error}
-              </div>
-            ))}
-          </div>
-        ) : null}
-        {extra && <div className={prefixCls('form-item-extra')}>{extra}</div>}
+    <ItemReportContext.Provider value={reportValue}>
+      <div
+        className={itemCls}
+        style={style}
+        data-field-name={name}
+        hidden={hidden}
+      >
+        {label && (
+          <label
+            className={classNames(
+              prefixCls('form-item-label'),
+              labelAlign === 'left' && prefixCls('form-item-label-left'),
+            )}
+            htmlFor={name}
+            style={labelStyle}
+          >
+            {showStar && (
+              <span className={prefixCls('form-item-required-star')}>*</span>
+            )}
+            {label}
+            {colon && <span className={prefixCls('form-item-colon')}>:</span>}
+            {showOptionalMark && (
+              <span className={prefixCls('form-item-optional')}>(可选)</span>
+            )}
+          </label>
+        )}
+        <div className={prefixCls('form-item-control')} style={controlStyle}>
+          <div className={prefixCls('form-item-input')}>{renderChildren()}</div>
+          {showHelp !== null ? (
+            <div className={prefixCls('form-item-help')}>{showHelp}</div>
+          ) : showErrors || allWarnings.length > 0 ? (
+            <div className={prefixCls('form-item-errors')} role="alert">
+              {fieldErrors.map((error, index) => (
+                <div key={index} className={prefixCls('form-item-error-text')}>
+                  {error}
+                </div>
+              ))}
+              {allWarnings.map((warning, index) => (
+                <div
+                  key={index}
+                  className={prefixCls('form-item-warning-text')}
+                >
+                  {warning}
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {extra && <div className={prefixCls('form-item-extra')}>{extra}</div>}
+        </div>
       </div>
-    </div>
+    </ItemReportContext.Provider>
   );
 };
 
@@ -711,6 +862,10 @@ export interface FormProps {
    *  @default true
    */
   requiredMark?: RequiredMark;
+  /** 标签栅格（horizontal 模式，共 24 栏） */
+  labelCol?: ColConfig;
+  /** 控件区栅格（horizontal 模式） */
+  wrapperCol?: ColConfig;
   /** 标签对齐方式
    *  @default 'right'
    */
@@ -745,6 +900,8 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
       onValuesChange,
       scrollToFirstError = false,
       requiredMark = true,
+      labelCol,
+      wrapperCol,
       labelAlign = 'right',
       colon = false,
       disabled = false,
@@ -757,12 +914,19 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
     ref,
   ) => {
     // 有 form prop 用外部实例；否则内部自建（惰性，避免每次渲染新建）
-    const internalStoreRef = useRef<FormStore | null>(null);
-    if (!form && !internalStoreRef.current) {
-      internalStoreRef.current = new FormStore();
+    const internalInstanceRef = useRef<FormInstance | null>(null);
+    if (!form && !internalInstanceRef.current) {
+      internalInstanceRef.current = createFormInstance();
     }
+    const instance = form ?? internalInstanceRef.current!;
     const store =
-      (form ? instanceStore.get(form) : undefined) ?? internalStoreRef.current!;
+      instanceStore.get(instance) ??
+      (() => {
+        // form 实例在组件外创建但尚未挂 Form 时的兜底（不应发生）
+        const s = new FormStore();
+        instanceStore.set(instance, s);
+        return s;
+      })();
 
     // initialValues 同步播种（render 阶段，早于所有子组件渲染——
     // List 等子组件在 render/effect 里都要能读到初始值）。
@@ -811,7 +975,7 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
             requestAnimationFrame(() => {
               document
                 .querySelector(`.${prefixCls('form-item-error')}`)
-                ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                ?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
             });
           }
         }
@@ -822,6 +986,9 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
     const ctxValue: FormContextValue = useMemo(
       () => ({
         store,
+        instance,
+        labelCol,
+        wrapperCol,
         layout,
         disabled,
         colon,
@@ -829,7 +996,18 @@ const FormBase = forwardRef<HTMLFormElement, FormProps>(
         labelAlign,
         requiredMark,
       }),
-      [store, layout, disabled, colon, size, labelAlign, requiredMark],
+      [
+        store,
+        instance,
+        labelCol,
+        wrapperCol,
+        layout,
+        disabled,
+        colon,
+        size,
+        labelAlign,
+        requiredMark,
+      ],
     );
 
     const formCls = classNames(
@@ -868,6 +1046,8 @@ interface FormComponent extends React.ForwardRefExoticComponent<
   useForm: () => [FormInstance];
   /** 订阅字段值（联动渲染） */
   useWatch: typeof useWatch;
+  /** 获取最近 Form 的命令式实例 */
+  useFormInstance: typeof useFormInstance;
 }
 
 const Form = FormBase as unknown as FormComponent;
@@ -875,6 +1055,7 @@ Form.Item = FormItem;
 Form.List = FormList;
 Form.useForm = () => useForm();
 Form.useWatch = useWatch;
+Form.useFormInstance = useFormInstance;
 
-export { Form, FormItem, FormList, useWatch };
+export { Form, FormItem, FormList, useWatch, useFormInstance };
 export default Form;

@@ -120,6 +120,29 @@ const keyword = Form.useWatch('keyword', form);
 
 > watch 的值建议为原始类型（string / number / boolean）；对象类型每次快照都是新引用。
 
+### Form.useFormInstance
+
+获取最近 `<Form>` 的命令式实例（封装组件内透传 form 的标准姿势）：
+
+```tsx | pure
+const form = Form.useFormInstance();
+```
+
+### noStyle 错误冒泡
+
+`noStyle` 字段的校验错误会向上冒泡到最近的「有样式」Form.Item 展示
+（适合 Input.Group / 自定义组合控件的场景）：
+
+```tsx | pure
+<Form.Item label="地址">
+  <Input.Group compact>
+    <Form.Item name="city" noStyle rules={[{ required: true }]}>
+      <Input />
+    </Form.Item>
+  </Input.Group>
+</Form.Item>
+```
+
 ### RuleType
 
 | 属性       | 说明                                             | 类型                                                                                  | 默认值   |

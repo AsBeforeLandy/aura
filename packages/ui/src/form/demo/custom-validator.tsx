@@ -15,7 +15,7 @@ const Demo: React.FC = () => (
       rules={[
         { required: true, message: '请输入用户名' },
         {
-          validator: async (value) => {
+          validator: async (value: unknown) => {
             await new Promise((r) => setTimeout(r, 500));
             if (existingUsers.includes(String(value))) {
               return false;
@@ -34,7 +34,7 @@ const Demo: React.FC = () => (
       rules={[
         { required: true, message: '请输入密码' },
         {
-          validator: (value) => /[A-Z]/.test(String(value)),
+          validator: (value: unknown) => /[A-Z]/.test(String(value)),
           message: '密码需包含至少一个大写字母',
         },
       ]}
@@ -42,7 +42,9 @@ const Demo: React.FC = () => (
       <Input.Password placeholder="需包含大写字母" />
     </Form.Item>
     <Form.Item>
-      <Button type="submit" variant="primary">提交验证</Button>
+      <Button type="submit" variant="primary">
+        提交验证
+      </Button>
     </Form.Item>
   </Form>
 );

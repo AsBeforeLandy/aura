@@ -8,7 +8,9 @@ const Demo: React.FC = () => (
         <Input placeholder="小尺寸 (sm)" />
       </Form.Item>
       <Form.Item>
-        <Button type="submit" variant="primary">提交</Button>
+        <Button type="submit" variant="primary">
+          提交
+        </Button>
       </Form.Item>
     </Form>
 
@@ -17,7 +19,9 @@ const Demo: React.FC = () => (
         <Input placeholder="中尺寸 (md)" />
       </Form.Item>
       <Form.Item>
-        <Button type="submit" variant="primary">提交</Button>
+        <Button type="submit" variant="primary">
+          提交
+        </Button>
       </Form.Item>
     </Form>
 
@@ -26,7 +30,9 @@ const Demo: React.FC = () => (
         <Input placeholder="大尺寸 (lg)" />
       </Form.Item>
       <Form.Item>
-        <Button type="submit" variant="primary">提交</Button>
+        <Button type="submit" variant="primary">
+          提交
+        </Button>
       </Form.Item>
     </Form>
   </Space>

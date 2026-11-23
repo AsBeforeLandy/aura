@@ -8,10 +8,20 @@ const Demo: React.FC = () => {
 
   return (
     <Form layout="horizontal" onFinish={handleFinish} colon>
-      <Form.Item name="name" label="姓名" rules={[{ required: true, message: '请输入姓名' }]}>
+      <Form.Item
+        name="name"
+        label="姓名"
+        rules={[{ required: true, message: '请输入姓名' }]}
+      >
         <Input placeholder="请输入姓名" />
       </Form.Item>
-      <Form.Item name="email" label="邮箱" rules={[{ pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: '邮箱格式不正确' }]}>
+      <Form.Item
+        name="email"
+        label="邮箱"
+        rules={[
+          { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: '邮箱格式不正确' },
+        ]}
+      >
         <Input placeholder="请输入邮箱" />
       </Form.Item>
       <Form.Item name="phone" label="手机号">
@@ -22,7 +32,9 @@ const Demo: React.FC = () => {
       </Form.Item>
       <Form.Item>
         <Space>
-          <Button type="submit" variant="primary">保存</Button>
+          <Button type="submit" variant="primary">
+            保存
+          </Button>
           <Button>取消</Button>
         </Space>
       </Form.Item>

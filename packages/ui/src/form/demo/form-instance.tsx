@@ -22,10 +22,18 @@ export default () => {
   return (
     <div>
       <Form form={form} initialValues={{ name: '', email: '' }}>
-        <Form.Item name="name" label="姓名" rules={[{ required: true, message: '请输入姓名' }]}>
+        <Form.Item
+          name="name"
+          label="姓名"
+          rules={[{ required: true, message: '请输入姓名' }]}
+        >
           <Input placeholder="请输入姓名" />
         </Form.Item>
-        <Form.Item name="email" label="邮箱" rules={[{ required: true, message: '请输入邮箱' }]}>
+        <Form.Item
+          name="email"
+          label="邮箱"
+          rules={[{ required: true, message: '请输入邮箱' }]}
+        >
           <Input placeholder="请输入邮箱" />
         </Form.Item>
       </Form>
