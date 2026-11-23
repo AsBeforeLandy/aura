@@ -149,13 +149,3 @@ export default () => (
 | [Notification 通知提醒框](/components/notification) | 角标形式的消息通知                 |
 | [Result 结果](/components/result)                   | 完成状态的结果反馈页               |
 | [Popconfirm 气泡确认框](/components/popconfirm)     | 危险操作的气泡二次确认             |
-
-## 业务组件
-
-面向 B 端中后台的高频场景（列表页、查询区、弹窗表单等），另有基于 antd 封装的业务组件层：
-
-```tsx | pure
-import { ProTable, BusinessProvider } from '@aura-react-comp/business';
-```
-
-详见 [业务组件总览](/businesses)。
