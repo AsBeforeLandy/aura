@@ -48,19 +48,3 @@ aura/
 | Firefox | 80+  |
 | Safari  | 14+  |
 | Edge    | 80+  |
-
-## 版本
-
-当前版本：**0.1.x**（已发布 npm，生产可用）
-
-各包均在 npm 正式发布并随 CI 持续更新：
-
-| 包名                                                        | 当前版本 |
-| ----------------------------------------------------------- | -------- |
-| `@aura-react-comp/design`                                   | 0.1.1    |
-| `@aura-react-comp/business`                                 | 0.2.2    |
-| `@aura-react-comp/x`                                        | 0.1.5    |
-| `@aura-react-comp/icons`                                    | 0.1.1    |
-| `@aura-react-comp/motion` / `charts` / `request` / `shared` | 0.1.x    |
-
-版本变更详见[更新日志](/changelog)。
