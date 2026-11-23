@@ -25,7 +25,7 @@ import { ProTable } from '@aura-react-comp/business';
 
 ## 设计说明
 
-由 `SearchForm` + antd `Card` / `Table` 组合而成。`request` 通过 ref 保存最新引用，因此无需用 `useCallback` 包裹即可安全内联书写。
+由 `SearchForm` + 底层框架的 `Card` / `Table` 组合而成。`request` 通过 ref 保存最新引用，因此无需用 `useCallback` 包裹即可安全内联书写。
 
 ## 代码演示
 
@@ -34,7 +34,7 @@ import { ProTable } from '@aura-react-comp/business';
 ### 动效增强（可选）
 
 首屏可用错峰骨架替代白屏、数据就绪后整体 Reveal 进场（ProTable 内部刷新仍由
-antd Spin 接管）。配方与代码见[动效场景配方](/guide/motion-recipes)的「B 端场景」章节。
+底层框架 Spin 接管）。配方与代码见[动效场景配方](/guide/motion-recipes)的「B 端场景」章节。
 
 <code src="./demo/motion.tsx" description="8 行错峰骨架 → 表格 Reveal 进场，可点击重播。">首屏骨架与进场</code>
 
@@ -52,7 +52,7 @@ antd Spin 接管）。配方与代码见[动效场景配方](/guide/motion-recip
 | defaultPageSize | 每页条数                      | `number`                                                 | `10`   |
 | rowKey          | 行标识                        | `string \| (record) => string`                           | `'id'` |
 
-其余属性透传给 antd `Table`。
+其余属性透传给底层框架的 `Table`。
 
 ### ProTableParams
 

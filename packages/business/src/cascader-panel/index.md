@@ -24,9 +24,9 @@ import { CascaderPanel } from '@aura-react-comp/business';
 - 层级较深、希望在面板内逐级下钻而非弹层选择
 - 需要同时掌握「当前展开到哪一级」（`onCurrentClick`）与「已勾选集合」（`onChange`）
 
-## 与 antd Cascader 的区别
+## 与通用 Cascader 组件的区别
 
-|          | CascaderPanel          | antd Cascader        |
+|          | CascaderPanel          | 通用 Cascader        |
 | -------- | ---------------------- | -------------------- |
 | 形态     | 平铺面板、常驻展示     | 输入框触发下拉       |
 | 选择模式 | 多选，勾选级联子孙     | 默认单选路径         |

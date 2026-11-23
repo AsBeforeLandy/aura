@@ -1,16 +1,16 @@
 # @aura-react-comp/business
 
-Aura 业务组件库：基于 antd v6 二次封装的 B 端中后台业务组件。
+Aura 业务组件库：基于主流企业级 UI 框架 v6 二次封装的 B 端中后台业务组件。
 
 把列表页、查询区、弹窗表单、排班、日历圈选等中后台高频场景沉淀为开箱即用的组件。
 
 ## 安装
 
 ```bash
-pnpm add @aura-react-comp/business antd react react-dom
+pnpm add @aura-react-comp/business react react-dom
 ```
 
-`antd`（>=6）、`react` / `react-dom`（>=18）为 peerDependencies，需由使用方提供。
+主流企业级 UI 框架（v6）、`react` / `react-dom`（>=18）为 peerDependencies，需由使用方提供。
 
 ## 样式引入（重要）
 
@@ -43,13 +43,13 @@ const App = () => (
 );
 ```
 
-建议在应用根节点包裹 `BusinessProvider`，使 antd 的主题与 Aura 品牌色（主色 `#7c3aed`）保持一致。
+建议在应用根节点包裹 `BusinessProvider`，使 底层框架的主题与 Aura 品牌色（主色 `#7c3aed`）保持一致。
 
 ## 组件总览（9 个）
 
 | 组件               | 说明                                                             |
 | ------------------ | ---------------------------------------------------------------- |
-| `BusinessProvider` | 将 Aura 设计令牌映射到 antd 主题系统                             |
+| `BusinessProvider` | 将 Aura 设计令牌映射到 底层框架的主题系统                        |
 | `PageContainer`    | 统一的页面骨架：面包屑 + 标题区 + 操作区 + 内容区                |
 | `SearchForm`       | 配置化查询表单，支持栅格布局与折叠展开                           |
 | `ProTable`         | 查询区 + 卡片 + 表格的组合，内置分页与请求状态管理               |

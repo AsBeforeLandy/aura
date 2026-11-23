@@ -93,7 +93,7 @@ import { Form } from '@aura-react-comp/design';
 
 ### Form.useForm
 
-创建命令式实例（用法与 antd 一致：`const [form] = Form.useForm()`），把实例传给 `<Form form={form}>` 后可在表单外部读写与校验：
+创建命令式实例（用法与主流表单方案一致：`const [form] = Form.useForm()`），把实例传给 `<Form form={form}>` 后可在表单外部读写与校验：
 
 | 方法                   | 说明                                                                   | 参数 / 返回                                                        |
 | ---------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
@@ -144,7 +144,7 @@ import { Form } from '@aura-react-comp/design';
 
 ### Form.useWatch
 
-订阅某个字段的值做联动渲染（用法与 antd 一致）：
+订阅某个字段的值做联动渲染（用法与主流表单方案一致）：
 
 ```tsx | pure
 const keyword = Form.useWatch('keyword', form);
@@ -217,7 +217,7 @@ const errors = form.getFieldError('city');
 | warningOnly  | 仅警告：不阻止提交，警告样式展示                              | `boolean`                                                                                             | `false`  |
 | defaultField | 数组元素级规则（对每个元素应用）                              | `RuleType`                                                                                            | -        |
 | fields       | 对象子字段 schema（配合 `type='object'`，子错误写入嵌套路径） | `Record<string, RuleType>`                                                                            | -        |
-| validator    | 自定义验证函数（antd 双签名兼容）                             | `(value) => boolean \| Promise<boolean>` 或 `(rule, value) => Promise<void \| Error>`                 | -        |
+| validator    | 自定义验证函数（业界通用双签名形态）                          | `(value) => boolean \| Promise<boolean>` 或 `(rule, value) => Promise<void \| Error>`                 | -        |
 
 ### Form.List
 

@@ -152,7 +152,7 @@ export default () => (
 
 ## 业务组件
 
-面向 B 端中后台的高频场景（列表页、查询区、弹窗表单等），另有基于 antd 封装的业务组件层：
+面向 B 端中后台的高频场景（列表页、查询区、弹窗表单等），另有基于企业级 UI 框架封装的业务组件层：
 
 ```tsx | pure
 import { ProTable, BusinessProvider } from '@aura-react-comp/business';

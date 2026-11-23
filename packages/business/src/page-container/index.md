@@ -26,7 +26,7 @@ import { PageContainer } from '@aura-react-comp/business';
 
 ## 设计说明
 
-基于 antd 的 `Breadcrumb` / `Skeleton` 二次封装。仅当存在标题、描述、操作区或面包屑时才渲染头部，避免空状态下出现多余留白。
+基于底层框架的 `Breadcrumb` / `Skeleton` 二次封装。仅当存在标题、描述、操作区或面包屑时才渲染头部，避免空状态下出现多余留白。
 
 ## 代码演示
 

@@ -12,7 +12,7 @@ toc: content
 
 # ModalForm 弹窗表单
 
-将 antd 的 `Modal` 与 `Form` 组合，内置「校验 → 提交 → 关闭」的完整流程。
+将 底层框架的 `Modal` 与 `Form` 组合，内置「校验 → 提交 → 关闭」的完整流程。
 
 ```tsx | pure
 import { ModalForm } from '@aura-react-comp/business';
@@ -36,7 +36,7 @@ import { ModalForm } from '@aura-react-comp/business';
 
 ## 交互流程
 
-1. 点击「确定」→ 触发 antd Form 校验
+1. 点击「确定」→ 触发表单校验
 2. 校验失败 → 保持弹窗打开并显示错误提示
 3. 校验通过 → 进入 loading 状态并执行 `onFinish`
 4. `onFinish` 完成 → 自动关闭弹窗

@@ -167,7 +167,7 @@ export function MetricCard({
 
 ### 配方七：ProTable 首屏骨架
 
-ProTable 内部刷新由 antd Spin 接管；**首屏**用骨架替代白屏更有质感——
+ProTable 内部刷新由底层框架 Spin 接管；**首屏**用骨架替代白屏更有质感——
 数据就绪后表格整体 Reveal 进场。
 
 ```tsx | pure

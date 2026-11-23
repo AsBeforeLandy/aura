@@ -54,7 +54,7 @@ toc: content
 | onClick                    | 点击通知；第二个参数可直接关闭本条     | `(event: Event, close: () => void) => void` | -      |
 | onShow / onClose / onError | 展示 / 关闭 / 出错回调                 | `(event: Event) => void`                    | -      |
 
-`open` 同时接受 antdx 风格的包装形态：`{ openConfig, closeConfig }`，
+`open` 同时接受主流对话组件库风格的包装形态：`{ openConfig, closeConfig }`，
 其中 `closeConfig` 用于在弹出新通知前先关掉指定 `tag` 的旧通知。
 
 ### useNotification

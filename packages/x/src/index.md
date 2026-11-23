@@ -5,7 +5,7 @@ group:
   title: 主题桥接
   order: 400
 category: Components
-description: 将 Aura 设计令牌映射到 antd 主题系统，为 AI 对话组件提供统一的暗色 / 主色 / 紧凑模式配置。
+description: 将 Aura 设计令牌映射到 底层框架的主题系统，为 AI 对话组件提供统一的暗色 / 主色 / 紧凑模式配置。
 order: 0
 toc: content
 ---
@@ -13,7 +13,7 @@ toc: content
 # XProvider AI 组件主题桥接
 
 `@aura-react-comp/x` 是 Aura 生态的 AI 对话组件库（对标 Ant Design X 的 Aura 实现）。`XProvider`
-是它的主题桥接层：把 Aura 设计令牌映射到 antd 的主题系统，使 AI 对话组件与
+是它的主题桥接层：把 Aura 设计令牌映射到 底层框架的主题系统，使 AI 对话组件与
 `@aura-react-comp/design`、`@aura-react-comp/business` 保持一致的紫罗兰视觉语言。
 
 ## 完整对话页
@@ -50,7 +50,7 @@ toc: content
 `@aura-react-comp/x` 以 [`@ant-design/x`](https://x.ant.design) 的组件划分为蓝本，
 官方组件已**全部覆盖**：
 
-| antdx 官方组件  | `@aura-react-comp/x` 对应           | 状态      |
+| 主流对话库组件  | `@aura-react-comp/x` 对应           | 状态      |
 | --------------- | ----------------------------------- | --------- |
 | Bubble          | `Bubble` / `Bubble.List`            | ✅ 已实现 |
 | Conversations   | `Conversations`                     | ✅ 已实现 |
@@ -72,14 +72,14 @@ toc: content
 
 实现上有三处**刻意的取舍**，不是遗漏：
 
-1. **代码高亮的配色**用 `var(--aura-*)` 令牌而非固定主题对象（antdx 用
+1. **代码高亮的配色**用 `var(--aura-*)` 令牌而非固定主题对象（主流对话库用
    `highlightProps` 透传 react-syntax-highlighter），换来亮暗主题自动跟随；
 2. **Mermaid 的类型不硬依赖 mermaid 包**——`MermaidConfig` 是宽松签名，
    这样未安装 mermaid 的消费方也能正常 `import`。
 3. **Notification 是系统通知**（`window.Notification`），不是页面内消息条；
    页面内提示请用 `@aura-react-comp/design` 的 `Notification` / `Message`。
 
-> 运行时（antdx 的 `XRequest` / `XStream` / `useXAgent`）在本库由
+> 运行时（主流对话库的 `XRequest` / `XStream` / `useXAgent`）在本库由
 > [`useXStream`](/x-components/use-x-stream) 与 [`useXChat`](/x-components/use-x-chat) 承担：
 > 传输细节由 `fetch` + 注入式 `onRequest` 掌控，不绑定特定服务商。
 
@@ -117,16 +117,16 @@ export default () => (
 
 ### XProviderProps
 
-| 参数         | 说明                         | 类型      | 默认值    |
-| ------------ | ---------------------------- | --------- | --------- |
-| dark         | 暗色模式：切换 antd 暗色算法 | `boolean` | `false`   |
-| compact      | 是否启用紧凑模式             | `boolean` | `false`   |
-| colorPrimary | 主题主色，同时用于链接色     | `string`  | `#7c3aed` |
-| locale       | 语言包                       | `Locale`  | `zhCN`    |
+| 参数         | 说明                              | 类型      | 默认值    |
+| ------------ | --------------------------------- | --------- | --------- |
+| dark         | 暗色模式：切换 底层框架的暗色算法 | `boolean` | `false`   |
+| compact      | 是否启用紧凑模式                  | `boolean` | `false`   |
+| colorPrimary | 主题主色，同时用于链接色          | `string`  | `#7c3aed` |
+| locale       | 语言包                            | `Locale`  | `zhCN`    |
 
 ## 注意事项
 
-- `XProvider` 只负责 antd 主题桥接；Aura 自研组件的 CSS 变量（`--aura-*`）由应用层
+- `XProvider` 只负责底层框架主题桥接；Aura 自研组件的 CSS 变量（`--aura-*`）由应用层
   引入 `@aura-react-comp/design/style.css` 并通过 `data-theme` 作用域切换，两者互不冲突。
 - `buildXThemeConfig` 作为命名导出暴露，便于在非组件场景（如 Storybook 装饰器、测试）
   复用同一份主题配置。
