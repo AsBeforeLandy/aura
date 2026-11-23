@@ -27,13 +27,11 @@ import { Card } from '@aura-react-comp/ui';
 ## 代码演示
 
 <code src="./demo/basic-2.tsx" description="基础用法。">基础用法</code>
-<code src="./demo/card-variant.tsx" description="卡片变体。">卡片变体</code>
+<code src="./demo/card-variant.tsx" description="卡片提供 `default`、`elevated`、`outlined`、`glass` 四种变体。">卡片变体</code>
 <code src="./demo/card-size.tsx" description="卡片尺寸。">卡片尺寸</code>
 <code src="./demo/hoverable.tsx" description="可悬浮卡片。">可悬浮卡片</code>
-<code src="./demo/loading-2.tsx" description="加载状态。">加载状态</code>
+<code src="./demo/loading-2.tsx" description="设置 `loading` 属性展示骨架屏加载效果。">加载状态</code>
 <code src="./demo/full.tsx" description="完整组合。">完整组合</code>
-<code src="./demo/variant.tsx" description="卡片提供 `default`、`elevated`、`outlined`、`glass` 四种变体。">卡片变体</code>
-<code src="./demo/loading.tsx" description="设置 `loading` 属性展示骨架屏加载效果。">加载状态</code>
 
 ## API
 
