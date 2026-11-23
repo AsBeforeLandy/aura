@@ -247,14 +247,14 @@ for (const pkg of LIB_PACKAGES) {
 // 7) 主题令牌：business 的样式全部依赖这些变量
 group('主题令牌');
 check('@aura-react-comp/design 产物包含 theme/tokens.css', () => {
-  const tokens = join(ROOT, 'packages', 'ui', 'esm', 'theme', 'tokens.css');
+  const tokens = join(ROOT, 'packages', 'design', 'esm', 'theme', 'tokens.css');
   assert(existsSync(tokens), `未找到 ${relative(ROOT, tokens)}`);
   const css = readFileSync(tokens, 'utf-8');
   assert(css.includes(':root'), 'tokens.css 中未找到 :root 块');
 });
 check('@aura-react-comp/design 对外暴露 ./style.css 子路径', () => {
   const pkgJson = JSON.parse(
-    readFileSync(join(ROOT, 'packages', 'ui', 'package.json'), 'utf-8'),
+    readFileSync(join(ROOT, 'packages', 'design', 'package.json'), 'utf-8'),
   );
   assert(
     pkgJson.exports?.['./style.css'],
