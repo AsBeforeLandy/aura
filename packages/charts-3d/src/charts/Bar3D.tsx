@@ -9,7 +9,11 @@ import {
 } from '../core/instancing';
 import { ColorBandLegend } from '../core/SceneLegend';
 import { formatNumber, mixColor } from '@aura-react-comp/charts';
-import { normalizeRatio, scaleBarHeights } from '../core/projection';
+import {
+  normalizeRatio,
+  sampleGradient,
+  scaleBarHeights,
+} from '../core/projection';
 
 /**
  * Bar3D：三维柱状图。
@@ -35,8 +39,8 @@ export interface Bar3DProps {
   maxHeight?: number;
   /** 柱底面边长（世界单位） */
   cellSize?: number;
-  /** 色带两端；缺省用主题紫 → 浅紫 */
-  colorRange?: [string, string];
+  /** 色带（支持两端或多段语义色带）；缺省用主题紫 → 浅紫 */
+  colorRange?: string[];
   /** 命中提示框 */
   tooltip?: boolean;
   /** 显示色带图例与数值参考刻度 */
@@ -69,36 +73,41 @@ export function TextSprite({
   position: [number, number, number];
   scale?: number;
 }) {
-  const aspect = useMemo(() => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return 4;
-    ctx.font = '500 48px system-ui';
-    return (ctx.measureText(text).width + 24) / 72;
-  }, [text]);
-
-  const texture = useMemo(() => {
+  const spriteData = useMemo(() => {
+    if (typeof document === 'undefined') return null;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
-    ctx.font = '500 48px system-ui';
-    const width = Math.ceil(ctx.measureText(text).width + 24);
+    const font = '500 48px system-ui, -apple-system, sans-serif';
+    ctx.font = font;
+    const width = Math.max(1, Math.ceil(ctx.measureText(text).width + 24));
+    const height = 72;
     canvas.width = width;
-    canvas.height = 72;
+    canvas.height = height;
+    // 修改 canvas 宽高会重置 2D 上下文状态，必须重新设置字体与对齐方式
+    ctx.font = font;
     ctx.fillStyle = color;
+    ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text, 12, canvas.height / 2);
+    ctx.fillText(text, width / 2, height / 2);
     const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
     texture.needsUpdate = true;
-    return texture;
+    return { texture, aspect: width / height };
   }, [text, color]);
 
-  if (!texture) return null;
+  React.useEffect(() => () => spriteData?.texture.dispose(), [spriteData]);
+
+  if (!spriteData) return null;
+  const worldHeight = 72 * scale;
   return (
-    <sprite position={position} scale={[aspect * scale, scale, 1]}>
+    <sprite
+      position={position}
+      scale={[spriteData.aspect * worldHeight, worldHeight, 1]}
+    >
       <spriteMaterial
         attach="material"
-        map={texture}
+        map={spriteData.texture}
         transparent
         depthWrite={false}
       />
@@ -206,7 +215,7 @@ function InstancedBars({
 }: {
   instances: InstanceDatum[];
   cellSize: number;
-  colorRange: [string, string];
+  colorRange: string[];
   hoverIndex: number;
   onHover: (index: number) => void;
   onOut: () => void;
@@ -321,8 +330,8 @@ export function Bar3D({
   // 明度梯度 —— 3D 材质自带光照衰减，基准色要比 2D 更亮才不吃重：
   // 亮端 mix 白 0.42、深端只 mix 黑 0.22，保持色相明快。
   // 显式传入的 colorRange 优先。
-  const range = useMemo<[string, string]>(() => {
-    if (colorRange) return colorRange;
+  const range = useMemo<string[]>(() => {
+    if (colorRange && colorRange.length > 0) return colorRange;
     const anchor =
       scene?.seriesColors?.[0] ??
       scene?.readToken('--aura-primary-700', DEFAULT_RANGE[0]) ??
@@ -384,7 +393,7 @@ export function Bar3D({
         x,
         z,
         h,
-        color: mixColor(range[0], range[1], ratio),
+        color: sampleGradient(range, ratio),
       };
     });
 

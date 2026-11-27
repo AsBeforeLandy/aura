@@ -12,9 +12,10 @@ const PANEL: React.CSSProperties = {
   position: 'absolute',
   right: 14,
   top: 12,
-  background: 'rgba(15, 23, 42, 0.72)',
-  border: '1px solid rgba(148, 163, 184, 0.3)',
-  borderRadius: 8,
+  background: 'var(--aura-bg)',
+  border: '1px solid var(--aura-border)',
+  borderRadius: 'var(--aura-radius-md)',
+  boxShadow: 'var(--aura-shadow-sm)',
   padding: '7px 10px',
   fontSize: 11,
   lineHeight: 1.5,
@@ -33,11 +34,16 @@ export function ColorBandLegend({
   colorRange: string[];
   label?: string;
 }) {
-  const gradient = `linear-gradient(to right, ${colorRange.join(', ')})`;
+  const gradient =
+    colorRange.length >= 2
+      ? `linear-gradient(to right, ${colorRange.join(', ')})`
+      : (colorRange[0] ?? 'transparent');
   return (
     <div style={PANEL}>
       {label ? (
-        <div style={{ color: '#94a3b8', marginBottom: 4 }}>{label}</div>
+        <div style={{ color: 'var(--aura-text-secondary)', marginBottom: 4 }}>
+          {label}
+        </div>
       ) : null}
       <div
         style={{
@@ -51,7 +57,7 @@ export function ColorBandLegend({
         style={{
           display: 'flex',
           justifyContent: 'space-between',
-          color: '#94a3b8',
+          color: 'var(--aura-text-secondary)',
           marginTop: 3,
         }}
       >
@@ -77,7 +83,7 @@ export function CategoryLegend({
             display: 'flex',
             alignItems: 'center',
             gap: 6,
-            color: '#cbd5e1',
+            color: 'var(--aura-text-secondary)',
           }}
         >
           <span

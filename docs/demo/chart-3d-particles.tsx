@@ -2,8 +2,8 @@ import React from 'react';
 import { ParticleField } from '@aura-react-comp/charts-3d';
 
 const DARK_BG = {
-  background: 'radial-gradient(ellipse at 50% 0%, #10305e 0%, #081428 62%)',
-  border: '1px solid rgba(56, 189, 248, 0.3)',
+  background: 'radial-gradient(ellipse at 50% 40%, #1e293b 0%, #0f172a 72%)',
+  border: '1px solid #334155',
   borderRadius: 10,
   overflow: 'hidden',
 };
@@ -15,7 +15,14 @@ const Demo: React.FC = () => (
         连线网络：近距离粒子自动连线，鼠标移动有视差
       </div>
       <div style={DARK_BG}>
-        <ParticleField height={360} count={140} showLinks linkDistance={30} />
+        <ParticleField
+          height={360}
+          count={140}
+          color="#7dd3fc"
+          linkColor="#38bdf8"
+          showLinks
+          linkDistance={30}
+        />
       </div>
     </div>
     <div>
@@ -26,6 +33,7 @@ const Demo: React.FC = () => (
         <ParticleField
           height={260}
           count={220}
+          color="#7dd3fc"
           showLinks={false}
           speed={0.35}
           opacity={0.6}

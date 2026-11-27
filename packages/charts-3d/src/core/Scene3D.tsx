@@ -102,6 +102,8 @@ export interface Scene3DProps {
   enableRotate?: boolean;
   /** 自动旋转（展示模式）；默认取视角预设的配置 */
   autoRotate?: boolean;
+  /** 自动旋转速度（覆盖预设） */
+  autoRotateSpeed?: number;
   /** 命中提示框内容；null 关闭 */
   children: React.ReactNode;
 }
@@ -242,6 +244,7 @@ export function Scene3D({
   height = 360,
   cameraPosition: cameraPositionProp,
   autoRotate: autoRotateProp,
+  autoRotateSpeed: autoRotateSpeedProp,
   preset = 'default',
   enableRotate = true,
   children,
@@ -250,6 +253,10 @@ export function Scene3D({
   const presetConfig = useMemo(() => getScenePresetConfig(preset), [preset]);
   const cameraPosition = cameraPositionProp ?? presetConfig.camera;
   const autoRotate = autoRotateProp ?? presetConfig.autoRotate;
+  const autoRotateSpeed =
+    autoRotateSpeedProp !== undefined && Number.isFinite(autoRotateSpeedProp)
+      ? autoRotateSpeedProp
+      : presetConfig.autoRotateSpeed;
   const { ref: containerRef, size } = useElementSize<HTMLDivElement>();
   const [camera, setCamera] = useState<Camera | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
@@ -326,7 +333,7 @@ export function Scene3D({
               enableRotate={enableRotate}
               autoRotate={autoRotate}
               maxPolarAngle={presetConfig.maxPolarAngle}
-              autoRotateSpeed={presetConfig.autoRotateSpeed}
+              autoRotateSpeed={autoRotateSpeed}
             />
             <SceneContext.Provider value={context}>
               {children}

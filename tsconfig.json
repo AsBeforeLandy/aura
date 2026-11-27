@@ -20,6 +20,7 @@
       "@aura-react-comp/x": ["./packages/x/src/index.ts"],
       "@aura-react-comp/motion": ["./packages/motion/src/index.ts"],
       "@aura-react-comp/charts": ["./packages/charts/src/index.ts"],
+      "@aura-react-comp/charts-3d": ["./packages/charts-3d/src/index.ts"],
       "@aura-react-comp/editor": ["./packages/editor/src/index.ts"]
     }
   },

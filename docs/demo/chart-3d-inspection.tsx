@@ -17,7 +17,12 @@ const data = ['R1', 'R2', 'R3', 'R4'].flatMap((team, teamIndex) =>
 const Demo: React.FC = () => (
   // inspection 预设：低角度自动环绕，无需任何操作即可持续展示
   <Scene3D height={400} preset="inspection">
-    <Bar3D data={data} maxHeight={150} cellSize={22} />
+    <Bar3D
+      data={data}
+      maxHeight={150}
+      cellSize={22}
+      colorRange={['#ddd6fe', '#6366f1']}
+    />
   </Scene3D>
 );
 

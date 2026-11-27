@@ -21,7 +21,12 @@ const Demo: React.FC = () => (
     enableRotate
     autoRotate={false}
   >
-    <Bar3D data={data} maxHeight={150} cellSize={22} />
+    <Bar3D
+      data={data}
+      maxHeight={150}
+      cellSize={22}
+      colorRange={['#ddd6fe', '#6366f1']}
+    />
   </Scene3D>
 );
 

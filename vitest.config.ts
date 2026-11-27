@@ -54,6 +54,10 @@ export default defineConfig({
       ),
       '@aura-react-comp/icons': path.resolve(__dirname, 'packages/icons/src'),
       '@aura-react-comp/charts': path.resolve(__dirname, 'packages/charts/src'),
+      '@aura-react-comp/charts-3d': path.resolve(
+        __dirname,
+        'packages/charts-3d/src',
+      ),
       '@aura-react-comp/editor': path.resolve(__dirname, 'packages/editor/src'),
     },
   },

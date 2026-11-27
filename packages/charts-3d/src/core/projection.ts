@@ -1,4 +1,5 @@
 import { Vector3, type Camera } from 'three';
+import { mixColor } from '@aura-react-comp/charts';
 
 /**
  * 3D → 2D 投影与数据缩放的纯函数。
@@ -55,4 +56,13 @@ export function normalizeRatio(
 ): number {
   if (max === min) return 0.6;
   return (value - min) / (max - min);
+}
+
+/** 在多段色带上取 t（0~1）位置的颜色，兼容单色、双色与多段语义色带 */
+export function sampleGradient(colors: readonly string[], t: number): string {
+  if (colors.length === 0) return '#888888';
+  if (colors.length === 1) return colors[0];
+  const clamped = Math.min(1, Math.max(0, t)) * (colors.length - 1);
+  const index = Math.min(Math.floor(clamped), colors.length - 2);
+  return mixColor(colors[index], colors[index + 1], clamped - index);
 }

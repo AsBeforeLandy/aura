@@ -2,7 +2,9 @@ import React, { useMemo } from 'react';
 import * as THREE from 'three';
 import { useScene } from '../core/Scene3D';
 import { formatNumber, mixColor } from '@aura-react-comp/charts';
-import { normalizeRatio } from '../core/projection';
+import { normalizeRatio, sampleGradient } from '../core/projection';
+
+export { sampleGradient };
 
 /**
  * Surface3D：三维曲面。
@@ -30,15 +32,6 @@ export interface Surface3DProps {
   wireframe?: boolean;
   /** 悬停提示框：显示命中面片的行列与数值 */
   tooltip?: boolean;
-}
-
-/** 在多段色带上取 t（0~1）位置的颜色 */
-export function sampleGradient(colors: string[], t: number): string {
-  if (colors.length === 0) return '#888888';
-  if (colors.length === 1) return colors[0];
-  const clamped = Math.min(1, Math.max(0, t)) * (colors.length - 1);
-  const index = Math.min(Math.floor(clamped), colors.length - 2);
-  return mixColor(colors[index], colors[index + 1], clamped - index);
 }
 
 export interface SurfaceGeometryData {

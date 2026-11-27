@@ -28,4 +28,10 @@ describe('getScenePresetConfig', () => {
     expect(Math.abs(x)).toBeLessThan(1);
     expect(Math.abs(z)).toBeLessThan(1);
   });
+
+  it('未知预设回退到 default 配置', () => {
+    expect(getScenePresetConfig('unknown' as 'default')).toEqual(
+      getScenePresetConfig('default'),
+    );
+  });
 });

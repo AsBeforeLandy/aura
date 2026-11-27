@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { mixColor, parseColor } from '@aura-react-comp/charts';
+import { parseColor } from '@aura-react-comp/charts';
+import { sampleGradient } from './projection';
 
 /**
  * InstancedMesh 的实例数据构造（纯函数，jsdom 可测）。
@@ -65,14 +66,18 @@ export function buildInstanceTransforms(
   return { matrices, scales };
 }
 
-/** 生成实例颜色数组（mixColor 色带插值 → parseColor 转分量），供 setColorAt 使用 */
+/** 生成实例颜色数组（多段色带插值 → parseColor 转 0~1 分量），供 THREE.Color 使用 */
 export function buildInstanceColors(
   instances: readonly InstanceDatum[],
-  colorRange: [string, string],
+  colorRange: readonly string[],
 ): { r: number; g: number; b: number }[] {
   return instances.map((instance): { r: number; g: number; b: number } => {
-    const mixed = mixColor(colorRange[0], colorRange[1], instance.ratio);
-    const parsed = parseColor(mixed) ?? [1, 1, 1];
-    return { r: parsed[0], g: parsed[1], b: parsed[2] };
+    const mixed = sampleGradient(colorRange, instance.ratio);
+    const parsed = parseColor(mixed) ?? [255, 255, 255];
+    return {
+      r: parsed[0] / 255,
+      g: parsed[1] / 255,
+      b: parsed[2] / 255,
+    };
   });
 }

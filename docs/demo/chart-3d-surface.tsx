@@ -39,7 +39,13 @@ const Demo: React.FC = () => (
         环形波纹：顶点色沿三段色带渐变（可拖转视角）
       </div>
       <Scene3D height={360} cameraPosition={[260, 200, 300]} enableRotate>
-        <Surface3D values={ripple} width={210} depth={210} maxHeight={80} />
+        <Surface3D
+          values={ripple}
+          width={210}
+          depth={210}
+          maxHeight={80}
+          colorRange={['#38bdf8', '#6366f1', '#a855f7']}
+        />
       </Scene3D>
     </div>
     <div>
@@ -57,6 +63,7 @@ const Demo: React.FC = () => (
           width={210}
           depth={210}
           maxHeight={70}
+          colorRange={['#38bdf8', '#6366f1', '#a855f7']}
           wireframe
         />
       </Scene3D>

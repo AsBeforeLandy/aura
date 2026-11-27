@@ -4,7 +4,7 @@ import { Bar3D, Scene3D } from '@aura-react-comp/charts-3d';
 /**
  * 预算执行差值：正 = 超支，负 = 节省。
  *
- * 色带三段取 multihue 的等亮度 D2 色（翠绿 / 靛蓝 / 玫红）：
+ * 色带三段取负值 / 零值 / 正值语义色（翠绿 / 中性灰 / 玫红）：
  * 负值（节省）落翠绿端、正值（超支）落玫红端。
  * 数据里的最小值（最节省）落在色带左端，最大值（最超支）落在右端。
  * colorRange 换一组颜色即可反转语义。
@@ -27,7 +27,7 @@ const Demo: React.FC = () => (
       data={data}
       maxHeight={130}
       cellSize={20}
-      colorRange={['#1FA473', '#668FE2', '#E3697E']}
+      colorRange={['#16a34a', '#94a3b8', '#db2777']}
     />
   </Scene3D>
 );

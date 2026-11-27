@@ -14,13 +14,16 @@ toc: content
 
 ## API
 
-| 属性       | 说明                     | 类型               | 默认值    |
-| ---------- | ------------------------ | ------------------ | --------- |
-| data       | 数据矩阵                 | `Bar3DDataItem[]`  | `[]`      |
-| maxHeight  | 柱体最大高度（世界单位） | `number`           | `160`     |
-| cellSize   | 柱底面边长               | `number`           | `26`      |
-| colorRange | 色带两端                 | `[string, string]` | 紫 → 浅紫 |
-| tooltip    | 命中提示框               | `boolean`          | `true`    |
+| 属性       | 说明                           | 类型                            | 默认值    |
+| ---------- | ------------------------------ | ------------------------------- | --------- |
+| data       | 数据矩阵                       | `Bar3DDataItem[]`               | `[]`      |
+| maxHeight  | 柱体最大高度（世界单位）       | `number`                        | `160`     |
+| cellSize   | 柱底面边长                     | `number`                        | `26`      |
+| colorRange | 色带（支持两端或多段语义色带） | `string[]`                      | 紫 → 浅紫 |
+| tooltip    | 命中提示框                     | `boolean`                       | `true`    |
+| legend     | 显示色带图例与数值参考刻度     | `boolean`                       | `true`    |
+| animation  | 入场生长动画                   | `boolean`                       | `true`    |
+| onBarClick | 点击柱体回调                   | `(item: Bar3DDataItem) => void` | -         |
 
 ### Bar3DDataItem
 

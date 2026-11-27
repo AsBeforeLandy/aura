@@ -16,8 +16,35 @@ export { ParticleField } from './charts/ParticleField';
 export type { ParticleFieldProps } from './charts/ParticleField';
 export { Voxel3D } from './charts/Voxel3D';
 export type { Voxel3DProps } from './charts/Voxel3D';
-export { HoloRing } from './charts/HoloRing';
-export type { HoloRingProps } from './charts/HoloRing';
+export {
+  Globe3D,
+  buildArcTubes,
+  buildGlobeModel,
+  buildSphereDots,
+  isSafeTextureUrl,
+  latLngToVector3,
+  sampleArcPosition,
+} from './charts/Globe3D';
+export type {
+  Globe3DProps,
+  Globe3DPoint,
+  Globe3DArc,
+  Globe3DArcTubeData,
+  Globe3DModel,
+  Globe3DModelPoint,
+  Globe3DModelArc,
+} from './charts/Globe3D';
+export { Network3D, buildNetworkModel } from './charts/Network3D';
+export type {
+  Network3DProps,
+  Network3DNode,
+  Network3DLink,
+  Network3DLayout,
+  Network3DModel,
+  Network3DModelNode,
+  Network3DModelLink,
+  Network3DModelOptions,
+} from './charts/Network3D';
 export {
   buildVoxelModel,
   buildVoxelTransforms,

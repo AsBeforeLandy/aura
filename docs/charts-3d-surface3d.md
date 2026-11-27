@@ -8,7 +8,7 @@ toc: content
 
 ## 代码演示
 
-<code src="./demo/chart-3d-surface.tsx" id="surface-ripple" description="环形波纹曲面：顶点色沿主色明度三段色带（亮 → 主色 → 深）渐变，随全局主题联动。可拖转视角。">环形波纹</code>
+<code src="./demo/chart-3d-surface.tsx" id="surface-ripple" description="环形波纹曲面：顶点色沿青 → 靛 → 紫三段自定义色带渐变，可拖转视角。">环形波纹</code>
 
 <code src="./demo/chart-3d-surface.tsx" id="surface-hills-wireframe" description="双高斯山丘的线框模式：叠加网格线便于排查曲面结构与网格密度，自动旋转展示。">线框模式</code>
 

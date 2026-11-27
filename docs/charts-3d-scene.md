@@ -12,13 +12,14 @@ toc: content
 
 ## API
 
-| 属性           | 说明                 | 类型                                            | 默认值      |
-| -------------- | -------------------- | ----------------------------------------------- | ----------- |
-| height         | 画布高度             | `number`                                        | `360`       |
-| preset         | 视角预设（场景模板） | `'default' \| 'inspection' \| 'top' \| 'front'` | `'default'` |
-| cameraPosition | 相机位置（覆盖预设） | `[number, number, number]`                      | 取预设      |
-| autoRotate     | 自动旋转（覆盖预设） | `boolean`                                       | 取预设      |
-| enableRotate   | 允许拖转 / 缩放视角  | `boolean`                                       | `true`      |
+| 属性            | 说明                     | 类型                                            | 默认值      |
+| --------------- | ------------------------ | ----------------------------------------------- | ----------- |
+| height          | 画布高度                 | `number`                                        | `360`       |
+| preset          | 视角预设（场景模板）     | `'default' \| 'inspection' \| 'top' \| 'front'` | `'default'` |
+| cameraPosition  | 相机位置（覆盖预设）     | `[number, number, number]`                      | 取预设      |
+| autoRotate      | 自动旋转（覆盖预设）     | `boolean`                                       | 取预设      |
+| autoRotateSpeed | 自动旋转速度（覆盖预设） | `number`                                        | 取预设      |
+| enableRotate    | 允许拖转 / 缩放视角      | `boolean`                                       | `true`      |
 
 SSR 安全：未测量到容器尺寸前不会创建 WebGL 上下文，服务端渲染只输出占位容器。
 
@@ -33,7 +34,7 @@ SSR 安全：未测量到容器尺寸前不会创建 WebGL 上下文，服务端
 | `top`        | 正俯视     | 看平面分布，避免透视遮挡           |
 | `front`      | 正视图     | 当「图表」用，接近 2D 阅读习惯     |
 
-所有预设统一把 maxPolarAngle 限制在 π/2.05——不允许钻到地面以下，那会让柱底朝上、文字镜像。显式传 `cameraPosition` / `autoRotate` 可覆盖预设的单项配置。
+所有预设统一把 maxPolarAngle 限制在 π/2.05——不允许钻到地面以下，那会让柱底朝上、文字镜像。显式传 `cameraPosition` / `autoRotate` / `autoRotateSpeed` 可覆盖预设的单项配置。
 
 ## WebGL 降级
 

@@ -1,7 +1,7 @@
 {
   "name": "@aura-react-comp/charts-3d",
   "version": "0.2.1",
-  "description": "Aura 3D 图表库 — 基于 three.js 与 React Three Fiber 的 3D 数据可视化，与 charts 共享设计令牌与提示框",
+  "description": "Aura 3D 可视化库 — 基于 three.js 与 React Three Fiber 的 3D 图表、关系网络与地球业务可视化",
   "keywords": [
     "aura",
     "react",
@@ -10,7 +10,9 @@
     "three",
     "webgl",
     "visualization",
-    "bar3d"
+    "bar3d",
+    "network-graph",
+    "globe"
   ],
   "license": "MIT",
   "repository": {
