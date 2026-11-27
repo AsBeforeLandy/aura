@@ -11,8 +11,13 @@
     "webgl",
     "visualization",
     "bar3d",
+    "pie3d",
+    "ribbon3d",
+    "funnel3d",
+    "radar3d",
     "network-graph",
-    "globe"
+    "globe",
+    "dandelion"
   ],
   "license": "MIT",
   "repository": {

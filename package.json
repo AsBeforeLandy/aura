@@ -87,9 +87,9 @@
       "limit": "12 kB"
     },
     {
-      "name": "charts-3d (全量 esm，不含 three，7 组件)",
+      "name": "charts-3d (全量 esm，不含 three，12 组件)",
       "path": "packages/charts-3d/esm/**/*.js",
-      "limit": "48 kB"
+      "limit": "75 kB"
     }
   ],
   "keywords": [

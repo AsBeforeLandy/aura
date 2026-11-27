@@ -180,7 +180,7 @@ const motionSidebar = collectSidebarGroups([
 
 /** 3D 分组：并入 chartsSidebar 统一展示（demo 与 API 页均在 docs/ 下）。
  *  所有 /charts* 与 /charts-3d* 页面挂同一个侧栏 —— 开始组只出现一次，
- *  2D 的 18 个图表与 3D 的 7 个组件页面互为邻居，不再按路由切换两套菜单。 */
+ *  2D 的 18 个图表与 3D 的 12 个组件页面互为邻居，不再按路由切换两套菜单。 */
 const charts3dGroup = [
   {
     title: '图表 · 3D',
@@ -188,12 +188,17 @@ const charts3dGroup = [
       { title: '概览', link: '/charts-3d' },
       { title: 'Scene3D 场景', link: '/charts-3d-scene' },
       { title: 'Bar3D', link: '/charts-3d-bar3d' },
+      { title: 'Pie3D', link: '/charts-3d-pie3d' },
+      { title: 'Ribbon3D', link: '/charts-3d-ribbon3d' },
+      { title: 'Funnel3D', link: '/charts-3d-funnel3d' },
+      { title: 'Radar3D', link: '/charts-3d-radar3d' },
       { title: 'Scatter3D', link: '/charts-3d-scatter3d' },
       { title: 'Surface3D', link: '/charts-3d-surface3d' },
       { title: 'Voxel3D', link: '/charts-3d-voxel' },
       { title: 'Network3D', link: '/charts-3d-network' },
       { title: 'Globe3D', link: '/charts-3d-globe' },
       { title: 'ParticleField', link: '/charts-3d-particles' },
+      { title: 'DandelionField', link: '/charts-3d-dandelion' },
     ],
   },
 ];
@@ -418,12 +423,17 @@ export default defineConfig({
       '/charts-3d': chartsSidebar,
       '/charts-3d-scene': chartsSidebar,
       '/charts-3d-bar3d': chartsSidebar,
+      '/charts-3d-pie3d': chartsSidebar,
+      '/charts-3d-ribbon3d': chartsSidebar,
+      '/charts-3d-funnel3d': chartsSidebar,
+      '/charts-3d-radar3d': chartsSidebar,
       '/charts-3d-scatter3d': chartsSidebar,
       '/charts-3d-surface3d': chartsSidebar,
       '/charts-3d-voxel': chartsSidebar,
       '/charts-3d-network': chartsSidebar,
       '/charts-3d-globe': chartsSidebar,
       '/charts-3d-particles': chartsSidebar,
+      '/charts-3d-dandelion': chartsSidebar,
       '/editor': editorSidebar,
       '/editor-advanced': editorSidebar,
       '/editor-components': editorSidebar,

@@ -20,16 +20,21 @@ pnpm add @aura-react-comp/charts-3d three
 
 ## 组件索引
 
-| 组件                                  | 用途           | 关键能力                                 |
-| ------------------------------------- | -------------- | ---------------------------------------- |
-| [Scene3D](/charts-3d-scene)           | 3D 画布容器    | 自适应、视角预设（巡检模式）、WebGL 降级 |
-| [Bar3D](/charts-3d-bar3d)             | 三维柱状矩阵   | 错峰生长动画、InstancedMesh、色带映射    |
-| [Scatter3D](/charts-3d-scatter3d)     | 三维散点       | 三维位置编码、类别 / 按值着色            |
-| [Surface3D](/charts-3d-surface3d)     | 三维曲面       | 顶点色渐变、多段色带、线框模式           |
-| [Voxel3D](/charts-3d-voxel)           | 三维体素热力图 | 三维分类交叉、InstancedMesh、拾取提示    |
-| [Network3D](/charts-3d-network)       | 三维关系网络   | 确定性布局、邻居高亮、分类图例           |
-| [Globe3D](/charts-3d-globe)           | 三维地球业务图 | 真实卫星地球、经纬度点位、立体飞线       |
-| [ParticleField](/charts-3d-particles) | 粒子背景装饰   | 星野 / 连线网络、鼠标视差、确定性初始化  |
+| 组件                                   | 用途            | 关键能力                                 |
+| -------------------------------------- | --------------- | ---------------------------------------- |
+| [Scene3D](/charts-3d-scene)            | 3D 画布容器     | 自适应、视角预设（巡检模式）、WebGL 降级 |
+| [Bar3D](/charts-3d-bar3d)              | 三维柱状矩阵    | 错峰生长动画、InstancedMesh、色带映射    |
+| [Pie3D](/charts-3d-pie3d)              | 三维立体饼/环图 | 倒角挤压切片、高度阶梯、悬停径向弹出     |
+| [Ribbon3D](/charts-3d-ribbon3d)        | 三维趋势丝带墙  | 多系列错落排布、样条平滑、单系列聚焦     |
+| [Funnel3D](/charts-3d-funnel3d)        | 三维漏斗/金字塔 | 圆台/棱台悬浮分层、环节与总转化率提示    |
+| [Radar3D](/charts-3d-radar3d)          | 三维分层雷达图  | 空间蛛网、多系列垂直透视、模型能力对比   |
+| [Scatter3D](/charts-3d-scatter3d)      | 三维散点        | 三维位置编码、类别 / 按值着色            |
+| [Surface3D](/charts-3d-surface3d)      | 三维曲面        | 顶点色渐变、多段色带、线框模式           |
+| [Voxel3D](/charts-3d-voxel)            | 三维体素热力图  | 三维分类交叉、InstancedMesh、拾取提示    |
+| [Network3D](/charts-3d-network)        | 三维关系网络    | 确定性布局、邻居高亮、分类图例           |
+| [Globe3D](/charts-3d-globe)            | 三维地球业务图  | 真实卫星地球、经纬度点位、立体飞线       |
+| [ParticleField](/charts-3d-particles)  | 粒子背景装饰    | 星野 / 连线网络、鼠标视差、确定性初始化  |
+| [DandelionField](/charts-3d-dandelion) | 蒲公英风散背景  | 3D 冠毛小伞、物理风场湍流、阵风交互      |
 
 ## 设计三原则
 
@@ -47,7 +52,7 @@ WebGL 无法在 jsdom 里运行，所以 3D 库的测试重心在**纯函数层*
 
 ## 体积与依赖
 
-`three` 是 peerDependency（压缩后约 160KB，由使用方安装），`@react-three/fiber` 与 `three-stdlib` 是运行时依赖。产物里只包含 Aura 的几何与场景编排代码（7 个组件全量约 43KB brotli，支持 ESM 按需引入）——不用 3D 的下游完全不受影响。
+`three` 是 peerDependency（压缩后约 160KB，由使用方安装），`@react-three/fiber` 与 `three-stdlib` 是运行时依赖。产物里只包含 Aura 的几何与场景编排代码（12 个组件全量约 65KB brotli，支持 ESM 按需引入）——不用 3D 的下游完全不受影响。
 
 ## 后续规划
 

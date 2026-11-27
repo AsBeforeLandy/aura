@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToString } from 'react-dom/server';
 import { Scene3D } from './Scene3D';
 import { ParticleField } from '../charts/ParticleField';
+import { DandelionField } from '../charts/DandelionField';
 
 /**
  * SSR 渲染回归：在无 DOM 的真实 Node 环境用 renderToString 渲染顶层 3D 容器组件。
@@ -33,5 +34,17 @@ describe('charts-3d SSR 渲染', () => {
 
     expect(particleHtml).toContain('height:280px');
     expect(particleHtml).not.toContain('<canvas');
+  });
+
+  it('DandelionField 可在 Node 环境安全渲染并保留前景内容', () => {
+    const html = renderToString(
+      <DandelionField height={360}>
+        <span>前景文案</span>
+      </DandelionField>,
+    );
+
+    expect(html).toContain('aura-dandelion-field');
+    expect(html).toContain('前景文案');
+    expect(html).not.toContain('<canvas');
   });
 });
